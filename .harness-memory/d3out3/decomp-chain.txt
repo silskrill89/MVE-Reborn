@@ -1,0 +1,529 @@
+// ===== depth=0 10033740 FUN_10033740 =====
+
+undefined4 FUN_10033740(undefined4 param_1,int param_2)
+
+{
+  char cVar1;
+  
+  if (param_2 == 1) {
+    cVar1 = FUN_10043c00();
+    if (cVar1 == '\0') {
+      return 0;
+    }
+  }
+  return 1;
+}
+
+
+// ===== depth=0 1003dff0 FUN_1003dff0 =====
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void FUN_1003dff0(void)
+
+{
+  _DAT_100b0dac = 0x42674f;
+                    /* WARNING: Could not recover jumptable at 0x1003e008. Too many branches */
+                    /* WARNING: Treating indirect jump as call */
+  (*(code *)0x42674f)();
+  return;
+}
+
+
+// ===== depth=0 1003e010 FUN_1003e010 =====
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+undefined8 __fastcall
+FUN_1003e010(undefined4 param_1,undefined4 param_2,undefined4 param_3,int param_4)
+
+{
+  undefined4 in_EAX;
+  undefined8 uVar1;
+  
+  DAT_1013dc38 = param_4;
+  if (((0x81 < param_4) && (param_4 < 0xed)) && ((&DAT_100b641e)[param_4] != '\0')) {
+    return CONCAT44(param_2,in_EAX);
+  }
+  _DAT_100b0dac = 0x4267e5;
+  uVar1 = (*(code *)0x4267e5)();
+  return uVar1;
+}
+
+
+// ===== depth=0 1003e070 FUN_1003e070 =====
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void FUN_1003e070(void)
+
+{
+  _DAT_100b0dac = 0x426acd;
+                    /* WARNING: Could not recover jumptable at 0x1003e088. Too many branches */
+                    /* WARNING: Treating indirect jump as call */
+  (*(code *)0x426acd)();
+  return;
+}
+
+
+// ===== depth=0 1003e090 FUN_1003e090 =====
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void FUN_1003e090(void)
+
+{
+  _DAT_100b0dac = 0x426c87;
+                    /* WARNING: Could not recover jumptable at 0x1003e0a8. Too many branches */
+                    /* WARNING: Treating indirect jump as call */
+  (*(code *)0x426c87)();
+  return;
+}
+
+
+// ===== depth=0 1003e0b0 FUN_1003e0b0 =====
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void FUN_1003e0b0(void)
+
+{
+  _DAT_100b0dac = 0x427477;
+                    /* WARNING: Could not recover jumptable at 0x1003e0c8. Too many branches */
+                    /* WARNING: Treating indirect jump as call */
+  (*(code *)0x427477)();
+  return;
+}
+
+
+// ===== depth=0 1003e0d0 FUN_1003e0d0 =====
+
+undefined8 FUN_1003e0d0(int param_1,int param_2)
+
+{
+  undefined4 in_EDX;
+  
+  DAT_1013c598 = param_1;
+  DAT_1013dbc8 = param_2;
+  FUN_1004f7e0(param_1,param_2);
+  return CONCAT44(in_EDX,param_2);
+}
+
+
+// ===== depth=0 1003e100 FUN_1003e100 =====
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void FUN_1003e100(void)
+
+{
+  _DAT_100b0dac = 0x426a53;
+                    /* WARNING: Could not recover jumptable at 0x1003e118. Too many branches */
+                    /* WARNING: Treating indirect jump as call */
+  (*(code *)0x426a53)();
+  return;
+}
+
+
+// ===== depth=0 1003e120 FUN_1003e120 =====
+
+undefined8 FUN_1003e120(void)
+
+{
+  undefined4 in_EAX;
+  int in_ECX;
+  undefined4 in_EDX;
+  
+  DAT_1013c268 = in_ECX;
+  *(undefined4 *)(in_ECX + 0x1d4) = 0;
+  return CONCAT44(in_EDX,in_EAX);
+}
+
+
+// ===== depth=0 1003e140 FUN_1003e140 =====
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void FUN_1003e140(void)
+
+{
+  undefined4 in_ECX;
+  
+  DAT_1013dc2c = in_ECX;
+  FUN_1003a810();
+  (*(code *)0x4bb630)();
+  _DAT_100b0dac = 0x5bac09;
+  (*(code *)0x5bac09)();
+  return;
+}
+
+
+// ===== depth=0 1003e170 FUN_1003e170 =====
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void FUN_1003e170(uint param_1,uint param_2)
+
+{
+  int in_ECX;
+  undefined4 unaff_EBX;
+  undefined4 unaff_ESI;
+  
+  DAT_1013dbdc = param_1 & 0xff;
+  DAT_1013c280 = param_2 & 0xff;
+  DAT_1013c558 = in_ECX;
+  FUN_1003b840(in_ECX,DAT_1013dbdc,DAT_1013c280,DAT_100b2450);
+  _DAT_100b0dac = 0x579295;
+  (*(code *)0x579295)(unaff_ESI,unaff_EBX);
+  return;
+}
+
+
+// ===== depth=0 1003e1d0 FUN_1003e1d0 =====
+
+undefined8 FUN_1003e1d0(undefined4 param_1,undefined4 param_2)
+
+{
+  undefined4 in_ECX;
+  undefined4 in_EDX;
+  
+  DAT_1013a5a8 = param_1;
+  DAT_1013c1fc = param_2;
+  DAT_1013dc50 = in_ECX;
+  FUN_1003b9d0();
+  return CONCAT44(in_EDX,param_2);
+}
+
+
+// ===== depth=0 1003e200 FUN_1003e200 =====
+
+undefined8 FUN_1003e200(undefined4 param_1,undefined4 param_2)
+
+{
+  undefined4 in_ECX;
+  undefined4 in_EDX;
+  
+  DAT_1013a5a4 = param_1;
+  DAT_1013db88 = param_2;
+  DAT_1013c568 = in_ECX;
+  FUN_1003bae0();
+  return CONCAT44(in_EDX,param_2);
+}
+
+
+// ===== depth=0 1003e230 FUN_1003e230 =====
+
+void FUN_1003e230(void)
+
+{
+  FUN_1003af20();
+  (*(code *)0x589790)();
+  DAT_100b2450 = 0;
+  return;
+}
+
+
+// ===== depth=0 1003e250 FUN_1003e250 =====
+
+void FUN_1003e250(void)
+
+{
+  FUN_1003af20();
+  (*(code *)0x60ad50)();
+  DAT_100b2450 = 0;
+  return;
+}
+
+
+// ===== depth=0 1003e270 FUN_1003e270 =====
+
+void FUN_1003e270(void)
+
+{
+  FUN_1003af20();
+  (*(code *)0x5a4de0)();
+  DAT_100b2450 = 0;
+  return;
+}
+
+
+// ===== depth=0 1003e290 FUN_1003e290 =====
+
+void FUN_1003e290(void)
+
+{
+  undefined4 in_ECX;
+  
+  DAT_1013c55c = in_ECX;
+  FUN_1003a450();
+  FUN_1003b580();
+  (*(code *)0x589ad0)();
+  return;
+}
+
+
+// ===== depth=0 1003e2b0 FUN_1003e2b0 =====
+
+void FUN_1003e2b0(void)
+
+{
+  undefined4 in_ECX;
+  
+  DAT_1013c540 = in_ECX;
+  FUN_1003b580();
+  (*(code *)0x60ad90)();
+  return;
+}
+
+
+// ===== depth=0 1003e2d0 FUN_1003e2d0 =====
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void FUN_1003e2d0(void)
+
+{
+  float *unaff_EBP;
+  undefined4 in_stack_000001b4;
+  int *in_stack_000001b8;
+  
+  DAT_1013a594 = in_stack_000001b8;
+  DAT_1013dc04 = in_stack_000001b4;
+  DAT_1013a5f8 = unaff_EBP;
+  FUN_1003b5d0(in_stack_000001b8,unaff_EBP,in_stack_000001b4);
+  _DAT_100b0dac = 0x5cf9f9;
+  (*(code *)0x5cf9f9)();
+  return;
+}
+
+
+// ===== depth=0 1003e320 FUN_1003e320 =====
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void FUN_1003e320(int param_1)
+
+{
+  int *in_stack_00000040;
+  
+  DAT_1013dc88 = in_stack_00000040;
+  DAT_1013c50c = *(undefined4 *)(param_1 + 4);
+  DAT_1013c594 = (float *)&stack0x00000018;
+  FUN_1003b5d0(in_stack_00000040,DAT_1013c594,DAT_1013c50c);
+  _DAT_100b0dac = 0x5c4348;
+  (*(code *)0x5c4348)();
+  return;
+}
+
+
+// ===== depth=0 10040d40 FUN_10040d40 =====
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void FUN_10040d40(undefined4 param_1,int param_2)
+
+{
+  uint uVar1;
+  
+  DAT_1013a5c8 = param_2;
+  uVar1 = FUN_1003ddd0(param_2);
+  if ((uVar1 & 0xff) != 0) {
+    if (*(int *)(DAT_1013a5c8 + 0x48) == 0) {
+      FUN_1002c330();
+    }
+    _DAT_100b0dac = 0x4167e8;
+    (*(code *)0x4167e8)();
+    return;
+  }
+  _DAT_100b0dac = 0x416778;
+  (*(code *)0x416778)();
+  return;
+}
+
+
+// ===== depth=0 10043010 FUN_10043010 =====
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void FUN_10043010(void)
+
+{
+  int iVar1;
+  bool in_ZF;
+  char *in_stack_0000001c;
+  
+  if (!in_ZF) {
+    _DAT_100b0dac = 0x64e13e;
+    (*(code *)0x64e13e)();
+    return;
+  }
+  DAT_1013a530 = in_stack_0000001c;
+  if (DAT_100b3f08 != '\0') {
+    iVar1 = __stricmp(in_stack_0000001c,"xvehicleenv128");
+    if ((iVar1 != 0) && (DAT_100b51d0 != 0)) {
+      DAT_1013c56c = FUN_10032740();
+      if (DAT_1013c56c != 0) {
+        _DAT_100b0dac = 0x64e1e0;
+        (*(code *)0x64e1e0)();
+        return;
+      }
+    }
+  }
+  _DAT_100b0dac = 0x64e190;
+  (*(code *)0x64e190)();
+  return;
+}
+
+
+// ===== depth=0 10043730 FUN_10043730 =====
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void FUN_10043730(void)
+
+{
+  DAT_1013dbc0 = FUN_1003de20();
+  _DAT_100b0dac = 0x40896c;
+  (*(code *)0x40896c)();
+  return;
+}
+
+
+// ===== depth=0 10043760 FUN_10043760 =====
+
+void FUN_10043760(void)
+
+{
+  undefined4 in_ECX;
+  
+  DAT_1013a59c = in_ECX;
+  FUN_1001b610();
+  (*(code *)0x593030)();
+  return;
+}
+
+
+// ===== depth=0 10043780 FUN_10043780 =====
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void FUN_10043780(void)
+
+{
+  float10 in_ST0;
+  float10 in_ST1;
+  
+  DAT_1013dca0 = (float)in_ST0;
+  _DAT_1013a5bc = (float)in_ST1;
+  if (_DAT_1013a5bc < DAT_1013dca0) {
+    DAT_1013dbf4 = (int)(DAT_1013dca0 - _DAT_1013a5bc) - _DAT_100b17dc;
+    if (0 < (int)DAT_1013dbf4) {
+      MsgWaitForMultipleObjects(0,(HANDLE *)0x0,0,DAT_1013dbf4,0x4bf);
+    }
+    _DAT_100b0dac = 0x6006b8;
+    (*(code *)0x6006b8)();
+    return;
+  }
+  _DAT_100b0dac = 0x60049c;
+  (*(code *)0x60049c)();
+  return;
+}
+
+
+// ===== depth=0 10043b50 FUN_10043b50 =====
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void FUN_10043b50(void)
+
+{
+  if (DAT_1012453d == '\0') {
+    (*(code *)0x61a6c0)(DAT_100a6af0);
+    (*(code *)0x498e5f)();
+    DAT_1012453d = '\x01';
+    DAT_00869641 = 1;
+    DAT_00869668 = 0;
+    DAT_00869669 = 1;
+    DAT_0086966c = 1;
+  }
+  _DAT_100b0dac = 0x49a024;
+  (*(code *)0x49a024)();
+  return;
+}
+
+
+// ===== depth=0 1000f040 FUN_1000f040 =====
+
+undefined8 FUN_1000f040(void)
+
+{
+  undefined4 in_EAX;
+  undefined4 in_ECX;
+  undefined4 in_EDX;
+  
+  DAT_10124a20 = in_ECX;
+  FUN_1000dc50();
+  return CONCAT44(in_EDX,in_EAX);
+}
+
+
+// ===== depth=0 10018d10 FUN_10018d10 =====
+
+undefined8 FUN_10018d10(undefined4 param_1)
+
+{
+  bool bVar1;
+  undefined4 in_EDX;
+  undefined8 uVar2;
+  
+  DAT_10124f38 = param_1;
+  bVar1 = FUN_10018da0();
+  if (!bVar1) {
+    return CONCAT44(in_EDX,param_1);
+  }
+  uVar2 = (*(code *)0x48b05a)();
+  return uVar2;
+}
+
+
+// ===== depth=0 1000d860 FUN_1000d860 =====
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void FUN_1000d860(void)
+
+{
+  FUN_1000d6d0();
+  _DAT_100b0dac = 0x4a4de2;
+  (*(code *)0x4a4de2)();
+  return;
+}
+
+
+// ===== depth=0 1003f400 FUN_1003f400 =====
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void FUN_1003f400(void)
+
+{
+  int in_EAX;
+  uint uVar1;
+  
+  DAT_1013a550 = in_EAX;
+  uVar1 = FUN_1003d160(in_EAX,0x10000);
+  if ((uVar1 & 0xff) != 0) {
+    _DAT_100b0dac = 0x4199e1;
+    (*(code *)0x4199e1)();
+    return;
+  }
+  _DAT_100b0dac = 0x4199f1;
+  (*(code *)0x4199f1)();
+  return;
+}
+
+
+// no function at 10051940
+// no function at 100564c0
+// no function at 10033f10
+// no function at 1005f9559

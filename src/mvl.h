@@ -12,3 +12,8 @@
 	MVL_STRINGIFY(MVL_VERSION_PATCH) " dev"
 
 // Target: GTA Vice City 1.0 (US) — game-code-patching DLL plugin, x86 only.
+
+// All original MVL paths resolve against the game directory (process CWD):
+// mvl\messagelog.txt, mvl\errorlog.txt, mvl\vehicles\globalv.xml, ...
+// (vehmod_retail.dll 0.98e strings @ 0x1007cad0/0x1007c180, re-098e-map.md §3).
+#define MVL_LOG_DIR "mvl"

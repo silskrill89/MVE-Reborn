@@ -11,7 +11,7 @@
 - No RE work started yet; no clone code in src/ yet (orchestrator-owned).
 
 ## Open Questions
-- `MVL_GAME_DIR` (VC 1.0 game dir for deploy) — unknown, placeholder.
+- `MVL_GAME_DIR` (VC 1.0 game dir for deploy) — resolved: `H:\games\VC` (setx-persisted).
 - Which binary to start RE on: 0.98e `vehmod_retail.dll` (primary) vs `.flt` variants.
 - Tooling for RE: Ghidra vs IDA import workflow (see `.opencode/skills/mvl-re/SKILL.md`).
 

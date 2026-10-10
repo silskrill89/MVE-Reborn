@@ -7,7 +7,7 @@
 - MSBuild (VS2022) at `C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\MSBuild.exe`
 - Windows 10 SDK 26100
 - Toolchain: x86, static CRT (/MT)
-- Game dir via env var `MVL_GAME_DIR` (currently unknown/placeholder — ask the user)
+- Game dir via env var `MVL_GAME_DIR` = `H:\games\VC` (user-confirmed; persisted via setx — only NEW processes see it)
 
 ## Step-by-step
 
@@ -26,7 +26,7 @@ msbuild build/MVL-clone.sln /p:Configuration=Release /p:Platform=Win32
 
 ### 2. Deploy
 
-Target: `$env:MVL_GAME_DIR\mvl\vehmod_retail.dll` (placeholder — game dir unknown; original MVL deploys as `vehmod_retail.dll` in a `mvl/` subdirectory).
+Target: `$env:MVL_GAME_DIR\mvl\vehmod_retail.dll` (game dir = `H:\games\VC`; original MVL deploys as `vehmod_retail.dll` in a `mvl/` subdirectory — create `mvl\` if missing).
 
 Verify:
 ```powershell
@@ -61,4 +61,4 @@ MVL writes its own logs/records in the game dir. Patterns to look for once RE id
 | `src/` | Clone implementation (orchestrator-owned) |
 | `bin/` | Build output (vehmod.dll) |
 | `docs/` | Obsidian vault: RE notes |
-| `$env:MVL_GAME_DIR\mvl\vehmod_retail.dll` | Deployed plugin (placeholder) |
+| `$env:MVL_GAME_DIR\mvl\vehmod_retail.dll` | Deployed plugin (`H:\games\VC\mvl\vehmod_retail.dll`) |

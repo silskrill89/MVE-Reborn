@@ -41,6 +41,17 @@
 - **Readable derivative code**: `ThirteenAG/III.VC.SA.WindowedMode` (MIT,
   "originally created by maxorator as part of MVL") — real hooking code;
   maxorator also contributed to `limit_adjuster_gta3vcsa`.
+  - Cloned to `E:\SDKs\III.VC.SA.WindowedMode` (2026-10-10): full
+    windowed/resizable/menu/autopause implementation + pattern-based per-exe
+    binding DB (GTAVC.ixx byte patterns) — include nearly as-is (see
+    docs/MVL/intel-log.md reusable-parts table).
+  - `E:\SDKs\III.VC.SA.LimitAdjuster` (Open Limit Adjuster, maxorator credited
+    contributor): memory addresses + patch logic for the hardcoded limits MVL
+    breaks (vehicle IDs, handling, model indices) — the "engine of MVL's
+    limits"; cross-check against our engine-limits module.
+  - `E:\dev(dave)\tools\io_scene_dff-master` (MIT, co-author maxorator): DFF
+    chunk-ID table + binary layouts = spec source for our C++ DFF parser
+    (COL internals/TXD rasters come from reVC/librw/RW36 SDK).
 - **Archived tracker**: Wayback has `bitbucket.org/ThirteenAG/mvl/issues`
   (2022/2023 snapshots): 6 issues — #1 SkyGFX compat, #2 jump lags, #3 v0.99
   download, #4 sharptrails+dynamic-shadows crash, #5 GTA:Liberty City compat,

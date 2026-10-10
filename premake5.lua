@@ -10,9 +10,37 @@ workspace "mvlclone"
 
 	files { "src/**.*" }
 
+	-- Vendored third-party sources (compiled into the project, not as libs)
+	files {
+		"external/tinyxml/**.cpp",
+		"external/lzma/C/7zAlloc.c",
+		"external/lzma/C/7zArcIn.c",
+		"external/lzma/C/7zBuf.c",
+		"external/lzma/C/7zBuf2.c",
+		"external/lzma/C/7zCrc.c",
+		"external/lzma/C/7zCrcOpt.c",
+		"external/lzma/C/7zDec.c",
+		"external/lzma/C/7zFile.c",
+		"external/lzma/C/7zStream.c",
+		"external/lzma/C/Bcj2.c",
+		"external/lzma/C/Bra.c",
+		"external/lzma/C/Bra86.c",
+		"external/lzma/C/BraIA64.c",
+		"external/lzma/C/CpuArch.c",
+		"external/lzma/C/Delta.c",
+		"external/lzma/C/LzmaDec.c",
+		"external/lzma/C/Lzma2Dec.c",
+		"external/lzma/C/Ppmd7.c",
+		"external/lzma/C/Ppmd7Dec.c",
+		"external/lzma/C/Alloc.c",
+	}
+
 	includedirs { "src" }
 	includedirs { "external/injector/include" }
 	includedirs { "external" }
+	includedirs { "external/tinyxml" }
+	includedirs { "external/lzma/C" }
+	includedirs { "external/lzma/C/Util/7z" }
 
 	-- Optional deploy target: when MVL_GAME_DIR is set in the environment,
 	-- the built DLL is additionally copied to that directory after every
@@ -30,6 +58,10 @@ project "vehmod"
 
 	defines { "_CRT_NONSTDC_NO_WARNINGS", "_CRT_SECURE_NO_WARNINGS" }
 	buildoptions { "/FS" }
+
+	filter "files:external/lzma/**"
+		-- Vendored LZMA SDK: plain C, tolerate SDK-style warnings (never WAE here)
+		buildoptions { "/wd4100", "/wd4189", "/wd4245", "/wd4244", "/wd4267" }
 
 	filter "configurations:Debug"
 		defines { "DEBUG" }

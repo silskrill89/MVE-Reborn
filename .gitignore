@@ -17,6 +17,7 @@ node_modules/
 # Local tooling databases
 .sadie/*.db*
 .harness-memory/memory.sqlite
+__pycache__/
 
 # Logs
 logs/

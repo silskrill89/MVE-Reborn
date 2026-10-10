@@ -3,7 +3,7 @@
 ## Diagnostic Log
 
 No plugin log path confirmed yet — RE pending. Once identified, record it here:
-- Log file: `%MVL_GAME_DIR%\...` (placeholder — update after RE)
+- Log file: `%MVL_GAME_DIR%\...` (game dir = `H:\games\VC`; filename TBD — update after RE)
 
 ## Common Crash Patterns (generic, to be filled with MVL evidence)
 

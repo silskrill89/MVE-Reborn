@@ -1,11 +1,11 @@
 ---
 name: deploy
-description: Build and deploy vehmod.dll to the MVL game dir (placeholder) with running-game safety
+description: Build and deploy vehmod.dll to the MVL game dir (H:\games\VC) with running-game safety
 ---
 
 # /deploy — MVL-clone deploy ritual
 
-Build mode: premake5.cmd → MSBuild Release|Win32 → `bin/Release/vehmod.dll` → deployed as `%MVL_GAME_DIR%\mvl\vehmod_retail.dll` (game dir unknown — placeholder until user provides `MVL_GAME_DIR`).
+Build mode: premake5.cmd → MSBuild Release|Win32 → `bin/Release/vehmod.dll` → deployed as `%MVL_GAME_DIR%\mvl\vehmod_retail.dll` (game dir = `H:\games\VC`, persisted as user env var `MVL_GAME_DIR` via setx; shells started before the setx must re-read it or use the literal path).
 
 ## Steps
 

@@ -19,4 +19,4 @@ premake5.cmd
 msbuild build/MVL-clone.sln /p:Configuration=Release /p:Platform=Win32
 ```
 
-Output: `bin/Release/vehmod.dll` (x86, /MT). Deploy target: `%MVL_GAME_DIR%\mvl\vehmod_retail.dll` (game dir TBD).
+Output: `bin/Release/vehmod.dll` (x86, /MT). Deploy target: `%MVL_GAME_DIR%\mvl\vehmod_retail.dll` (game dir = `H:\games\VC`).

@@ -1,0 +1,2733 @@
+=== defined strings (data with refs) ===
+100757e8	1	0	permission denied	
+100757fc	2	1	file exists	058d23,
+10075808	1	0	no such device	
+10075818	0	0	filename too long	
+1007582c	0	0	device or resource busy	
+10075844	0	0	io error	
+10075850	0	0	directory not empty	
+10075864	0	0	invalid argument	
+10075878	0	0	no space on device	
+1007588c	0	0	no such file or directory	
+100758a8	0	0	function not supported	
+100758c0	0	0	no lock available	
+100758d4	0	0	not enough memory	
+100758e8	0	0	resource unavailable try again	
+10075908	0	0	cross device link	
+1007591c	0	0	operation canceled	
+10075930	0	0	too many files open	
+10075944	0	0	permission_denied	
+10075958	0	0	address_in_use	
+10075968	0	0	address_not_available	
+10075980	0	0	address_family_not_supported	
+100759a0	0	0	connection_already_in_progress	
+100759c0	0	0	bad_file_descriptor	
+100759d4	0	0	connection_aborted	
+100759e8	0	0	connection_refused	
+100759fc	0	0	connection_reset	
+10075a10	0	0	destination_address_required	
+10075a30	0	0	bad_address	
+10075a3c	0	0	host_unreachable	
+10075a50	0	0	operation_in_progress	
+10075a68	0	0	interrupted	
+10075a74	0	0	invalid_argument	
+10075a88	0	0	already_connected	
+10075a9c	0	0	too_many_files_open	
+10075ab0	0	0	message_size	
+10075ac0	0	0	filename_too_long	
+10075ad4	0	0	network_down	
+10075ae4	0	0	network_reset	
+10075af4	0	0	network_unreachable	
+10075b08	0	0	no_buffer_space	
+10075b18	0	0	no_protocol_option	
+10075b2c	0	0	not_connected	
+10075b3c	0	0	not_a_socket	
+10075b4c	0	0	operation_not_supported	
+10075b64	0	0	protocol_not_supported	
+10075b7c	0	0	wrong_protocol_type	
+10075b90	0	0	timed_out	
+10075b9c	0	0	operation_would_block	
+10075bb4	1	0	address family not supported	
+10075bd4	2	1	address in use	058cf9,
+10075be4	1	0	address not available	
+10075bfc	0	0	already connected	
+10075c10	0	0	argument list too long	
+10075c28	0	0	argument out of domain	
+10075c40	0	0	bad address	
+10075c4c	0	0	bad file descriptor	
+10075c60	0	0	bad message	
+10075c6c	0	0	broken pipe	
+10075c78	0	0	connection aborted	
+10075c8c	0	0	connection already in progress	
+10075cac	0	0	connection refused	
+10075cc0	0	0	connection reset	
+10075cd4	0	0	destination address required	
+10075cf4	0	0	executable format error	
+10075d0c	0	0	file too large	
+10075d1c	0	0	host unreachable	
+10075d30	0	0	identifier removed	
+10075d44	0	0	illegal byte sequence	
+10075d5c	0	0	inappropriate io control operation	
+10075d80	0	0	invalid seek	
+10075d90	0	0	is a directory	
+10075da0	0	0	message size	
+10075db0	0	0	network down	
+10075dc0	0	0	network reset	
+10075dd0	0	0	network unreachable	
+10075de4	0	0	no buffer space	
+10075df4	0	0	no child process	
+10075e08	0	0	no link	
+10075e10	0	0	no message available	
+10075e28	0	0	no message	
+10075e34	0	0	no protocol option	
+10075e48	0	0	no stream resources	
+10075e5c	0	0	no such device or address	
+10075e78	0	0	no such process	
+10075e88	0	0	not a directory	
+10075e98	0	0	not a socket	
+10075ea8	0	0	not a stream	
+10075eb8	0	0	not connected	
+10075ec8	0	0	not supported	
+10075ed8	0	0	operation in progress	
+10075ef0	0	0	operation not permitted	
+10075f08	0	0	operation not supported	
+10075f20	0	0	operation would block	
+10075f38	0	0	owner dead	
+10075f44	0	0	protocol error	
+10075f54	0	0	protocol not supported	
+10075f6c	0	0	read only file system	
+10075f84	0	0	resource deadlock would occur	
+10075fa4	0	0	result out of range	
+10075fb8	0	0	state not recoverable	
+10075fd0	0	0	stream timeout	
+10075fe0	0	0	text file busy	
+10075ff0	0	0	timed out	
+10075ffc	0	0	too many files open in system	
+1007601c	0	0	too many links	
+1007602c	0	0	too many symbolic link levels	
+1007604c	0	0	value too large	
+1007605c	0	0	wrong protocol type	
+100760ec	2	2	bad allocation	059d7f,058e0d,
+10076160	1	1	Unknown exception	05cf9f,
+10076174	1	1	mscoree.dll	05d645,
+1007618c	1	1	CorExitProcess	05d645,
+100761a0	2	1	R6008\n- not enough space for arguments\n	05dbbd,
+100761f8	0	0	R6009\n- not enough space for environment\n	
+10076250	0	0	R6010\n- abort() has been called\n	
+10076298	0	0	R6016\n- not enough space for thread data\n	
+100762f0	0	0	R6017\n- unexpected multithread lock error\n	
+10076350	0	0	R6018\n- unexpected heap error\n	
+10076398	0	0	R6019\n- unable to open console device\n	
+100763f0	0	0	R6024\n- not enough space for _onexit/atexit table\n	
+10076460	0	0	R6025\n- pure virtual function call\n	
+100764b0	0	0	R6026\n- not enough space for stdio initialization\n	
+10076520	0	0	R6027\n- not enough space for lowio initialization\n	
+10076590	0	0	R6028\n- unable to initialize heap\n	
+100765dc	0	0	R6030\n- CRT not initialized\n	
+10076620	0	0	R6031\n- Attempt to initialize the CRT more than once.\nThis indicates a bug in your application.\n	
+100766e8	0	0	R6032\n- not enough space for locale information\n	
+10076750	0	0	R6033\n- Attempt to use MSIL code from this assembly during native code initialization\nThis indicates a bug in your application. It is most likely the result of calling an MSIL-compiled (/clr) function from a native constructor or from DllMain.\n	
+10076940	0	0	R6034\n- inconsistent onexit begin-end variables\n	
+100769a8	0	0	DOMAIN error\n	
+100769c8	0	0	SING error\n	
+100769e4	0	0	TLOSS error\n	
+10076a08	0	0	runtime error 	
+10076ae0	0	0	R6002\n- floating point support not loaded\n	
+10076b3c	1	1	Runtime Error!\n\nProgram: 	05dbe1,
+10076b70	1	1	<program name unknown>	05dbe1,
+10076bb0	1	1	Microsoft Visual C++ Runtime Library	05dbe1,
+10076c06	3	3	null)	05e0aa,064d0e,062b82,
+10076c84	2	1	ja-JP	05f34e,
+10076c90	2	1	zh-CN	05f34e,
+10076c9c	2	1	ko-KR	05f34e,
+10076ca8	2	1	zh-TW	05f34e,
+10076cd0	1	0	Sunday	
+10076cd8	1	0	Monday	
+10076ce0	1	0	Tuesday	
+10076ce8	1	0	Wednesday	
+10076cf4	1	0	Thursday	
+10076d00	1	0	Friday	
+10076d08	1	0	Saturday	
+10076d44	1	0	January	
+10076d4c	1	0	February	
+10076d58	1	0	March	
+10076d60	1	0	April	
+10076d78	1	0	August	
+10076d80	1	0	September	
+10076d8c	1	0	October	
+10076d94	1	0	November	
+10076da0	1	0	December	
+10076db4	1	0	MM/dd/yy	
+10076dc0	1	0	dddd, MMMM dd, yyyy	
+10076dd4	1	0	HH:mm:ss	
+10076e18	1	0	Sunday	
+10076e28	1	0	Monday	
+10076e38	1	0	Tuesday	
+10076e48	1	0	Wednesday	
+10076e5c	1	0	Thursday	
+10076e70	1	0	Friday	
+10076e80	1	0	Saturday	
+10076ef4	1	0	January	
+10076f04	1	0	February	
+10076f18	1	0	March	
+10076f24	1	0	April	
+10076f30	1	0	June	
+10076f3c	1	0	July	
+10076f48	1	0	August	
+10076f58	1	0	September	
+10076f6c	1	0	October	
+10076f7c	1	0	November	
+10076f90	1	0	December	
+10076fb4	1	0	MM/dd/yy	
+10076fc8	1	0	dddd, MMMM dd, yyyy	
+10076ff0	1	0	HH:mm:ss	
+10077004	1	0	en-US	
+10077090	2	2	kernel32.dll	05fe8b,06aa16,
+100770ac	1	1	FlsAlloc	05fe8b,
+100770b8	1	1	FlsFree	05fe8b,
+100770c0	1	1	FlsGetValue	05fe8b,
+100770cc	1	1	FlsSetValue	05fe8b,
+100770d8	1	1	InitializeCriticalSectionEx	05fe8b,
+100770f4	1	1	CreateSemaphoreExW	05fe8b,
+10077108	1	1	SetThreadStackGuarantee	05fe8b,
+10077120	1	1	CreateThreadpoolTimer	05fe8b,
+10077138	1	1	SetThreadpoolTimer	05fe8b,
+1007714c	1	1	WaitForThreadpoolTimerCallbacks	05fe8b,
+1007716c	1	1	CloseThreadpoolTimer	05fe8b,
+10077184	1	1	CreateThreadpoolWait	05fe8b,
+1007719c	1	1	SetThreadpoolWait	05fe8b,
+100771b0	1	1	CloseThreadpoolWait	05fe8b,
+100771c4	1	1	FlushProcessWriteBuffers	05fe8b,
+100771e0	1	1	FreeLibraryWhenCallbackReturns	05fe8b,
+10077200	1	1	GetCurrentProcessorNumber	05fe8b,
+1007721c	1	1	GetLogicalProcessorInformation	05fe8b,
+1007723c	1	1	CreateSymbolicLinkW	05fe8b,
+10077250	1	1	SetDefaultDllDirectories	05fe8b,
+1007726c	1	1	EnumSystemLocalesEx	05fe8b,
+10077280	1	1	CompareStringEx	05fe8b,
+10077290	1	1	GetDateFormatEx	05fe8b,
+100772a0	1	1	GetLocaleInfoEx	05fe8b,
+100772b0	1	1	GetTimeFormatEx	05fe8b,
+100772c0	1	1	GetUserDefaultLocaleName	05fe8b,
+100772dc	1	1	IsValidLocaleName	05fe8b,
+100772f0	1	1	LCMapStringEx	05fe8b,
+10077300	1	1	GetCurrentPackageId	05fe8b,
+10077318	1	1	UTF-8	061541,
+10077320	1	1	UTF-16LE	061541,
+1007732c	1	1	UNICODE	061541,
+10077448	1	1	bad exception	0662a8,
+10077458	2	1	USER32.DLL	0674ed,
+10077470	1	1	MessageBoxW	0674ed,
+1007747c	1	1	GetActiveWindow	0674ed,
+1007748c	1	1	GetLastActivePopup	0674ed,
+100774a0	1	1	GetUserObjectInformationW	0674ed,
+100774bc	1	1	GetProcessWindowStation	0674ed,
+10078570	0	0	de-DE	
+10078690	0	0	sl-SI	
+1007875c	0	0	hi-IN	
+100787d4	0	0	bn-IN	
+100787e0	0	0	pa-IN	
+100787f8	0	0	ta-IN	
+10078804	0	0	te-IN	
+10078810	0	0	kn-IN	
+10078834	0	0	sa-IN	
+100788c8	0	0	de-CH	
+10078928	0	0	sr-SP-Latn	
+10078964	0	0	se-SE	
+100789bc	0	0	de-AT	
+100789ec	0	0	sr-SP-Cyrl	
+10078a5c	0	0	fr-CH	
+10078a9c	0	0	de-LI	
+10078acc	0	0	bs-BA-Latn	
+10078b24	0	0	sr-BA-Latn	
+10078e34	0	0	bn-in	
+10078e40	0	0	bs-ba-latn	
+10078e88	0	0	de-at	
+10078e94	0	0	de-ch	
+10078ea0	0	0	de-de	
+10078eac	0	0	de-li	
+10078f4c	2	1	en-tt	0676cf,
+100790b4	0	0	fr-ch	
+10079108	0	0	hi-in	
+10079144	2	1	id-id	0676cf,
+10079198	0	0	kn-in	
+10079280	0	0	pa-in	
+100792f8	0	0	sa-in	
+1007931c	0	0	se-se	
+10079334	0	0	sl-si	
+100793c4	0	0	sr-ba-latn	
+100793dc	0	0	sr-sp-cyrl	
+100793f4	0	0	sr-sp-latn	
+10079440	0	0	ta-in	
+1007944c	0	0	te-in	
+100796d8	1	0	__based(	
+100796e4	1	0	__cdecl	
+100796ec	1	0	__pascal	
+100796f8	1	0	__stdcall	
+10079704	1	0	__thiscall	
+10079710	1	0	__fastcall	
+1007971c	1	0	__clrcall	
+10079728	1	0	__eabi	
+10079730	1	0	__ptr64	
+10079738	1	0	__restrict	
+10079744	1	0	__unaligned	
+10079750	1	0	restrict(	
+10079764	1	0	 delete	
+10079788	1	0	operator	
+10079808	1	0	`vftable'	
+10079814	1	0	`vbtable'	
+10079820	1	0	`vcall'	
+10079828	1	0	`typeof'	
+10079834	1	0	`local static guard'	
+1007984c	1	0	`string'	
+10079858	1	0	`vbase destructor'	
+1007986c	1	0	`vector deleting destructor'	
+1007988c	1	0	`default constructor closure'	
+100798ac	1	0	`scalar deleting destructor'	
+100798cc	1	0	`vector constructor iterator'	
+100798ec	1	0	`vector destructor iterator'	
+1007990c	1	0	`vector vbase constructor iterator'	
+10079930	1	0	`virtual displacement map'	
+1007994c	1	0	`eh vector constructor iterator'	
+10079970	1	0	`eh vector destructor iterator'	
+10079990	1	0	`eh vector vbase constructor iterator'	
+100799b8	1	0	`copy constructor closure'	
+100799d4	1	0	`udt returning'	
+100799e8	1	0	`RTTI	
+100799f0	1	0	`local vftable'	
+10079a00	1	0	`local vftable constructor closure'	
+10079a24	1	0	 new[]	
+10079a2c	1	0	 delete[]	
+10079a38	1	0	`omni callsig'	
+10079a48	1	0	`placement delete closure'	
+10079a64	1	0	`placement delete[] closure'	
+10079a84	1	0	`managed vector constructor iterator'	
+10079aac	1	0	`managed vector destructor iterator'	
+10079ad4	1	0	`eh vector copy constructor iterator'	
+10079afc	1	0	`eh vector vbase copy constructor iterator'	
+10079b28	1	0	`dynamic initializer for '	
+10079b44	1	0	`dynamic atexit destructor for '	
+10079b68	1	0	`vector copy constructor iterator'	
+10079b8c	1	0	`vector vbase copy constructor iterator'	
+10079bb8	1	0	`managed vector copy constructor iterator'	
+10079be4	1	0	`local static thread guard'	
+10079c00	1	0	 Type Descriptor'	
+10079c14	1	0	 Base Class Descriptor at (	
+10079c30	1	0	 Base Class Array'	
+10079c44	1	0	 Class Hierarchy Descriptor'	
+10079c64	1	0	 Complete Object Locator'	
+1007a490	1	1	e+000	06a192,
+1007a498	1	1	CreateFile2	06aa16,
+1007a4a4	1	1	CONOUT$	06b329,
+1007a4b4	1	1	1#SNAN	06bcf1,
+1007a4bc	1	1	1#IND	06bcf1,
+1007a4c4	1	1	1#INF	06bcf1,
+1007a4cc	1	1	1#QNAN	06bcf1,
+1007a4d4	2	2	generic	0077b0,001110,
+1007a4dc	6	2	unknown error	001120,001200,
+1007a4ec	1	1	iostream	001190,
+1007a4f8	1	1	iostream stream error	0011a0,
+1007a510	1	1	system	0011f0,
+1007a518	2	1	Failed to open animation file.	0013b0,
+1007a53c	1	1	bool CCustomAnimFile::Load(char* pszFileName)	001472,
+1007a56c	1	1	Failed to open animation memory buffer.	0014e0,
+1007a594	1	1	Failed to read animation from memory.	0014e0,
+1007a5c0	1	1	bool CCustomAnimFile::Load(void* pBuffer, uint32_t uBufferLength)	001595,
+1007a60c	1	1	Failed to load ANPK animation file.	001600,
+1007a638	1	1	Failed to load ANP3 animation file.	001600,
+1007a65c	1	1	Unknown animation file signature.	001600,
+1007a680	1	1	bool CCustomAnimFile::Load(RwStream* pStream)	0016ed,
+1007a6b0	2	2	Animation file claims to contain over 500 animations.	001f90,001740,
+1007a6f8	2	2	Animation hierarchy %d (%s) claims to contain over 50 sequences.	001f90,001740,
+1007a750	1	1	Failed to read animation sequence %d,%d(%s) info section, req %d, read %d.	001740,
+1007a79c	1	1	Failed to skip struct overhead.	001740,
+1007a7bc	2	2	Animation sequence %d,%d(%s) claims to have over 10000 frames.	001f90,001740,
+1007a814	1	1	Animation sequence frame type is invalid.	001740,
+1007a840	2	1	Failed to read animation frame rotation.	001740,
+1007a86c	1	1	Failed to read animation frame translation.	001740,
+1007a898	1	1	Failed to skip animation frame scale.	001740,
+1007a8c0	2	2	Model 1 used to initialise animations is not available.	001f90,001740,
+1007a8f8	1	1	CCustomAnimFile::LoadVersionOne	001ea4,
+1007a918	1	1	Animation block name	001f90,
+1007a930	1	1	Number of animations	001f90,
+1007a948	1	1	Animation name	001f90,
+1007a958	1	1	Number of sequences	001f90,
+1007a96c	1	1	Frame data length	001f90,
+1007a980	1	1	Unknown animation field	001f90,
+1007a998	1	1	Animation sequence name	001f90,
+1007a9b0	1	1	Animation sequence type	001f90,
+1007a9c8	1	1	Animation hierarchy %d (%s) bone %d (%s) unknown type %d.	001f90,
+1007aa04	1	1	Number of frames in a sequence	001f90,
+1007aa24	1	1	Bone index of a sequence	001f90,
+1007aa40	1	1	Frame rotation and time	001f90,
+1007aa58	1	1	Frame translation	001f90,
+1007aa6c	1	1	CCustomAnimFile::LoadVersionTwo	0025fb,
+1007aa8c	1	1	Could not bytes from stream: %s.	0027b0,
+1007aab0	1	1	Could not read animation section header named %s.	002830,
+1007aae4	1	1	Animation section header FOURCC is %s, should be %s.	002830,
+1007ab28	1	1	Animation info section contents must be at least 5 bytes, this is %d bytes.	002900,
+1007ab74	1	1	Failed to read element count from animation info section.	002900,
+1007abb0	1	1	Buffer is too small to load animation file string.	0029d0,
+1007abe4	1	1	Failed to read string from animation file.	0029d0,
+1007ac10	1	1	Invalid animation for BlendAnimation: group %u anim %u	0033e0,
+1007ac48	1	1	Invalid animation for AddAnimation: group %u anim %u	0036f0,
+1007ac80	7	7	invalid map/set<T> iterator	0183f0,005880,003b30,003e00,004060,0050e0,004330,
+1007ac9c	3	2	invalid string position	004c90,0046a0,
+1007acb4	5	4	string too long	025970,025650,004b90,0046a0,
+1007acc4	7	7	map/set<T> too long	023aa0,018940,006a40,006c70,006e90,0070c0,0067e0,
+1007ace8	7	3	basic	053060,053390,04e4f0,
+1007acf0	1	1	Loading generic textures	0077b0,
+1007ad0c	18	1	Loading the Game	0077b0,
+1007ad20	1	1	Loading particles	0077b0,
+1007ad34	1	1	particle	0077b0,
+1007ad40	1	1	MODELS/PARTICLE.TXD	0077b0,
+1007ad54	4	1	Setup game variables	0077b0,
+1007ad6c	1	1	MODELS\GTA3.IMG	0077b0,
+1007ad7c	1	1	DATA\DEFAULT.DAT	0077b0,
+1007ad90	1	1	Add particles	0077b0,
+1007ada0	1	1	Setup paths	0077b0,
+1007adac	1	1	Setup water	0077b0,
+1007adb8	1	1	DATA\WATER.DAT	0077b0,
+1007adc8	2	1	water	04c700,
+1007add0	1	1	Setup streaming	0077b0,
+1007ade0	1	1	Streaming uses %dK of its memory\n	0077b0,
+1007ae04	1	1	Load animations	0077b0,
+1007ae14	1	1	Find big buildings	0077b0,
+1007ae28	1	1	Setup traffic lights	0077b0,
+1007ae40	1	1	lights	049930,
+1007ae48	1	1	Load scripts	0077b0,
+1007ae58	1	1	Position dynamic objects	0077b0,
+1007ae74	1	1	Initialise vehicle paths	0077b0,
+1007ae90	1	1	Start script	0077b0,
+1007aea0	1	1	Load scene	0077b0,
+1007af00	6	6	vector<T> too long	058b70,0231b0,0232b0,010b00,010ba0,00b320,
+1007af14	1	1	Extra view	00c370,
+1007af20	1	1	Generate vehicle XMLs	00c370,
+1007af38	1	1	Generate weapon XMLs	00c370,
+1007af50	1	1	Log weapon spawn position	00c370,
+1007af6c	1	1	Spawn vehicle	00c370,
+1007af7c	1	1	Weapons	00c370,
+1007af84	1	1	Windows	00c370,
+1007af8c	1	1	Output	00c370,
+1007af94	1	1	%d-%d	00cac0,
+1007af9c	1	1	Texture file too small.	00d340,
+1007afb4	9	1	CDxHandler::DX9TextureFix	00d340,
+1007afd0	1	1	Texture file main header missing.	00d340,
+1007aff4	1	1	Texture uses too high version.	00d340,
+1007b014	1	1	Texture dictionary sub-header missing.	00d340,
+1007b03c	1	1	Texture dictionary sub-header size wrong.	00d340,
+1007b068	1	1	Texture offset is invalid (tex %u).	00d340,
+1007b08c	1	1	Texture header is missing (tex %u).	00d340,
+1007b0b0	1	1	Texture sub-header is missing (tex %u).	00d340,
+1007b0dc	1	1	Texture type unknown (tex %u).	00d340,
+1007b288	1	1	mvl\bullethole.png	00f4b0,
+1007b29c	16	12	list<T> too long	022c50,022dd0,0290d0,022670,01a8c0,019930,01ac30,01aef0,00fd70,00ff20,00f4b0,00f560,
+1007b2b0	1	1	mvl\img\seledge.png	010ed0,
+1007b2c4	1	1	mvl\img\dot.png	010ed0,
+1007b2d4	2	1	MvlSecWnd	012170,
+1007b2e0	1	1	MVL camera view	012170,
+1007b2f0	1	1	Unable to shoot, wrong angle %f.	015d60,
+1007b314	1	1	Box action %u.	016180,
+1007b378	10	10	Problem at %08X.	017170,0171d0,017250,017410,017510,0175f0,0171a0,017220,017720,0177c0,
+1007b38c	1	1	CLongModelId::RelocateEntityLevel	017170,
+1007b3b0	1	1	CLongModelId::RelocateEntityZone	0171a0,
+1007b3d4	1	1	CLongModelId::ExtendModelIdMovsx	0171d0,
+1007b3f8	1	1	CLongModelId::ExtendModelIdOr	017220,
+1007b418	1	1	CLongModelId::ExtendTxdIndexMovsx	017250,
+1007b43c	1	1	CModelIndexLimit::ReplaceStreamingBufferRefs	017410,
+1007b46c	1	1	CModelIndexLimit::ReplaceModelPointerBufferRefs	017510,
+1007b49c	1	1	CModelIndexLimit::ReplaceTexStartIndexRefs	0175f0,
+1007b4c8	1	1	CModelIndexLimit::ReplaceColStartIndexRefs	017720,
+1007b4f4	1	1	CModelIndexLimit::ReplaceAnimStartIndexRefs	0177c0,
+1007b520	1	1	Duplicate model index %d for model %s, previous index %d.	0179e0,
+1007b55c	1	1	CModelIndexLimit::RegisterModelForLookup	0179e0,
+1007b588	1	1	Creating instance of model %d with name %s - real name of the model is %s!	017f60,
+1007b5d4	2	1	CModelIndexLimit::VerifyModelHasColModel	017f60,
+1007b600	1	1	Cannot create instance of model %d (%s), no colmodel.	017f60,
+1007b638	1	1	Cannot add model %s to list of ID-less models - limit full (%d).	018030,
+1007b67c	1	1	CModelIndexLimit::VerifyDirectoryCanAdd	018030,
+1007b6a4	1	1	data\maps\paths.ipl	018b80,
+1007b6b8	3	2	mvl\pathcache.bin	018b80,018c60,
+1007b6cc	1	1	DATA\MAPS\paths.ipl	018da0,
+1007b730	1	1	Could not find an available slot for ped head model.	019500,
+1007b768	1	1	Ped head model index set to %d.	019500,
+1007b788	1	1	pedhead	019500,
+1007b790	1	1	Could not find a free model slot for road thingy.	0198e0,
+1007b7c4	1	1	Road thingy placed at index %d.	0198e0,
+1007b7e4	4	2	snake	043660,019930,
+1007b83c	13	7	false	057320,04e8f0,04edc0,04f090,049640,038160,01bc10,
+1007b850	1	1	Wrong validator for line '%s'.	01ba80,
+1007b870	1	1	The value of '%s' element is out of range %u to %u.	01ba80,
+1007b8a4	1	1	Line list and buffer list lengths don't match.	01baf0,
+1007b8d4	6	6	Unknown element '%s' in '%s' sector.	053390,04cec0,037b80,037e70,0380b0,01bb40,
+1007b8fc	1	1	'%s' sector is missing '%s' element.	01bbb0,
+1007b924	7	7	'%s' sector contains multiple '%s' elements.	053390,04cec0,04d380,0474d0,037b80,037e70,01bc10,
+1007b954	1	1	Could not load '%s' vector.	01bc10,
+1007b970	1	1	ifuXtM	01bc10,
+1007b978	8	8	Failed to read data from '%s' element.	053390,04cec0,04d380,0474d0,037b80,037e70,038160,01bc10,
+1007b9a0	2	2	The value of '%s' can only be either 'true' or 'false'.	038160,01bc10,
+1007b9d8	5	5	Failed to parse the contents of '%s' element.	053390,04d380,0474d0,037e70,01bc10,
+1007ba14	1	1	CHelpers::XmlParseVector	01bdb0,
+1007ba30	1	1	Vector	01bdb0,
+1007ba38	1	1	CHelpers::PngFileToTexture	01bfb3,
+1007ba54	1	1	Could not open memory stream for PNG file.	01bed0,
+1007ba80	2	2	Could not read RwImage from PNG file.	052be0,01bed0,
+1007baa8	2	2	Could not get texture from RwImage.	052be0,01bed0,
+1007bad0	1	1	mvl/errorlog.txt	01c180,
+1007bae8	1	1	Address: %08X error %08X\nEAX %08X EBX %08X ECX %08X EDX %08X\nEBP %08X ESP %08X ESI %08X EDI %08X\n	01c180,
+1007bb4c	1	1	Stack: \n	01c180,
+1007bb58	1	1	Bad stack address %08X\n	01c180,
+1007bb70	1	1	%08X\n	01c180,
+1007bb78	1	1	%08X S %08X N %s\n	01c180,
+1007bb8c	1	1	%08X - unknown module.\n	01c180,
+1007bba4	1	1	mvl/dump640FE5h.txt	01c180,
+1007bbc0	1	1	mvl/libpng15.dll	01c3f0,
+1007bbd8	1	1	Could not load 'mvl/libpng15.dll', LoadLibrary failed with error %d.	01c3f0,
+1007bc20	2	1	CPngFuncs::LoadPngFuncs	01c3f0,
+1007bc38	1	1	png_create_read_struct_2	01c3f0,
+1007bc54	1	1	png_create_info_struct	01c3f0,
+1007bc6c	1	1	png_destroy_read_struct	01c3f0,
+1007bc84	1	1	png_set_read_fn	01c3f0,
+1007bc94	1	1	png_read_info	01c3f0,
+1007bca4	1	1	png_get_IHDR	01c3f0,
+1007bcb4	1	1	png_set_strip_16	01c3f0,
+1007bcc8	1	1	png_set_packing	01c3f0,
+1007bcd8	1	1	png_set_expand_gray_1_2_4_to_8	01c3f0,
+1007bcf8	1	1	png_set_gray_to_rgb	01c3f0,
+1007bd0c	1	1	png_set_filler	01c3f0,
+1007bd1c	1	1	png_get_valid	01c3f0,
+1007bd2c	1	1	png_get_PLTE	01c3f0,
+1007bd3c	1	1	png_get_tRNS	01c3f0,
+1007bd4c	1	1	png_read_image	01c3f0,
+1007bd5c	1	1	png_read_end	01c3f0,
+1007bd6c	1	1	%d functions are missing from libpng15.dll	01c3f0,
+1007bd98	1	1	Failed to read data from PNG file via stream.	01c5f0,
+1007bdc8	1	1	PNG library not loaded.	01c690,
+1007bde0	2	2	CPngFuncs::RtPNGImageStreamRead	01c9aa,01c690,
+1007be00	1	1	1.5.13	01c690,
+1007be08	1	1	Failed to create read struct.	01c690,
+1007be28	1	1	Failed to create info struct.	01c690,
+1007be48	1	1	Only 32-bit PNG is currently supported!	01c690,
+1007be70	1	1	Failed to create image.	01c690,
+1007be88	1	1	Failed to allocate image pixels.	01c690,
+1007beac	1	1	mvl\messagelog.txt	01cad0,
+1007bec4	1	1	Error in %s: %s\n	01cb80,
+1007bed8	1	1	MSG: %s\n	01cc00,
+1007bee4	1	1	Warning in %s: %s\n	01cce0,
+1007c518	1	1	Unknown opcode %04X.	023470,
+1007c530	1	1	Cannot ignore unknown opcode %04X.	0234c0,
+1007c554	1	1	CScmHandler::IgnoreOpcode	0234c0,
+1007c578	0	0	loadAnimationFile	
+1007c58c	1	0	[]:[s] Load an animation file.	
+1007c5ac	1	0	unloadAnimationFile	
+1007c5c0	1	0	[]:[s] Unload an animation file.	
+1007c5e4	1	0	initAnimType	
+1007c5f4	1	0	[]:[Oiii] Initialize an animation.	
+1007c618	1	0	getStockAnimation	
+1007c62c	1	0	[]:[ii] Gets a stock animation.	
+1007c64c	1	0	addPedAnimation	
+1007c65c	1	0	[]:[OO] Add ped animation.	
+1007c678	1	0	blendPedAnimation	
+1007c68c	1	0	[]:[OOf] Blend ped animation.	
+1007c6ac	1	0	getAllPedAnimations	
+1007c6c0	1	0	[]:[O] Get all ped animations.	
+1007c6e0	1	0	findPedAnimation	
+1007c6f4	1	0	[]:[Oi] Find ped animation by index.	
+1007c71c	1	0	getAnimPed	
+1007c728	1	0	[]:[O] Get the ped of this animation.	
+1007c750	1	0	getAnimIndex	
+1007c760	1	0	[]:[O] Get the animation index of this animation.	
+1007c794	1	0	getAnimGroupIndex	
+1007c7a8	1	0	[]:[O] Get the group index of this animation.	
+1007c7d8	1	0	getAnimName	
+1007c7e4	1	0	[]:[O] Get the name of this animation.	
+1007c80c	1	0	getAnimFlags	
+1007c81c	1	0	[]:[O] Get the flags of this animation.	
+1007c844	1	0	getAnimLength	
+1007c854	1	0	[]:[O] Get the length of this animation.	
+1007c880	1	0	getAnimProgress	
+1007c890	1	0	[]:[O] Get the progress of this animation.	
+1007c8bc	1	0	getAnimSpeed	
+1007c8cc	1	0	[]:[O] Get the speed of this animation.	
+1007c8f4	1	0	getAnimBlendProgress	
+1007c90c	1	0	[]:[O] Get the blend progress of this animation.	
+1007c940	1	0	getAnimBlendSpeed	
+1007c954	1	0	[]:[O] Get the blend speed of this animation.	
+1007c984	1	0	getAnimCallback	
+1007c994	1	0	[]:[O] Get the animation callback.	
+1007c9b8	1	0	setAnimCallback	
+1007c9c8	1	0	[]:[OiOO] Set the animation callback.	
+1007c9f0	1	0	setAnimFlags	
+1007ca00	1	0	[]:[Oi] Set animation flags.	
+1007ca20	1	0	setAnimProgress	
+1007ca30	1	0	[]:[Of] Set animation progress.	
+1007ca50	1	0	setAnimSpeed	
+1007ca60	1	0	[]:[Of] Set animation speed.	
+1007ca80	1	0	setAnimBlendProgress	
+1007ca98	1	0	[]:[Of] Set animation blend progress.	
+1007cac0	1	0	setAnimBlendSpeed	
+1007cad4	1	0	[]:[Of] Set animation blend speed.	
+1007caf8	1	0	removeAnim	
+1007cb04	1	0	[]:[O] Remove the animation from its ped.	
+1007cb30	1	0	invokeAnimCallback	
+1007cb44	0	0	[]:[O(iOO)] Invoke a tuple received from getAnimCallback.	
+1007cb80	2	1	manim	023d10,
+1007cb88	1	1	Argument is not an animation identifier.	023d50,
+1007cbb4	1	1	Animation does not exist.	023d50,
+1007cbd0	1	1	Argument is not an animation type identifier.	023db0,
+1007cc00	1	1	Animation type does not exist.	023db0,
+1007cc20	1	1	Argument is not an animation or animation type identifier.	023e10,
+1007cc5c	1	1	Animation or animation type does not exist.	023e10,
+1007cc88	1	1	s:manim.loadAnimationFile	024020,
+1007cca4	1	1	s:manim.unloadAnimationFile	0240d0,
+1007ccc0	1	1	Oiii:manim.initAnimType	024110,
+1007ccd8	1	1	Wrong number of arguments.	024180,
+1007ccf4	1	1	First argument is not a name or an index.	024180,
+1007cd20	1	1	OO:manim.addPedAnimation	024330,
+1007cd3c	15	15	Entity type is not ped.	026990,026c50,026b40,026bc0,026d00,026d80,026e00,026e80,026f00,026a30,026ab0,024330,0243e0,0244a0,024560,
+1007cd54	1	1	OOf:manim.blendPedAnimation	0243e0,
+1007cd70	1	1	O:manim.getAllPedAnimations	0244a0,
+1007cd8c	1	1	Oi:manim.getAllPedAnimations	024560,
+1007cdac	1	1	O:manim.getAnimPed	024620,
+1007cdc0	1	1	O:manim.getAnimIndex	024690,
+1007cddc	1	1	O:manim.getAnimGroupIndex	0246e0,
+1007cdf8	1	1	O:manim.getAnimName	024730,
+1007ce10	1	1	O:manim.getAnimFlags	024780,
+1007ce28	1	1	O:manim.getAnimLength	0247d0,
+1007ce44	1	1	O:manim.getAnimProgress	024830,
+1007ce5c	2	2	O:manim.getAnimSpeed	024890,0248f0,
+1007ce74	1	1	O:manim.getAnimBlendSpeed	024950,
+1007ce90	1	1	O:manim.getAnimCallback	0249b0,
+1007cea8	1	1	(iii)	0249b0,
+1007ceb0	1	1	(iOO)	0249b0,
+1007ceb8	2	2	Wrong parameter count.	024a40,024df0,
+1007ced0	1	1	Second parameter must be an integer.	024a40,
+1007cef8	1	1	Oiii:manim.setAnimCallback	024a40,
+1007cf14	1	1	OiOO:manim.setAnimCallback	024a40,
+1007cf30	2	2	Callback must be a function.	024a40,024df0,
+1007cf50	2	2	Invalid callback type.	024a40,024df0,
+1007cf68	1	1	OI:manim.setAnimFlags	024bc0,
+1007cf80	1	1	Of:manim.setAnimProgress	024c20,
+1007cf9c	1	1	Of:manim.setAnimSpeed	024c80,
+1007cfb4	1	1	Of:manim.setAnimBlendProgress	024ce0,
+1007cfd4	1	1	Of:manim.setAnimBlendSpeed	024d40,
+1007cff0	1	1	O:manim.removeAnim	024da0,
+1007d004	1	1	OO:manim.invokeAnimCallback	024df0,
+1007d020	1	1	First parameter of tuple must be an integer.	024df0,
+1007d050	1	1	iii:manim.invokeAnimCallback	024df0,
+1007d070	1	1	iOO:manim.invokeAnimCallback	024df0,
+1007d090	0	0	logPrint	
+1007d09c	1	0	i:[s] Prints to the log.	
+1007d0b8	1	0	registerCallback	
+1007d0cc	1	0	i:[ss] Registers a callback handler.	
+1007d0f4	1	0	getFrameCount	
+1007d104	1	0	i:[] Gets current frame count.	
+1007d124	1	0	checkKeysPressed	
+1007d138	1	0	i:[[...]] Check for a list of keys if they are pressed.	
+1007d170	1	0	setHudMessage	
+1007d180	0	0	i:[is] Shows hud message.	
+1007d19c	2	1	mbase	024fd0,
+1007d1a4	1	1	[fff]	0251f0,
+1007d1ac	1	1	[OOOO]	025230,
+1007d1b4	1	1	s:mvlbase.logPrint	025280,
+1007d1c8	1	1	Argument one should be a string.	0252d0,
+1007d1ec	1	1	Argument two should be a function.	0252d0,
+1007d210	1	1	Event name string read error.	0252d0,
+1007d234	1	1	O:mbase.checkKeysPressed	0253e0,
+1007d250	1	1	Argument should be a list.	0253e0,
+1007d26c	1	1	is:mvlbase.setHudMessage	0254b0,
+1007d288	0	0	getEntModelIndex	
+1007d29c	1	0	i:[i] Get the model index of an entity.	
+1007d2c4	1	0	getEntPosition	
+1007d2d4	1	0	(fff):[i] Get the position of an entity.	
+1007d300	1	0	setEntPosition	
+1007d310	1	0	i:[i(fff)] Set the position of an entity.	
+1007d33c	1	0	getEntSpeed	
+1007d348	1	0	(fff):[i] Get the speed of an entity.	
+1007d370	1	0	setEntSpeed	
+1007d37c	1	0	:[i(fff)] Set the speed of an entity.	
+1007d3a4	1	0	getEntType	
+1007d3b0	1	0	s:[i] Get the type of an entity.	
+1007d3d4	1	0	findEntitiesInRange	
+1007d3e8	1	0	[]:[s(fff)f] Find entities of a certain type in a specified range.	
+1007d42c	1	0	getAllEntities	
+1007d43c	1	0	[]:[s] Get all entities of a certain type.	
+1007d468	1	0	getEntFromScmPoolId	
+1007d484	2	2	Argument value is None.	025ba0,026fc0,
+1007d49c	1	1	Argument is not an entity identifier.	025ba0,
+1007d4c4	1	1	Entity does not exist.	025ba0,
+1007d4dc	1	1	O:ment.getEntModelIndex	025c50,
+1007d4f4	1	1	O:ment.getEntPosition	025ca0,
+1007d50c	5	5	(fff)	029b60,025ca0,025d20,025e00,028240,
+1007d514	2	2	O(fff):ment.setEntPosition	025d20,025eb0,
+1007d530	1	1	O:ment.getEntSpeed	025e00,
+1007d544	1	1	O:ment.getEntType	025f40,
+1007d558	5	3	building	025f40,026010,026460,
+1007d564	5	3	object	025f40,026010,026460,
+1007d570	10	7	vehicle	0501b0,050590,04e790,02ae60,025f40,026010,026460,
+1007d578	1	1	unknown	025f40,
+1007d580	1	1	s(fff)f:ment.findEntitiesInRange	026010,
+1007d5a4	1	1	s:ment.findEntitiesInRange	026460,
+1007d5c0	0	0	getPlayerPed	
+1007d5d0	1	0	i:[] Get player ped handle.	
+1007d5ec	1	0	getPedVehicle	
+1007d5fc	1	0	i:[] Get the handle to the vehicle the ped is in.	
+1007d630	1	0	getPedHealth	
+1007d640	1	0	f:[O] Get ped health.	
+1007d658	1	0	setPedHealth	
+1007d668	1	0	i:[Of] Set ped health.	
+1007d680	1	0	getPedArmour	
+1007d690	1	0	f:[O] Get ped armour.	
+1007d6a8	1	0	setPedArmour	
+1007d6b8	1	0	i:[Of] Set ped armour.	
+1007d6d0	1	0	givePedWeapon	
+1007d6e0	1	0	i:[Oiiii] Give weapon to ped.	
+1007d700	1	0	getPedCurrentWeapon	
+1007d714	1	0	i:[O] Get ped current weapon.	
+1007d734	1	0	getPedCurrentTotalAmmo	
+1007d74c	1	0	i:[O] Get ped current total ammo.	
+1007d770	1	0	getPedCurrentLoadedAmmo	
+1007d788	1	0	i:[O] Get ped current loaded ammo.	
+1007d7ac	1	0	getCurrentWeaponSlot	
+1007d7c4	1	0	i:[O] Get ped current weapon slot.	
+1007d7e8	1	0	setCurrentWeaponSlot	
+1007d800	0	0	i:[Oi] Set ped current weapon slot.	
+1007d82c	1	1	O:mped.getPedVehicle	026990,
+1007d844	1	1	O:mped.getPedHealth	026a30,
+1007d858	1	1	Of:mped.setPedHealth	026ab0,
+1007d870	1	1	O:mped.getPedArmour	026b40,
+1007d884	1	1	Of:mped.setPedArmour	026bc0,
+1007d89c	1	1	Oiiii:mped.givePedWeapon	026c50,
+1007d8b8	1	1	O:mped.getPedCurrentWeapon	026d00,
+1007d8d4	1	1	O:mped.getPedCurrentTotalAmmo	026d80,
+1007d8f4	1	1	O:mped.getPedCurrentLoadedAmmo	026e00,
+1007d914	1	1	O:mped.getCurrentWeaponSlot	026e80,
+1007d930	1	1	Oi:mped.getCurrentWeaponSlot	026f00,
+1007d950	0	0	getEntityObject	
+1007d960	1	0	O:[O] Get the atomic/clump of the entity.	
+1007d98c	1	0	getAtomicFrame	
+1007d99c	1	0	O:[O] Get the frame of an atomic.	
+1007d9c0	1	0	getClumpFrame	
+1007d9d0	1	0	O:[O] Get the frame of a clump.	
+1007d9f0	1	0	getFrameName	
+1007da00	1	0	s:[O] Get the atomic/clump of the entity.	
+1007da2c	1	0	getFrameRelativeMatrix	
+1007da44	2	0	[[fff][fff][fff][fff]]:[O] Get the atomic/clump of the entity.	
+1007da84	1	0	getFrameAbsoluteMatrix	
+1007da9c	1	0	getFrameFirstChild	
+1007dab4	1	1	Argument is not an frame identifier.	026fc0,
+1007dadc	1	1	Argument is not an atomic identifier.	026fc0,
+1007db04	1	1	Argument is not an clump identifier.	026fc0,
+1007db2c	1	1	Invalid pool index.	026fc0,
+1007db40	1	1	RW object does not exist.	026fc0,
+1007db5c	1	1	O:mrw.getEntityObject	027080,
+1007db74	1	1	O:mrw.getAtomicFrame	027120,
+1007db8c	1	1	O:mrw.getClumpFrame	027190,
+1007dba0	1	1	O:mrw.getFrameName	027200,
+1007dbb4	1	1	O:mrw.getFrameRelativeMatrix	027250,
+1007dbd4	1	1	O:mrw.getFrameAbsoluteMatrix	0272a0,
+1007dbf4	1	1	O:mrw.getFrameFirstChild	0272f0,
+1007dc10	0	0	registerHandler	
+1007dc20	1	0	i:[iOs] Register opcode handler.	
+1007dc44	1	0	scriptWait	
+1007dc50	0	0	:[] Make this opcode halt script until next frame.	
+1007dc94	1	1	iOs:mscm.registerHandler	0278a0,
+1007dcb0	1	1	Invalid opcode range.	0278a0,
+1007dcc8	1	1	Handler must be a function.	0278a0,
+1007dce4	1	1	No more than 11 parameters allowed.	0278a0,
+1007dd08	1	1	ifPVOB	0278a0,
+1007dd10	1	1	Parameter format contains invalid characters.	0278a0,
+1007dd40	0	0	createVehicle	
+1007dd50	1	0	O:[i(fff)(fff)i] Create a vehicle.	
+1007dd74	1	0	getTuningPartCount	
+1007dd88	1	0	i:[i] Get the number of vehicle parts for a model index that can be selected.	
+1007ddd8	1	0	getTuningPartName	
+1007ddec	1	0	s:[ii] Get the name of one tunable vehicle part.	
+1007de20	1	0	getTuningPartVarCount	
+1007de38	1	0	i:[ii] Get the number of different versions for one tunable part.	
+1007de7c	1	0	getVehUsedTuningPart	
+1007de98	1	0	i:[ii] Get the index of the version of a tunable part used by the vehicle.	
+1007dee4	1	0	setVehUsedTuningPart	
+1007df00	1	0	i:[iii] Set the index of the version of a tunable part used by the vehicle.	
+1007df4c	1	0	getVehModelAIType	
+1007df60	1	0	s:[i] Get the AI type of a vehicle model as a string.	
+1007df98	1	0	setCarTaxiLightState	
+1007dfb0	1	0	i:[ii] Set the taxi light state of an automobile.	
+1007dfe4	1	0	getVehicleHealth	
+1007dff8	1	0	f:[i] Get vehicle health.	
+1007e014	1	0	setVehicleHealth	
+1007e028	1	0	i:[if] Set vehicle health.	
+1007e044	1	0	blowVehicleUp	
+1007e054	0	0	i:[ii] Blow vehicle up.	
+1007e074	1	1	i(fff)(fff)i:mveh.createVehicle	027a70,
+1007e094	1	1	i:mveh.getTuningPartCount	027b90,
+1007e0b0	1	1	ii:mveh.getTuningPartName	027bf0,
+1007e0cc	1	1	ii:mveh.getTuningPartVarCount	027c50,
+1007e0ec	1	1	Oi:mveh.getVehUsedTuningPart	027cb0,
+1007e10c	6	6	Entity type is not vehicle.	027cb0,027d50,027f60,028000,028080,028110,
+1007e128	1	1	Oii:mveh.setVehUsedTuningPart	027d50,
+1007e148	1	1	i:mveh.getVehModelAIType	027de0,
+1007e16c	3	2	police	037b80,027de0,
+1007e17c	2	1	predator	027de0,
+1007e190	2	1	barracks	027de0,
+1007e1a8	3	2	firetruck	037b80,027de0,
+1007e1b4	3	2	ambulance	037b80,027de0,
+1007e1c8	1	1	Oi:mveh.setCarTaxiLightState	027f60,
+1007e1e8	1	1	O:mveh.getVehicleHealth	028000,
+1007e200	1	1	Of:mveh.setVehicleHealth	028080,
+1007e21c	1	1	OO:mveh.blowVehicleUp	028110,
+1007e234	0	0	getWeather	
+1007e240	1	0	i:[] Get current weather.	
+1007e25c	1	0	getTime	
+1007e268	1	0	(ii):[] Get current time as a tuple, first element is hours, second is minutes.	
+1007e2b8	1	0	rayTrace	
+1007e2c4	1	0	(iifff):[(fff)(fff)is] Do a ray trace.	
+1007e2ec	1	0	startFireOnEntity	
+1007e300	1	0	i:[ii] Create fire at entity.	
+1007e320	1	0	createExplosion	
+1007e330	0	0	i:[i(fff)] Create explosion at position.	
+1007e35c	2	1	mworld	0281c0,
+1007e36c	1	1	(fff)(fff)Os:mworld.rayTrace	028240,
+1007e38c	1	1	OO:mworld.startFireOnEntity	028560,
+1007e3a8	1	1	Oi(fff):mworld.createExplosion	0285e0,
+1007e3c8	1	1	python33.dll	0287c0,
+1007e3d8	1	1	Couldn't load python interpreter.	0287c0,
+1007e3fc	1	1	PyModule_Create2	0287c0,
+1007e410	1	1	PyImport_Import	0287c0,
+1007e420	1	1	PyFloat_FromDouble	0287c0,
+1007e434	1	1	PyObject_IsTrue	0287c0,
+1007e444	1	1	PyCallable_Check	0287c0,
+1007e458	1	1	PyTuple_New	0287c0,
+1007e464	1	1	PyTuple_Size	0287c0,
+1007e474	1	1	PyTuple_GetItem	0287c0,
+1007e484	1	1	PyTuple_SetItem	0287c0,
+1007e494	1	1	PyObject_CallObject	0287c0,
+1007e4a8	1	1	PyLong_FromUnsignedLong	0287c0,
+1007e4c0	1	1	PyLong_FromLong	0287c0,
+1007e4d0	1	1	PyByteArray_AsString	0287c0,
+1007e4e8	1	1	PyUnicode_FromString	0287c0,
+1007e500	1	1	PyType_IsSubtype	0287c0,
+1007e514	1	1	PyLong_AsLong	0287c0,
+1007e524	1	1	PyUnicode_AsASCIIString	0287c0,
+1007e53c	1	1	PyErr_Print	0287c0,
+1007e548	1	1	PyFloat_AsDouble	0287c0,
+1007e55c	1	1	PyObject_GetAttrString	0287c0,
+1007e574	1	1	Py_Initialize	0287c0,
+1007e584	1	1	Py_Finalize	0287c0,
+1007e590	1	1	PyArg_ParseTuple	0287c0,
+1007e5a4	1	1	Py_BuildValue	0287c0,
+1007e5b4	1	1	PySys_GetObject	0287c0,
+1007e5c4	1	1	PySys_SetObject	0287c0,
+1007e5d4	1	1	PyImport_ImportModule	0287c0,
+1007e5ec	1	1	PyImport_AppendInittab	0287c0,
+1007e604	1	1	PyBytes_AsString	0287c0,
+1007e618	1	1	PyModule_GetName	0287c0,
+1007e62c	1	1	PyList_New	0287c0,
+1007e638	1	1	PyList_Append	0287c0,
+1007e648	1	1	PyBool_FromLong	0287c0,
+1007e658	1	1	PyErr_Occurred	0287c0,
+1007e668	1	1	PyErr_SetString	0287c0,
+1007e678	1	1	PyList_SetItem	0287c0,
+1007e688	1	1	PyFunction_GetModule	0287c0,
+1007e6a0	1	1	PyList_Size	0287c0,
+1007e6ac	1	1	PyList_GetItem	0287c0,
+1007e6bc	1	1	PyLong_AsLongLong	0287c0,
+1007e6d0	1	1	PyLong_FromLongLong	0287c0,
+1007e6e4	1	1	PyErr_Clear	0287c0,
+1007e6f0	1	1	PyUnicode_Type	0287c0,
+1007e700	1	1	PyFloat_Type	0287c0,
+1007e710	1	1	PyLong_Type	0287c0,
+1007e71c	1	1	PyBool_Type	0287c0,
+1007e728	1	1	PyFunction_Type	0287c0,
+1007e738	1	1	PyModule_Type	0287c0,
+1007e748	1	1	_Py_NoneStruct	0287c0,
+1007e758	1	1	PyExc_KeyError	0287c0,
+1007e768	1	1	Couldn't load all python functions %08X %08X.	0287c0,
+1007e798	1	1	Python interpreter loaded.	0287c0,
+1007e7b4	1	1	eventGameStart	028cd0,
+1007e7c4	1	1	eventFrame	028cd0,
+1007e7d0	1	1	eventInternalAddAnim	028cd0,
+1007e7e8	1	1	eventInternalBlendAnim	028cd0,
+1007e800	1	1	eventBulletFired	028cd0,
+1007e81c	1	1	Successfully loaded script '%s'.	029310,
+1007e840	1	1	Failed to load script '%s'.	029310,
+1007e85c	1	1	mvl\scripts\	029580,
+1007e874	1	1	OiOOii	029b60,
+1007e880	1	1	StringIO	029ff0,
+1007e88c	3	2	stderr	029ff0,02a0a0,
+1007e894	1	1	getvalue	02a0a0,
+1007e8a0	1	1	close	02a0a0,
+1007e8a8	2	2	%s.err.txt	02a170,02a1d0,
+1007e8b8	2	1	CMvlSettings::LoadMXMLSectionInternal	02a7f0,
+1007e8e0	1	1	windowed	02a7f0,
+1007e8ec	1	1	usemenus	02a7f0,
+1007e8f8	1	1	fixframewait	02a7f0,
+1007e908	1	1	menuonrestore	02a7f0,
+1007e918	1	1	rtshadowonplanes	02a7f0,
+1007e92c	1	1	rtshadowonplayer	02a7f0,
+1007e940	1	1	antialias	02a7f0,
+1007e94c	1	1	noloadfade	02a7f0,
+1007e958	1	1	autoloadsave	02a7f0,
+1007e968	1	1	roadthingy	02a7f0,
+1007e974	1	1	trashbin	02a7f0,
+1007e980	1	1	pathbincache	02a7f0,
+1007e990	1	1	custominit	02a7f0,
+1007e99c	1	1	autointeriors	02a7f0,
+1007e9ac	1	1	debugidedata	02a7f0,
+1007e9bc	1	1	testmenus	02a7f0,
+1007e9c8	1	1	decapitations	02a7f0,
+1007e9d8	1	1	framereserve	02a7f0,
+1007e9f4	1	1	The value of '%s' can only be either 'on', 'off' or 'max'.	02a7f0,
+1007ea30	1	1	CMvlSettings::LoadMXMLSectionLimitsInstances	02ac20,
+1007ea60	1	1	ptrnode	02ac20,
+1007ea68	1	1	entryinfonode	02ac20,
+1007ea80	3	2	vehicles	0507e0,02ac20,
+1007ea8c	1	1	buildings	02ac20,
+1007ea98	1	1	treadables	02ac20,
+1007eaa4	1	1	objects	02ac20,
+1007eaac	1	1	dummys	02ac20,
+1007eab4	1	1	audioscriptobj	02ac20,
+1007eac4	1	1	colmodel	02ac20,
+1007ead0	1	1	CMvlSettings::LoadMXMLSectionLimitsModelStore	02ae60,
+1007eb00	1	1	simple	02ae60,
+1007eb10	5	4	weapon	056aa0,052f20,04e430,02ae60,
+1007eb18	1	1	clump	02ae60,
+1007eb28	2	1	CMvlSettings::LoadMXMLSectionLimits	02b030,
+1007eb4c	1	1	models	02b030,
+1007eb54	1	1	texdicts	02b030,
+1007eb60	1	1	colfiles	02b030,
+1007eb6c	1	1	streamingmem	02b030,
+1007eb7c	1	1	instances	02b030,
+1007eb88	1	1	modelstore	02b030,
+1007eb94	19	15	Could not load '%s' sector.	054910,050bd0,051150,04e4f0,02b030,02b230,058880,050f20,051060,053060,056640,0567a0,0478a0,04dd20,037b80,
+1007ebb0	1	1	internal	02b230,
+1007ebbc	1	1	limits	02b230,
+1007ebc4	2	1	CMvlSettings::LoadMXMLSectionMiscData	02b230,
+1007ebec	2	1	mvl\globalm.xml	02b390,
+1007ebfc	2	1	CMvlSettings::LoadGlobalMXMLFile	02b390,
+1007ec20	1	1	Global misc XML file detected - loading it.	02b390,
+1007ec4c	5	5	XML file could not be parsed: %s.	058990,052f20,04e790,038160,02b390,
+1007ec70	5	5	No root element in XML.	058990,052f20,051240,04e790,02b390,
+1007ec88	1	1	miscdata	02b390,
+1007ec94	5	5	Root element has the wrong name.	058990,052f20,051240,04e790,02b390,
+1007ecb8	2	1	PtrNode	02b4d0,
+1007ecc0	2	1	EntryInfoNode	02b4d0,
+1007ecd8	1	0	Vehicles	
+1007ece4	1	0	Buildings	
+1007ecf0	1	0	Treadables	
+1007ecfc	1	0	Objects	
+1007ed04	1	0	Dummys	
+1007ed0c	1	0	AudioScriptObj	
+1007ed1c	1	0	ColModel	
+1007ed28	1	1	Pool %s limit below minimum %d.	02b4d0,
+1007ed48	2	1	CMvlSettings::ProcessPoolLimits	02b4d0,
+1007ed68	1	1	Pool %s limit above maximum %d.	02b4d0,
+1007ed88	2	1	Simple	02b5a0,
+1007ed98	1	0	Weapon	
+1007eda0	1	0	Clump	
+1007eda8	1	0	Vehicle	
+1007edbc	1	1	Model store %s limit below minimum %d.	02b5a0,
+1007ede4	2	1	CMvlSettings::ProcessModelStoreLimits	02b5a0,
+1007ee0c	1	1	Model store %s limit above maximum %d.	02b5a0,
+1007ee34	1	0	RAN OUT OF PTRNODE SLOTS!!! Increase pool size.	
+1007ee64	1	0	CMvlSettings::HookPoolNewPtrNode	
+1007ee88	1	0	RAN OUT OF ENTRYINFONODE SLOTS!!! Increase pool size.	
+1007eec0	1	0	CMvlSettings::HookPoolNewEntryInfoNode	
+1007eee8	1	0	RAN OUT OF PED SLOTS!!! Increase pool size.	
+1007ef14	1	0	CMvlSettings::HookPoolNewPed	
+1007ef34	1	0	RAN OUT OF VEHICLE SLOTS!!! Increase pool size.	
+1007ef64	1	0	CMvlSettings::HookPoolNewVehicle	
+1007ef88	1	0	RAN OUT OF BUILDING SLOTS!!! Increase pool size.	
+1007efbc	1	0	CMvlSettings::HookPoolNewBuilding	
+1007efe0	1	0	RAN OUT OF TREADABLE SLOTS!!! Increase pool size.	
+1007f014	1	0	CMvlSettings::HookPoolNewTreadable	
+1007f038	1	0	RAN OUT OF OBJECT SLOTS!!! Increase pool size.	
+1007f068	1	0	CMvlSettings::HookPoolNewObject	
+1007f088	1	0	RAN OUT OF DUMMY SLOTS!!! Increase pool size.	
+1007f0b8	1	0	CMvlSettings::HookPoolNewDummy	
+1007f0d8	1	0	RAN OUT OF COLMODEL SLOTS!!! Increase pool size.	
+1007f10c	1	0	CMvlSettings::HookPoolNewColModel	
+1007f130	1	1	Requested model limit over 200000, reducing back to 200000.	02b8f0,
+1007f16c	4	1	CMvlSettings::ProcessIdLimits	02b8f0,
+1007f18c	1	1	Requested TXD limit over 50000, reducing back to 50000.	02b8f0,
+1007f1c4	1	1	Requested COL limit over 1000, reducing back to 1000.	02b8f0,
+1007f200	1	1	Model, TXD, COL and ANIM limits totalling over 32767, switching to experimental long model ID mode.	02b8f0,
+1007f264	1	1	Ignoring streaming memory limit below 65MB.	02ba50,
+1007f290	2	1	CMvlSettings::ProcessStreamingMemLimit	02ba50,
+1007f2b8	1	1	Ignoring streaming memory limit above 1900MB.	02ba50,
+1007f2e8	1	1	This is not a Vice City 1.0 executable.	02baf0,
+1007f310	1	1	CMvlSettings::PrepareMvlForLoad	02baf0,
+1007f330	1	1	Fri Dec  6 22:54:10 2013	02baf0,
+1007f34c	1	1	----- MVL version 0.98e, compiled on %s -----\n	02baf0,
+1007f3c8	1	1	InFile_Open - Could not open archive file '%s'.	02bf00,
+1007f3f8	2	1	CSevenWalker::LoadSeven	02bf00,
+1007f410	1	1	SzArEx_Open - Could not read archive file '%s'.	02bf00,
+1007f4e0	1	1	write.txt	02df00,
+1007f598	1	0	trafficlight1	
+1007f5a8	1	0	MTraffic4	
+1007f5b4	1	0	MTraffic1	
+1007f5c0	1	0	MTraffic2	
+1007f5cc	1	0	lamppost1	
+1007f5d8	1	0	lamppost2	
+1007f5e4	1	0	lamppost3	
+1007f5f0	1	0	doublestreetlght1	
+1007f604	1	0	Streetlamp1	
+1007f610	1	0	Streetlamp2	
+1007f61c	1	0	veg_tree3	
+1007f628	1	0	veg_treea1	
+1007f634	1	0	veg_treeb1	
+1007f640	1	0	veg_treea3	
+1007f64c	1	0	doc_crane_cab0	
+1007f65c	1	0	doc_crane_cab01	
+1007f66c	1	0	doc_crane_cab02	
+1007f67c	1	0	doc_crane_cab03	
+1007f68c	1	0	boatcranelg0	
+1007f69c	1	0	LODnetopa0	
+1007f6a8	1	0	parkingmeter	
+1007f6b8	1	0	parkingmeterg	
+1007f6c8	1	0	mall_fans	
+1007f6d4	1	0	htl_fan_rotate_nt	
+1007f6e8	1	0	htl_fan_rotate_dy	
+1007f6fc	1	0	hotroomfan	
+1007f708	1	0	phonebooth1	
+1007f714	1	0	wastebin	
+1007f728	1	0	postbox1	
+1007f734	1	0	newsstand1	
+1007f740	1	0	trafficcone	
+1007f74c	1	0	dump1	
+1007f754	1	0	roadworkbarrier1	
+1007f768	1	0	bussign1	
+1007f774	1	0	noparkingsign1	
+1007f784	1	0	phonesign	
+1007f790	1	0	fire_hydrant	
+1007f7a0	1	0	package1	
+1007f7ac	1	0	Money	
+1007f7b4	1	0	barrel1	
+1007f7bc	1	0	dk_paynspraydoor	
+1007f7d0	1	0	dk_waretankdoor1	
+1007f7e4	1	0	hav_garagedoor1	
+1007f7f4	1	0	hav_garagedoor02	
+1007f808	1	0	hav_garagedoor03	
+1007f81c	1	0	hav_garagedoor04	
+1007f830	1	0	lh_showdoor03	
+1007f840	1	0	lh_showdoor1	
+1007f850	1	0	lhtankdoor	
+1007f85c	1	0	nbtgardoor	
+1007f868	1	0	dk_camjonesdoor	
+1007f878	1	0	nbtgardoor02	
+1007f888	1	0	dt_savedra	
+1007f894	1	0	dt_savedrb	
+1007f8a0	1	0	dk_bombdoor	
+1007f8ac	1	0	haiwshpnsdoor	
+1007f8bc	1	0	wshpnsdoor	
+1007f8c8	1	0	nbecpnsdoor	
+1007f8d4	1	0	nbtgardoor03	
+1007f8e4	1	0	dt_savedrc	
+1007f8f0	1	0	dt_savedrd	
+1007f8fc	1	0	man_frntstepGD	
+1007f90c	1	0	svegrgedoor	
+1007f918	1	0	barrel2	
+1007f920	1	0	briefcase	
+1007f92c	1	0	wglasssmash	
+1007f938	1	0	glassfx_composh	
+1007f948	1	0	barrel4	
+1007f950	1	0	adrenaline	
+1007f95c	1	0	bodyarmour	
+1007f970	1	0	health	
+1007f978	1	0	bonus	
+1007f980	1	0	bribe	
+1007f988	1	0	killfrenzy	
+1007f994	1	0	camerapickup	
+1007f9a4	1	0	bigdollar	
+1007f9b0	1	0	pickupsave	
+1007f9bc	1	0	property_locked	
+1007f9cc	1	0	property_fsale	
+1007f9dc	1	0	clothesp	
+1007f9e8	1	0	bollardlight	
+1007f9f8	1	0	bar_barrier10	
+1007fa08	1	0	bar_barrier12	
+1007fa18	1	0	petrolpump	
+1007fa24	1	0	washgaspump	
+1007fa38	1	0	parktable1	
+1007fa44	1	0	lamppostX	
+1007fa50	1	0	veg_palm04	
+1007fa5c	1	0	veg_palwee02	
+1007fa6c	1	0	veg_palmkbb11	
+1007fa7c	1	0	veg_palmkb4	
+1007fa88	1	0	veg_palm02	
+1007fa94	1	0	veg_palmkb3	
+1007faa0	1	0	veg_palmbig14	
+1007fab0	1	0	veg_palm01	
+1007fabc	1	0	mlamppost	
+1007fac8	1	0	roadworkbarrierX	
+1007fadc	1	0	littleha_police	
+1007faec	1	0	telgrphpole02	
+1007fafc	1	0	trafficlightX	
+1007fb0c	1	0	parkbench1	
+1007fb18	1	0	plc_stinger	
+1007fb24	1	0	od_lightbeam	
+1007fb34	1	0	ap_radar1_01	
+1007fb44	1	0	rcbomb	
+1007fb4c	1	0	beachball	
+1007fb58	1	0	sandcastle1	
+1007fb64	1	0	sandcastle2	
+1007fb70	1	0	jellyfish	
+1007fb7c	1	0	jellyfish01	
+1007fb88	1	0	fish1single	
+1007fb94	1	0	fish1s	
+1007fb9c	1	0	fish2single	
+1007fba8	1	0	fish2s	
+1007fbb0	1	0	fish3single	
+1007fbbc	1	0	fish3s	
+1007fbc4	1	0	turtle	
+1007fbcc	1	0	dolphin	
+1007fbd4	1	0	shark	
+1007fbdc	1	0	submarine	
+1007fbe8	1	0	Esc_step	
+1007fbf4	1	0	lounge_wood_up	
+1007fc04	1	0	lounge_towel_up	
+1007fc14	1	0	lounge_wood_dn	
+1007fc24	1	0	lotion	
+1007fc2c	1	0	beachtowel01	
+1007fc3c	1	0	beachtowel02	
+1007fc4c	1	0	beachtowel03	
+1007fc5c	1	0	beachtowel04	
+1007fc6c	1	0	blimp_night	
+1007fc78	1	0	blimp_day	
+1007fc84	1	0	yt_main_body	
+1007fc94	1	0	yt_main_body2	
+1007ff80	6	1	CSoundHandler::FillInfoFromName	0338a0,
+1007ffa0	1	1	Failed to parse loop start offset from file name.	0338a0,
+1007ffd4	1	1	Loop offset start may not be negative.	0338a0,
+1007fffc	1	1	Failed to find loop end offset indicator 'e' from file name.	0338a0,
+1008003c	1	1	Failed to parse loop end offset from file name.	0338a0,
+1008006c	1	1	Loop offset end must be -1 or higher.	0338a0,
+10080094	1	1	After loop offset end there should be a dot.	0338a0,
+100800c4	1	1	Unexpected file end in the middle of RIFF header.	033a00,
+100800f8	24	1	CSoundHandler::FillSampleBufferFromData	033a00,
+10080120	1	1	Did not find a RIFF fourCC in the WAV file.	033a00,
+1008014c	1	1	File size specified in RIFF header does not match actual size.	033a00,
+1008018c	1	1	RIFF header does not contain a WAVE fourCC.	033a00,
+100801b8	1	1	Unexpected file end in the middle of 'fmt ' subchunk header.	033a00,
+100801f8	1	1	First subchunk is not with a 'fmt ' fourCC.	033a00,
+10080228	1	1	First subchunk size should be 16, probably file is not in PCM format.	033a00,
+10080270	1	1	Unexpected file end in the middle of 'fmt ' subchunk.	033a00,
+100802a8	1	1	Format chunk has audio format other than 1 (PCM).	033a00,
+100802dc	1	1	Format chunk specifies 0 channels.	033a00,
+10080300	1	1	Format chunk specifies over 16 channels.	033a00,
+1008032c	1	1	Format chunk specifies a sample rate out of range 100-384000.	033a00,
+1008036c	1	1	Format chunk specifies bits per sample other than 16.	033a00,
+100803a8	1	1	Block align in format chunk is smaller than channels*bitspersample.	033a00,
+100803f0	1	1	Block align in format chunk specifies padding more than 32 bytes.	033a00,
+10080434	1	1	Unexpected file end in the middle of 'data' subchunk header.	033a00,
+10080474	1	1	Second subchunk header is not with a 'data' fourCC.	033a00,
+100804a8	1	1	Second subchunk length too large - goes beyond end of file.	033a00,
+100804e4	1	1	Second subchunk length is not a multiple of block align.	033a00,
+10080520	1	1	More than two channels in %s, using only the first two.	033a00,
+10080558	1	1	More than one channel in %s, using only the first one.	033a00,
+10080590	1	1	File contains no samples.	033a00,
+100805ac	1	1	Loop end offset points past the end of sample buffer.	033a00,
+100805e4	1	1	Loop start offset points past the end of sample buffer.	033a00,
+1008061c	1	1	Loop start offset is not before end offset	033a00,
+10080648	1	1	Wave file %s - using channels 0 and 1 as left and right samples.	033a00,
+10080690	1	1	Wave file %s - using channel 0 for both left and right samples.	033a00,
+100806d0	1	1	Could not find slot for sound file %s.	033e10,
+100806f8	4	1	CSoundHandler::LoadSoundFile	033e10,
+10080718	1	1	Duplicate file on the same slot, %s.	033e10,
+10080740	1	1	Could not get sound info from audio file name %s.	033e10,
+10080774	1	1	Could not read sample buffer from file %s.	033e10,
+100807a8	1	1	&#x%02X;	0348b0,
+100807c4	1	1	</%s>	034e20,
+100807d0	1	1	%s="%s"	0356a0,
+100807e0	1	1	%s='%s'	0356a0,
+100807f4	1	1	<!--%s-->	035830,
+10080800	1	1	<![CDATA[%s]]>\n	0358e0,
+10080810	2	1	<?xml 	035b50,
+10080818	1	1	version="%s" 	035b50,
+10080828	1	1	version="	035b50,
+10080838	1	1	encoding="%s" 	035b50,
+10080848	1	1	encoding="	035b50,
+10080854	1	1	standalone="%s" 	035b50,
+10080868	1	1	standalone="	035b50,
+1008088c	3	2	<![CDATA[	036b90,0374f0,
+10080a80	1	0	No error	
+10080a8c	1	0	Error	
+10080a94	1	0	Failed to open file	
+10080aa8	1	0	Error parsing Element.	
+10080ac0	1	0	Failed to read Element name	
+10080adc	1	0	Error reading Element value.	
+10080afc	1	0	Error reading Attributes.	
+10080b18	1	0	Error: empty tag.	
+10080b2c	1	0	Error reading end tag.	
+10080b44	1	0	Error parsing Unknown.	
+10080b5c	1	0	Error parsing Comment.	
+10080b74	1	0	Error parsing Declaration.	
+10080b90	1	0	Error document empty.	
+10080ba8	1	0	Error null (0) or unexpected EOF found in input stream.	
+10080be0	1	0	Error parsing CDATA.	
+10080bf8	1	0	Error when TiXmlDocument added to document, because TiXmlDocument can only be at the root.	
+10080c54	3	2	&amp;	0348b0,0364f0,
+10080c6c	2	1	&quot;	0348b0,
+10080c74	2	1	&apos;	0348b0,
+10080c7c	1	1	UTF-8	036960,
+10080c8c	2	2	<?xml	036b90,037680,
+10080c98	1	1	version	037680,
+10080ca0	1	1	encoding	037680,
+10080cac	1	1	standalone	037680,
+10080cc0	1	1	Failed to read data from 'v' element.	037a90,
+10080ce8	4	1	LoadGlobalXMLNoSpawn	037a90,
+10080d00	1	1	Failed to parse the contents of 'v' element.	037a90,
+10080d30	1	1	The value of 'v' element must be in the range 130-236.	037a90,
+10080d68	1	1	Unknown element '%s' in 'nospawn' sector.	037a90,
+10080d94	7	1	LoadGlobalAISpecials	037b80,
+10080dac	5	2	aispecials	037b80,0380b0,
+10080db8	1	1	ainame	037b80,
+10080dc0	2	2	Element '%s' has unknown value.	046420,037b80,
+10080de0	1	1	Element 'ainame' is not the first child of '%s' sector, found '%s' instead.	037b80,
+10080e2c	2	2	emlights	04ccd0,037b80,
+10080e38	1	1	'%s' sector contains multiple EM light sectors ('emlights'/'emlightsingle'/'taxilight').	037b80,
+10080e94	2	2	emlightsingle	04ccd0,037b80,
+10080ea4	2	2	taxilight	04ccd0,037b80,
+10080eb0	8	1	LoadGlobalVehExtraFlags	037e70,
+10080ec8	5	2	setextraflags	037e70,0380b0,
+10080edc	1	1	The value of '%s' must be in range 130-236.	037e70,
+10080f08	1	1	extraflags	037e70,
+10080f18	2	2	'%s' element can only specify one AI flag.	046420,037e70,
+10080f44	1	1	'%s' sector is missing 'id' sector.	037e70,
+10080f68	1	1	'%s' sector is missing 'extraflags' sector.	037e70,
+10080f94	2	1	LoadGlobalStockAISpecials	0380b0,
+10080fb0	2	2	stockvehiclesettings	0380b0,038160,
+10080fc8	1	1	Could not load '%s' sector from XML file.	0380b0,
+10080ff4	2	1	mvl\vehicles\globalv.xml	038160,
+10081010	13	1	LoadGlobalVXMLFile	038160,
+10081024	1	1	Global vehicle XML file detected - loading it.	038160,
+10081054	1	1	Root element is missing.	038160,
+10081070	1	1	vehdata	038160,
+10081078	1	1	Root element has the wrong name (has to be 'vehdata').	038160,
+100810b0	1	1	nospawn	038160,
+100810b8	1	1	Root element contains multiple 'nospawn' sectors.	038160,
+100810ec	1	1	Could not load 'nospawn' sector from XML file.	038160,
+1008111c	1	1	tuningfix	038160,
+10081128	1	1	Root sector contains multiple 'tuningfix' elements.	038160,
+1008115c	1	1	Failed to read data from 'tuningfix' element.	038160,
+1008118c	1	1	The value of 'tuningfix' can only be either 'true' or 'false'.	038160,
+100811cc	1	1	idstart	038160,
+100811d4	1	1	Root sector contains multiple '%s' elements.	038160,
+10081204	1	1	Failed to read data from 'idstart' element.	038160,
+10081230	1	1	Failed to parse the contents of 'idstart'.	038160,
+10081260	1	1	The value of 'idstart' has to be between 250 and MIN(65000, modelLimit - 100).	038160,
+100812b0	1	1	usespawner	038160,
+100812bc	1	1	Root sector contains multiple 'spawner' elements.	038160,
+100812f0	1	1	Failed to read data from 'spawner' element.	038160,
+1008131c	1	1	The value of 'spawner' can only be either 'true' or 'false'.	038160,
+1008135c	1	1	usetuner	038160,
+10081368	1	1	Root sector contains multiple 'usetuner' elements.	038160,
+1008139c	1	1	Failed to read data from 'usetuner' element.	038160,
+100813cc	1	1	The value of 'usetuner' can only be either 'true' or 'false'.	038160,
+1008140c	1	1	disablelightboxes	038160,
+10081420	1	1	Root sector contains multiple 'disablelightboxes' elements.	038160,
+1008145c	1	1	Failed to read data from 'disablelightboxes' element.	038160,
+10081498	1	1	The value of 'disablelightboxes' can only be either 'true' or 'false'.	038160,
+100814e0	1	1	disableflipdamage	038160,
+100814f4	1	1	Root sector contains multiple 'disableflipdamage' elements.	038160,
+10081530	1	1	Failed to read data from 'disableflipdamage' element.	038160,
+10081568	1	1	The value of 'disableflipdamage' can only be either 'true' or 'false'.	038160,
+100815b0	1	1	Root sector contains multiple 'stockvehiclesettings' elements.	038160,
+100815f0	1	1	Could not load 'stockvehiclesettings' sector from XML file.	038160,
+1008162c	1	1	maxaltitude	038160,
+1008163c	1	1	Failed to parse the contents of '%s'.	038160,
+10081664	1	1	dumprgbcolors	038160,
+10081674	1	1	Unknown element '%s' in root element.	038160,
+1008169c	1	1	SA collision section length longer than 1MB.	0388a0,
+100816cc	3	1	LoadSAColSection	0388a0,
+100816e0	1	1	SA collision section length does not match length specified in header.	0388a0,
+10081740	1	1	SA collision section magic code not COLL nor COL3.	0388a0,
+10081774	10	5	Wheels	039300,038db0,03be50,039ec0,03c1c0,
+1008177c	2	2	wheel_rb_dummy	038db0,039300,
+1008178c	2	2	wheel_lb_dummy	038db0,039300,
+1008179c	2	2	wheel_rf_dummy	038db0,039300,
+100817ac	2	2	wheel_lf_dummy	038db0,039300,
+100817bc	2	2	wheel_rm_dummy	038db0,039300,
+100817cc	2	2	wheel_lm_dummy	038db0,039300,
+100817dc	6	3	Wings	039300,038db0,03be50,
+100817e4	2	1	wing_rf_dummy	038db0,
+100817f4	1	1	wing_lf_dummy	038db0,
+10081804	3	3	Windscreen	039300,038db0,03be50,
+10081810	1	1	windscreen_dummy	038db0,
+1008182c	1	1	boot_dummy	038db0,
+10081838	4	3	Bonnet	039300,038db0,03be50,
+10081840	1	1	bonnet_dummy	038db0,
+10081850	3	3	Front bump	039300,038db0,03be50,
+1008185c	1	1	bump_front_dummy	038db0,
+10081870	3	3	Rear bump	039300,038db0,03be50,
+1008187c	1	1	bump_rear_dummy	038db0,
+1008188c	6	3	Front doors	039300,038db0,03be50,
+10081898	2	1	door_lf_dummy	038db0,
+100818a8	1	1	door_rf_dummy	038db0,
+100818b8	3	3	Rear doors	039300,038db0,03be50,
+100818c4	2	1	door_lr_dummy	038db0,
+100818d4	1	1	door_rr_dummy	038db0,
+100818e8	1	1	windscreen_hi_ok	039300,
+100818fc	1	1	windscreen_hi_dam	039300,
+10081910	1	1	wing_rf_hi_ok	039300,
+10081920	1	1	wing_rf_hi_dam	039300,
+10081930	1	1	wing_lf_hi_ok	039300,
+10081940	1	1	wing_lf_hi_dam	039300,
+10081950	1	1	boot_hi_ok	039300,
+1008195c	1	1	boot_hi_dam	039300,
+10081968	1	1	bonnet_hi_ok	039300,
+10081978	1	1	bonnet_hi_dam	039300,
+10081988	1	1	bump_front_hi_ok	039300,
+1008199c	1	1	bump_front_hi_dam	039300,
+100819b0	1	1	bump_rear_hi_ok	039300,
+100819c0	1	1	bump_rear_hi_dam	039300,
+100819d4	1	1	door_lf_hi_ok	039300,
+100819e4	1	1	door_lf_hi_dam	039300,
+100819f4	1	1	door_rf_hi_ok	039300,
+10081a04	1	1	door_rf_hi_dam	039300,
+10081a14	1	1	door_lr_hi_ok	039300,
+10081a24	1	1	door_lr_hi_dam	039300,
+10081a34	1	1	door_rr_hi_ok	039300,
+10081a44	1	1	door_rr_hi_dam	039300,
+10081a54	1	1	_dummy	039300,
+10081a5c	1	1	Too many different types of tuning parts.	039b00,
+10081a88	2	1	SaveTuningAtomics	039b00,
+10081a9c	1	1	Two frames with the same name not allowed in one tuning file	039b00,
+10081ae0	1	1	Could not open memory stream for tuning model file in archive '%s'.	039ec0,
+10081b24	5	1	LoadTuningFile	039ec0,
+10081b38	1	1	Could not find clump chunk header from tuning file in archive '%s'.	039ec0,
+10081b7c	1	1	Loading clump from tuning file failed in archive '%s'.	039ec0,
+10081bb8	1	1	Main model is missing a wheel dummy OR doesn't have a custom wheel.	039ec0,
+10081bfc	1	1	chassis_dummy	039ec0,
+10081c0c	1	1	Nothing to do with part '%s' (%s)	039ec0,
+10081c30	1	1	invalid	03b740,
+10081c38	1	1	petrolcap	03be10,
+10081c44	2	1	wheel_rf	03c700,
+10081c50	1	0	wheel_rm	
+10081c5c	1	0	wheel_rb	
+10081c68	1	0	wheel_lf	
+10081c74	1	0	wheel_lm	
+10081c80	1	0	wheel_lb	
+10081c8c	2	2	custom1	04dd20,03c850,
+10081c94	2	2	custom2	04dd20,03c850,
+10081c9c	2	2	custom3	04dd20,03c850,
+10081ca4	2	2	custom4	04dd20,03c850,
+10081cb0	5	5	A vehicle with model %d was created, however it has not been loaded.	03c9b0,03c9e0,03ca40,03ca90,03cad0,
+10081cf8	1	1	SetupBasicHandling	03c9b0,
+10081d0c	1	1	SetupBikeHandling	03c9e0,
+10081d20	1	1	FixBikeAnimGroup	03ca40,
+10081d34	1	1	InAeroHandlingGetter	03ca90,
+10081d4c	1	1	InBoatHandlingGetter	03cad0,
+10081d64	1	1	Model %d used, however it has not been loaded.	03cb10,
+10081d94	1	1	GetHandlingForNewCars	03cb10,
+10081dac	1	1	Requested name for model %d, which has not been loaded.	03cb40,
+10081de4	1	1	ModelRequested	03cb40,
+10081df4	5	5	Checks for model %d, which has not been loaded.	03ce30,03cea0,03cf00,03cda0,03cde0,
+10081e24	1	1	GetNewMaxPassengers	03cda0,
+10081e38	1	1	DetectFlyableBoats	03cde0,
+10081e4c	1	1	HeliGetType	03ce30,
+10081e58	1	1	HeliGetWeaponType	03cea0,
+10081e6c	1	1	HeliGetRotorSettings	03cf00,
+10081e98	2	0	train	
+10081ea8	2	0	plane	
+10081eb8	6	3	normal	046960,04f680,04c700,
+10081ec0	4	2	poorfamily	046960,04f680,
+10081ecc	3	1	richfamily	046960,
+10081ed8	3	1	executive	046960,
+10081ee4	3	1	worker	046960,
+10081ef0	3	1	moped	046960,
+10081ef8	3	1	motorbike	046960,
+10081f04	3	1	leisureboat	046960,
+10081f10	3	1	workerboat	046960,
+10081f1c	2	1	remote	04c700,
+10081f24	4	1	hunter	04c700,
+10081f2c	2	1	sparrow	04c700,
+10081f34	1	1	DLL was loaded too late to fetch all data - use a launcher.	040df0,
+10081f70	3	1	GenerateDefaultXML	040df0,
+10081f84	2	1	mvl\vlist	040df0,
+10081f90	1	1	Failed to create mvl/vlist directory.	040df0,
+10081fb8	2	1	vicechee	040df0,
+10081fc4	1	1	mvl\vlist\%s.xml	040df0,
+10081fd8	1	1	Unable to generate file mvl\vlist\%s.xml, does folder mvl\vlist exist?	040df0,
+10082020	2	2	<?xml version="1.0" encoding="ASCII"?>\n	057320,040df0,
+10082048	1	1	<vehicle>\n	040df0,
+10082054	2	2	\t<basic>\n	057320,040df0,
+10082060	2	2	\t\t<type>%s</type>\n	057320,040df0,
+10082074	1	1	\t\t<name>%ls</name>\n	040df0,
+10082090	1	1	\t\t<anims>%s</anims>\n	040df0,
+100820a8	1	1	\t\t<comprules>%d</comprules>\n	040df0,
+100820c8	1	1	\t\t<maxpassengers>%d</maxpassengers>\n	040df0,
+100820f0	1	1	\t\t<extraflags>%04X</extraflags>\n	040df0,
+10082114	1	1	\t\t<wheelmodel>%d</wheelmodel>\n	040df0,
+10082134	1	1	\t\t<wheelrotangle>%d</wheelrotangle>\n	040df0,
+1008215c	1	1	\t\t<lodmodel>%d</lodmodel>\n	040df0,
+10082178	1	1	\t\t<wheelscale>%f</wheelscale>\n	040df0,
+10082198	1	1	\t\t<immunity>%d</immunity>\n	040df0,
+100821b4	2	2	\t</basic>\n\n	057320,040df0,
+100821c0	1	1	\t<aidata>\n	040df0,
+100821cc	3	2	ignore	046960,040df0,
+100821d4	1	1	\t\t<class>%s</class>\n	040df0,
+100821ec	1	1	\t\t<freq>%d</freq>\n	040df0,
+10082200	1	1	\t\t<level>%d</level>\n	040df0,
+10082218	1	1	\t</aidata>\n\n	040df0,
+10082228	1	1	\t<colors>\n	040df0,
+10082234	1	1	\t\t<rgbcol>%d,%d,%d,%d,%d,%d</rgbcol>\n	040df0,
+1008225c	1	1	\t\t<carcol>%d,%d</carcol>\n	040df0,
+10082278	1	1	\t</colors>\n\n	040df0,
+10082288	1	1	\t<audio>\n	040df0,
+10082294	1	1	\t\t<enginefarsample>%u</enginefarsample>\n	040df0,
+100822c0	1	1	\t\t<enginenearsample>%u</enginenearsample>\n	040df0,
+100822ec	1	1	\t\t<hornsample>%u</hornsample>\n	040df0,
+1008230c	1	1	\t\t<hornfreq>%u</hornfreq>\n	040df0,
+10082328	1	1	\t\t<sirensample>%u</sirensample>\n	040df0,
+1008234c	1	1	\t\t<sirenfreq>%u</sirenfreq>\n	040df0,
+1008236c	1	1	\t\t<doorsounds>%u</doorsounds>\n	040df0,
+1008238c	1	1	\n\t\t<boatengine>\n	040df0,
+100823a0	1	1	\t\t\t<type>%d</type>\n	040df0,
+100823b4	1	1	\t\t\t<basevolume>%d</basevolume>\n	040df0,
+100823d4	1	1	\t\t\t<basefrequency>%d</basefrequency>\n	040df0,
+100823fc	1	1	\t\t\t<volumeincrease>%f</volumeincrease>\n	040df0,
+10082424	1	1	\t\t\t<frequencyincrease>%f</frequencyincrease>\n	040df0,
+10082454	1	1	\t\t</boatengine>\n	040df0,
+10082468	1	1	\t</audio>\n\n	040df0,
+10082474	1	1	\t<helidata>\n	040df0,
+10082484	1	1	\t\t<helitype>%s</helitype>\n	040df0,
+100824a0	1	1	\t\t<weapons>%s</weapons>\n	040df0,
+100824bc	1	1	\t\t<rotorradius>%f</rotorradius>\n	040df0,
+100824e0	1	1	\t\t<rotordammult>%f</rotordammult>\n	040df0,
+10082504	1	1	\t</helidata>\n\n	040df0,
+10082514	1	1	\t<handling>\n	040df0,
+10082524	1	1	\t\t<mass>%f</mass>\n	040df0,
+10082538	1	1	\t\t<percentsubmerged>%d</percentsubmerged>\n	040df0,
+10082564	1	1	\t\t<steeringlock>%f</steeringlock>\n	040df0,
+10082588	1	1	\t\t<seatoffset>%f</seatoffset>\n	040df0,
+100825a8	1	1	\t\t<damagemultiplier>%f</damagemultiplier>\n	040df0,
+100825d4	1	1	\t\t<value>%d</value>\n	040df0,
+100825ec	1	1	\t\t<flags>%08X</flags>\n\n	040df0,
+10082608	1	1	\t\t<dimensions>\n\t\t\t<x>%f</x>\n\t\t\t<y>%f</y>\n\t\t\t<z>%f</z>\n\t\t</dimensions>\n\n	040df0,
+10082650	1	1	\t\t<centreofmass>\n\t\t\t<x>%f</x>\n\t\t\t<y>%f</y>\n\t\t\t<z>%f</z>\n\t\t</centreofmass>\n\n	040df0,
+1008269c	1	1	\t\t<boatsteering>\n	040df0,
+100826b0	1	1	\t\t\t<bankforcemult>%f</bankforcemult>\n	040df0,
+100826d8	1	1	\t\t\t<rudderturnforce>%f</rudderturnforce>\n	040df0,
+10082704	1	1	\t\t\t<speedsteerfalloff>%f</speedsteerfalloff>\n	040df0,
+10082734	1	1	\t\t</boatsteering>\n\n	040df0,
+10082748	1	1	\t\t<traction>\n	040df0,
+10082758	1	1	\t\t\t<multiplier>%f</multiplier>\n	040df0,
+10082778	1	1	\t\t\t<loss>%f</loss>\n	040df0,
+1008278c	3	1	\t\t\t<bias>%f</bias>\n	040df0,
+100827a0	1	1	\t\t</traction>\n\n	040df0,
+100827b0	1	1	\t\t<transmission>\n	040df0,
+100827c4	1	1	\t\t\t<numofgears>%d</numofgears>\n	040df0,
+100827e4	1	1	\t\t\t<maxspeed>%f</maxspeed>\n	040df0,
+10082800	1	1	\t\t\t<acceleration>%f</acceleration>\n	040df0,
+10082824	1	1	\t\t\t<drivetype>%c</drivetype>\n	040df0,
+10082844	1	1	\t\t\t<enginetype>%c</enginetype>\n	040df0,
+10082864	1	1	\t\t</transmission>\n\n	040df0,
+10082878	1	1	\t\t<boatbrakes>\n	040df0,
+10082888	1	1	\t\t\t<verticalwavehitlimit>%f</verticalwavehitlimit>\n	040df0,
+100828bc	1	1	\t\t\t<forwardwavehitbrake>%f</forwardwavehitbrake>\n	040df0,
+100828f0	1	1	\t\t</boatbrakes>\n\n	040df0,
+10082904	1	1	\t\t<brakes>\n	040df0,
+10082910	1	1	\t\t\t<deceleration>%f</deceleration>\n	040df0,
+10082934	1	1	\t\t\t<abs>%d</abs>\n	040df0,
+10082948	1	1	\t\t</brakes>\n\n	040df0,
+10082958	1	1	\t\t<boatsuspension>\n	040df0,
+1008296c	1	1	\t\t\t<waterresvolumemult>%f</waterresvolumemult>\n	040df0,
+1008299c	1	1	\t\t\t<waterdampingmult>%f</waterdampingmult>\n	040df0,
+100829c8	2	1	\t\t\t<upperlimit>%f</upperlimit>\n	040df0,
+100829e8	1	1	\t\t\t<handbrakedragmult>%f</handbrakedragmult>\n	040df0,
+10082a18	1	1	\t\t\t<sideslipforce>%f</sideslipforce>\n	040df0,
+10082a40	2	1	\t\t\t<antidive>%f</antidive>\n	040df0,
+10082a5c	1	1	\t\t</boatsuspension>\n\n	040df0,
+10082a74	1	1	\t\t<suspension>\n	040df0,
+10082a84	1	1	\t\t\t<forcelevel>%f</forcelevel>\n	040df0,
+10082aa4	1	1	\t\t\t<dampening>%f</dampening>\n	040df0,
+10082ac4	1	1	\t\t\t<lowerlimit>%f</lowerlimit>\n	040df0,
+10082ae4	1	1	\t\t</suspension>\n\n	040df0,
+10082af8	1	1	\t\t<lights>\n	040df0,
+10082b04	1	1	\t\t\t<front>%d</front>\n	040df0,
+10082b1c	1	1	\t\t\t<rear>%d</rear>\n	040df0,
+10082b30	1	1	\t\t</lights>\n	040df0,
+10082b40	1	1	\t</handling>\n\n	040df0,
+10082b50	1	1	\t<aerohandling>\n	040df0,
+10082b64	1	1	\t\t<thrust>%f</thrust>\n	040df0,
+10082b7c	1	1	\t\t<thrustfalloff>%f</thrustfalloff>\n	040df0,
+10082ba4	1	1	\t\t<yaw>%f</yaw>\n	040df0,
+10082bb8	1	1	\t\t<yawstab>%f</yawstab>\n	040df0,
+10082bd4	1	1	\t\t<sideslip>%f</sideslip>\n	040df0,
+10082bf0	1	1	\t\t<roll>%f</roll>\n	040df0,
+10082c04	1	1	\t\t<rollstab>%f</rollstab>\n	040df0,
+10082c20	1	1	\t\t<pitch>%f</pitch>\n	040df0,
+10082c38	1	1	\t\t<pitchstab>%f</pitchstab>\n	040df0,
+10082c58	1	1	\t\t<formlift>%f</formlift>\n	040df0,
+10082c74	1	1	\t\t<attacklift>%f</attacklift>\n	040df0,
+10082c94	1	1	\t\t<moveres>%f</moveres>\n\n	040df0,
+10082cb0	2	1	\t\t<turnres>\n\t\t\t<x>%f</x>\n\t\t\t<y>%f</y>\n\t\t\t<z>%f</z>\n\t\t</turnres>\n\n	040df0,
+10082cf8	1	1	\t\t<speedres>\n\t\t\t<x>%f</x>\n\t\t\t<y>%f</y>\n\t\t\t<z>%f</z>\n\t\t</speedres>\n	040df0,
+10082d3c	1	1	\t</aerohandling>\n\n	040df0,
+10082d50	1	1	\t<boathandling>\n	040df0,
+10082d64	1	1	\t\t<thrusty>%f</thrusty>\n	040df0,
+10082d80	1	1	\t\t<thrustz>%f</thrustz>\n	040df0,
+10082d9c	1	1	\t\t<thrustappz>%f</thrustappz>\n	040df0,
+10082dbc	1	1	\t\t<aqplaneforce>%f</aqplaneforce>\n	040df0,
+10082de0	1	1	\t\t<aqplanelimit>%f</aqplanelimit>\n	040df0,
+10082e04	1	1	\t\t<aqplaneoffset>%f</aqplaneoffset>\n	040df0,
+10082e2c	1	1	\t\t<waveaudiomult>%f</waveaudiomult>\n\n	040df0,
+10082e58	1	1	\t\t<moveres>\n\t\t\t<x>%f</x>\n\t\t\t<y>%f</y>\n\t\t\t<z>%f</z>\n\t\t</moveres>\n\n	040df0,
+10082e9c	1	1	\t\t<looklrbcamheight>%f</looklrbcamheight>\n	040df0,
+10082ec8	1	1	\t</boathandling>\n\n	040df0,
+10082edc	1	1	\t<bikehandling>\n	040df0,
+10082ef0	1	1	\t\t<leanfwdcom>%f</leanfwdcom>\n	040df0,
+10082f10	1	1	\t\t<leanfwdforce>%f</leanfwdforce>\n	040df0,
+10082f34	1	1	\t\t<leanbackcom>%f</leanbackcom>\n	040df0,
+10082f58	1	1	\t\t<leanbackforce>%f</leanbackforce>\n	040df0,
+10082f80	1	1	\t\t<maxlean>%f</maxlean>\n	040df0,
+10082f9c	1	1	\t\t<fullanimlean>%f</fullanimlean>\n	040df0,
+10082fc0	1	1	\t\t<deslean>%f</deslean>\n	040df0,
+10082fdc	1	1	\t\t<speedsteer>%f</speedsteer>\n	040df0,
+10082ffc	1	1	\t\t<slipsteer>%f</slipsteer>\n	040df0,
+1008301c	1	1	\t\t<noplayercomz>%f</noplayercomz>\n	040df0,
+10083040	1	1	\t\t<wheelieang>%f</wheelieang>\n	040df0,
+10083060	1	1	\t\t<stoppieang>%f</stoppieang>\n	040df0,
+10083080	1	1	\t\t<wheeliesteer>%f</wheeliesteer>\n	040df0,
+100830a4	1	1	\t\t<wheeliestabmult>%f</wheeliestabmult>\n	040df0,
+100830d0	1	1	\t\t<stoppiestabmult>%f</stoppiestabmult>\n	040df0,
+100830fc	1	1	\t</bikehandling>\n\n	040df0,
+10083110	1	1	\t<specials>\n\t\t<emlights>\n\t\t\t<alwayson>false</alwayson>\n\t\t\t<colourone>255,0,0</colourone>\n\t\t\t<colourtwo>255,255,255</colourtwo>\n\t\t\t\n\t\t\t<posleft>\n\t\t\t\t<x>-1.1</x>\n\t\t\t\t<y>0.9</y>\n\t\t\t\t<z>1.6</z>\n\t\t\t</posleft>\n\t\t\t\n\t\t\t<posright>\n\t\t\t\t<x>1.1</x>\n\t\t\t\t<y>0.9</y>\n\t\t\t\t<z>1.6</z>\n\t\t\t</posright>\n\t\t</emlights>\n\t</specials>\n\n	040df0,
+10083248	1	1	\t<specials>\n\t\t<taxilight>\n\t\t\t<alwayson>false</alwayson>\n\t\t\t<colour>128,128,0</colour>\n\n\t\t\t<position>\n\t\t\t\t<x>0.0</x>\n\t\t\t\t<y>0.0</y>\n\t\t\t\t<z>0.95</z>\n\t\t\t</position>\n\t\t</taxilight>\n\t</specials>\n\n	040df0,
+10083308	2	1	\t<specials>\n\t\t<emlightsingle>\n\t\t\t<alwayson>false</alwayson>\n\t\t\t<colour>70,70,255</colour>\n\n\t\t\t<position>\n\t\t\t\t<x>0.4</x>\n\t\t\t\t<y>0.6</y>\n\t\t\t\t<z>0.3</z>\n\t\t\t</position>\n\t\t</emlightsingle>\n\t</specials>\n\n	040df0,
+100833d0	1	1	\t<specials>\n\t\t<emlights>\n\t\t\t<colourone>255,0,0</colourone>\n\t\t\t<colourtwo>0,0,255</colourtwo>\n\t\t\t<posleft>\n\t\t\t\t<x>-1.1</x>\n\t\t\t\t<y>0.8</y>\n\t\t\t\t<z>1.2</z>\n\t\t\t</posleft>\n\t\t\t<posright>\n\t\t\t\t<x>1.1</x>\n\t\t\t\t<y>0.8</y>\n\t\t\t\t<z>1.2</z>\n\t\t\t</posright>\n\t\t</emlights>\n\t</specials>\n\n	040df0,
+100834e0	1	1	\t<specials>\n\t\t<emlights>\n\t\t\t<alwayson>false</alwayson>\n\t\t\t<colourone>255,0,0</colourone>\n\t\t\t<colourtwo>255,255,0</colourtwo>\n\t\t\t\n\t\t\t<posleft>\n\t\t\t\t<x>-1.1</x>\n\t\t\t\t<y>1.7</y>\n\t\t\t\t<z>2.0</z>\n\t\t\t</posleft>\n\t\t\t\n\t\t\t<posright>\n\t\t\t\t<x>1.1</x>\n\t\t\t\t<y>1.7</y>\n\t\t\t\t<z>2.0</z>\n\t\t\t</posright>\n\t\t</emlights>\n\t</specials>\n\n	040df0,
+10083618	1	1	\t<specials>\n\t\t<heliweps>\n\t\t\t<missilepos>\n\t\t\t\t<x>2.5</x>\n\t\t\t\t<y>1.0</y>\n\t\t\t\t<z>-0.5</z>\n\t\t\t</missilepos>\n\t\t\t\n\t\t\t<machinegunpos>\n\t\t\t\t<x>0.0</x>\n\t\t\t\t<y>4.8</y>\n\t\t\t\t<z>-1.3</z>\n\t\t\t</machinegunpos>\n\t\t</heliweps>\n\t</specials>\n\n	040df0,
+100836f8	1	1	\t<specials>\n\t\t<emlights>\n\t\t\t<alwayson>false</alwayson>\n\t\t\t<colourone>255,0,0</colourone>\n\t\t\t<colourtwo>0,0,255</colourtwo>\n\t\t\t\n\t\t\t<posleft>\n\t\t\t\t<x>-0.7</x>\n\t\t\t\t<y>-0.4</y>\n\t\t\t\t<z>1.0</z>\n\t\t\t</posleft>\n\t\t\t\n\t\t\t<posright>\n\t\t\t\t<x>0.7</x>\n\t\t\t\t<y>-0.4</y>\n\t\t\t\t<z>1.0</z>\n\t\t\t</posright>\n\t\t</emlights>\n\t</specials>\n\n	040df0,
+10083830	1	1	\t<specials>\n\t\t<heliweps>\n\t\t\t<machinegunpos>\n\t\t\t\t<x>0.0</x>\n\t\t\t\t<y>4.8</y>\n\t\t\t\t<z>-1.3</z>\n\t\t\t</machinegunpos>\n\t\t</heliweps>\n\t</specials>\n\n	040df0,
+100838bc	1	1	</vehicle>\n	040df0,
+100838c8	1	1	.\mvl\vehicles\	042090,
+100838e0	1	1	Vehicle %d (%ls) loaded, but not in model pointer list.	042350,
+10083918	1	1	CreateVehicleNear	042350,
+1008392c	1	1	PathGen Z offset %f	042670,
+10083954	1	1	nameless	042a10,
+10083960	1	1	%06X - %08X - %s - %d\n	042a10,
+10083978	2	2	exdbg.txt	042a60,042b10,
+10083984	1	1	group %d (%s) anim %d (%s)\n	042b10,
+100839a0	1	1	None	042c10,
+100839b4	1	1	No subs	042c10,
+100839c4	1	1	Bad state	042c10,
+100839d8	1	1	%hs ID %d	042c10,
+100839ec	2	1	Testing...	042e10,
+10083a04	2	2	mvl\vehicles\%s	042ec0,04f680,
+10083a14	2	2	Could not load vehicle from '%s'.\n	042ec0,04f680,
+10083a38	2	2	InitVehicles	042ec0,04f680,
+10083a48	1	0	xvehicleenv128	
+10083a58	1	1	xtracar	044a10,
+10083a60	1	1	Loaded a San Andreas vehicle model, but SA vehicle texture dictionary was not found.	044f20,
+10083ab8	1	1	CMvlVehicle::InitialiseLoaded	044f20,
+10083ad8	1	1	Dimensions set to %f %f %f.	045030,
+10083af4	1	1	Parsing vehicle archive failed.	045110,
+10083b14	1	1	Loading weapons.txd / weapons.dff failed.	045110,
+10083b40	1	1	Loading vehicle XML file failed.	045110,
+10083b64	1	1	Loading vehicle texture file failed.	045110,
+10083b8c	1	1	Loading vehicle model file failed.	045110,
+10083bb0	1	1	Loading vehicle collision file failed.	045110,
+10083bd8	1	1	ID %d: '%ls' from archive '%s'	045110,
+10083bf8	1	1	CMvlVehicle::LoadFromArchive	045318,
+10083c18	5	1	CMvlVehicle::ParseArchive	045360,
+10083c34	2	2	Could not load 7zip archive '%s'.	0523b0,045360,
+10083c58	1	1	Archive '%s' already loaded as '%s'.	045360,
+10083c80	2	2	Could not load file '%s' from archive '%s'.	0523b0,045360,
+10083cac	2	2	Could not register file '%s' from archive '%s'.	0523b0,045360,
+10083cdc	1	1	Archive '%s' is not complete.	045360,
+10083cfc	3	1	CMvlVehicle::RegisterArchiveFile	0455d0,
+10083d20	1	0	rcengine1	
+10083d2c	0	0	rcengine2	
+10083d38	1	1	tuning1.dff	0455d0,
+10083d44	1	1	tuning2.dff	0455d0,
+10083d50	1	1	tuning3.dff	0455d0,
+10083d5c	1	1	tuning4.dff	0455d0,
+10083d68	1	1	tuning5.dff	0455d0,
+10083d74	1	1	tuning6.dff	0455d0,
+10083d80	1	1	tuning7.dff	0455d0,
+10083d8c	1	1	tuning8.dff	0455d0,
+10083d98	1	1	tuning9.dff	0455d0,
+10083da4	1	1	weapons.txd	0455d0,
+10083db0	1	1	weapons.dff	0455d0,
+10083dec	2	2	Loading sound file %s failed.	052540,0455d0,
+10083e0c	1	1	File '%s' is larger than 12582912 bytes.	0455d0,
+10083e38	1	1	File '%s' is the second file of this type, bb %08X, dat %08X, i %d.	0455d0,
+10083e7c	4	1	CMvlVehicle::VerifyRequiredFiles	045870,
+10083ea0	1	1	Main XML is missing from the archive.	045870,
+10083ec8	1	1	Main DFF is missing from the archive.	045870,
+10083ef0	1	1	Main TXD is missing from the archive.	045870,
+10083f18	1	1	Main COL is missing from the archive and DFF model isn't SA version.	045870,
+10083f60	4	4	Failed to recognize texture.	052780,045900,04f9a0,046010,
+10083f80	4	4	Could not open memory stream for texture file.	052780,045900,04f9a0,046010,
+10083fb0	4	4	Could not find texture dictionary chunk header from .txd file.	052780,045900,04f9a0,046010,
+10083ff0	4	4	Loading texture dictionary from .txd file failed.	052780,045900,04f9a0,046010,
+10084024	1	1	CMvlVehicle::LoadTextureFile	045a5a,
+10084044	2	2	Could not open memory stream for DFF file.	052960,045af0,
+10084070	2	2	Could not find clump chunk header from DFF file.	052960,045af0,
+100840a4	2	2	Loading clump from DFF file failed.	052960,045af0,
+100840c8	1	1	CMvlVehicle::LoadModelFile	045ccb,
+100840e4	1	1	Collision file missing.	045d60,
+100840fc	1	1	Collision file does not have any entries.	045d60,
+10084128	1	1	Collision file is missing signature.	045d60,
+10084150	1	1	Invalid colmodel size.	045d60,
+10084168	1	1	CMvlVehicle::LoadCollisionFile	045ed7,
+10084188	1	1	Loaded %d anims from IFP file for vehicle.	045f50,
+100841b4	2	2	Failed to read animation file.	052e40,045f50,
+100841d4	1	1	CMvlVehicle::LoadAnimationFile	045f50,
+100841f4	1	1	Could not open memory stream for weapon DFF file.	046010,
+10084228	1	1	Could not find clump chunk header from weapon DFF file.	046010,
+10084260	1	1	Loading clump from weapon DFF file failed.	046010,
+1008428c	1	1	CMvlVehicle::LoadWeaponFiles	0462fe,
+100842e8	1	0	anims	
+100842f0	0	0	comprules	
+100842fc	1	1	wheelmodel	046420,
+10084308	0	0	wheelscale	
+10084314	1	1	lodmodel	046420,
+10084320	0	0	wheelrotangle	
+10084330	0	0	maxpassengers	
+10084340	0	0	wheelcorrection	
+10084350	0	0	immunity	
+1008435c	15	1	CMvlVehicle::LoadXMLBasic	046420,
+10084378	1	1	Element '%s' is not the first child of '%s' sector.	046420,
+100843ac	1	1	Vehicle has no name.	046420,
+100843c4	2	2	Unknown	053390,046420,
+100843cc	1	1	The name of the vehicle is less than 2 characters long.	046420,
+10084404	1	1	'%s' element present when the vehicle type is not car.	046420,
+10084440	1	1	'%s' element present when the vehicle type is neither car nor bike.	046420,
+10084484	1	1	'%s' element present when the vehicle type is not plane.	046420,
+100844c0	1	1	'%s' element present when the vehicle type is not bike.	046420,
+100844f8	1	1	'basic' sector is missing 'wheelmodel' element, which is required for cars.	046420,
+10084548	1	1	'basic' sector is missing 'wheelscale' element, which is required for cars.	046420,
+10084598	1	1	'basic' sector is missing 'lodmodel' element, which is required for planes.	046420,
+100845e8	1	1	'basic' sector is missing 'wheelrotangle' element, which is required for bikes.	046420,
+10084638	1	1	'%s' sector doesn't have 'extraflags' element, defaulting to 0.	046420,
+10084678	1	1	class	046960,
+10084680	1	1	'aidata' sector contains multiple 'class' elements.	046960,
+100846b4	16	1	CMvlVehicle::LoadXMLAIData	046960,
+100846d0	1	1	Failed to read data from 'class' element.	046960,
+100846fc	1	1	Element 'class' has unknown value.	046960,
+10084728	1	1	'aidata' sector contains multiple 'freq' elements.	046960,
+1008475c	1	1	Failed to read data from 'freq' element.	046960,
+1008478c	1	1	Failed to parse the contents of 'freq' element.	046960,
+100847bc	1	1	level	046960,
+100847c4	1	1	'aidata' sector contains multiple 'level' elements.	046960,
+100847f8	1	1	Failed to read data from 'level' element.	046960,
+10084824	1	1	Failed to parse the contents of 'level' element.	046960,
+10084860	1	1	'aidata' sector contains multiple 'gamg' elements.	046960,
+10084894	1	1	Failed to read data from 'gang' element.	046960,
+100848c0	1	1	The value of 'gang' element must be in the range 0-7.	046960,
+100848f8	1	1	Unknown element '%s' in 'aidata' sector.	046960,
+10084924	1	1	'aidata' sector is missing 'class' element.	046960,
+10084950	1	1	'aidata' sector is missing 'freq' element.	046960,
+1008497c	1	1	'aidata' sector is missing 'level' element.	046960,
+100849a8	1	1	carcol	046e90,
+100849b0	1	1	Failed to read data from 'carcol' element.	046e90,
+100849dc	14	1	CMvlVehicle::LoadXMLCarCol	046e90,
+100849f8	1	1	More than 16 colour elements present, only 16 will be used.	046e90,
+10084a34	1	1	%u,%u	046e90,
+10084a3c	1	1	Failed to parse the contents of 'carcol' element.	046e90,
+10084a70	1	1	The values of 'carcol' element are out of range 0-255.	046e90,
+10084aa8	1	1	carcol4	046e90,
+10084ab0	1	1	Failed to read data from 'carcol4' element.	046e90,
+10084adc	1	1	%u,%u,%u,%u	046e90,
+10084ae8	1	1	Failed to parse the contents of 'carcol4' element.	046e90,
+10084b1c	1	1	The values of 'carcol4' element are out of range 0-255.	046e90,
+10084b54	1	1	rgbcol	046e90,
+10084b5c	1	1	Failed to read data from 'rgbcol' element.	046e90,
+10084b88	1	1	%u,%u,%u,%u,%u,%u	046e90,
+10084b9c	1	1	Failed to parse the contents of 'rgbcol' element.	046e90,
+10084bd0	1	1	The values of 'rgbcol' element are out of range 0-255.	046e90,
+10084c08	1	1	rgbcol4	046e90,
+10084c10	1	1	Failed to read data from 'rgbcol4' element.	046e90,
+10084c3c	1	1	%u,%u,%u,%u,%u,%u,%u,%u,%u,%u,%u,%u	046e90,
+10084c60	1	1	Failed to parse the contents of 'rgbcol4' element.	046e90,
+10084c94	1	1	The values of 'rgbcol4' element are out of range 0-255.	046e90,
+10084ccc	1	1	Unknown element '%s' in 'colors' sector.	046e90,
+10084cf8	12	1	CMvlVehicle::LoadXMLAudioBoatEngine	0474d0,
+10084d1c	7	2	boatengine	0478a0,0474d0,
+10084d28	1	1	The value of '%s' element is out of range 0-1.	0474d0,
+10084d58	1	1	basevolume	0474d0,
+10084d64	1	1	The value of '%s' element is out of range 0-100.	0474d0,
+10084d98	1	1	basefrequency	0474d0,
+10084da8	1	1	The value of '%s' element is out of range 5-1000000.	0474d0,
+10084de0	1	1	volumeincrease	0474d0,
+10084df0	1	1	frequencyincrease	0474d0,
+10084e04	1	1	Unknown element '%s' in 'audio' sector.	0474d0,
+10084e2c	1	1	'%s' sector is missing 'type' element.	0474d0,
+10084e54	1	1	'%s' sector is missing 'basevolume' element.	0474d0,
+10084e84	1	1	'%s' sector is missing 'basefrequency' element.	0474d0,
+10084eb4	1	1	'%s' sector is missing 'volumeincrease' element.	0474d0,
+10084ee8	1	1	'%s' sector is missing 'frequencyincrease' element.	0474d0,
+10084f1c	1	1	enginefarsample	0478a0,
+10084f2c	1	1	enginenearsample	0478a0,
+10084f40	1	1	hornsample	0478a0,
+10084f4c	1	1	hornfreq	0478a0,
+10084f58	1	1	sirensample	0478a0,
+10084f64	1	1	sirenfreq	0478a0,
+10084f70	1	1	doorsounds	0478a0,
+10084f7c	3	1	CMvlVehicle::LoadXMLAudio	0478a0,
+10084f98	1	1	'%s' sector for a boat has no 'boatengine' sector. Using default values.	0478a0,
+10084fe4	1	1	multiplier	047c40,
+10084ff0	1	1	'traction' sector contains multiple 'multiplier' elements.	047c40,
+1008502c	13	1	CMvlVehicle::LoadXMLHandlingTraction	047c40,
+10085054	1	1	Failed to read data from 'multiplier' element.	047c40,
+10085084	1	1	Failed to parse the contents of 'multiplier' element.	047c40,
+100850c4	1	1	'traction' sector contains multiple 'loss' elements.	047c40,
+100850fc	1	1	Failed to read data from 'loss' element.	047c40,
+10085128	1	1	Failed to parse the contents of 'loss' element.	047c40,
+10085160	1	1	'traction' sector contains multiple 'bias' elements.	047c40,
+10085198	3	3	Failed to read data from 'bias' element.	0488d0,047c40,0483b0,
+100851c4	3	3	Failed to parse the contents of 'bias' element.	0488d0,047c40,0483b0,
+100851f4	1	1	Unknown element '%s' in 'traction' sector.	047c40,
+10085220	1	1	'traction' sector is missing 'multiplier' element.	047c40,
+10085254	1	1	'traction' sector is missing 'loss' element.	047c40,
+10085284	1	1	'traction' sector is missing 'bias' element.	047c40,
+100852b4	1	1	numofgears	047f10,
+100852c0	1	1	'transmission' sector contains multiple 'numofgears' elements.	047f10,
+10085300	21	1	CMvlVehicle::LoadXMLHandlingTransmission	047f10,
+1008532c	1	1	Failed to read data from 'numofgears' element.	047f10,
+1008535c	1	1	Failed to parse the contents of 'numofgears' element.	047f10,
+10085394	1	1	maxspeed	047f10,
+100853a0	1	1	'transmission' sector contains multiple 'maxspeed' elements.	047f10,
+100853e0	1	1	Failed to read data from 'maxspeed' element.	047f10,
+10085410	1	1	Failed to parse the contents of 'maxspeed' element.	047f10,
+10085444	1	1	acceleration	047f10,
+10085458	1	1	'transmission' sector contains multiple 'acceleration' elements.	047f10,
+1008549c	1	1	Failed to read data from 'acceleration' element.	047f10,
+100854d0	1	1	Failed to parse the contents of 'acceleration' element.	047f10,
+10085508	1	1	drivetype	047f10,
+10085514	1	1	'transmission' sector contains multiple 'drivetype' elements.	047f10,
+10085554	1	1	Failed to read data from 'drivetype' element.	047f10,
+10085588	1	1	Failed to parse the contents of 'drivetype' element.	047f10,
+100855c0	1	1	enginetype	047f10,
+100855cc	1	1	'transmission' sector contains multiple 'enginetype' elements.	047f10,
+1008560c	1	1	Failed to read data from 'enginetype' element.	047f10,
+1008563c	1	1	Failed to parse the contents of 'enginetype' element.	047f10,
+10085674	1	1	Unknown element '%s' in 'transmission' sector.	047f10,
+100856a4	1	1	'transmission' sector is missing 'multiplier' element.	047f10,
+100856dc	1	1	'transmission' sector is missing 'loss' element.	047f10,
+10085710	1	1	'transmission' sector is missing 'bias' element.	047f10,
+10085744	1	1	'transmission' sector is missing 'drivetype' element.	047f10,
+1008577c	1	1	'transmission' sector is missing 'enginetype' element.	047f10,
+100857b4	1	1	deceleration	0483b0,
+100857c4	1	1	'brakes' sector contains multiple 'deceleration' elements.	0483b0,
+10085800	14	1	CMvlVehicle::LoadXMLHandlingBrakes	0483b0,
+10085824	1	1	Failed to read data from 'deceleration' element.	0483b0,
+10085858	1	1	Failed to parse the contents of 'deceleration' element.	0483b0,
+10085890	1	1	'brakes' sector contains multiple 'bias' elements.	0483b0,
+100858c8	1	1	'brakes' sector contains multiple 'abs' elements.	0483b0,
+100858fc	1	1	Failed to read data from 'abs' element.	0483b0,
+10085924	1	1	Failed to parse the contents of 'abs' element.	0483b0,
+10085954	1	1	Element 'abs' can only have values 0 or 1.	0483b0,
+10085980	1	1	Unknown element '%s' in 'brakes' sector.	0483b0,
+100859ac	1	1	'brakes' sector is missing 'deceleration' element.	0483b0,
+100859e0	1	1	'brakes' sector is missing 'bias' element.	0483b0,
+10085a0c	1	1	'brakes' sector is missing 'abs' element.	0483b0,
+10085a38	1	1	verticalwavehitlimit	0486c0,
+10085a50	1	1	'boatbrakes' sector contains multiple 'verticalwavehitlimit' elements.	0486c0,
+10085a98	9	1	CMvlVehicle::LoadXMLHandlingBoatBrakes	0486c0,
+10085ac0	1	1	Failed to read data from 'verticalwavehitlimit' element.	0486c0,
+10085b00	1	1	Failed to parse the contents of 'verticalwavehitlimit' element.	0486c0,
+10085b40	1	1	forwardwavehitbrake	0486c0,
+10085b58	1	1	'boatbrakes' sector contains multiple 'forwardwavehitbrake' elements.	0486c0,
+10085ba0	1	1	Failed to read data from 'forwardwavehitbrake' element.	0486c0,
+10085bd8	1	1	Failed to parse the contents of 'forwardwavehitbrake' element.	0486c0,
+10085c18	1	1	Unknown element '%s' in 'boatbrakes' sector.	0486c0,
+10085c48	1	1	'boatbrakes' sector is missing 'verticalwavehitlimit' element.	0486c0,
+10085c88	1	1	'boatbrakes' sector is missing 'forwardwavehitbrake' element.	0486c0,
+10085cc8	1	1	forcelevel	0488d0,
+10085cd4	1	1	'suspension' sector contains multiple 'forcelevel' elements.	0488d0,
+10085d14	25	1	CMvlVehicle::LoadXMLHandlingSuspension	0488d0,
+10085d3c	1	1	Failed to read data from 'forcelevel' element.	0488d0,
+10085d6c	1	1	Failed to parse the contents of 'forcelevel' element.	0488d0,
+10085da4	1	1	dampening	0488d0,
+10085db0	1	1	'suspension' sector contains multiple 'dampening' elements.	0488d0,
+10085dec	1	1	Failed to read data from 'dampening' element.	0488d0,
+10085e1c	1	1	Failed to parse the contents of 'dampening' element.	0488d0,
+10085e54	2	2	upperlimit	0488d0,048e20,
+10085e60	1	1	'suspension' sector contains multiple 'upperlimit' elements.	0488d0,
+10085ea0	2	2	Failed to read data from 'upperlimit' element.	0488d0,048e20,
+10085ed0	2	2	Failed to parse the contents of 'upperlimit' element.	0488d0,048e20,
+10085f08	1	1	lowerlimit	0488d0,
+10085f14	1	1	'suspension' sector contains multiple 'lowerlimit' elements.	0488d0,
+10085f54	1	1	Failed to read data from 'lowerlimit' element.	0488d0,
+10085f84	1	1	Failed to parse the contents of 'lowerlimit' element.	0488d0,
+10085fbc	1	1	'suspension' sector contains multiple 'bias' elements.	0488d0,
+10085ff4	2	2	antidive	0488d0,048e20,
+10086000	1	1	'suspension' sector contains multiple 'antidive' elements.	0488d0,
+1008603c	2	2	Failed to read data from 'antidive' element.	0488d0,048e20,
+1008606c	2	2	Failed to parse the contents of 'antidive' element.	0488d0,048e20,
+100860a0	1	1	Unknown element '%s' in 'suspension' sector.	0488d0,
+100860d0	1	1	'suspension' sector is missing 'forcelevel' element.	0488d0,
+10086108	1	1	'suspension' sector is missing 'dampening' element.	0488d0,
+1008613c	1	1	'suspension' sector is missing 'upperlimit' element.	0488d0,
+10086174	1	1	'suspension' sector is missing 'lowerlimit' element.	0488d0,
+100861ac	1	1	'suspension' sector is missing 'bias' element.	0488d0,
+100861dc	1	1	'suspension' sector is missing 'antidive' element.	0488d0,
+10086210	1	1	waterresvolumemult	048e20,
+10086228	1	1	'boatsuspension' sector contains multiple 'waterresvolumemult' elements.	048e20,
+10086274	25	1	CMvlVehicle::LoadXMLHandlingBoatSuspension	048e20,
+100862a0	1	1	Failed to read data from 'waterresvolumemult' element.	048e20,
+100862d8	1	1	Failed to parse the contents of 'waterresvolumemult' element.	048e20,
+10086318	1	1	waterdampingmult	048e20,
+10086330	1	1	'boatsuspension' sector contains multiple 'waterdampingmult' elements.	048e20,
+10086378	1	1	Failed to read data from 'waterdampingmult' element.	048e20,
+100863b0	1	1	Failed to parse the contents of 'waterdampingmult' element.	048e20,
+100863f0	1	1	'boatsuspension' sector contains multiple 'upperlimit' elements.	048e20,
+10086434	1	1	handbrakedragmult	048e20,
+10086448	1	1	'boatsuspension' sector contains multiple 'handbrakedragmult' elements.	048e20,
+10086490	1	1	Failed to read data from 'handbrakedragmult' element.	048e20,
+100864c8	1	1	Failed to parse the contents of 'handbrakedragmult' element.	048e20,
+10086508	1	1	sideslipforce	048e20,
+10086518	1	1	'boatsuspension' sector contains multiple 'sideslipforce' elements.	048e20,
+1008655c	1	1	Failed to read data from 'sideslipforce' element.	048e20,
+10086590	1	1	Failed to parse the contents of 'sideslipforce' element.	048e20,
+100865cc	1	1	'boatsuspension' sector contains multiple 'antidive' elements.	048e20,
+1008660c	1	1	Unknown element '%s' in 'boatsuspension' sector.	048e20,
+10086640	1	1	'boatsuspension' sector is missing 'waterresvolumemult' element.	048e20,
+10086684	1	1	'boatsuspension' sector is missing 'waterdampingmult' element.	048e20,
+100866c4	1	1	'boatsuspension' sector is missing 'upperlimit' element.	048e20,
+10086700	1	1	'boatsuspension' sector is missing 'handbrakedragmult' element.	048e20,
+10086740	1	1	'boatsuspension' sector is missing 'sideslipforce' element.	048e20,
+1008677c	1	1	'boatsuspension' sector is missing 'antidive' element.	048e20,
+100867b4	1	1	bankforcemult	049370,
+100867c8	1	1	'boatsteering' sector contains multiple 'bankforcemult' elements.	049370,
+1008680c	13	1	CMvlVehicle::LoadXMLHandlingBoatSteering	049370,
+10086838	1	1	Failed to read data from 'bankforcemult' element.	049370,
+1008686c	1	1	Failed to parse the contents of 'bankforcemult' element.	049370,
+100868a8	1	1	rudderturnforce	049370,
+100868b8	1	1	'boatsteering' sector contains multiple 'rudderturnforce' elements.	049370,
+100868fc	1	1	Failed to read data from 'rudderturnforce' element.	049370,
+10086930	1	1	Failed to parse the contents of 'rudderturnforce' element.	049370,
+1008696c	1	1	speedsteerfalloff	049370,
+10086980	1	1	'boatsteering' sector contains multiple 'speedsteerfalloff' elements.	049370,
+100869c8	1	1	Failed to read data from 'speedsteerfalloff' element.	049370,
+10086a00	1	1	Failed to parse the contents of 'speedsteerfalloff' element.	049370,
+10086a40	1	1	Unknown element '%s' in 'boatsteering' sector.	049370,
+10086a70	1	1	'boatsteering' sector is missing 'bankforcemult' element.	049370,
+10086aac	1	1	'boatsteering' sector is missing 'rudderturnforce' element.	049370,
+10086ae8	1	1	'boatsteering' sector is missing 'speedsteerfalloff' element.	049370,
+10086b28	1	1	front	049640,
+10086b30	1	1	'lights' sector contains multiple 'front' elements.	049640,
+10086b64	12	1	CMvlVehicle::LoadXMLHandlingLights	049640,
+10086b88	1	1	Failed to read data from 'front' element.	049640,
+10086bb4	1	1	Failed to parse the contents of 'front' element.	049640,
+10086bf0	1	1	'lights' sector contains multiple 'rear' elements.	049640,
+10086c24	1	1	Failed to read data from 'rear' element.	049640,
+10086c50	1	1	Failed to parse the contents of 'rear' element.	049640,
+10086c80	1	1	hasboxes	049640,
+10086c8c	1	1	'lights' sector contains multiple 'lightbox' elements.	049640,
+10086cc4	1	1	Failed to read data from 'lightbox' element.	049640,
+10086cf4	1	1	The value of 'lightbox' can only be either 'true' or 'false'.	049640,
+10086d34	1	1	Unknown element '%s' in 'lights' sector.	049640,
+10086d60	1	1	'lights' sector is missing 'front' element.	049640,
+10086d8c	1	1	'lights' sector is missing 'rear' element.	049640,
+10086dc0	1	1	'handling' sector contains multiple 'mass' elements.	049930,
+10086df8	62	1	CMvlVehicle::LoadXMLHandling	049930,
+10086e18	1	1	Failed to read data from 'mass' element.	049930,
+10086e44	1	1	Failed to parse the contents of 'mass' element.	049930,
+10086e74	1	1	percentsubmerged	049930,
+10086e88	1	1	'handling' sector contains multiple 'percentsubmerged' elements.	049930,
+10086ecc	1	1	Failed to read data from 'percentsubmerged' element.	049930,
+10086f04	1	1	Failed to parse the contents of 'percentsubmerged' element.	049930,
+10086f40	1	1	steeringlock	049930,
+10086f50	1	1	'handling' sector contains multiple 'steeringlock' elements.	049930,
+10086f90	1	1	Failed to read data from 'steeringlock' element.	049930,
+10086fc4	1	1	Failed to parse the contents of 'steeringlock' element.	049930,
+10086ffc	1	1	seatoffset	049930,
+10087008	1	1	'handling' sector contains multiple 'seatoffset' elements.	049930,
+10087044	1	1	Failed to read data from 'seatoffset' element.	049930,
+10087074	1	1	Failed to parse the contents of 'seatoffset' element.	049930,
+100870ac	1	1	damagemultiplier	049930,
+100870c0	1	1	'handling' sector contains multiple 'damagemultiplier' elements.	049930,
+10087104	1	1	Failed to read data from 'damagemultiplier' element.	049930,
+1008713c	1	1	Failed to parse the contents of 'damagemultiplier' element.	049930,
+10087178	1	1	value	049930,
+10087180	1	1	'handling' sector contains multiple 'value' elements.	049930,
+100871b8	1	1	Failed to read data from 'value' element.	049930,
+100871e4	1	1	Failed to parse the contents of 'value' element.	049930,
+10087218	2	2	flags	053620,049930,
+10087220	1	1	'handling' sector contains multiple 'flags' elements.	049930,
+10087258	1	1	Failed to read data from 'flags' element.	049930,
+10087284	1	1	Failed to parse the contents of 'flags' element.	049930,
+100872b8	1	1	dimensions	049930,
+100872c4	1	1	'handling' sector contains multiple 'dimensions' vectors.	049930,
+10087300	1	1	Could not load 'dimensions' vector.	049930,
+10087324	1	1	centreofmass	049930,
+10087334	1	1	'handling' sector contains multiple 'centreofmass' vectors.	049930,
+10087370	1	1	Could not load 'centreofmass' vector.	049930,
+10087398	1	1	traction	049930,
+100873a4	1	1	Boats must have a 'boatsteering' sector instead of 'traction'.	049930,
+100873e4	1	1	'handling' sector contains multiple 'traction' sectors.	049930,
+1008741c	1	1	Could not load 'traction' sector.	049930,
+10087440	1	1	boatsteering	049930,
+10087450	1	1	Non-boats must have a 'traction' sector instead of 'boatsteering'.	049930,
+10087494	1	1	'handling' sector contains multiple 'boatsteering' sectors.	049930,
+100874d0	1	1	Could not load 'boatsteering' sector.	049930,
+100874f8	1	1	transmission	049930,
+10087508	1	1	'handling' sector contains multiple 'transmission' sectors.	049930,
+10087544	1	1	Could not load 'transmission' sector.	049930,
+1008756c	1	1	brakes	049930,
+10087574	1	1	Boats must have a 'boatbrakes' sector instead of 'brakes'.	049930,
+100875b0	1	1	'handling' sector contains multiple 'brakes' sectors.	049930,
+100875e8	1	1	Could not load 'brakes' sector.	049930,
+10087608	1	1	boatbrakes	049930,
+10087614	1	1	Non-boats must have a 'brakes' sector instead of 'boatbrakes'.	049930,
+10087654	1	1	'handling' sector contains multiple 'boatbrakes' sectors.	049930,
+10087690	1	1	Could not load 'boatbrakes' sector.	049930,
+100876b4	1	1	suspension	049930,
+100876c0	1	1	Boats must have a 'boatsuspension' sector instead of 'suspension'.	049930,
+10087704	1	1	'handling' sector contains multiple 'suspension' sectors.	049930,
+10087740	1	1	Could not load 'suspension' sector.	049930,
+10087764	1	1	boatsuspension	049930,
+10087778	1	1	Non-boats must have a 'suspension' sector instead of 'boatsuspension'.	049930,
+100877c0	1	1	'handling' sector contains multiple 'boatsuspension' sectors.	049930,
+10087800	1	1	Could not load 'boatsuspension' sector.	049930,
+10087828	1	1	'handling' sector contains multiple 'lights' sectors.	049930,
+10087860	1	1	Could not load 'lights' sector.	049930,
+10087880	1	1	Unknown element '%s' in 'handling' sector.	049930,
+100878ac	1	1	'handling' sector is missing 'mass' element.	049930,
+100878dc	1	1	'handling' sector is missing 'percentsubmerged' element.	049930,
+10087918	1	1	'handling' sector is missing 'steeringlock' element.	049930,
+10087950	1	1	'handling' sector is missing 'seatoffset' element.	049930,
+10087984	1	1	'handling' sector is missing 'damagemultiplier' element.	049930,
+100879c0	1	1	'handling' sector is missing 'value' element.	049930,
+100879f0	1	1	'handling' sector is missing 'flags' element.	049930,
+10087a20	1	1	No dimensions specified in handling, going to get it from collision info later.	049930,
+10087a70	1	1	'handling' sector is missing 'centreofmass' vector.	049930,
+10087aa4	1	1	'handling' sector is missing 'traction'/'boatsteering' sector.	049930,
+10087ae4	1	1	'handling' sector is missing 'transmission' sector.	049930,
+10087b18	1	1	'handling' sector is missing 'brakes'/'boatbrakes' sector.	049930,
+10087b58	1	1	'handling' sector is missing 'suspension'/'boatsuspension' sector.	049930,
+10087b9c	1	1	'handling' sector is missing 'lights' sector.	049930,
+10087bcc	1	1	thrust	04a610,
+10087bd4	1	1	'aerohandling' sector contains multiple 'thrust' elements.	04a610,
+10087c10	55	1	CMvlVehicle::LoadXMLAeroHandling	04a610,
+10087c34	1	1	Failed to read data from 'thrust' element.	04a610,
+10087c60	1	1	Failed to parse the contents of 'thrust' element.	04a610,
+10087c94	1	1	thrustfalloff	04a610,
+10087ca8	1	1	'aerohandling' sector contains multiple 'thrustfalloff' elements.	04a610,
+10087cec	1	1	Failed to read data from 'thrustfalloff' element.	04a610,
+10087d20	1	1	Failed to parse the contents of 'thrustfalloff' element.	04a610,
+10087d60	1	1	'aerohandling' sector contains multiple 'yaw' elements.	04a610,
+10087d98	1	1	Failed to read data from 'yaw' element.	04a610,
+10087dc0	1	1	Failed to parse the contents of 'yaw' element.	04a610,
+10087df0	1	1	yawstab	04a610,
+10087df8	1	1	'aerohandling' sector contains multiple 'yawstab' elements.	04a610,
+10087e34	1	1	Failed to read data from 'yawstab' element.	04a610,
+10087e60	1	1	Failed to parse the contents of 'yawstab' element.	04a610,
+10087e94	1	1	sideslip	04a610,
+10087ea0	1	1	'aerohandling' sector contains multiple 'sideslip' elements.	04a610,
+10087ee0	1	1	Failed to read data from 'sideslip' element.	04a610,
+10087f10	1	1	Failed to parse the contents of 'sideslip' element.	04a610,
+10087f4c	1	1	'aerohandling' sector contains multiple 'roll' elements.	04a610,
+10087f88	1	1	Failed to read data from 'roll' element.	04a610,
+10087fb4	1	1	Failed to parse the contents of 'roll' element.	04a610,
+10087fe4	1	1	rollstab	04a610,
+10087ff0	1	1	'aerohandling' sector contains multiple 'rollstab' elements.	04a610,
+10088030	1	1	Failed to read data from 'rollstab' element.	04a610,
+10088060	1	1	Failed to parse the contents of 'rollstab' element.	04a610,
+10088094	1	1	pitch	04a610,
+1008809c	1	1	'aerohandling' sector contains multiple 'pitch' elements.	04a610,
+100880d8	1	1	Failed to read data from 'pitch' element.	04a610,
+10088104	1	1	Failed to parse the contents of 'pitch' element.	04a610,
+10088138	1	1	pitchstab	04a610,
+10088144	1	1	'aerohandling' sector contains multiple 'pitchstab' elements.	04a610,
+10088184	1	1	Failed to read data from 'pitchstab' element.	04a610,
+100881b4	1	1	Failed to parse the contents of 'pitchstab' element.	04a610,
+100881ec	1	1	formlift	04a610,
+100881f8	1	1	'aerohandling' sector contains multiple 'formlift' elements.	04a610,
+10088238	1	1	Failed to read data from 'formlift' element.	04a610,
+10088268	1	1	Failed to parse the contents of 'formlift' element.	04a610,
+1008829c	1	1	attacklift	04a610,
+100882a8	1	1	'aerohandling' sector contains multiple 'attacklift' elements.	04a610,
+100882e8	1	1	Failed to read data from 'attacklift' element.	04a610,
+10088318	1	1	Failed to parse the contents of 'attacklift' element.	04a610,
+10088350	2	2	moveres	04bee0,04a610,
+10088358	1	1	'aerohandling' sector contains multiple 'moveres' elements.	04a610,
+10088394	1	1	Failed to read data from 'moveres' element.	04a610,
+100883c0	1	1	Failed to parse the contents of 'moveres' element.	04a610,
+100883f4	2	2	turnres	04bee0,04a610,
+100883fc	1	1	'aerohandling' sector contains multiple 'turnres' vectors.	04a610,
+10088438	2	2	Could not load 'turnres' vector.	04bee0,04a610,
+1008845c	1	1	speedres	04a610,
+10088468	1	1	'aerohandling' sector contains multiple 'speedres' vectors.	04a610,
+100884a4	1	1	Could not load 'speedres' vector.	04a610,
+100884c8	1	1	Unknown element '%s' in 'aerohandling' sector.	04a610,
+100884f8	1	1	'aerohandling' sector is missing 'thrust' element.	04a610,
+1008852c	1	1	'aerohandling' sector is missing 'thrustfalloff' element.	04a610,
+10088568	1	1	'aerohandling' sector is missing 'yaw' element.	04a610,
+10088598	1	1	'aerohandling' sector is missing 'yawstab' element.	04a610,
+100885cc	1	1	'aerohandling' sector is missing 'sideslip' element.	04a610,
+10088604	1	1	'aerohandling' sector is missing 'roll' element.	04a610,
+10088638	1	1	'aerohandling' sector is missing 'rollstab' element.	04a610,
+10088670	1	1	'aerohandling' sector is missing 'pitch' element.	04a610,
+100886a4	1	1	'aerohandling' sector is missing 'pitchstab' element.	04a610,
+100886dc	1	1	'aerohandling' sector is missing 'formlift' element.	04a610,
+10088714	1	1	'aerohandling' sector is missing 'attacklift' element.	04a610,
+1008874c	1	1	'aerohandling' sector is missing 'moveres' element.	04a610,
+10088780	1	1	'aerohandling' sector is missing 'turnres' vector.	04a610,
+100887b4	1	1	'aerohandling' sector is missing 'speedres' vector.	04a610,
+100887e8	1	1	leanfwdcom	04b1a0,
+100887f4	1	1	'bikehandling' sector contains multiple 'leanfwdcom' elements.	04b1a0,
+10088834	61	1	CMvlVehicle::LoadXMLBikeHandling	04b1a0,
+10088858	1	1	Failed to read data from 'leanfwdcom' element.	04b1a0,
+10088888	1	1	Failed to parse the contents of 'leanfwdcom' element.	04b1a0,
+100888c0	1	1	leanfwdforce	04b1a0,
+100888d0	1	1	'bikehandling' sector contains multiple 'leanfwdforce' elements.	04b1a0,
+10088914	1	1	Failed to read data from 'leanfwdforce' element.	04b1a0,
+10088948	1	1	Failed to parse the contents of 'leanfwdforce' element.	04b1a0,
+10088980	1	1	leanbackcom	04b1a0,
+10088990	1	1	'bikehandling' sector contains multiple 'leanbackcom' elements.	04b1a0,
+100889d0	1	1	Failed to read data from 'leanbackcom' element.	04b1a0,
+10088a00	1	1	Failed to parse the contents of 'leanbackcom' element.	04b1a0,
+10088a38	1	1	leanbackforce	04b1a0,
+10088a48	1	1	'bikehandling' sector contains multiple 'leanbackforce' elements.	04b1a0,
+10088a8c	1	1	Failed to read data from 'leanbackforce' element.	04b1a0,
+10088ac0	1	1	Failed to parse the contents of 'leanbackforce' element.	04b1a0,
+10088afc	1	1	maxlean	04b1a0,
+10088b04	1	1	'bikehandling' sector contains multiple 'maxlean' elements.	04b1a0,
+10088b40	1	1	Failed to read data from 'maxlean' element.	04b1a0,
+10088b6c	1	1	Failed to parse the contents of 'maxlean' element.	04b1a0,
+10088ba0	1	1	fullanimlean	04b1a0,
+10088bb0	1	1	'bikehandling' sector contains multiple 'fullanimlean' elements.	04b1a0,
+10088bf4	1	1	Failed to read data from 'fullanimlean' element.	04b1a0,
+10088c28	1	1	Failed to parse the contents of 'fullanimlean' element.	04b1a0,
+10088c60	1	1	deslean	04b1a0,
+10088c68	1	1	'bikehandling' sector contains multiple 'deslean' elements.	04b1a0,
+10088ca4	1	1	Failed to read data from 'deslean' element.	04b1a0,
+10088cd0	1	1	Failed to parse the contents of 'deslean' element.	04b1a0,
+10088d04	1	1	speedsteer	04b1a0,
+10088d10	1	1	'bikehandling' sector contains multiple 'speedsteer' elements.	04b1a0,
+10088d50	1	1	Failed to read data from 'speedsteer' element.	04b1a0,
+10088d80	1	1	Failed to parse the contents of 'speedsteer' element.	04b1a0,
+10088db8	1	1	slipsteer	04b1a0,
+10088dc4	1	1	'bikehandling' sector contains multiple 'slipsteer' elements.	04b1a0,
+10088e04	1	1	Failed to read data from 'slipsteer' element.	04b1a0,
+10088e34	1	1	Failed to parse the contents of 'slipsteer' element.	04b1a0,
+10088e6c	1	1	noplayercomz	04b1a0,
+10088e80	1	1	'bikehandling' sector contains multiple 'noplayercomz' elements.	04b1a0,
+10088ec4	1	1	Failed to read data from 'noplayercomz' element.	04b1a0,
+10088ef8	1	1	Failed to parse the contents of 'noplayercomz' element.	04b1a0,
+10088f30	1	1	wheelieang	04b1a0,
+10088f3c	1	1	'bikehandling' sector contains multiple 'wheelieang' elements.	04b1a0,
+10088f7c	1	1	Failed to read data from 'wheelieang' element.	04b1a0,
+10088fac	1	1	Failed to parse the contents of 'wheelieang' element.	04b1a0,
+10088fe4	1	1	stoppieang	04b1a0,
+10088ff0	1	1	'bikehandling' sector contains multiple 'stoppieang' elements.	04b1a0,
+10089030	1	1	Failed to read data from 'stoppieang' element.	04b1a0,
+10089060	1	1	Failed to parse the contents of 'stoppieang' element.	04b1a0,
+10089098	1	1	wheeliesteer	04b1a0,
+100890a8	1	1	'bikehandling' sector contains multiple 'wheeliesteer' elements.	04b1a0,
+100890ec	1	1	Failed to read data from 'wheeliesteer' element.	04b1a0,
+10089120	1	1	Failed to parse the contents of 'wheeliesteer' element.	04b1a0,
+10089158	1	1	wheeliestabmult	04b1a0,
+10089168	1	1	'bikehandling' sector contains multiple 'wheeliestabmult' elements.	04b1a0,
+100891ac	1	1	Failed to read data from 'wheeliestabmult' element.	04b1a0,
+100891e0	1	1	Failed to parse the contents of 'wheeliestabmult' element.	04b1a0,
+1008921c	1	1	stoppiestabmult	04b1a0,
+10089230	1	1	'bikehandling' sector contains multiple 'stoppiestabmult' elements.	04b1a0,
+10089274	1	1	Failed to read data from 'stoppiestabmult' element.	04b1a0,
+100892a8	1	1	Failed to parse the contents of 'stoppiestabmult' element.	04b1a0,
+100892e4	1	1	Unknown element '%s' in 'bikehandling' sector.	04b1a0,
+10089314	1	1	'bikehandling' sector is missing 'leanfwdcom' element.	04b1a0,
+1008934c	1	1	'bikehandling' sector is missing 'leanfwdforce' element.	04b1a0,
+10089388	1	1	'bikehandling' sector is missing 'leanbackcom' element.	04b1a0,
+100893c0	1	1	'bikehandling' sector is missing 'leanbackforce' element.	04b1a0,
+100893fc	1	1	'bikehandling' sector is missing 'maxlean' element.	04b1a0,
+10089430	1	1	'bikehandling' sector is missing 'fullanimlean' element.	04b1a0,
+1008946c	1	1	'bikehandling' sector is missing 'deslean' element.	04b1a0,
+100894a0	1	1	'bikehandling' sector is missing 'speedsteer' element.	04b1a0,
+100894d8	1	1	'bikehandling' sector is missing 'slipsteer' element.	04b1a0,
+10089510	1	1	'bikehandling' sector is missing 'noplayercomz' element.	04b1a0,
+1008954c	1	1	'bikehandling' sector is missing 'wheelieang' element.	04b1a0,
+10089584	1	1	'bikehandling' sector is missing 'stoppieang' element.	04b1a0,
+100895bc	1	1	'bikehandling' sector is missing 'wheeliesteer' element.	04b1a0,
+100895f8	1	1	'bikehandling' sector is missing 'wheeliestabmult' element.	04b1a0,
+10089634	1	1	'bikehandling' sector is missing 'stoppiestabmult' element.	04b1a0,
+10089670	1	1	thrusty	04bee0,
+10089678	1	1	'boathandling' sector contains multiple 'thrusty' elements.	04bee0,
+100896b4	39	1	CMvlVehicle::LoadXMLBoatHandling	04bee0,
+100896d8	1	1	Failed to read data from 'thrusty' element.	04bee0,
+10089704	1	1	Failed to parse the contents of 'thrusty' element.	04bee0,
+10089738	1	1	thrustz	04bee0,
+10089740	1	1	'boathandling' sector contains multiple 'thrustz' elements.	04bee0,
+1008977c	1	1	Failed to read data from 'thrustz' element.	04bee0,
+100897a8	1	1	Failed to parse the contents of 'thrustz' element.	04bee0,
+100897dc	1	1	thrustappz	04bee0,
+100897e8	1	1	'boathandling' sector contains multiple 'thrustappz' elements.	04bee0,
+10089828	1	1	Failed to read data from 'thrustappz' element.	04bee0,
+10089858	1	1	Failed to parse the contents of 'thrustappz' element.	04bee0,
+10089890	1	1	aqplaneforce	04bee0,
+100898a0	1	1	'boathandling' sector contains multiple 'aqplaneforce' elements.	04bee0,
+100898e4	1	1	Failed to read data from 'aqplaneforce' element.	04bee0,
+10089918	1	1	Failed to parse the contents of 'aqplaneforce' element.	04bee0,
+10089950	1	1	aqplanelimit	04bee0,
+10089960	1	1	'boathandling' sector contains multiple 'aqplanelimit' elements.	04bee0,
+100899a4	1	1	Failed to read data from 'aqplanelimit' element.	04bee0,
+100899d8	1	1	Failed to parse the contents of 'aqplanelimit' element.	04bee0,
+10089a10	1	1	aqplaneoffset	04bee0,
+10089a20	1	1	'boathandling' sector contains multiple 'aqplaneoffset' elements.	04bee0,
+10089a64	1	1	Failed to read data from 'aqplaneoffset' element.	04bee0,
+10089a98	1	1	Failed to parse the contents of 'aqplaneoffset' element.	04bee0,
+10089ad4	1	1	waveaudiomult	04bee0,
+10089ae8	1	1	'boathandling' sector contains multiple 'waveaudiomult' elements.	04bee0,
+10089b2c	1	1	Failed to read data from 'waveaudiomult' element.	04bee0,
+10089b60	1	1	Failed to parse the contents of 'waveaudiomult' element.	04bee0,
+10089b9c	1	1	'boathandling' sector contains multiple 'moveres' vectors.	04bee0,
+10089bd8	1	1	Could not load 'moveres' vector.	04bee0,
+10089bfc	1	1	'boathandling' sector contains multiple 'turnres' vectors.	04bee0,
+10089c38	1	1	looklrbcamheight	04bee0,
+10089c50	1	1	'boathandling' sector contains multiple 'looklrbcamheight' elements.	04bee0,
+10089c98	1	1	Failed to read data from 'looklrbcamheight' element.	04bee0,
+10089cd0	1	1	Failed to parse the contents of 'looklrbcamheight' element.	04bee0,
+10089d0c	1	1	Unknown element '%s' in 'boathandling' sector.	04bee0,
+10089d3c	1	1	'boathandling' sector is missing 'thrusty' element.	04bee0,
+10089d70	1	1	'boathandling' sector is missing 'thrustz' element.	04bee0,
+10089da4	1	1	'boathandling' sector is missing 'thrustappz' element.	04bee0,
+10089ddc	1	1	'boathandling' sector is missing 'aqplaneforce' element.	04bee0,
+10089e18	1	1	'boathandling' sector is missing 'aqplanelimit' element.	04bee0,
+10089e54	1	1	'boathandling' sector is missing 'aqplaneoffset' element.	04bee0,
+10089e90	1	1	'boathandling' sector is missing 'waveaudiomult' element.	04bee0,
+10089ecc	1	1	'boathandling' sector is missing 'moveres' vector.	04bee0,
+10089f00	1	1	'boathandling' sector is missing 'turnres' vector.	04bee0,
+10089f34	1	1	'boathandling' sector is missing 'looklrbcamheight' element.	04bee0,
+10089f74	1	1	helitype	04c700,
+10089f80	1	1	'helidata' sector contains multiple 'helitype' elements.	04c700,
+10089fbc	17	1	CMvlVehicle::LoadXMLHeliData	04c700,
+10089fdc	1	1	Failed to read data from 'helitype' element.	04c700,
+1008a00c	1	1	Element 'helitype' has unknown value.	04c700,
+1008a034	1	1	weapons	04c700,
+1008a03c	1	1	'helidata' sector contains multiple 'weapons' elements.	04c700,
+1008a074	1	1	Failed to read data from 'weapons' element.	04c700,
+1008a0a0	1	1	Element 'weapons' has unknown value.	04c700,
+1008a0c8	1	1	rotorradius	04c700,
+1008a0d4	1	1	'helidata' sector contains multiple 'rotorradius' elements.	04c700,
+1008a110	1	1	Failed to read data from 'rotorradius' element.	04c700,
+1008a140	1	1	Failed to parse the contents of 'rotorradius' element.	04c700,
+1008a178	1	1	rotordammult	04c700,
+1008a188	1	1	'helidata' sector contains multiple 'rotordammult' elements.	04c700,
+1008a1c8	1	1	Failed to read data from 'rotordammult' element.	04c700,
+1008a1fc	1	1	Failed to parse the contents of 'rotordammult' element.	04c700,
+1008a234	1	1	Unknown element '%s' in 'helidata' sector.	04c700,
+1008a260	1	1	'helidata' sector is missing 'helitype' element.	04c700,
+1008a294	1	1	'helidata' sector is missing 'weapons' element.	04c700,
+1008a2c4	1	1	'helidata' sector is missing 'rotorradius' element.	04c700,
+1008a2f8	1	1	'helidata' sector is missing 'rotordammult' element.	04c700,
+1008a330	1	1	machinegunpos	04cb80,
+1008a340	1	1	'heliweps' sector contains multiple 'machinegunpos' vectors.	04cb80,
+1008a380	5	1	CMvlVehicle::LoadXMLHeliWepsData	04cb80,
+1008a3a4	1	1	Could not load 'machinegunpos' vector.	04cb80,
+1008a3cc	1	1	missilepos	04cb80,
+1008a3d8	1	1	'heliweps' sector contains multiple 'missilepos' vectors.	04cb80,
+1008a414	1	1	Could not load 'missilepos' vector.	04cb80,
+1008a438	1	1	Unknown element '%s' in 'heliweps' sector.	04cb80,
+1008a468	1	1	'specials' sector contains multiple EM light sectors ('emlights'/'emlightsingle'/'taxilight').	04ccd0,
+1008a4c8	7	1	CMvlVehicle::LoadXMLSpecialData	04ccd0,
+1008a4e8	1	1	Could not load 'emlights' sector.	04ccd0,
+1008a50c	1	1	Could not load 'emlightsingle' sector.	04ccd0,
+1008a534	1	1	Could not load 'taxilight' sector.	04ccd0,
+1008a558	1	1	heliweps	04ccd0,
+1008a564	1	1	'specials' sector contains multiple 'heliweps' sectors.	04ccd0,
+1008a59c	1	1	Could not load 'heliweps' sector.	04ccd0,
+1008a5c0	1	1	Unknown element '%s' in 'specials' sector.	04ccd0,
+1008a5ec	1	1	dockkey	04cec0,
+1008a5f4	3	1	moveupkey	04cec0,
+1008a600	2	1	movedownkey	04cec0,
+1008a60c	2	1	restorekey	04cec0,
+1008a618	2	1	shootkey	04cec0,
+1008a624	3	1	CMvlVehicle::LoadXMLWeaponKeyData	04cec0,
+1008a648	5	4	%u,%u,%u	04e8f0,04edc0,04cec0,04f090,
+1008a654	1	1	Failed to parse the contents of '%s' element (format 'x,x,x').	04cec0,
+1008a694	1	1	'hotkeys' sector is missing '%s' element.	04cec0,
+1008a6c0	1	1	gravity	04d0d0,
+1008a6c8	1	1	'missileinfo' sector contains multiple 'gravity' elements.	04d0d0,
+1008a704	12	1	CMvlVehicle::LoadXMLWeaponMissileInfo	04d0d0,
+1008a72c	1	1	Failed to read data from 'gravity' element.	04d0d0,
+1008a758	1	1	Element 'gravity' may only have values 'on' or 'off'.	04d0d0,
+1008a790	2	2	timeout	04d0d0,04d380,
+1008a798	1	1	'missileinfo' sector contains multiple 'timeout' elements.	04d0d0,
+1008a7d4	1	1	Failed to read data from 'timeout' element.	04d0d0,
+1008a800	1	1	Failed to parse the contents of 'timeout' element.	04d0d0,
+1008a834	1	1	addspeedmul	04d0d0,
+1008a840	1	1	'missileinfo' sector contains multiple 'addspeedmul' elements.	04d0d0,
+1008a880	1	1	Failed to read data from 'addspeedmul' element.	04d0d0,
+1008a8b0	1	1	Failed to parse the contents of 'addspeedmul' element.	04d0d0,
+1008a8e8	2	2	Unknown element '%s' in 'missileinfo' sector.	04d0d0,04d380,
+1008a918	1	1	'missileinfo' sector is missing 'gravity' element.	04d0d0,
+1008a94c	1	1	'missileinfo' sector is missing 'timeout' element.	04d0d0,
+1008a980	4	1	CMvlVehicle::LoadXMLWeaponMachineGunInfo	04d380,
+1008a9ac	2	2	machineguninfo	04dd20,04d380,
+1008a9bc	2	2	range	053620,04d380,
+1008a9c4	1	1	accuracy	04d380,
+1008a9d0	1	1	sound	04d380,
+1008a9d8	1	1	dockspeed	04d610,
+1008a9e4	1	1	'dockedinfo' sector contains multiple 'dockspeed' elements.	04d610,
+1008aa20	11	1	CMvlVehicle::LoadXMLWeaponDockedInfo	04d610,
+1008aa48	1	1	Failed to read data from 'dockspeed' element.	04d610,
+1008aa78	1	1	Failed to parse the contents of 'dockspeed'.	04d610,
+1008aaa8	4	4	position	0586d0,04edc0,04f090,04d610,
+1008aab4	1	1	'dockedinfo' sector contains multiple 'position' vectors.	04d610,
+1008aaf0	3	3	Could not load 'position' vector.	04edc0,04f090,04d610,
+1008ab14	2	2	rotation	0543a0,04d610,
+1008ab20	1	1	'dockedinfo' sector contains multiple 'rotation' vectors.	04d610,
+1008ab5c	1	1	Could not load 'rotation' vector.	04d610,
+1008ab80	1	1	Unknown element '%s' in 'dockedinfo' sector.	04d610,
+1008abb0	1	1	'dockedinfo' sector is missing 'dockspeed' element.	04d610,
+1008abe4	1	1	'dockedinfo' sector is missing 'position' vector.	04d610,
+1008ac18	1	1	'dockedinfo' sector is missing 'rotation' vector.	04d610,
+1008ac4c	1	1	movespeed	04d890,
+1008ac58	1	1	'armedinfo' sector contains multiple 'movespeed' elements.	04d890,
+1008ac94	17	1	CMvlVehicle::LoadXMLWeaponArmedInfo	04d890,
+1008acb8	1	1	Failed to read data from 'movespeed' element.	04d890,
+1008ace8	1	1	Failed to parse the contents of 'movespeed'.	04d890,
+1008ad18	1	1	minpos	04d890,
+1008ad20	1	1	'armedinfo' sector contains multiple 'minpos' vectors.	04d890,
+1008ad58	1	1	Could not load 'minpos' vector.	04d890,
+1008ad78	1	1	minrot	04d890,
+1008ad80	1	1	'armedinfo' sector contains multiple 'minrot' vectors.	04d890,
+1008adb8	1	1	Could not load 'minrot' vector.	04d890,
+1008add8	1	1	maxpos	04d890,
+1008ade0	1	1	'armedinfo' sector contains multiple 'maxpos' vectors.	04d890,
+1008ae18	1	1	Could not load 'maxpos' vector.	04d890,
+1008ae38	1	1	maxrot	04d890,
+1008ae40	1	1	'armedinfo' sector contains multiple 'maxrot' vectors.	04d890,
+1008ae78	1	1	Could not load 'maxrot' vector.	04d890,
+1008ae98	1	1	middlepos	04d890,
+1008aea4	1	1	'armedinfo' sector contains multiple 'middlepos' elements.	04d890,
+1008aee0	1	1	Failed to read data from 'middlepos' element.	04d890,
+1008af10	1	1	Failed to parse the contents of 'middlepos'.	04d890,
+1008af40	1	1	Unknown element '%s' in 'armedinfo' sector.	04d890,
+1008af6c	1	1	'armedinfo' sector is missing 'minpos' vector.	04d890,
+1008af9c	1	1	'armedinfo' sector is missing 'minrot' vector.	04d890,
+1008afcc	1	1	'weapon' sector contains multiple 'type' elements.	04dd20,
+1008b000	28	1	CMvlVehicle::LoadXMLExtraWeaponData	04dd20,
+1008b024	1	1	Failed to read data from 'type' element.	04dd20,
+1008b050	1	1	missile	04dd20,
+1008b058	1	1	machinegun	04dd20,
+1008b068	1	1	Failed to read 'type' field - can only have values 'missile' and 'machinegun'.	04dd20,
+1008b0b8	1	1	model	04dd20,
+1008b0c0	1	1	'weapon' sector contains multiple 'model' elements.	04dd20,
+1008b0f4	1	1	Failed to read data from 'model' element.	04dd20,
+1008b120	1	1	rocketlauncher	04dd20,
+1008b134	1	1	'model' set to 'custom1', which is not loaded.	04dd20,
+1008b164	1	1	'model' set to 'custom2', which is not loaded.	04dd20,
+1008b194	1	1	'model' set to 'custom3', which is not loaded.	04dd20,
+1008b1c4	1	1	'model' set to 'custom4', which is not loaded.	04dd20,
+1008b1f8	1	1	Invalid 'model' value, valid: 'none', 'rlauncher', 'm4', 'custom1'-'custom4'.	04dd20,
+1008b248	1	1	missileinfo	04dd20,
+1008b254	1	1	'weapon' sector contains multiple 'missileinfo' sectors.	04dd20,
+1008b290	1	1	Could not load 'missileinfo' sector.	04dd20,
+1008b2b8	1	1	fireoffset	04dd20,
+1008b2c4	1	1	'heliweps' sector contains multiple 'fireoffset' vectors.	04dd20,
+1008b300	1	1	Could not load 'fireoffset' vector.	04dd20,
+1008b324	1	1	dockedinfo	04dd20,
+1008b330	1	1	'weapon' sector contains multiple 'dockedinfo' sectors.	04dd20,
+1008b368	1	1	Could not load 'dockedinfo' sector.	04dd20,
+1008b38c	1	1	armedinfo	04dd20,
+1008b398	1	1	'weapon' sector contains multiple 'armedinfo' sectors.	04dd20,
+1008b3d0	1	1	Could not load 'armedinfo' sector.	04dd20,
+1008b3f4	1	1	hotkeys	04dd20,
+1008b3fc	1	1	'%s' sector contains multiple '%s' sectors.	04dd20,
+1008b428	1	1	'weapon' sector contains multiple 'machineguninfo' sectors.	04dd20,
+1008b464	1	1	Could not load 'machineguninfo' sector.	04dd20,
+1008b48c	1	1	Unknown element '%s' in 'weapon' sector.	04dd20,
+1008b4b8	1	1	'weapon' sector is missing 'type' element.	04dd20,
+1008b4e4	1	1	'weapon' sector is missing 'model' element.	04dd20,
+1008b510	1	1	'weapon' sector is missing 'fireoffset' vector.	04dd20,
+1008b540	1	1	'weapon' sector is missing 'armedinfo' sector.	04dd20,
+1008b570	1	1	'weapon' sector is missing 'hotkeys' sector.	04dd20,
+1008b5a0	1	1	'weaponlist' sector contains more than 4 'weapon' sectors.	04e430,
+1008b5dc	3	1	CMvlVehicle::LoadXMLWeaponList	04e430,
+1008b5fc	1	1	Could not load 'weapon' sector.	04e430,
+1008b61c	1	1	Unknown element '%s' in 'weaponlist' sector.	04e430,
+1008b64c	0	0	aidata	
+1008b654	0	0	colors	
+1008b65c	1	1	audio	053060,
+1008b664	0	0	handling	
+1008b670	0	0	aerohandling	
+1008b680	0	0	bikehandling	
+1008b690	0	0	boathandling	
+1008b6a0	0	0	helidata	
+1008b6ac	0	0	specials	
+1008b6b8	0	0	weaponlist	
+1008b6c4	6	1	CMvlVehicle::LoadXMLSectionVehicle	04e4f0,
+1008b6e8	1	1	Section '%s' is not the first child of '%s' sector.	04e4f0,
+1008b720	1	1	Root element is missing 'boathandling' sector, which is required for boats.	04e4f0,
+1008b770	1	1	Root element is missing 'aerohandling' sector, which is required for planes and helis.	04e4f0,
+1008b7c8	1	1	Root element is missing 'bikehandling' sector, which is required for bikes.	04e4f0,
+1008b814	3	1	CMvlVehicle::LoadXMLFile	04e790,
+1008b830	2	2	No XML file found.	052f20,04e790,
+1008b844	1	1	colourone	04e8f0,
+1008b850	1	1	'emlights' sector contains multiple 'colourone' elements.	04e8f0,
+1008b88c	18	1	CVehicleHandler::LoadXMLEmLightData	04e8f0,
+1008b8b0	1	1	Failed to read data from 'colourone' element.	04e8f0,
+1008b8e0	1	1	primary	04e8f0,
+1008b8e8	1	1	secondary	04e8f0,
+1008b8f8	1	1	Failed to parse the contents of 'colourone' element (format 'r,g,b').	04e8f0,
+1008b940	1	1	colourtwo	04e8f0,
+1008b94c	1	1	'emlights' sector contains multiple 'colourtwo' elements.	04e8f0,
+1008b988	1	1	Failed to read data from 'colourtwo' element.	04e8f0,
+1008b9b8	1	1	Failed to parse the contents of 'colourtwo' element (format 'r,g,b').	04e8f0,
+1008ba00	1	1	posleft	04e8f0,
+1008ba08	1	1	'emlights' sector contains multiple 'posleft' vectors.	04e8f0,
+1008ba40	1	1	Could not load 'posleft' vector.	04e8f0,
+1008ba64	1	1	posright	04e8f0,
+1008ba70	1	1	'emlights' sector contains multiple 'posright' vectors.	04e8f0,
+1008baa8	1	1	Could not load 'posright' vector.	04e8f0,
+1008bacc	3	3	alwayson	04e8f0,04edc0,04f090,
+1008bad8	1	1	'emlights' sector contains multiple 'alwayson' vectors.	04e8f0,
+1008bb10	3	3	Failed to read data from 'alwayson' element.	04e8f0,04edc0,04f090,
+1008bb40	3	3	Element 'alwayson' may only have values 'true' or 'false'.	04e8f0,04edc0,04f090,
+1008bb7c	1	1	Unknown element '%s' in 'emlights' sector.	04e8f0,
+1008bba8	1	1	'emlights' sector is missing 'colourone' element.	04e8f0,
+1008bbdc	1	1	'emlights' sector is missing 'colourtwo' element.	04e8f0,
+1008bc10	1	1	'emlights' sector is missing 'posleft' vector.	04e8f0,
+1008bc40	1	1	'emlights' sector is missing 'posright' vector.	04e8f0,
+1008bc70	2	2	colour	04edc0,04f090,
+1008bc78	1	1	'emlightsingle' sector contains multiple 'colour' elements.	04edc0,
+1008bcb4	11	1	CVehicleHandler::LoadXMLSingleEmLightData	04edc0,
+1008bce0	2	2	Failed to read data from 'colour' element.	04edc0,04f090,
+1008bd10	2	2	Failed to parse the contents of 'colour' element (format 'r,g,b').	04edc0,04f090,
+1008bd54	1	1	'emlightsingle' sector contains multiple 'position' vectors.	04edc0,
+1008bd94	1	1	'emlightsingle' sector contains multiple 'alwayson' vectors.	04edc0,
+1008bdd4	1	1	Unknown element '%s' in 'emlightsingle' sector.	04edc0,
+1008be04	1	1	'emlightsingle' sector is missing 'colour' element.	04edc0,
+1008be38	1	1	'emlightsingle' sector is missing 'position' vector.	04edc0,
+1008be70	1	1	'taxilight' sector contains multiple 'colour' elements.	04f090,
+1008bea8	11	1	CVehicleHandler::LoadXMLTaxiEmLightData	04f090,
+1008bed0	1	1	'taxilight' sector contains multiple 'position' vectors.	04f090,
+1008bf0c	1	1	'taxilight' sector contains multiple 'alwayson' elements.	04f090,
+1008bf48	1	1	Unknown element '%s' in 'taxilight' sector.	04f090,
+1008bf74	1	1	'taxilight' sector is missing 'colour' element.	04f090,
+1008bfa4	1	1	'taxilight' sector is missing 'position' vector.	04f090,
+1008bfd8	2	2	Slot out of range, taking first free ID.	0550c0,04f4d0,
+1008c004	1	1	CVehicleHandler::GetNewSlotForArchive	04f4d0,
+1008c02c	2	2	Slot requested by file already in use, taking first free ID.	0550c0,04f4d0,
+1008c06c	1	1	Could not load vehicle archive '%s'.	04f5a0,
+1008c094	2	1	CVehicleHandler::LoadVehicleArchive	04f5a0,
+1008c0b8	1	1	%d: %ls	04f5a0,
+1008c0c0	1	1	Could not find a slot for vehicle file '%s', all slots full.	04f5a0,
+1008c100	1	1	mvl\vehicles\*.7z	04f680,
+1008c114	1	1	CVehicleHandler::LoadVehicleArchives	04f680,
+1008c140	1	1	Class '%s' has all default vehicles with NOSPAWN, yet no custom cars specified for this class - using default car with ID %d	04f680,
+1008c1c0	1	1	mvl/vehicles/sa_vehicle.txd	04f870,
+1008c1dc	1	1	Software\Rockstar Games\GTA San Andreas\Installation	04f870,
+1008c214	1	1	ExePath	04f870,
+1008c21c	1	1	models\generic\vehicle.txd	04f870,
+1008c238	1	1	Could not open texture file '%s'	04f9a0,
+1008c25c	6	1	CVehicleHandler::LoadSanAndreasVehiclesTxd	04f9a0,
+1008c288	1	1	Too big texture file (over 4MB).	04f9a0,
+1008c2ac	1	1	Could not read texture file.	04f9a0,
+1008c2cc	1	1	vehiclelights128	04f9a0,
+1008c2e0	1	1	vehiclelightson128	04f9a0,
+1008c2f4	1	1	Successfully loaded San Andreas vehicle texture dictionary.	04f9a0,
+1008c330	1	1	Current start ID gives only %d free slots, switching base to %d which gives %d slots.	04fc90,
+1008c388	4	1	CVehicleHandler::AnalyzeStartIndex	04fc90,
+1008c3b0	2	1	Current start ID gives only %d free slots and there aren't any better ID ranges available.	04fc90,
+1008c410	1	1	Current start ID gives only %d free slots, suggesting start index %d which gives %d.	04fc90,
+1008c468	3	2	identity	056880,04fdc0,
+1008c47c	4	2	archivehash	056880,04fdc0,
+1008c488	2	2	archivename	056880,04fdc0,
+1008c494	2	2	tuningparts	050400,04ffe0,
+1008c4a0	3	2	partindex	050400,04ffe0,
+1008c4bc	1	1	garage	050720,
+1008c4c4	2	2	mvlsave	050870,051240,
+1008c4d4	2	2	_mvl.xml	050980,051340,
+1008c4e0	2	1	CVehicleHandler::LoadSaveXmlVehicleInfoParts	050a30,
+1008c510	1	1	More than 20 part selections specified, ignoring overflow.	050a30,
+1008c54c	2	1	CVehicleHandler::LoadSaveXmlVehicleInfoIdentity	050af0,
+1008c57c	1	1	No vehicle match for hash %08X or archive '%s'.	050af0,
+1008c5ac	6	1	CVehicleHandler::LoadSaveXmlVehicleInfo	050bd0,
+1008c5d4	1	1	Slot index for garage vehicles must be between 0 and 47.	050bd0,
+1008c610	1	1	Garage slot index %d is already loaded.	050bd0,
+1008c638	1	1	Slot index for garage vehicles must be between 0 and %d.	050bd0,
+1008c674	1	1	Pool slot index %d is already loaded.	050bd0,
+1008c69c	2	1	CVehicleHandler::LoadSaveXmlVehiclesList	050f20,
+1008c6c8	2	1	CVehicleHandler::LoadSaveXmlVehicles	051060,
+1008c6f0	1	1	playerweps	056c00,
+1008c6fc	2	1	CVehicleHandler::LoadSaveXmlRoot	051150,
+1008c720	1	1	Save XML file could not be parsed: %s.	051240,
+1008c748	2	1	CVehicleHandler::LoadSaveXmlDocument	051240,
+1008c770	1	1	Ignoring extra save XML, it is older than main save file.	051340,
+1008c7ac	1	1	Failed to load save extra XML.	051340,
+1008c7cc	1	1	CVehicleHandler::LoadExtraSaveFile	051340,
+1008c7f0	2	2	Failed to find MVL model index %d at pool slot %d.	051500,051620,
+1008c824	2	1	CVehicleHandler::FetchRealModelIndexForPoolSlot	051500,
+1008c854	1	1	Type mismatch for model index %d at pool slot %d.	051500,
+1008c888	1	1	CVehicleHandler::FetchRealModelIndexForGarageSlot	051620,
+1008c8bc	1	0	Garage had a vehicle with invalid model index %d, removing it.	
+1008c8fc	1	0	CVehicleHandler::HookValidateGarageVehicle	
+1008c930	1	1	Opcode 800h - specified vehicle model index is out of range - exceeds TXD base index.	051e20,
+1008c988	1	1	CVehicleSCM::SetNextTextForVehicleId	051e20,
+1008c9b8	1	1	Opcode 800h - specified vehicle model index is not in use.	051e20,
+1008c9f8	1	1	Opcode 800h - specified vehicle model index is not actually a vehicle.	051e20,
+1008ca40	1	1	Invalid	051e20,
+1008ca50	1	1	Opcode 800h - specified vehicle does not exist in vehicle pool.	051eb0,
+1008ca90	1	1	CVehicleSCM::ProcessNextTextOpcode	051eb0,
+1008cab4	1	1	Opcode 800h - invalid value for first argument.	051eb0,
+1008cae4	1	1	Parsing weapon archive failed.	052150,
+1008cb04	1	1	Loading weapon XML file failed.	052150,
+1008cb24	2	1	Loading weapon icon file failed.	052150,
+1008cb48	1	1	Loading weapon texture file failed.	052150,
+1008cb6c	1	1	Loading weapon model file failed.	052150,
+1008cb90	1	1	Successfully loaded weapon %d from file %s	052150,
+1008cbbc	1	1	CMvlWeapon::LoadFromArchive	05235a,
+1008cbd8	3	1	CMvlWeapon::ParseArchive	0523b0,
+1008cbf4	7	1	CMvlWeapon::RegisterArchiveFile	052540,
+1008cc14	1	0	gunshot-r	
+1008cc20	1	0	gunshot-l	
+1008cc2c	4	3	reload	054910,057320,053620,
+1008cc34	1	0	shotecho	
+1008cc40	1	1	Another XML file is already registered.	052540,
+1008cc68	1	1	Another DFF file is already registered.	052540,
+1008cc90	1	1	Another TXD file is already registered.	052540,
+1008ccb8	1	1	icon.png	052540,
+1008ccc4	1	1	Another icon file is already registered.	052540,
+1008ccf0	1	1	scope.png	052540,
+1008ccfc	1	1	full_scope.png	052540,
+1008cd0c	1	1	stretch_scope.png	052540,
+1008cd20	1	1	Another scope texture file is already registered.	052540,
+1008cd54	1	1	Another IFP file is already registered.	052540,
+1008cd7c	1	1	CMvlWeapon::LoadTextureFile	0528d1,
+1008cd98	1	1	Clump contains no atomics.	052960,
+1008cdb4	1	1	CMvlWeapon::LoadModelFile	052b2b,
+1008cdd0	2	2	CMvlWeapon::LoadImageTexture	052d0e,052be0,
+1008cdf0	1	1	Buffer is not loaded - file does not exist.	052be0,
+1008ce1c	1	1	Could not open memory stream for icon file.	052be0,
+1008ce48	1	1	Failed to read icon buffer to texture.	052dc0,
+1008ce70	1	1	CMvlWeapon::LoadIconFile	052dc0,
+1008ce8c	1	1	Failed to read scope buffer to texture.	052e00,
+1008ceb4	1	1	CMvlWeapon::LoadScopeFile	052e00,
+1008ced0	1	1	Loaded %d anims from IFP file for weapon.	052e40,
+1008cefc	1	1	CMvlWeapon::LoadAnimFile	052e40,
+1008cf18	3	1	CMvlWeapon::LoadXMLFile	052f20,
+1008cf30	1	1	properties	053060,
+1008cf3c	2	2	spawnlist	058880,053060,
+1008cf48	1	1	shotgun	053060,
+1008cf50	5	1	CMvlWeapon::LoadXMLSectionWeapon	053060,
+1008cf74	8	1	CMvlWeapon::LoadXMLSectionBasic	053390,
+1008cf94	1	1	Weapon has no name.	053390,
+1008cfa8	1	1	The name of the weapon is less than 2 characters long.	053390,
+1008cfe0	1	1	logicalid	053390,
+1008cfec	1	1	'%s' sector is missing 'name' element.	053390,
+1008d014	1	1	'%s' sector is missing 'logicalid' element.	053390,
+1008d040	1	1	firerate	053620,
+1008d04c	1	1	clipsize	053620,
+1008d058	1	1	damage	053620,
+1008d060	1	1	speed	053620,
+1008d068	1	1	radius	053620,
+1008d070	1	1	lifespan	053620,
+1008d07c	2	2	spread	053cd0,053620,
+1008d084	2	2	offset	0543a0,053620,
+1008d08c	1	1	animgroup	053620,
+1008d098	1	1	animstart	053620,
+1008d0a4	1	1	animend	053620,
+1008d0ac	1	1	animfire	053620,
+1008d0b8	1	1	anim2start	053620,
+1008d0c4	1	1	anim2end	053620,
+1008d0d0	1	1	anim2fire	053620,
+1008d0dc	1	1	animbreak	053620,
+1008d0e8	1	1	modelindex	053620,
+1008d0f4	1	1	model2index	053620,
+1008d100	1	1	weaponslot	053620,
+1008d10c	3	1	CMvlWeapon::LoadXMLSectionProperties	053620,
+1008d134	2	1	melee	053620,
+1008d13c	2	1	projectile	053620,
+1008d148	2	1	instant_hit	053620,
+1008d154	2	1	area_effect	053620,
+1008d160	2	1	camera	053620,
+1008d168	2	1	other	053620,
+1008d170	1	1	Unknown weapon type '%s'.	053620,
+1008d18c	1	1	Unknown animation group, switching to 'unarmed'	053620,
+1008d1bc	1	1	fragments	053cd0,
+1008d1c8	1	1	CMvlWeapon::LoadXMLSectionShotgun	053cd0,
+1008d214	1	1	hatinfo	054390,
+1008d21c	1	1	isrelative	0543a0,
+1008d228	1	1	scale	0543a0,
+1008d230	1	1	CWeaponLogicHat::ParseXmlBlock	0543a0,
+1008d2a0	5	2	gunshot	054910,057320,
+1008d2b0	3	1	CWeaponHandler::LoadXMLSectionWeaponAudio	054910,
+1008d2dc	1	1	sample	054ae0,
+1008d2e4	1	1	volume	054ae0,
+1008d2ec	1	1	frequency	054ae0,
+1008d2f8	1	1	displacement	054ae0,
+1008d308	1	1	voldisplacement	054ae0,
+1008d318	1	1	distance	054ae0,
+1008d324	1	1	loopcount	054ae0,
+1008d330	1	1	nospam	054ae0,
+1008d338	1	1	CWeaponHandler::LoadXMLSectionWeaponShotAudio	054ae0,
+1008d368	1	1	CWeaponHandler::GetNewSlotForArchive	0550c0,
+1008d390	1	1	mvl\weapons\*.7z	055140,
+1008d3a4	1	1	mvl\weapons\%s	055140,
+1008d3b4	1	1	Could not load weapon archive '%s'.	055140,
+1008d3d8	2	1	CWeaponHandler::LoadWeaponArchives	055140,
+1008d3fc	1	1	Could not find a slot for weapon file '%s', all slots full.	055140,
+1008d438	2	1	CWeaponHandler::LoadSaveXmlWeaponInfoIdentity	056560,
+1008d468	1	1	No weapon match for hash %08X or archive '%s'.	056560,
+1008d4a0	3	1	CWeaponHandler::LoadSaveXmlPlayerWeaponInfo	056640,
+1008d4cc	2	2	Cannot apply weapon %s, slot collision.	056db0,056640,
+1008d4f4	2	1	CWeaponHandler::LoadSaveXmlPlayerWeapons	0567a0,
+1008d520	1	1	CWeaponHandler::ApplySaveData	056db0,
+1008d540	2	1	mvl\wlist	057320,
+1008d54c	1	1	Failed to create mvl/wlist directory.	057320,
+1008d574	2	1	CWeaponHandler::DumpWeaponXML	057320,
+1008d594	1	1	mvl\wlist\%s.xml	057320,
+1008d5a8	1	1	Unable to generate file mvl\wlist\%s.xml, does folder mvl\wlist exist?	057320,
+1008d5f0	1	1	<weapon>\n	057320,
+1008d5fc	1	1	\t\t<name>%s</name>\n	057320,
+1008d610	1	1	\t\t<logicalid>%d</logicalid>\n	057320,
+1008d630	1	1	\t<properties>\n	057320,
+1008d640	1	1	\t\t<range>%f</range>\n	057320,
+1008d658	1	1	\t\t<firerate>%u</firerate>\n	057320,
+1008d674	1	1	\t\t<reload>%u</reload>\n	057320,
+1008d68c	1	1	\t\t<clipsize>%d</clipsize>\n	057320,
+1008d6a8	1	1	\t\t<damage>%d</damage>\n	057320,
+1008d6c0	1	1	\t\t<speed>%f</speed>\n	057320,
+1008d6d8	1	1	\t\t<radius>%f</radius>\n	057320,
+1008d6f0	1	1	\t\t<lifespan>%f</lifespan>\n	057320,
+1008d70c	1	1	\t\t<spread>%f</spread>\n	057320,
+1008d724	1	1	\t\t<offset>\n\t\t\t<x>%f</x>\n\t\t\t<y>%f</y>\n\t\t\t<z>%f</z>\n\t\t</offset>\n	057320,
+1008d764	1	1	\t\t<animgroup>%s</animgroup>\n	057320,
+1008d784	1	1	\t\t<animstart>%d</animstart>\n	057320,
+1008d7a4	1	1	\t\t<animend>%d</animend>\n	057320,
+1008d7c0	1	1	\t\t<animfire>%d</animfire>\n	057320,
+1008d7dc	1	1	\t\t<anim2start>%d</anim2start>\n	057320,
+1008d7fc	1	1	\t\t<anim2end>%d</anim2end>\n	057320,
+1008d818	1	1	\t\t<anim2fire>%d</anim2fire>\n	057320,
+1008d838	1	1	\t\t<animbreak>%d</animbreak>\n	057320,
+1008d858	1	1	\t\t<modelindex>%d</modelindex>\n	057320,
+1008d878	1	1	\t\t<model2index>%d</model2index>\n	057320,
+1008d89c	1	1	\t\t<flags>%08X</flags>\n	057320,
+1008d8b4	1	1	\t\t<weaponslot>%d</weaponslot>\n	057320,
+1008d8d4	1	1	\t</properties>\n	057320,
+1008d8e4	1	1	\n\t<audio>	057320,
+1008d8f0	1	1	\n\t\t<%s>\n	057320,
+1008d8fc	1	1	\t\t\t<sample>%u</sample>\n	057320,
+1008d914	1	1	\t\t\t<volume>%u</volume>\n	057320,
+1008d92c	1	1	\t\t\t<frequency>%u</frequency>\n	057320,
+1008d94c	1	1	\t\t\t<displacement>%u</displacement>\n	057320,
+1008d970	1	1	\t\t\t<voldisplacement>%u</voldisplacement>\n	057320,
+1008d99c	1	1	\t\t\t<distance>%f</distance>\n	057320,
+1008d9b8	1	1	\t\t\t<loopcount>%u</loopcount>\n	057320,
+1008d9d8	1	1	\t\t\t<nospam>%s</nospam>\n	057320,
+1008d9f0	1	1	\t\t</%s>\n	057320,
+1008d9fc	1	1	\t</audio>\n	057320,
+1008da08	1	1	</weapon>\n	057320,
+1008da14	1	1	Game object pool %d/%d full, not creating pickup.	057d80,
+1008da48	2	1	CWeaponPickups::CreateWeaponPickup	057d80,
+1008da6c	1	1	Didn't find an empty slot for pickup.	057d80,
+1008da94	1	1	Invalid weapon ID for pickup.	057d80,
+1008dab4	1	1	%d pickups registered, now creating them.	058330,
+1008dae0	1	1	Spawn from player position:\n	0583e0,
+1008db00	1	1	\t<spawn>\n\t\t<wepid>0</wepid>\n\t\t<position>\n\t\t\t<x>%f</x>\n\t\t\t<y>%f</y>\n\t\t\t<z>%f</z>\n\t\t</position>\n\t\t<ammo>100</ammo>\n\t</spawn>\n\n	0583e0,
+1008db80	1	1	Invalid weapon ID in new weapon pickup opcode.	0584f0,
+1008dbb0	1	1	CWeaponPickups::ProcessNewWeaponPickupOpcode	0584f0,
+1008dbe0	1	1	spawn	058610,
+1008dbe8	2	1	CWeaponPickups::LoadXMLSectionSpawnList	058610,
+1008dc10	1	1	Could not load %s section.	058610,
+1008dc2c	1	1	wepid	0586d0,
+1008dc34	2	1	CWeaponPickups::LoadXMLSectionSpawn	0586d0,
+1008dc58	1	1	Invalid weapon ID %d in spawn info	0586d0,
+1008dc7c	1	1	Ammo for weapon ID %d is not positive.	0586d0,
+1008dca4	2	1	CWeaponPickups::LoadXMLSectionPickups	058880,
+1008dccc	2	1	mvl\weapons\pickups.xml	058990,
+1008dce4	2	1	CWeaponPickups::LoadXMLPickupFile	058990,
+1008dd08	1	1	pickups	058990,
+1008dd10	1	1	Successfully loaded weapon pickup XML file.	058990,
+1009732c	3	1	log10	06efca,
+1009734c	1	1	exp10	06efca,
+10097364	1	1	floor	06efca,
+100a05e4	0	0	_nextafter	
+100a3836	0	0	GetModuleInformation	
+100a384e	0	0	EnumProcessModules	
+100a3864	0	0	GetModuleFileNameExA	
+100a387a	0	0	PSAPI.DLL	
+100a3886	0	0	GetTickCount	
+100a3896	0	0	GetTickCount64	
+100a38a8	0	0	GetModuleHandleA	
+100a38bc	0	0	CreateFileA	
+100a38ca	0	0	WriteFile	
+100a38d6	0	0	ReadFile	
+100a38e2	0	0	GetFileTime	
+100a38f0	0	0	CloseHandle	
+100a38fe	0	0	DeleteFileA	
+100a390c	0	0	GetCurrentProcess	
+100a3920	0	0	IsBadReadPtr	
+100a3930	0	0	FreeLibrary	
+100a393e	0	0	GetLastError	
+100a394e	0	0	GetProcAddress	
+100a3960	0	0	LoadLibraryA	
+100a3970	0	0	GetModuleFileNameA	
+100a3986	0	0	GetFileSize	
+100a3994	0	0	SetFilePointer	
+100a39a6	0	0	CreateFileW	
+100a39b4	0	0	VirtualFree	
+100a39c2	0	0	VirtualAlloc	
+100a39d2	0	0	LeaveCriticalSection	
+100a39ea	0	0	EnterCriticalSection	
+100a3a02	0	0	DeleteCriticalSection	
+100a3a1a	0	0	WaitForSingleObject	
+100a3a30	0	0	VirtualProtect	
+100a3a42	0	0	IsBadCodePtr	
+100a3a52	0	0	SetCurrentDirectoryA	
+100a3a6a	0	0	FindFirstFileA	
+100a3a7c	0	0	FindClose	
+100a3a88	0	0	FindNextFileA	
+100a3a98	0	0	GetCurrentDirectoryA	
+100a3ab0	0	0	SetUnhandledExceptionFilter	
+100a3ace	0	0	GetFileAttributesA	
+100a3ae4	0	0	ExitProcess	
+100a3af2	0	0	ReadDirectoryChangesW	
+100a3b0a	0	0	WideCharToMultiByte	
+100a3b20	0	0	CreateDirectoryA	
+100a3b34	0	0	CreateMutexA	
+100a3b44	0	0	ReleaseMutex	
+100a3b54	0	0	CreateThread	
+100a3b62	0	0	KERNEL32.dll	
+100a3b72	0	0	CallWindowProcA	
+100a3b84	0	0	AdjustWindowRectEx	
+100a3b9a	0	0	AppendMenuA	
+100a3ba8	0	0	SetMenu	
+100a3bb2	0	0	GetCursorPos	
+100a3bc2	0	0	SetWindowPos	
+100a3bd2	0	0	MonitorFromWindow	
+100a3be6	0	0	GetWindowLongA	
+100a3bf8	0	0	SetWindowLongA	
+100a3c0a	0	0	GetMenu	
+100a3c14	0	0	GetForegroundWindow	
+100a3c2a	0	0	ShowCursor	
+100a3c38	0	0	GetMonitorInfoA	
+100a3c4a	0	0	SendMessageA	
+100a3c5a	0	0	CreateMenu	
+100a3c68	0	0	GetClientRect	
+100a3c78	0	0	GetKeyState	
+100a3c86	0	0	GetWindowRect	
+100a3c96	0	0	ScreenToClient	
+100a3ca8	0	0	LoadCursorA	
+100a3cb6	0	0	DefWindowProcA	
+100a3cc8	0	0	CreateWindowExA	
+100a3cda	0	0	LoadIconA	
+100a3ce6	0	0	RegisterClassExA	
+100a3cfa	0	0	DestroyWindow	
+100a3d0a	0	0	MsgWaitForMultipleObjects	
+100a3d24	0	0	USER32.dll	
+100a3d32	0	0	RegQueryValueExA	
+100a3d46	0	0	RegOpenKeyExA	
+100a3d56	0	0	RegCloseKey	
+100a3d62	0	0	ADVAPI32.dll	
+100a3d72	0	0	EncodePointer	
+100a3d82	0	0	DecodePointer	
+100a3d92	0	0	HeapFree	
+100a3d9e	0	0	HeapAlloc	
+100a3daa	0	0	IsDebuggerPresent	
+100a3dbe	0	0	IsProcessorFeaturePresent	
+100a3dda	0	0	GetCurrentThreadId	
+100a3df0	0	0	LoadLibraryExW	
+100a3e02	0	0	GetCommandLineA	
+100a3e14	0	0	RaiseException	
+100a3e26	0	0	RtlUnwind	
+100a3e32	0	0	InterlockedDecrement	
+100a3e4a	0	0	GetModuleHandleExW	
+100a3e60	0	0	AreFileApisANSI	
+100a3e72	0	0	MultiByteToWideChar	
+100a3e88	0	0	HeapSize	
+100a3e94	0	0	Sleep	
+100a3e9c	0	0	GetStdHandle	
+100a3eac	0	0	GetModuleFileNameW	
+100a3ec2	0	0	GetProcessHeap	
+100a3ed4	0	0	SetLastError	
+100a3ee4	0	0	InterlockedIncrement	
+100a3efc	0	0	IsValidCodePage	
+100a3f0e	0	0	GetACP	
+100a3f18	0	0	GetOEMCP	
+100a3f24	0	0	GetCPInfo	
+100a3f30	0	0	UnhandledExceptionFilter	
+100a3f4c	0	0	InitializeCriticalSectionAndSpinCount	
+100a3f74	0	0	TerminateProcess	
+100a3f88	0	0	TlsAlloc	
+100a3f94	0	0	TlsGetValue	
+100a3fa2	0	0	TlsSetValue	
+100a3fb0	0	0	TlsFree	
+100a3fba	0	0	GetStartupInfoW	
+100a3fcc	0	0	GetModuleHandleW	
+100a3fe0	0	0	GetFileType	
+100a3fee	0	0	GetConsoleCP	
+100a3ffe	0	0	GetConsoleMode	
+100a4010	0	0	ReadConsoleW	
+100a4020	0	0	SetFilePointerEx	
+100a4034	0	0	QueryPerformanceCounter	
+100a404e	0	0	GetCurrentProcessId	
+100a4064	0	0	GetSystemTimeAsFileTime	
+100a407e	0	0	GetEnvironmentStringsW	
+100a4098	0	0	FreeEnvironmentStringsW	
+100a40b2	0	0	HeapReAlloc	
+100a40c0	0	0	OutputDebugStringW	
+100a40d6	0	0	LoadLibraryW	
+100a40e6	0	0	LCMapStringW	
+100a40f6	0	0	GetStringTypeW	
+100a4108	0	0	SetStdHandle	
+100a4118	0	0	WriteConsoleW	
+100a4128	0	0	FlushFileBuffers	
+100a413c	0	0	SetEndOfFile	
+100a5008	0	0	.?AVbad_alloc@std@@	
+100a5024	0	0	.?AVexception@std@@	
+100a5040	0	0	.?AVlogic_error@std@@	
+100a5060	0	0	.?AVlength_error@std@@	
+100a5080	0	0	.?AVout_of_range@std@@	
+100a50a8	0	0	.?AVtype_info@@	
+100a54a1	0	0	abcdefghijklmnopqrstuvwxyz	
+100a54c1	0	0	ABCDEFGHIJKLMNOPQRSTUVWXYZ	
+100a56ba	0	0	abcdefghijklmnopqrstuvwxyz	
+100a56da	0	0	ABCDEFGHIJKLMNOPQRSTUVWXYZ	
+100a5d98	0	0	.?AVbad_exception@std@@	
+100a6294	0	0	.?AV_Iostream_error_category@std@@	
+100a62c0	0	0	.?AV_System_error_category@std@@	
+100abf98	0	0	.?AVerror_category@std@@	
+100abfbc	0	0	.?AU_Container_base0@std@@	
+100abfe0	0	0	.?AV?$_String_alloc@$0A@U?$_String_base_types@DV?$allocator@D@std@@@std@@@std@@	
+100ac038	0	0	.?AV_Generic_error_category@std@@	
+100ac064	0	0	.?AV?$_String_val@U?$_Simple_types@D@std@@@std@@	
+100ac0a0	0	0	.?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@	
+100ac0ec	0	0	.?AVCAnimBlendAssociation@@	
+100ac110	0	0	.?AVCAnimBlendSequence@@	
+100ac134	0	0	.?AVCObjectVC@@	
+100ac14c	0	0	.?AVCEntity@@	
+100ac164	0	0	.?AVCPhysical@@	
+100ac18c	0	0	.?AUIDirect3DDevice8@@	
+100ac1ac	0	0	.?AUIDirect3DDevice8Hook@@	
+100ac1d0	0	0	.?AUIUnknown@@	
+100ac200	0	0	.?AVCIntelliBox@@	
+100ae5f0	0	0	.?AVCPedHead@@	
+100ae608	0	0	.?AVCBuilding@@	
+100ae620	0	0	.?AVRoadEntity@@	
+100ae640	0	0	.?AVXmlLineValidator@@	
+100ae660	0	0	.?AVXmlLineRangeUValidator@@	
+100ae690	0	0	.?AVTiXmlBase@@	
+100ae964	0	0	.?AVTiXmlDocument@@	
+100ae99c	0	0	.?AVTiXmlNode@@	
+100ae9b4	0	0	.?AVCClumpModelInfo@@	
+100ae9d4	0	0	.?AVCSimpleModelInfo@@	
+100aec18	0	0	.?AVCVehicleModelInfo@@	
+100aec38	0	0	.?AVCBaseModelInfo@@	
+100aec58	0	0	.?AVCBoatVC@@	
+100aec70	0	0	.?AVCAutomobileVC@@	
+100aec8c	0	0	.?AVCVehicleVC@@	
+100aeca8	0	0	.?AVCBikeVC@@	
+100aecc0	0	0	.?AVTiXmlText@@	
+100aecd8	0	0	.?AVTiXmlAttribute@@	
+100aecf8	0	0	.?AVTiXmlDeclaration@@	
+100aed18	0	0	.?AVTiXmlComment@@	
+100aed34	0	0	.?AVTiXmlElement@@	
+100aed50	0	0	.?AVTiXmlUnknown@@	
+100aee5d	1	1	RRRFFFFFFRRRR	043900,
+100af118	0	0	.?AVCMvlVehicleModelInfo@@	
+100af5f8	0	0	.?AVCWeaponLogic@@	
+100af614	0	0	.?AVCWeaponLogicHat@@	
+100af634	0	0	.?AVCWeaponLogicSpike@@	
+100afc04	0	0	.?AVCWeaponObject@@	
+10141060	0	0	<?xml version='1.0' encoding='UTF-8' standalone='yes'?>\n<assembly xmlns='urn:schemas-microsoft-com:asm.v1' manifestVersion='1.0'>\n  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">\n    <security>\n      <requestedPrivileges>\n        <requestedExecutionLevel level='asInvoker' uiAccess='false' />\n      </requestedPrivileges>\n    </security>\n  </trustInfo>\n</assembly>\n	
+ffdff1ac	0	0		
+ffdffc00	0	0		

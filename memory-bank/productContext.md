@@ -13,7 +13,7 @@ Clone **Maxo's Vehicle Loader (MVL)** — a GTA Vice City 1.0 DLL plugin — fro
 ## User Requirements
 - Clone must be functionally equivalent to MVL 0.98e (`vehmod_retail.dll`)
 - Plugin target name: `vehmod`
-- Deploy target: `%MVL_GAME_DIR%\mvl\vehmod_retail.dll` (game dir unknown — placeholder)
+- Deploy target: `%MVL_GAME_DIR%\mvl\vehmod_retail.dll` (game dir = `H:\games\VC`)
 - `original_files/` is READ-ONLY — RE targets by version
 
 ## Known Constraints

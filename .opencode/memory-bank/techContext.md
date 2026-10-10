@@ -8,7 +8,7 @@
 - **Output**: `bin/Release/vehmod.dll`
 
 ## Deploy
-- Game dir: env var `MVL_GAME_DIR` (unknown — placeholder)
+- Game dir: env var `MVL_GAME_DIR` = `H:\games\VC` (user-confirmed; setx-persisted)
 - Target: `%MVL_GAME_DIR%\mvl\vehmod_retail.dll`
 - Host: GTA Vice City 1.0 (gta-vc.exe, x86, D3D8)
 

@@ -37,6 +37,22 @@
         "-File",
         "E:/dev(dave)/projects/Maxos_vehicle_revnres/tools/obsidian-mcp-wrapper.ps1"
       ]
+    },
+    "ghidra": {
+      "enabled": true,
+      "type": "local",
+      "command": [
+        "C:/Users/aaaaaaaaa/AppData/Local/Microsoft/WinGet/Links/uv.exe",
+        "run",
+        "--directory",
+        "E:/dev(dave)/tools/ghidra-mcp",
+        "bridge-mcp-ghidra",
+        "--transport",
+        "stdio"
+      ],
+      "environment": {
+        "GHIDRA_MCP_URL": "http://127.0.0.1:8089"
+      }
     }
   }
 }

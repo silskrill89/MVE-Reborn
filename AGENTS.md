@@ -16,9 +16,16 @@ Python host as a late-phase module behind a C ABI bridge.
 **Config format progression**: game INI → MVL XML (compat layer reads MVL XMLs
 1:1) → O3DE-style JSON (settings-registry / layered-JSON conventions) as the
 project's open end-format for parity with the O3DE community. See `PLAN.md` §2.
+
+**Naming policy (binding, user directive 2026-10-10)**: the clone MUST reuse the
+original MVL symbol names wherever RE recovered them (RTTI gave 136: CMvlSettings,
+CMvlVehicle, CVehicleHandler, LoadXMLBasic, LoadVehicleArchives, …). Decompiled
+original ↔ clone code must map 1:1 by name. Unnamed functions get provisional
+names from the same convention, logged with confidence in re-*.md.
 - **Plugin target**: `vehmod`
 - **Primary RE target**: `original_files/maxovehmod098e/vehmod_retail.dll`
 - **Version range**: `original_files/maxovehmod*` 0.9 → 0.98e (+ `xmlgen_launcher`)
+- **Reference sources**: reVC source `E:\dev(dave)\releases\GTASource\GTA VC RE\source\re3-miami` (game semantics, struct layouts), `E:\SDKs\librw` (RW formats), `E:\SDKs\RW36_031126\RW36_031126` (official RW 3.6 SDK headers/tools), `E:\SDKs\plugin-sdk-master\plugin_vc` (VC 1.0 addresses/structs for hooks). See PLAN.md §3.
 
 ## Repo Layout
 
@@ -44,7 +51,7 @@ msbuild build/MVL-clone.sln /p:Configuration=Release /p:Platform=Win32
 - **SDK**: Windows 10 SDK 26100
 - **Platform**: x86 (Win32), static CRT (/MT)
 - **Output**: `bin/Release/vehmod.dll`
-- **Deploy**: `%MVL_GAME_DIR%\mvl\vehmod_retail.dll` — game dir unknown (env var `MVL_GAME_DIR` is a placeholder; ask the user)
+- **Deploy**: `%MVL_GAME_DIR%\mvl\vehmod_retail.dll` — game dir confirmed by user: `H:\games\VC` (persisted as user env var `MVL_GAME_DIR` via setx; only NEW processes see the var)
 - **Host**: GTA Vice City 1.0 (`gta-vc.exe`, x86, D3D8)
 
 ## Domain Concepts

@@ -9,12 +9,19 @@ REM NOTE: the skygfx project has a fancy python build pipeline;
 REM that is NOT in scope here — this is intentionally minimal.
 REM
 REM Optional env vars:
-REM   MVL_GAME_DIR   if set, postbuild copies bin\<cfg>\vehmod.dll
-REM                  there as vehmod_retail.dll
+REM   MVL_GAME_DIR   game dir to deploy bin\<cfg>\vehmod.dll into as
+REM                  vehmod_retail.dll (mvl\ subdirectory). Falls back to
+REM                  H:\games\VC if unset. Set persistently via:
+REM                    setx MVL_GAME_DIR "H:\games\VC"
+REM                  (only NEW processes see the variable)
 REM ============================================================
 
 setlocal
 cd /d "%~dp0"
+
+REM --- deploy target: env var, fallback to confirmed game dir ---
+set "GAME_DIR=%MVL_GAME_DIR%"
+if not defined GAME_DIR set "GAME_DIR=H:\games\VC"
 
 call premake5.cmd %*
 
@@ -31,4 +38,21 @@ if not defined MSBUILD (
 )
 
 "%MSBUILD%" build\mvlclone.sln /p:Configuration=Release /p:Platform=x86 /m /v:m
+if errorlevel 1 (
+	echo [b.bat] ERROR: build failed - not deploying.
+	exit /b 1
+)
+
+REM --- deploy: bin\Release\vehmod.dll -> %GAME_DIR%\mvl\vehmod_retail.dll ---
+if exist "bin\Release\vehmod.dll" (
+	if not exist "%GAME_DIR%\mvl" mkdir "%GAME_DIR%\mvl"
+	copy /y "bin\Release\vehmod.dll" "%GAME_DIR%\mvl\vehmod_retail.dll" >nul && (
+		echo [b.bat] Deployed to %GAME_DIR%\mvl\vehmod_retail.dll
+	) || (
+		echo [b.bat] WARNING: deploy failed ^(game running? dir missing?^) - build output is in bin\Release\vehmod.dll
+	)
+) else (
+	echo [b.bat] WARNING: bin\Release\vehmod.dll not found - nothing to deploy.
+)
+
 endlocal

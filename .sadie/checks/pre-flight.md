@@ -4,7 +4,7 @@ Run before starting work to verify the environment is healthy.
 
 ## 1. Game directory (deploy target)
 ```powershell
-Test-Path "$env:MVL_GAME_DIR\gta-vc.exe"   # placeholder — MVL_GAME_DIR unknown
+Test-Path "$env:MVL_GAME_DIR\gta-vc.exe"   # game dir = H:\games\VC (user-confirmed; setx-persisted)
 ```
 
 ## 2. Build tools available
@@ -30,7 +30,7 @@ If not → run `premake5.cmd` then `msbuild build/MVL-clone.sln /p:Configuration
 
 ## 5. Deploy target matches
 ```powershell
-Test-Path "$env:MVL_GAME_DIR\mvl\vehmod_retail.dll"   # placeholder
+Test-Path "$env:MVL_GAME_DIR\mvl\vehmod_retail.dll"   # game dir = H:\games\VC; only present after a deploy
 ```
 
 ## 6. Obsidian vault accessible
