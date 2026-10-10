@@ -1,0 +1,42 @@
+{
+  "$schema": "https://opencode.ai",
+  "plugin": [
+    "opencode-cline-mode"
+  ],
+  "permission": {
+    "skill": {
+      "*": "allow"
+    }
+  },
+  "mcp": {
+    "local-lsai": {
+      "type": "local",
+      "command": "clangd",
+      "args": [
+        "--compile-commands-dir=.",
+        "--query-driver=*",
+        "--header-insertion=never"
+      ],
+      "enabled": true
+    },
+    "codebase-memory-mcp": {
+      "enabled": true,
+      "type": "local",
+      "command": [
+        "C:/Users/aaaaaaaaa/.local/bin/codebase-memory-mcp.exe"
+      ]
+    },
+    "obsidian-mcp": {
+      "enabled": true,
+      "type": "local",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "E:/dev(dave)/projects/Maxos_vehicle_revnres/tools/obsidian-mcp-wrapper.ps1"
+      ]
+    }
+  }
+}
