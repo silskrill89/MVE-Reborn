@@ -87,9 +87,11 @@ int  MvlSaveApplyGarageFallbackIndex(void);     // TODO(save): DAT_1013dce4
 int  MvlSaveApplyExpectedModelType(void);       // TODO(save): DAT_1013dcd0
 // Garage record store slot: &DAT_100b3008 + garageSlot * 0x50 (0x50-byte records):
 void *MvlGarageSlotRecord(int garageSlot);      // TODO(save): 0x100b3008
-// CWeaponHandler save-data (NEXT LANE — stubs):
-void CWeaponHandlerClearSaveData(void);         // TODO(save): 0x56d40 (zeros DAT_10117960..0x101179a8)
-bool CWeaponHandlerLoadSaveXmlPlayerWeapons(TiXmlElement *sector); // TODO(save): 0x567a0
+// CWeaponHandler save-data: REAL implementations now live in
+// src/weapons/weapon_handler.cpp (tranche-4 weapons lane); decls kept here
+// because LoadExtraSaveFile/LoadSaveXmlRoot call them by these signatures.
+void CWeaponHandlerClearSaveData(void);         // 0x98e @ RVA 0x56d40
+bool CWeaponHandlerLoadSaveXmlPlayerWeapons(TiXmlElement *sector); // 0x98e @ RVA 0x567a0
 
 // ---------------------------------------------------------------------------
 // CVehicleHandler — save-system cluster.

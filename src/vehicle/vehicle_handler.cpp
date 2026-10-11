@@ -609,13 +609,8 @@ void *MvlGarageSlotRecord(int)
 	return 0;
 }
 
-void CWeaponHandlerClearSaveData(void)
-{
-	MvlErrorLog("TODO(save): 0x56d40 CWeaponHandler::ClearSaveData (next lane)");
-}
-
-bool CWeaponHandlerLoadSaveXmlPlayerWeapons(TiXmlElement *)
-{
-	MvlErrorLog("TODO(save): 0x567a0 CWeaponHandler::LoadSaveXmlPlayerWeapons (next lane)");
-	return false;
-}
+// CWeaponHandler save-XML entry points: the stubs that used to live here were
+// replaced by the real implementations in src/weapons/weapon_handler.cpp
+// (tranche-4 weapons lane; signatures unchanged — decls remain in
+// vehicle_handler.h).
+#include "../weapons/weapon_handler.h"
