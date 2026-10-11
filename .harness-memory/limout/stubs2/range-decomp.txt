@@ -1,0 +1,59 @@
+// FUN_10043730 @ 0x10043730 (RVA 0x43730) size 34
+
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void FUN_10043730(void)
+
+{
+  DAT_1013dbc0 = FUN_1003de20();
+  _DAT_100b0dac = 0x40896c;
+  (*(code *)0x40896c)();
+  return;
+}
+
+
+
+// FUN_10043760 @ 0x10043760 (RVA 0x43760) size 21
+
+
+void __fastcall FUN_10043760(undefined4 param_1)
+
+{
+  DAT_1013a59c = param_1;
+  FUN_1001b610();
+  (*(code *)0x593030)();
+  return;
+}
+
+
+
+// FUN_10043780 @ 0x10043780 (RVA 0x43780) size 130
+
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void FUN_10043780(void)
+
+{
+  float10 in_ST0;
+  float10 in_ST1;
+  
+  DAT_1013dca0 = (float)in_ST0;
+  _DAT_1013a5bc = (float)in_ST1;
+  if (_DAT_1013a5bc < DAT_1013dca0) {
+    DAT_1013dbf4 = (int)(DAT_1013dca0 - _DAT_1013a5bc) - _DAT_100b17dc;
+    if (0 < (int)DAT_1013dbf4) {
+      MsgWaitForMultipleObjects(0,(HANDLE *)0x0,0,DAT_1013dbf4,0x4bf);
+    }
+    _DAT_100b0dac = 0x6006b8;
+    (*(code *)0x6006b8)();
+    return;
+  }
+  _DAT_100b0dac = 0x60049c;
+  (*(code *)0x60049c)();
+  return;
+}
+
+
+

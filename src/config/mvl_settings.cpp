@@ -24,6 +24,24 @@
 #include "../loader/log.h"
 
 #include <stdlib.h>
+#include <limits.h>
+
+// Parse <name>int</name> if the element is present. Returns false only when
+// the element exists but its text is not a valid integer — mirrors the
+// original generic matcher (FUN_1001bc10 returns 0 on parse failure, which
+// aborts the enclosing section load). Absent element: returns true, *out
+// untouched.
+static bool
+MvlLoadIntElement(const TiXmlElement *parent, const char *name, int *out)
+{
+	const TiXmlElement *el = parent->FirstChildElement(name);
+	bool ok;
+
+	if(!el)
+		return true;
+	*out = MvlAtoi(el->GetText(), &ok);
+	return ok;
+}
 
 void
 SMvlSettingsData::Reset(void)
@@ -48,27 +66,20 @@ SMvlSettingsData::Reset(void)
 	noloadfade = false;
 	pedhead = false;
 	custominit = false;
-	models = 0;
-	texdicts = 0;
-	colfiles = 0;
-	streamingmem = 0;
-	ptrnode = 0;
-	entryinfonode = 0;
-	peds = 0;
-	vehicles = 0;
-	buildings = 0;
-	treadables = 0;
-	objects = 0;
-	dummys = 0;
-	audioscriptobj = 0;
-	colmodel = 0;
-	msSimple = 0;
-	msTime = 0;
-	msWeapon = 0;
-	msClump = 0;
-	msVehicle = 0;
-	msPed = 0;
-	msFx2d = 0;
+
+	// <limits>: ids/instances/modelstore are zeroed by the memset above.
+	// streamingmem uses the original's -1 "not configured" sentinel
+	// (DAT_100a6a8c; ProcessStreamingMemLimit @ RVA 0x2ba50 tests for it).
+	streamingmem.mb = -1;
+
+	// Processor state: dirty/long-model flags off; engine-derived ID
+	// boundaries 0 until the engine-init lane fills them (TODO(engine),
+	// original globals @ VA 0x100a6320 / 0x100a6328 / 0x100a6318).
+	idLimitsDirty = false;
+	longModelIdMode = false;
+	curModelLimit = 0;
+	curTxdLimit = 0;
+	curColLimit = 0;
 }
 
 CMvlSettings &
@@ -117,7 +128,8 @@ CMvlSettings::LoadGlobalMXMLFile(void)
 	       "models=%d texdicts=%d colfiles=%d streamingmem=%d)",
 	       path,
 	       m_data.windowed ? 1 : 0, m_data.usemenus ? 1 : 0, m_data.antialias,
-	       m_data.models, m_data.texdicts, m_data.colfiles, m_data.streamingmem);
+	       m_data.ids.models, m_data.ids.texdicts, m_data.ids.colfiles,
+	       m_data.streamingmem.mb);
 
 	// Validation / engine-patch pass (0.98b pool/limit expansion).
 	ProcessPoolLimits();
@@ -180,25 +192,40 @@ CMvlSettings::LoadMXMLSectionInternal(const TiXmlElement *miscdata)
 // ---------------------------------------------------------------------------
 // LoadMXMLSectionLimits — vehmod_retail.dll 0.98e @ RVA 0x2b030.
 // <limits>: models, texdicts, colfiles, streamingmem; dispatches to the
-// instances/modelstore sub-section parsers.
+// instances/modelstore sub-section parsers. Storage globals: models @ VA
+// 0x100b17e4, texdicts @ VA 0x100b17e0, colfiles @ VA 0x100b17bc,
+// streamingmem @ VA 0x100a6a8c.
 // ---------------------------------------------------------------------------
 
 void
 CMvlSettings::LoadMXMLSectionLimits(const TiXmlElement *miscdata)
 {
 	const TiXmlElement *limits = miscdata->FirstChildElement("limits");
-	bool ok;
 
 	if(!limits)
 		return;
 
-	m_data.models      = XmlGetInt(limits, "models", &ok);
-	m_data.texdicts    = XmlGetInt(limits, "texdicts", &ok);
-	m_data.colfiles    = XmlGetInt(limits, "colfiles", &ok);
-	m_data.streamingmem = XmlGetInt(limits, "streamingmem", &ok);
+	// Direct int children (original generic element matcher, type 'i').
+	// A present element with bad text aborts the section silently (original
+	// FUN_1002b030 just returns for direct members).
+	if(!MvlLoadIntElement(limits, "models", &m_data.ids.models) ||
+	   !MvlLoadIntElement(limits, "texdicts", &m_data.ids.texdicts) ||
+	   !MvlLoadIntElement(limits, "colfiles", &m_data.ids.colfiles) ||
+	   !MvlLoadIntElement(limits, "streamingmem", &m_data.streamingmem.mb))
+		return;
 
-	LoadMXMLSectionLimitsInstances(limits);
-	LoadMXMLSectionLimitsModelStore(limits);
+	// Sub-sections: on failure the original logs "Could not load '%s'
+	// sector." and stops parsing.
+	if(!LoadMXMLSectionLimitsInstances(limits)){
+		MvlErrorLog("CMvlSettings::LoadMXMLSectionLimits: Could not load '%s' sector.",
+		            "instances");
+		return;
+	}
+	if(!LoadMXMLSectionLimitsModelStore(limits)){
+		MvlErrorLog("CMvlSettings::LoadMXMLSectionLimits: Could not load '%s' sector.",
+		            "modelstore");
+		return;
+	}
 }
 
 // ---------------------------------------------------------------------------
@@ -208,25 +235,47 @@ CMvlSettings::LoadMXMLSectionLimits(const TiXmlElement *miscdata)
 // treadables, objects, dummys, audioscriptobj).
 // ---------------------------------------------------------------------------
 
-void
+bool
 CMvlSettings::LoadMXMLSectionLimitsInstances(const TiXmlElement *limits)
 {
+	// <instances> children, in the original's storage order (DAT_100b1794..).
+	// Original @ RVA 0x2ac20 returns 0 when a matched child fails to parse;
+	// unmatched children are skipped. "peds" name string @ VA 0x1007ea78.
+	struct SEntry
+	{
+		const char *name;
+		int *value;
+	};
+
+	const SEntry entries[10] = {
+		{ "ptrnode",        &m_data.instances.ptrnode },
+		{ "entryinfonode",  &m_data.instances.entryinfonode },
+		{ "peds",           &m_data.instances.peds },
+		{ "vehicles",       &m_data.instances.vehicles },
+		{ "buildings",      &m_data.instances.buildings },
+		{ "treadables",     &m_data.instances.treadables },
+		{ "objects",        &m_data.instances.objects },
+		{ "dummys",         &m_data.instances.dummys },
+		{ "audioscriptobj", &m_data.instances.audioscriptobj },
+		{ "colmodel",       &m_data.instances.colmodel },
+	};
 	const TiXmlElement *inst = limits->FirstChildElement("instances");
-	bool ok;
+	int i;
 
 	if(!inst)
-		return;
+		return true;
 
-	m_data.ptrnode       = XmlGetInt(inst, "ptrnode", &ok);
-	m_data.entryinfonode = XmlGetInt(inst, "entryinfonode", &ok);
-	m_data.peds          = XmlGetInt(inst, "peds", &ok);
-	m_data.vehicles      = XmlGetInt(inst, "vehicles", &ok);
-	m_data.buildings     = XmlGetInt(inst, "buildings", &ok);
-	m_data.treadables    = XmlGetInt(inst, "treadables", &ok);
-	m_data.objects       = XmlGetInt(inst, "objects", &ok);
-	m_data.dummys        = XmlGetInt(inst, "dummys", &ok);
-	m_data.audioscriptobj = XmlGetInt(inst, "audioscriptobj", &ok);
-	m_data.colmodel      = XmlGetInt(inst, "colmodel", &ok);
+	for(i = 0; i < 10; i++){
+		const TiXmlElement *el = inst->FirstChildElement(entries[i].name);
+		bool ok;
+
+		if(!el)
+			continue;
+		*entries[i].value = MvlAtoi(el->GetText(), &ok);
+		if(!ok)
+			return false;
+	}
+	return true;
 }
 
 // ---------------------------------------------------------------------------
@@ -236,25 +285,59 @@ CMvlSettings::LoadMXMLSectionLimitsInstances(const TiXmlElement *limits)
 // — accept both, TODO(schema) confirm which the original reads.)
 // ---------------------------------------------------------------------------
 
-void
+bool
 CMvlSettings::LoadMXMLSectionLimitsModelStore(const TiXmlElement *limits)
 {
+	// <modelstore> children, in the original's storage order (DAT_100b17c0..).
+	// Original @ RVA 0x2ae60: "time" name string @ VA 0x1007eb08, "ped" @ VA
+	// 0x1007d56c, last entry @ VA 0x1007eb20 (spelling unresolved).
+	struct SEntry
+	{
+		const char *name;
+		int *value;
+	};
+
+	const SEntry entries[6] = {
+		{ "simple",  &m_data.modelstore.simple },
+		{ "time",    &m_data.modelstore.time },
+		{ "weapon",  &m_data.modelstore.weapon },
+		{ "clump",   &m_data.modelstore.clump },
+		{ "vehicle", &m_data.modelstore.vehicle },
+		{ "ped",     &m_data.modelstore.ped },
+	};
 	const TiXmlElement *ms = limits->FirstChildElement("modelstore");
-	bool ok;
+	int i;
 
 	if(!ms)
-		return;
+		return true;
 
-	m_data.msSimple  = XmlGetInt(ms, "simple", &ok);
-	m_data.msTime    = XmlGetInt(ms, "time", &ok);
-	m_data.msWeapon  = XmlGetInt(ms, "weapon", &ok);
-	m_data.msClump   = XmlGetInt(ms, "clump", &ok);
-	m_data.msVehicle = XmlGetInt(ms, "vehicle", &ok);
-	m_data.msPed     = XmlGetInt(ms, "ped", &ok);
+	for(i = 0; i < 6; i++){
+		const TiXmlElement *el = ms->FirstChildElement(entries[i].name);
+		bool ok;
 
-	m_data.msFx2d = XmlGetInt(ms, "fx2d", &ok);
-	if(m_data.msFx2d == 0)
-		m_data.msFx2d = XmlGetInt(ms, "2dfx", &ok);
+		if(!el)
+			continue;
+		*entries[i].value = MvlAtoi(el->GetText(), &ok);
+		if(!ok)
+			return false;
+	}
+
+	// TODO(schema): last entry name (VA 0x1007eb20) not visible in the decomp
+	// chain; samples use <fx2d>, the version matrix says "2dfx". Accept both
+	// (fx2d first); a parse failure still aborts, like the original.
+	{
+		const TiXmlElement *el = ms->FirstChildElement("fx2d");
+		bool ok;
+
+		if(!el)
+			el = ms->FirstChildElement("2dfx");
+		if(el){
+			m_data.modelstore.fx2d = MvlAtoi(el->GetText(), &ok);
+			if(!ok)
+				return false;
+		}
+	}
+	return true;
 }
 
 // ---------------------------------------------------------------------------
@@ -274,80 +357,224 @@ CMvlSettings::LoadMXMLSectionMiscData(const TiXmlElement *miscdata)
 }
 
 // ---------------------------------------------------------------------------
-// Process* — validation + engine-patch entry points.
-// vehmod_retail.dll 0.98e RVAs: ProcessPoolLimits 0x2b4d0,
-// ProcessModelStoreLimits 0x2b5a0, ProcessIdLimits 0x2b8f0,
-// ProcessStreamingMemLimit 0x2ba50.
+// Process* — validation + engine-patch entry points. 1:1 ports of
+// vehmod_retail.dll 0.98e: ProcessPoolLimits @ RVA 0x2b4d0,
+// ProcessModelStoreLimits @ RVA 0x2b5a0, ProcessIdLimits @ RVA 0x2b8f0,
+// ProcessStreamingMemLimit @ RVA 0x2ba50.
 //
-// HOOK POINT: the original patches VC 1.0 pool sizes / model-store sizes /
-// streaming memory here (0.98b feature). The clone currently validates and
-// logs; patch installation goes at the marked sites once the hook
-// installers (FUN_10022560/0x10022590) are cloned.
+// The original reads parallel .data descriptor tables (current/minimum/maximum
+// per entry) and writes accepted values straight into VC 1.0 memory. The table
+// CONTENTS are not in the decomp chain (data section) — the VAs are cited at
+// each table below. Until the engine lane recovers them, unknown min/max use
+// INT_MIN/INT_MAX placeholders (never clamps — behaviour-neutral) and
+// engine-current values stay -1/0 ("not hooked"). HOOK POINT markers show
+// where the original writes go.
 // ---------------------------------------------------------------------------
 
 void
 CMvlSettings::ProcessPoolLimits(void)
 {
-	// Only log pools the user actually raised (non-zero in globalm.xml).
-	if(m_data.vehicles || m_data.colmodel || m_data.peds || m_data.ptrnode){
-		MvlLog("ProcessPoolLimits: ptrnode=%d entryinfonode=%d peds=%d "
-		       "vehicles=%d buildings=%d treadables=%d objects=%d dummys=%d "
-		       "audioscriptobj=%d colmodel=%d",
-		       m_data.ptrnode, m_data.entryinfonode, m_data.peds,
-		       m_data.vehicles, m_data.buildings, m_data.treadables,
-		       m_data.objects, m_data.dummys, m_data.audioscriptobj,
-		       m_data.colmodel);
+	// Descriptor table mirroring the original's parallel arrays (10 entries,
+	// loop bound 0x28/4 @ RVA 0x2b4d0):
+	//   value   -> DAT_100b1794 + i*4  (settings .data, order above)
+	//   current -> DAT_100ae6a0 + i*4  (pointer to engine pool size)
+	//   minimum -> DAT_100ae70c + i*4  (VA 0x100ae70c)
+	//   maximum -> DAT_100ae6e4 + i*4  (VA 0x100ae6e4)
+	// TODO(table): min/max contents not recovered (see port-notes-limits.md).
+	// INT_MIN/INT_MAX placeholders disable clamping until the .data tables are
+	// dumped. current = -1 means "engine not hooked" — this mirrors the
+	// original's negative-pointer path, where the auto-raise step is skipped.
+	struct SPoolDesc
+	{
+		const char *name;
+		int *value;
+		int current;
+		int minimum;
+		int maximum;
+	};
+
+	SPoolDesc pools[10] = {
+		{ "ptrnode",        &m_data.instances.ptrnode,        -1, INT_MIN, INT_MAX },
+		{ "entryinfonode",  &m_data.instances.entryinfonode,  -1, INT_MIN, INT_MAX },
+		{ "peds",           &m_data.instances.peds,           -1, INT_MIN, INT_MAX },
+		{ "vehicles",       &m_data.instances.vehicles,       -1, INT_MIN, INT_MAX },
+		{ "buildings",      &m_data.instances.buildings,      -1, INT_MIN, INT_MAX },
+		{ "treadables",     &m_data.instances.treadables,     -1, INT_MIN, INT_MAX },
+		{ "objects",        &m_data.instances.objects,        -1, INT_MIN, INT_MAX },
+		{ "dummys",         &m_data.instances.dummys,         -1, INT_MIN, INT_MAX },
+		{ "audioscriptobj", &m_data.instances.audioscriptobj, -1, INT_MIN, INT_MAX },
+		{ "colmodel",       &m_data.instances.colmodel,       -1, INT_MIN, INT_MAX },
+	};
+	int i;
+
+	for(i = 0; i < 10; i++){
+		SPoolDesc &p = pools[i];
+
+		// Auto-raise: unset (0) request + engine pool below minimum -> minimum.
+		if(*p.value == 0 && p.current >= 0 && p.current < p.minimum)
+			*p.value = p.minimum;
+
+		if(*p.value != 0){
+			if(*p.value < p.minimum){
+				MvlLog("CMvlSettings::ProcessPoolLimits: Pool %s limit below minimum %d.",
+				       p.name, p.minimum);
+				*p.value = p.minimum;
+			} else if(*p.value > p.maximum){
+				MvlLog("CMvlSettings::ProcessPoolLimits: Pool %s limit above maximum %d.",
+				       p.name, p.maximum);
+				*p.value = p.maximum;
+			}
+			// HOOK POINT (0.98b pool expansion; writers FUN_10022560/
+			// FUN_10022590): original stores *p.value into *DAT_100ae6a0[i];
+			// if that slot is a negative pointer (0x80000000|addr) it instead
+			// patches the push-immediate at that address to 6A 00 68 <le32
+			// limit>. "RAN OUT OF ... SLOTS!!!" strings @ VA 0x1007ef64 /
+			// 0x1007f10c belong to the hooked pool allocators.
+			// TODO(engine): install the CPool patch writer.
+		}
 	}
-	// HOOK POINT: patch CPool sizes in VC 1.0 (0.98b; "RAN OUT OF ... SLOTS!!!"
-	// strings @ 0x1007ef64/0x1007f10c belong to the hooked pool allocators).
 }
 
 void
 CMvlSettings::ProcessModelStoreLimits(void)
 {
-	if(m_data.msSimple || m_data.msClump || m_data.msVehicle){
-		MvlLog("ProcessModelStoreLimits: simple=%d time=%d weapon=%d clump=%d "
-		       "vehicle=%d ped=%d fx2d=%d",
-		       m_data.msSimple, m_data.msTime, m_data.msWeapon, m_data.msClump,
-		       m_data.msVehicle, m_data.msPed, m_data.msFx2d);
+	// Descriptor table mirroring the original's parallel arrays (7 entries,
+	// loop bound 0x1c/4 @ RVA 0x2b5a0):
+	//   value    -> DAT_100b17c0 + i*4  (settings .data, <modelstore> order)
+	//   minimum  -> DAT_100ae940 + i*4  (VA 0x100ae940)
+	//   maximum  -> VA 0x100ae978 + i*4
+	//   elemsize -> DAT_100ae76c + i*4  (array element size, used for realloc)
+	//   ctor     -> DAT_100ae750 + i*4  (per-element constructor fn pointer)
+	// TODO(table): min/max/elemsize/ctor contents not recovered; INT_MIN/
+	// INT_MAX placeholders disable clamping until the .data tables are dumped.
+	struct SStoreDesc
+	{
+		const char *name;
+		int *value;
+		int minimum;
+		int maximum;
+	};
+
+	SStoreDesc stores[7] = {
+		{ "simple",  &m_data.modelstore.simple,  INT_MIN, INT_MAX },
+		{ "time",    &m_data.modelstore.time,    INT_MIN, INT_MAX },
+		{ "weapon",  &m_data.modelstore.weapon,  INT_MIN, INT_MAX },
+		{ "clump",   &m_data.modelstore.clump,   INT_MIN, INT_MAX },
+		{ "vehicle", &m_data.modelstore.vehicle, INT_MIN, INT_MAX },
+		{ "ped",     &m_data.modelstore.ped,     INT_MIN, INT_MAX },
+		{ "2dfx",    &m_data.modelstore.fx2d,    INT_MIN, INT_MAX },
+	};
+	int i;
+
+	for(i = 0; i < 7; i++){
+		SStoreDesc &s = stores[i];
+
+		if(*s.value != 0){
+			if(*s.value < s.minimum){
+				MvlLog("CMvlSettings::ProcessModelStoreLimits: Model store %s limit below minimum %d.",
+				       s.name, s.minimum);
+				*s.value = s.minimum;
+			} else if(*s.value > s.maximum){
+				MvlLog("CMvlSettings::ProcessModelStoreLimits: Model store %s limit above maximum %d.",
+				       s.name, s.maximum);
+				*s.value = s.maximum;
+			}
+			// HOOK POINT (0.98b model-store expansion): original reallocs the
+			// store array (_malloc(elemsize * limit + 4)), calls the ctor
+			// `limit` times and relinks the store list heads @ VA 0x100ae788.
+			// TODO(engine): port once CModelStore/its list heads are mapped.
+		}
 	}
-	// HOOK POINT: patch CModelStore array sizes (0.98b).
 }
 
 void
 CMvlSettings::ProcessIdLimits(void)
 {
-	// 0.98b: "Model, TXD, COL and ANIM limits totalling over 32767, switching
-	// to experimental long model ID mode." (version-matrix.md §0.98b).
-	int total = m_data.models + m_data.texdicts + m_data.colfiles;
+	// Original @ RVA 0x2b8f0. Reads the engine's current ID boundaries
+	// (DAT_100a6320 model end, DAT_100a6328 TXD end, DAT_100a6318 COL end),
+	// keeps the larger of requested/current, caps requested values, and
+	// switches on experimental long model IDs when the total exceeds 32767.
 
-	if(total > 32767)
-		MvlLog("ProcessIdLimits: limits total %d over 32767 - long model ID "
-		       "mode required (TODO: CLongModelId engine)", total);
-	else if(total)
-		MvlLog("ProcessIdLimits: limits total %d", total);
-	// HOOK POINT: CModelIndexLimit / CLongModelId patch installation
-	// (re-098e-map.md §Limits / model-ID engine).
+	// models (DAT_100b17e4): cap 200000.
+	if(m_data.ids.models != 0)
+		m_data.idLimitsDirty = true;               // DAT_100b178f
+	{
+		int limit = m_data.curModelLimit;          // DAT_100a6320
+		if(m_data.curModelLimit <= m_data.ids.models){
+			limit = m_data.ids.models;
+			if(m_data.ids.models > 200000){
+				MvlLog("CMvlSettings::ProcessIdLimits: Requested model limit over 200000, reducing back to 200000.");
+				limit = 200000;
+			}
+		}
+		m_data.ids.models = limit;
+	}
+
+	// texdicts (DAT_100b17e0): span = TXD end - model end; cap 50000.
+	if(m_data.ids.texdicts != 0)
+		m_data.idLimitsDirty = true;
+	{
+		int limit = m_data.curTxdLimit - m_data.curModelLimit;
+		if(m_data.curTxdLimit - m_data.curModelLimit <= m_data.ids.texdicts){
+			limit = m_data.ids.texdicts;
+			if(m_data.ids.texdicts > 50000){
+				MvlLog("CMvlSettings::ProcessIdLimits: Requested TXD limit over 50000, reducing back to 50000.");
+				limit = 50000;
+			}
+		}
+		m_data.ids.texdicts = limit;
+	}
+
+	// colfiles (DAT_100b17bc): span = COL end - TXD end; cap 1000.
+	if(m_data.ids.colfiles != 0)
+		m_data.idLimitsDirty = true;
+	{
+		int limit = m_data.curColLimit - m_data.curTxdLimit;
+		if(m_data.curColLimit - m_data.curTxdLimit <= m_data.ids.colfiles){
+			limit = m_data.ids.colfiles;
+			if(m_data.ids.colfiles > 1000){
+				MvlLog("CMvlSettings::ProcessIdLimits: Requested COL limit over 1000, reducing back to 1000.");
+				limit = 1000;
+			}
+		}
+		m_data.ids.colfiles = limit;
+	}
+
+	// Long model ID switch: original tests 0x7fff < texdicts + 100 + colfiles
+	// + models (the +100 is the ANIM allowance).
+	if(0x7fff < m_data.ids.texdicts + 100 + m_data.ids.colfiles + m_data.ids.models){
+		MvlLog("CMvlSettings::ProcessIdLimits: Model, TXD, COL and ANIM limits totalling over 32767, switching to experimental long model ID mode.");
+		m_data.longModelIdMode = true;             // DAT_100b0c41
+	}
+
+	// TODO(engine): original calls FUN_100173d0 (RVA 0x173d0) and, when it
+	// returns non-zero, FUN_10017390 (RVA 0x17390) — CLongModelId state.
+	if(m_data.idLimitsDirty){
+		// TODO(engine): rebuild model/TXD/COL ID tables (FUN_10017820,
+		// RVA 0x17820) — CModelIndexLimit / CLongModelId patch lane.
+	}
 }
 
 void
 CMvlSettings::ProcessStreamingMemLimit(void)
 {
-	// 0.98e: streamingmem clamp 65-1900 MB (version-matrix.md §0.98e).
-	int mb = m_data.streamingmem;
-
-	if(mb <= 0)
+	// Original @ RVA 0x2ba50. Value global DAT_100a6a8c; -1 = not configured.
+	// Out-of-range values are IGNORED (not clamped), with these exact logs.
+	if(m_data.streamingmem.mb == -1)
 		return;
-	if(mb < 65){
-		MvlLog("ProcessStreamingMemLimit: %d MB below minimum, clamping to 65", mb);
-		mb = 65;
-	} else if(mb > 1900){
-		MvlLog("ProcessStreamingMemLimit: %d MB above maximum, clamping to 1900", mb);
-		mb = 1900;
+	if(m_data.streamingmem.mb < 65){       // 0x41
+		MvlLog("CMvlSettings::ProcessStreamingMemLimit: Ignoring streaming memory limit below 65MB.");
+		return;
 	}
-	m_data.streamingmem = mb;
-	MvlLog("ProcessStreamingMemLimit: %d MB", mb);
-	// HOOK POINT: patch VC 1.0 streaming buffer size (0.98e).
+	if(m_data.streamingmem.mb > 1900){     // 0x76c
+		MvlLog("CMvlSettings::ProcessStreamingMemLimit: Ignoring streaming memory limit above 1900MB.");
+		return;
+	}
+
+	// HOOK POINT (0.98e): original stores (streamingmem << 20) — MB -> bytes —
+	// to VC 1.0 game globals DAT_0041079f and DAT_0094dd54 (game VAs
+	// 0x0041079f / 0x0094dd54). TODO(engine): port with the streaming-buffer
+	// hook lane.
 }
 
 // ---------------------------------------------------------------------------
@@ -358,7 +585,7 @@ CMvlSettings::ProcessStreamingMemLimit(void)
 int
 CMvlSettings::ValidateIdStart(int idstart) const
 {
-	int modelLimit = m_data.models > 0 ? m_data.models : 65000 + 100;
+	int modelLimit = m_data.ids.models > 0 ? m_data.ids.models : 65000 + 100;
 	int maxId = 65000;
 
 	if(modelLimit - 100 < maxId)

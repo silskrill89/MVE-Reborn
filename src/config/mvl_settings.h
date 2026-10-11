@@ -22,6 +22,56 @@
 #include "../core/stdafx.h"
 #include "../../external/tinyxml/tinyxml.h"
 
+// Typed limits blocks. Member order mirrors the original storage arrays so the
+// engine-patch lane can walk them with plain pointer arithmetic, exactly like
+// the decompiled loops (vehmod_retail.dll 0.98e, RVAs cited per struct).
+
+// <limits><instances> — pool instance counts. Original .data array @ VA
+// 0x100b1794..0x100b17b8 (10 ints), parser @ RVA 0x2ac20.
+struct SMvlLimitsInstances
+{
+	int ptrnode;
+	int entryinfonode;
+	int peds;
+	int vehicles;
+	int buildings;
+	int treadables;
+	int objects;
+	int dummys;
+	int audioscriptobj;
+	int colmodel;
+};
+
+// <limits><modelstore> — model-store counts. Original .data array @ VA
+// 0x100b17c0..0x100b17d8 (7 ints), parser @ RVA 0x2ae60.
+struct SMvlLimitsModelStore
+{
+	int simple;
+	int time;
+	int weapon;
+	int clump;
+	int vehicle;
+	int ped;
+	int fx2d;
+};
+
+// <limits> — direct ID limits. Original .data globals: models @ VA 0x100b17e4,
+// texdicts @ VA 0x100b17e0, colfiles @ VA 0x100b17bc; parser @ RVA 0x2b030.
+struct SMvlLimitsIds
+{
+	int models;
+	int texdicts;
+	int colfiles;
+};
+
+// <limits><streamingmem> — streaming memory limit in MB. Original global @ VA
+// 0x100a6a8c (int), processor @ RVA 0x2ba50. -1 = not configured (the original
+// returns early when the value is 0xFFFFFFFF).
+struct SMvlLimitsStreamingMem
+{
+	int mb;
+};
+
 // Parsed settings storage. Field names mirror the XML element names 1:1.
 struct SMvlSettingsData
 {
@@ -48,31 +98,24 @@ struct SMvlSettingsData
 	bool custominit;      // 0.98d
 
 	// <limits> (LoadMXMLSectionLimits)
-	int models;
-	int texdicts;
-	int colfiles;
-	int streamingmem;     // MB, 0.98e clamp 65-1900
+	SMvlLimitsIds ids;                    // models / texdicts / colfiles
+	SMvlLimitsStreamingMem streamingmem;  // MB; -1 = unset
 
 	// <limits><instances> (LoadMXMLSectionLimitsInstances / ProcessPoolLimits)
-	int ptrnode;
-	int entryinfonode;
-	int peds;
-	int vehicles;
-	int buildings;
-	int treadables;
-	int objects;
-	int dummys;
-	int audioscriptobj;
-	int colmodel;
+	SMvlLimitsInstances instances;
 
 	// <limits><modelstore> (LoadMXMLSectionLimitsModelStore)
-	int msSimple;
-	int msTime;
-	int msWeapon;
-	int msClump;
-	int msVehicle;
-	int msPed;
-	int msFx2d;
+	SMvlLimitsModelStore modelstore;
+
+	// Processor state (original .data globals).
+	bool idLimitsDirty;    // DAT_100b178f — a model/TXD/COL limit was requested
+	bool longModelIdMode;  // DAT_100b0c41 — experimental long model ID mode
+	// Current engine ID boundaries (original globals @ VA 0x100a6320 model end,
+	// 0x100a6328 TXD end, 0x100a6318 COL end). Engine-derived; stay 0 in the
+	// clone until the engine-init lane computes them (TODO(engine)).
+	int curModelLimit;
+	int curTxdLimit;
+	int curColLimit;
 
 	void Reset(void);
 };
@@ -92,8 +135,11 @@ public:
 	// Section parsers (called by LoadGlobalMXMLFile; public for testability).
 	// All take the parent element; missing elements are a no-op.
 	void LoadMXMLSectionInternal(const TiXmlElement *miscdata);          // 0x2a7f0
-	void LoadMXMLSectionLimitsInstances(const TiXmlElement *limits);     // 0x2ac20
-	void LoadMXMLSectionLimitsModelStore(const TiXmlElement *limits);    // 0x2ae60
+	// The two limits sub-parsers return false when a matched child element has
+	// an unparseable value (original returned char; LoadMXMLSectionLimits then
+	// logs "Could not load '%s' sector." and stops).
+	bool LoadMXMLSectionLimitsInstances(const TiXmlElement *limits);     // 0x2ac20
+	bool LoadMXMLSectionLimitsModelStore(const TiXmlElement *limits);    // 0x2ae60
 	void LoadMXMLSectionLimits(const TiXmlElement *miscdata);            // 0x2b030
 	void LoadMXMLSectionMiscData(const TiXmlElement *miscdata);          // 0x2b230
 

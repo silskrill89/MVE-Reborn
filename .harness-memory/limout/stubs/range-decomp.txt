@@ -1,0 +1,327 @@
+// FUN_1003dff0 @ 0x1003dff0 (RVA 0x3dff0) size 30
+
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void FUN_1003dff0(void)
+
+{
+  _DAT_100b0dac = 0x42674f;
+                    /* WARNING: Could not recover jumptable at 0x1003e008. Too many branches */
+                    /* WARNING: Treating indirect jump as call */
+  (*(code *)0x42674f)();
+  return;
+}
+
+
+
+// FUN_1003e010 @ 0x1003e010 (RVA 0x3e010) size 86
+
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+undefined8 __fastcall
+FUN_1003e010(undefined4 param_1,undefined4 param_2,undefined4 param_3,int param_4)
+
+{
+  undefined4 in_EAX;
+  undefined8 uVar1;
+  
+  DAT_1013dc38 = param_4;
+  if (((0x81 < param_4) && (param_4 < 0xed)) && ((&DAT_100b641e)[param_4] != '\0')) {
+    return CONCAT44(param_2,in_EAX);
+  }
+  _DAT_100b0dac = 0x4267e5;
+  uVar1 = (*(code *)0x4267e5)();
+  return uVar1;
+}
+
+
+
+// FUN_1003e070 @ 0x1003e070 (RVA 0x3e070) size 30
+
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void FUN_1003e070(void)
+
+{
+  _DAT_100b0dac = 0x426acd;
+                    /* WARNING: Could not recover jumptable at 0x1003e088. Too many branches */
+                    /* WARNING: Treating indirect jump as call */
+  (*(code *)0x426acd)();
+  return;
+}
+
+
+
+// FUN_1003e090 @ 0x1003e090 (RVA 0x3e090) size 30
+
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void FUN_1003e090(void)
+
+{
+  _DAT_100b0dac = 0x426c87;
+                    /* WARNING: Could not recover jumptable at 0x1003e0a8. Too many branches */
+                    /* WARNING: Treating indirect jump as call */
+  (*(code *)0x426c87)();
+  return;
+}
+
+
+
+// FUN_1003e0b0 @ 0x1003e0b0 (RVA 0x3e0b0) size 30
+
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void FUN_1003e0b0(void)
+
+{
+  _DAT_100b0dac = 0x427477;
+                    /* WARNING: Could not recover jumptable at 0x1003e0c8. Too many branches */
+                    /* WARNING: Treating indirect jump as call */
+  (*(code *)0x427477)();
+  return;
+}
+
+
+
+// FUN_1003e0d0 @ 0x1003e0d0 (RVA 0x3e0d0) size 38
+
+
+undefined8 __fastcall FUN_1003e0d0(undefined4 param_1,undefined4 param_2,int param_3,int param_4)
+
+{
+  DAT_1013c598 = param_3;
+  DAT_1013dbc8 = param_4;
+  FUN_1004f7e0(param_3,param_4);
+  return CONCAT44(param_2,param_4);
+}
+
+
+
+// FUN_1003e100 @ 0x1003e100 (RVA 0x3e100) size 30
+
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void FUN_1003e100(void)
+
+{
+  _DAT_100b0dac = 0x426a53;
+                    /* WARNING: Could not recover jumptable at 0x1003e118. Too many branches */
+                    /* WARNING: Treating indirect jump as call */
+  (*(code *)0x426a53)();
+  return;
+}
+
+
+
+// FUN_1003e120 @ 0x1003e120 (RVA 0x3e120) size 26
+
+
+undefined8 __fastcall FUN_1003e120(int param_1,undefined4 param_2)
+
+{
+  undefined4 in_EAX;
+  
+  DAT_1013c268 = param_1;
+  *(undefined4 *)(param_1 + 0x1d4) = 0;
+  return CONCAT44(param_2,in_EAX);
+}
+
+
+
+// FUN_1003e140 @ 0x1003e140 (RVA 0x3e140) size 42
+
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void __fastcall FUN_1003e140(undefined4 param_1)
+
+{
+  DAT_1013dc2c = param_1;
+  FUN_1003a810();
+  (*(code *)0x4bb630)();
+  _DAT_100b0dac = 0x5bac09;
+  (*(code *)0x5bac09)();
+  return;
+}
+
+
+
+// FUN_1003e170 @ 0x1003e170 (RVA 0x3e170) size 90
+
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void __thiscall FUN_1003e170(int param_1,uint param_2,uint param_3)
+
+{
+  undefined4 unaff_EBX;
+  undefined4 unaff_ESI;
+  
+  DAT_1013dbdc = param_2 & 0xff;
+  DAT_1013c280 = param_3 & 0xff;
+  DAT_1013c558 = param_1;
+  FUN_1003b840(param_1,DAT_1013dbdc,DAT_1013c280,DAT_100b2450);
+  _DAT_100b0dac = 0x579295;
+  (*(code *)0x579295)(unaff_ESI,unaff_EBX);
+  return;
+}
+
+
+
+// FUN_1003e1d0 @ 0x1003e1d0 (RVA 0x3e1d0) size 38
+
+
+undefined8 __fastcall
+FUN_1003e1d0(undefined4 param_1,undefined4 param_2,undefined4 param_3,undefined4 param_4)
+
+{
+  DAT_1013a5a8 = param_3;
+  DAT_1013c1fc = param_4;
+  DAT_1013dc50 = param_1;
+  FUN_1003b9d0();
+  return CONCAT44(param_2,param_4);
+}
+
+
+
+// FUN_1003e200 @ 0x1003e200 (RVA 0x3e200) size 38
+
+
+undefined8 __fastcall
+FUN_1003e200(undefined4 param_1,undefined4 param_2,undefined4 param_3,undefined4 param_4)
+
+{
+  DAT_1013a5a4 = param_3;
+  DAT_1013db88 = param_4;
+  DAT_1013c568 = param_1;
+  FUN_1003bae0();
+  return CONCAT44(param_2,param_4);
+}
+
+
+
+// FUN_1003e230 @ 0x1003e230 (RVA 0x3e230) size 28
+
+
+void __fastcall FUN_1003e230(undefined4 param_1)
+
+{
+  DAT_100b2450 = param_1;
+  FUN_1003af20();
+  (*(code *)0x589790)();
+  DAT_100b2450 = 0;
+  return;
+}
+
+
+
+// FUN_1003e250 @ 0x1003e250 (RVA 0x3e250) size 28
+
+
+void __fastcall FUN_1003e250(undefined4 param_1)
+
+{
+  DAT_100b2450 = param_1;
+  FUN_1003af20();
+  (*(code *)0x60ad50)();
+  DAT_100b2450 = 0;
+  return;
+}
+
+
+
+// FUN_1003e270 @ 0x1003e270 (RVA 0x3e270) size 28
+
+
+void __fastcall FUN_1003e270(undefined4 param_1)
+
+{
+  DAT_100b2450 = param_1;
+  FUN_1003af20();
+  (*(code *)0x5a4de0)();
+  DAT_100b2450 = 0;
+  return;
+}
+
+
+
+// FUN_1003e290 @ 0x1003e290 (RVA 0x3e290) size 32
+
+
+void __fastcall FUN_1003e290(undefined4 param_1)
+
+{
+  DAT_1013c55c = param_1;
+  FUN_1003a450();
+  FUN_1003b580();
+  (*(code *)0x589ad0)();
+  return;
+}
+
+
+
+// FUN_1003e2b0 @ 0x1003e2b0 (RVA 0x3e2b0) size 27
+
+
+void __fastcall FUN_1003e2b0(undefined4 param_1)
+
+{
+  DAT_1013c540 = param_1;
+  FUN_1003b580();
+  (*(code *)0x60ad90)();
+  return;
+}
+
+
+
+// FUN_1003e2d0 @ 0x1003e2d0 (RVA 0x3e2d0) size 80
+
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void FUN_1003e2d0(void)
+
+{
+  float *unaff_EBP;
+  undefined4 in_stack_000001b4;
+  int *in_stack_000001b8;
+  
+  DAT_1013a594 = in_stack_000001b8;
+  DAT_1013dc04 = in_stack_000001b4;
+  DAT_1013a5f8 = unaff_EBP;
+  FUN_1003b5d0(in_stack_000001b8,unaff_EBP,in_stack_000001b4);
+  _DAT_100b0dac = 0x5cf9f9;
+  (*(code *)0x5cf9f9)();
+  return;
+}
+
+
+
+// FUN_1003e320 @ 0x1003e320 (RVA 0x3e320) size 81
+
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void FUN_1003e320(int param_1)
+
+{
+  int *in_stack_00000040;
+  
+  DAT_1013dc88 = in_stack_00000040;
+  DAT_1013c50c = *(undefined4 *)(param_1 + 4);
+  DAT_1013c594 = (float *)&stack0x00000018;
+  FUN_1003b5d0(in_stack_00000040,DAT_1013c594,DAT_1013c50c);
+  _DAT_100b0dac = 0x5c4348;
+  (*(code *)0x5c4348)();
+  return;
+}
+
+
+

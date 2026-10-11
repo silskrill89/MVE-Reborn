@@ -42,3 +42,9 @@ Highlights:
 - **Lane A (archive)**: src/archive/seven_walker (CSevenWalker, SzArEx_Open + solid-block cache + UTF-16→UTF-8), vehicle_archive (CMvlVehicle::ParseArchive, RegisterArchiveFile tuning1-9.dff/weapons, VerifyRequiredFiles xml-mandatory).
 - **BUILD GREEN (Release|Win32)**: single error fixed (seven_walker.cpp missing `#include "7zCrc.h"` for CrcGenerateTable — 7zCrc.h:14, must precede SzArEx_Open); vehmod.dll linked → bin\Release\; postbuild deploy ran → H:\games\VC\vehmod_retail.dll (deploy-subdir alignment with b.bat's mvl\ path noted as TODO).
 - Next big block: Ghidra MCP decomp port of remaining ~136+ RTTI-named functions (model/limit engine, vehicle XML parsers, weapons, SCM, Python host).
+
+## 2026-10-10 (engine tranche) — limits/model-ID/hooks ported + BUILD GREEN
+- fix-1 ported CMvlSettings limit processors (ProcessPoolLimits/ProcessModelStoreLimits/ProcessIdLimits/ProcessStreamingMemLimit + LoadMXMLSectionLimitsInstances/ModelStore) into src/config/mvl_settings.{h,cpp} with typed limit structs, exact log strings, real engine VAs documented (pool value table 0x100b1794, streaming writes 0x0041079f/0x0094dd54).
+- fix-2 ported CLongModelId + CModelIndexLimit (13 methods, 2288 extracted patch-site entries with static_asserts) into src/engine/model_id.{h,cpp}; hook trio (MvlWriteJmp/MvlWriteDword/MvlUnlockGameText) + 22 handler stubs + 21-entry patch table into src/engine/game_hooks.{h,cpp}. MvlInstallStubHooks NOT called yet — 11 helper stubs unported.
+- Build fixes: __thiscall free-function decl → __fastcall(this,edx-dummy); naked stripped from header decls (kept on definitions). Full build GREEN, deployed to H:\games\VC\vehmod_retail.dll.
+- Next: vehicle archive/XML pipeline tranche + hook helper completion; re-daily continues below.
