@@ -1,0 +1,75 @@
+// FUN_10017f60 @ 0x10017f60 (RVA 0x17f60) size 141
+
+
+uint FUN_10017f60(void)
+
+{
+  int iVar1;
+  int iVar2;
+  uint uVar3;
+  int iVar4;
+  
+  iVar1 = DAT_10124f14;
+  iVar2 = *(int *)(DAT_100a6314 + DAT_10124f14 * 4);
+  iVar4 = 0;
+  if (iVar2 != 0) {
+    if (DAT_100b17e9 != '\0') {
+      iVar2 = __stricmp(DAT_10124f24,(char *)(iVar2 + 4));
+      if (iVar2 != 0) {
+        FUN_1001cce0("CModelIndexLimit::VerifyModelHasColModel",
+                     "Creating instance of model %d with name %s - real name of the model is %s!");
+      }
+    }
+    iVar4 = *(int *)(DAT_100a6314 + iVar1 * 4);
+    if (*(int *)(iVar4 + 0x1c) == 0) {
+      uVar3 = FUN_1001cb80("CModelIndexLimit::VerifyModelHasColModel",
+                           "Cannot create instance of model %d (%s), no colmodel.");
+      return uVar3 & 0xffffff00;
+    }
+  }
+  return CONCAT31((int3)((uint)iVar4 >> 8),1);
+}
+
+
+
+// FUN_10018030 @ 0x10018030 (RVA 0x18030) size 44
+
+
+uint FUN_10018030(void)
+
+{
+  uint uVar1;
+  
+  if (*(int *)(DAT_10124f30 + 4) <= *(int *)(DAT_10124f30 + 8)) {
+    uVar1 = FUN_1001cb80("CModelIndexLimit::VerifyDirectoryCanAdd",
+                         "Cannot add model %s to list of ID-less models - limit full (%d).");
+    return uVar1 & 0xffffff00;
+  }
+  return CONCAT31((int3)((uint)DAT_10124f30 >> 8),1);
+}
+
+
+
+// FUN_100180a0 @ 0x100180a0 (RVA 0x180a0) size 156
+
+
+void FUN_100180a0(void)
+
+{
+  if (DAT_100b0c43 == '\0') {
+    FUN_10022560((undefined1 *)0x48bdfc,0x10017db0);
+    FUN_10022560((undefined1 *)0x48bf2c,0x10017df0);
+    FUN_10022560((undefined1 *)0x48cad3,0x10017e30);
+    FUN_10022560((undefined1 *)0x48ca41,0x10017e70);
+    FUN_10022560((undefined1 *)0x48c4ae,0x10017eb0);
+    FUN_10022560((undefined1 *)0x48c69e,0x10017ef0);
+    FUN_10022560((undefined1 *)0x55f7d0,0x10017f30);
+    FUN_10022560((undefined1 *)0x48acb0,0x10017ff0);
+    FUN_10022560((undefined1 *)0x4873f0,0x10018060);
+    DAT_100b0c43 = '\x01';
+  }
+  return;
+}
+
+
+

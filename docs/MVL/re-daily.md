@@ -48,3 +48,15 @@ Highlights:
 - fix-2 ported CLongModelId + CModelIndexLimit (13 methods, 2288 extracted patch-site entries with static_asserts) into src/engine/model_id.{h,cpp}; hook trio (MvlWriteJmp/MvlWriteDword/MvlUnlockGameText) + 22 handler stubs + 21-entry patch table into src/engine/game_hooks.{h,cpp}. MvlInstallStubHooks NOT called yet — 11 helper stubs unported.
 - Build fixes: __thiscall free-function decl → __fastcall(this,edx-dummy); naked stripped from header decls (kept on definitions). Full build GREEN, deployed to H:\games\VC\vehmod_retail.dll.
 - Next: vehicle archive/XML pipeline tranche + hook helper completion; re-daily continues below.
+
+## 2026-10-11 (tranche-2) — vehicle pipeline + XML parsers ported, BUILD GREEN
+- **Lane V (fix-2)** ported CMvlVehicle archive pipeline (0x44f20–0x463f0: LoadFromArchive/ParseArchive/RegisterArchiveFile/VerifyRequiredFiles/Load{Texture,Model,Collision,Animation}File/LoadWeaponFiles/InitialiseLoaded) into src/archive/vehicle_archive.{h,cpp} + all 29 LoadXML* parsers (0x46420–0x4e790) into src/vehicle/vehicle_xml.{h,cpp} (~4.9k LOC). Original names 1:1, `0.98e @ RVA` citations, verbatim quirks ('gamg', 'lightbox', transmission copy/paste bug) preserved. 59 engine HOOK POINT stubs with target VAs. Port notes: .harness-memory/limout/port-notes-veh.md (201 lines, 8 open questions).
+- **Lane E (fix-1)** = FAILED (empty result, wrote nothing). Export inputs ready in .harness-memory/limout/{helpers,dirmgr}/. Re-dispatched on fresh session.
+- Build fix: vehicle_xml.cpp fMachineGunSound → nMachineGunSound (field name per SMvlVehicleWeaponData @ vehicle_archive.h:261).
+- BUILD GREEN: bin\Release\vehmod.dll (postbuild deploy ran). Total tranche LOC ~5.6k incl. prior engine tranche.
+
+## 2026-10-11 (tranche-3) — hook helpers + directory manager + save system ported, BUILD GREEN
+- **fix-3 (fresh session)**: src/engine/model_helpers.{h,cpp} (1474 lines) — all 12 depth-0 roots (11 helpers + driver FUN_10017820) + 19 depth-1 ports (quat→matrix 0x8990, LCG rand 0x59f55) + ~60 log-once TODO stubs (RW thunks, XMM-loss fns needing disasm); src/engine/dirmgr.{h,cpp} — FUN_10017f60/18030 delegate to CModelIndexLimit, FUN_100180a0 guard ported (9 E9-JMP installs withheld — handlers 0x17db0..0x18060 unported); port-notes-helpers.md (~200 lines, 5 open Qs incl. shared-global fragmentation = engine_globals consolidation candidate).
+- **fix-2 (vehicle session reuse)**: src/vehicle/vehicle_handler.{h,cpp} (621 lines) — full CVehicleHandler save cluster 1:1 (LoadSaveXml* 7 methods, LoadExtraSaveFile sidecar _mvl.xml, FetchRealModelIndexForPoolSlot/GarageSlot); save XML schema recovered from DLL parser tables @ RVA 0xaf3c8–0xaf548 (root mvlsave); 13 hook stubs (CWeaponHandler save fns = next lane); port-notes-veh.md save section.
+- Build fixes (orchestrator): model_helpers.cpp illegal static_cast<uintptr_t>(ptr) → direct reinterpret_cast (2 sites); vehicle_handler.cpp TIXML_ERROR_OPENING_FILE → TiXmlBase::TIXML_ERROR_OPENING_FILE (class-scoped enum).
+- BUILD GREEN: vehmod.dll linked + postbuild deploy ran. Tranche-3 = ~2167 new lines.
