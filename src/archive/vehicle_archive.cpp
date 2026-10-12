@@ -8,6 +8,7 @@
 #include "vehicle_archive.h"
 
 #include "../loader/log.h"
+#include "../vehicle/vehicle_handler.h"   // CVehicleHandler::LoadXML*EmLight* (forwarders below)
 
 #include <ctype.h>
 #include <stdarg.h>
@@ -861,11 +862,8 @@ CCustomAnimFile *MvlAnimFileNew(void)
 	return 0;
 }
 
-bool MvlAnimFileLoad(CCustomAnimFile *, const void *, unsigned)
-{
-	MvlLog("HOOK POINT 0x14e0 MvlAnimFileLoad");
-	return false;
-}
+// MvlAnimFileLoad definition MOVED to src/anim/custom_anim.cpp (archive seam,
+// FUN_100014e0 @ 0x14e0) — see port-notes-media.md.
 
 int MvlAnimFilePostProcess(CCustomAnimFile *)
 {
@@ -878,11 +876,8 @@ void MvlAnimFileFree(CCustomAnimFile *)
 	MvlLog("HOOK POINT 0x12f0 MvlAnimFileFree");
 }
 
-bool MvlSoundLoadFile(const void *, void *, const char *, const void *, unsigned)
-{
-	MvlLog("HOOK POINT 0x33e10 MvlSoundLoadFile");
-	return false;
-}
+// MvlSoundLoadFile definition MOVED to src/audio/sound_handler.cpp (archive
+// seam, FUN_10033e10 @ 0x33e10) — see port-notes-media.md.
 
 void MvlSoundNotifyLoaded(void)
 {
@@ -985,22 +980,19 @@ const char *MvlAnimGroupTableName(int)
 	return 0;
 }
 
-bool LoadXMLEmLightData(TiXmlElement *, void *)
+bool LoadXMLEmLightData(TiXmlElement *e, void *dest)
 {
-	MvlLog("HOOK POINT 0x4e8f0 CVehicleHandler::LoadXMLEmLightData");
-	return false;
+	return CVehicleHandler::LoadXMLEmLightData(e, dest);   // 0x4e8f0 impl: vehicle_handler.cpp
 }
 
-bool LoadXMLEmLightSingle(TiXmlElement *, void *)
+bool LoadXMLEmLightSingle(TiXmlElement *e, void *dest)
 {
-	MvlLog("HOOK POINT 0x4edc0 CVehicleHandler::LoadXMLEmLightSingle");
-	return false;
+	return CVehicleHandler::LoadXMLSingleEmLightData(e, dest);   // 0x4edc0 impl: vehicle_handler.cpp
 }
 
-bool LoadXMLTaxiLight(TiXmlElement *, void *)
+bool LoadXMLTaxiLight(TiXmlElement *e, void *dest)
 {
-	MvlLog("HOOK POINT 0x4f090 CVehicleHandler::LoadXMLTaxiLight");
-	return false;
+	return CVehicleHandler::LoadXMLTaxiEmLightData(e, dest);   // 0x4f090 impl: vehicle_handler.cpp
 }
 
 void MvlSpecialModelPrep(void)

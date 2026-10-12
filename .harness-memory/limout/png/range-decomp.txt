@@ -1,0 +1,639 @@
+// FUN_1001bdb0 @ 0x1001bdb0 (RVA 0x1bdb0) size 284
+
+
+void __fastcall FUN_1001bdb0(int param_1,int param_2)
+
+{
+  int iVar1;
+  int iVar2;
+  uint uVar3;
+  char *local_78;
+  char *local_74;
+  uint local_70;
+  undefined *local_6c;
+  undefined1 local_68;
+  int local_64;
+  undefined1 local_60;
+  undefined8 local_5c;
+  undefined *local_54;
+  undefined1 local_50;
+  int local_4c;
+  undefined1 local_48;
+  undefined8 local_44;
+  undefined *local_3c;
+  undefined1 local_38;
+  int local_34;
+  undefined1 local_30;
+  undefined8 local_2c;
+  undefined4 local_24;
+  undefined1 local_20;
+  undefined4 local_1c;
+  undefined1 local_18;
+  undefined8 local_14;
+  uint local_8;
+  
+  local_8 = DAT_100a50c0 ^ (uint)&stack0xfffffffc;
+  local_4c = param_2 + 4;
+  local_34 = param_2 + 8;
+  local_6c = &DAT_1007ba08;
+  local_68 = 0x66;
+  local_60 = 1;
+  local_5c = 0;
+  local_54 = &DAT_1007ba0c;
+  local_50 = 0x66;
+  local_48 = 1;
+  local_44 = 0;
+  local_3c = &DAT_1007ba10;
+  local_38 = 0x66;
+  local_30 = 1;
+  local_2c = 0;
+  local_24 = 0;
+  local_20 = 0;
+  local_1c = 0;
+  local_18 = 0;
+  local_14 = 0;
+  local_70 = 0;
+  local_64 = param_2;
+  iVar1 = FUN_10034be0(param_1);
+  local_78 = "CHelpers::XmlParseVector";
+  local_74 = "Vector";
+  while( true ) {
+    if (iVar1 == 0) {
+      FUN_1001bbb0((int *)&local_6c,local_70,&local_78);
+      __security_check_cookie(local_8 ^ (uint)&stack0xfffffffc);
+      return;
+    }
+    iVar2 = FUN_1001bb40(iVar1,(int *)&local_6c,&local_78);
+    if ((-1 < iVar2) &&
+       (uVar3 = FUN_1001bc10(iVar1,(int)(&local_6c + iVar2 * 6),(byte)iVar2,&local_78,&local_70),
+       (char)uVar3 == '\0')) break;
+    iVar1 = FUN_10034c10(iVar1);
+  }
+  __security_check_cookie(local_8 ^ (uint)&stack0xfffffffc);
+  return;
+}
+
+
+
+// FUN_1001bed0 @ 0x1001bed0 (RVA 0x1bed0) size 278
+
+
+void FUN_1001bed0(void)
+
+{
+  int iVar1;
+  int iVar2;
+  uint uStack_9c;
+  int local_78 [6];
+  int local_60 [6];
+  int local_48 [12];
+  uint local_18;
+  undefined1 *local_14;
+  void *local_10;
+  undefined1 *puStack_c;
+  undefined4 local_8;
+  
+  puStack_c = &LAB_10072e78;
+  local_10 = ExceptionList;
+  uStack_9c = DAT_100a50c0 ^ (uint)&stack0xfffffffc;
+  local_14 = (undefined1 *)&uStack_9c;
+  ExceptionList = &local_10;
+  local_8 = 0;
+  local_18 = uStack_9c;
+  iVar1 = FUN_100320a0();
+  if (iVar1 == 0) {
+    FUN_1001b8d0((undefined1 *)local_78,"Could not open memory stream for PNG file.");
+                    /* WARNING: Subroutine does not return */
+    __CxxThrowException_8(local_78,&DAT_100a1e04);
+  }
+  iVar2 = FUN_1001c690(iVar1);
+  if (iVar2 == 0) {
+    FUN_1001b8d0((undefined1 *)local_60,"Could not read RwImage from PNG file.");
+                    /* WARNING: Subroutine does not return */
+    __CxxThrowException_8(local_60,&DAT_100a1e04);
+  }
+  iVar2 = FUN_1001ca90(iVar2);
+  if (iVar2 == 0) {
+    FUN_1001b8d0((undefined1 *)local_48,"Could not get texture from RwImage.");
+                    /* WARNING: Subroutine does not return */
+    __CxxThrowException_8(local_48,&DAT_100a1e04);
+  }
+  local_8 = 0xffffffff;
+  if (iVar1 != 0) {
+    FUN_10032090();
+  }
+  ExceptionList = local_10;
+  __security_check_cookie(local_18 ^ (uint)&stack0xfffffffc);
+  return;
+}
+
+
+
+// Catch@1001bfb3 @ 0x1001bfb3 (RVA 0x1bfb3) size 64
+
+
+undefined * Catch_1001bfb3(void)
+
+{
+  int unaff_EBP;
+  
+  *(undefined1 *)(unaff_EBP + -4) = 2;
+  if (*(int *)(unaff_EBP + -0x78) != 0) {
+    FUN_100327c0();
+  }
+  FUN_1001cb80("CHelpers::PngFileToTexture","%s");
+  FUN_10002c00((undefined4 *)(unaff_EBP + -0x2c));
+  return &DAT_1001bff3;
+}
+
+
+
+// FUN_1001c040 @ 0x1001c040 (RVA 0x1c040) size 92
+
+
+undefined8 __fastcall FUN_1001c040(LPCSTR param_1)
+
+{
+  HANDLE hFile;
+  _FILETIME local_c;
+  
+  hFile = CreateFileA(param_1,0x80,3,(LPSECURITY_ATTRIBUTES)0x0,3,0,(HANDLE)0x0);
+  if (hFile == (HANDLE)0xffffffff) {
+    return 0;
+  }
+  local_c.dwLowDateTime = 0;
+  local_c.dwHighDateTime = 0;
+  GetFileTime(hFile,(LPFILETIME)0x0,(LPFILETIME)0x0,&local_c);
+  CloseHandle(hFile);
+  return CONCAT44(local_c.dwHighDateTime,local_c.dwLowDateTime);
+}
+
+
+
+// FUN_1001c0a0 @ 0x1001c0a0 (RVA 0x1c0a0) size 142
+
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void __fastcall FUN_1001c0a0(int param_1)
+
+{
+  ushort uVar1;
+  HWND pHVar2;
+  int iVar3;
+  int local_14 [4];
+  
+  local_14[3] = DAT_100a50c0 ^ (uint)&stack0xfffffffc;
+  pHVar2 = GetForegroundWindow();
+  if (pHVar2 != _DAT_007897a4) {
+    __security_check_cookie(local_14[3] ^ (uint)&stack0xfffffffc);
+    return;
+  }
+  local_14[0] = param_1;
+  local_14[1] = 0;
+  local_14[2] = 0;
+  iVar3 = 0;
+  do {
+    if (0 < local_14[iVar3]) {
+      uVar1 = GetKeyState(local_14[iVar3]);
+      if ((uVar1 & 0x8000) == 0) {
+        __security_check_cookie(local_14[3] ^ (uint)&stack0xfffffffc);
+        return;
+      }
+    }
+    iVar3 = iVar3 + 1;
+  } while (iVar3 < 3);
+  __security_check_cookie(local_14[3] ^ (uint)&stack0xfffffffc);
+  return;
+}
+
+
+
+// FUN_1001c130 @ 0x1001c130 (RVA 0x1c130) size 57
+
+
+int FUN_1001c130(void)
+
+{
+  int iVar1;
+  
+  iVar1 = 0;
+  if (0 < DAT_100a6320) {
+    do {
+      if (*(int *)(DAT_100a6314 + iVar1 * 4) == 0) {
+        if (iVar1 < DAT_100a6d48) {
+          return iVar1;
+        }
+        if (DAT_101244cc <= iVar1) {
+          return iVar1;
+        }
+      }
+      iVar1 = iVar1 + 1;
+    } while (iVar1 < DAT_100a6320);
+  }
+  return -1;
+}
+
+
+
+// FUN_1001c170 @ 0x1001c170 (RVA 0x1c170) size 15
+
+
+int __cdecl FUN_1001c170(int *param_1,int *param_2)
+
+{
+  return *param_1 - *param_2;
+}
+
+
+
+// FUN_1001c180 @ 0x1001c180 (RVA 0x1c180) size 613
+
+
+void FUN_1001c180(uint param_1)
+
+{
+  int iVar1;
+  FILE *pFVar2;
+  BOOL BVar3;
+  HANDLE pvVar4;
+  int iVar5;
+  void *lp;
+  HMODULE *lphModule;
+  HMODULE pHVar6;
+  char *pcVar7;
+  DWORD DVar8;
+  CHAR *lpFilename;
+  _MODULEINFO *lpmodinfo;
+  uint *lpcbNeeded;
+  HMODULE local_920 [512];
+  _MODULEINFO local_120;
+  int local_114;
+  uint local_110;
+  CHAR local_10c [260];
+  uint local_8;
+  
+  local_8 = DAT_100a50c0 ^ (uint)&stack0xfffffffc;
+  local_110 = param_1;
+  pFVar2 = _fopen("mvl/errorlog.txt","w");
+  iVar5 = *(int *)(param_1 + 4);
+  local_114 = iVar5;
+  if (pFVar2 != (FILE *)0x0) {
+    FUN_1005a769(pFVar2,(byte *)
+                        "Address: %08X error %08X\nEAX %08X EBX %08X ECX %08X EDX %08X\nEBP %08X ESP %08X ESI %08X EDI %08X\n"
+                );
+    FUN_1005a769(pFVar2,(byte *)"Stack: \n");
+    lp = *(void **)(iVar5 + 0xc4);
+    iVar5 = 100;
+    do {
+      BVar3 = IsBadReadPtr(lp,4);
+      if (BVar3 == 0) {
+        pcVar7 = "%08X\n";
+      }
+      else {
+        pcVar7 = "Bad stack address %08X\n";
+      }
+      FUN_1005a769(pFVar2,(byte *)pcVar7);
+      lp = (void *)((int)lp + 4);
+      iVar5 = iVar5 + -1;
+    } while (iVar5 != 0);
+    lpcbNeeded = &local_110;
+    DVar8 = 0x800;
+    lphModule = local_920;
+    pvVar4 = GetCurrentProcess();
+    BVar3 = EnumProcessModules(pvVar4,lphModule,DVar8,lpcbNeeded);
+    if (BVar3 != 0) {
+      _qsort(local_920,local_110 >> 2,4,FUN_1001c170);
+      iVar5 = 0;
+      if (local_110 >> 2 != 0) {
+        do {
+          DVar8 = 0x104;
+          lpFilename = local_10c;
+          pHVar6 = local_920[iVar5];
+          pvVar4 = GetCurrentProcess();
+          DVar8 = GetModuleFileNameExA(pvVar4,pHVar6,lpFilename,DVar8);
+          if (DVar8 == 0) {
+LAB_1001c321:
+            FUN_1005a769(pFVar2,(byte *)"%08X - unknown module.\n");
+          }
+          else {
+            DVar8 = 0xc;
+            lpmodinfo = &local_120;
+            pHVar6 = local_920[iVar5];
+            pvVar4 = GetCurrentProcess();
+            BVar3 = GetModuleInformation(pvVar4,pHVar6,lpmodinfo,DVar8);
+            if (BVar3 == 0) goto LAB_1001c321;
+            FUN_1005a769(pFVar2,(byte *)"%08X S %08X N %s\n");
+          }
+          iVar5 = iVar5 + 1;
+        } while (iVar5 < (int)(local_110 >> 2));
+      }
+    }
+    FUN_1005a769(pFVar2,&DAT_1007b84c);
+    _fclose(pFVar2);
+  }
+  iVar5 = local_114;
+  if ((((*(int *)(local_114 + 0xb8) == 0x640fe5) &&
+       (BVar3 = IsBadReadPtr(*(void **)(local_114 + 0xc4),0x14), BVar3 == 0)) &&
+      (iVar1 = *(int *)(iVar5 + 0xc4), *(int *)(iVar1 + 0x10) == 0x57a723)) &&
+     ((BVar3 = IsBadReadPtr(*(void **)(iVar1 + 8),0x174), BVar3 == 0 &&
+      (pFVar2 = _fopen("mvl/dump640FE5h.txt","w"), pFVar2 != (FILE *)0x0)))) {
+    _fwrite(*(void **)(*(int *)(iVar5 + 0xc4) + 8),0x174,1,pFVar2);
+    _fclose(pFVar2);
+  }
+  __security_check_cookie(local_8 ^ (uint)&stack0xfffffffc);
+  return;
+}
+
+
+
+// FUN_1001c3f0 @ 0x1001c3f0 (RVA 0x1c3f0) size 447
+
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+uint FUN_1001c3f0(void)
+
+{
+  HMODULE hModule;
+  uint uVar1;
+  bool bVar2;
+  bool bVar3;
+  bool bVar4;
+  bool bVar5;
+  bool bVar6;
+  bool bVar7;
+  bool bVar8;
+  bool bVar9;
+  bool bVar10;
+  bool bVar11;
+  bool bVar12;
+  bool bVar13;
+  bool bVar14;
+  bool bVar15;
+  bool bVar16;
+  
+  hModule = LoadLibraryA("mvl/libpng15.dll");
+  if (hModule == (HMODULE)0x0) {
+    GetLastError();
+    uVar1 = FUN_1001cb80("CPngFuncs::LoadPngFuncs",
+                         "Could not load \'mvl/libpng15.dll\', LoadLibrary failed with error %d.");
+    return uVar1 & 0xffffff00;
+  }
+  DAT_100b0d80 = GetProcAddress(hModule,"png_create_read_struct_2");
+  bVar2 = DAT_100b0d80 == (FARPROC)0x0;
+  DAT_100b0d90 = GetProcAddress(hModule,"png_create_info_struct");
+  bVar3 = DAT_100b0d90 == (FARPROC)0x0;
+  DAT_100b0d68 = GetProcAddress(hModule,"png_destroy_read_struct");
+  bVar4 = DAT_100b0d68 == (FARPROC)0x0;
+  DAT_100b0d70 = GetProcAddress(hModule,"png_set_read_fn");
+  bVar5 = DAT_100b0d70 == (FARPROC)0x0;
+  DAT_100b0d6c = GetProcAddress(hModule,"png_read_info");
+  bVar6 = DAT_100b0d6c == (FARPROC)0x0;
+  DAT_100b0d98 = GetProcAddress(hModule,"png_get_IHDR");
+  bVar7 = DAT_100b0d98 == (FARPROC)0x0;
+  DAT_100b0d8c = GetProcAddress(hModule,"png_set_strip_16");
+  bVar8 = DAT_100b0d8c == (FARPROC)0x0;
+  DAT_100b0d88 = GetProcAddress(hModule,"png_set_packing");
+  bVar9 = DAT_100b0d88 == (FARPROC)0x0;
+  DAT_100b0d74 = GetProcAddress(hModule,"png_set_expand_gray_1_2_4_to_8");
+  bVar10 = DAT_100b0d74 == (FARPROC)0x0;
+  DAT_100b0d7c = GetProcAddress(hModule,"png_set_gray_to_rgb");
+  bVar11 = DAT_100b0d7c == (FARPROC)0x0;
+  DAT_100b0d94 = GetProcAddress(hModule,"png_set_filler");
+  bVar12 = DAT_100b0d94 == (FARPROC)0x0;
+  _DAT_100b0d9c = GetProcAddress(hModule,"png_get_valid");
+  bVar13 = _DAT_100b0d9c == (FARPROC)0x0;
+  _DAT_100b0da4 = GetProcAddress(hModule,"png_get_PLTE");
+  bVar14 = _DAT_100b0da4 == (FARPROC)0x0;
+  _DAT_100b0d78 = GetProcAddress(hModule,"png_get_tRNS");
+  bVar15 = _DAT_100b0d78 == (FARPROC)0x0;
+  DAT_100b0da8 = GetProcAddress(hModule,"png_read_image");
+  bVar16 = DAT_100b0da8 == (FARPROC)0x0;
+  DAT_100b0d84 = GetProcAddress(hModule,"png_read_end");
+  if ((uint)bVar2 + (uint)bVar3 + (uint)bVar4 + (uint)bVar5 + (uint)bVar6 + (uint)bVar7 +
+      (uint)bVar8 + (uint)bVar9 + (uint)bVar10 + (uint)bVar11 + (uint)bVar12 + (uint)bVar13 +
+      (uint)bVar14 + (uint)bVar15 + (uint)bVar16 + (uint)(DAT_100b0d84 == (FARPROC)0x0) != 0) {
+    FUN_1001cb80("CPngFuncs::LoadPngFuncs","%d functions are missing from libpng15.dll");
+    uVar1 = FreeLibrary(hModule);
+    return uVar1 & 0xffffff00;
+  }
+  return CONCAT31((int3)((uint)DAT_100b0d84 >> 8),1);
+}
+
+
+
+// FUN_1001c5b0 @ 0x1001c5b0 (RVA 0x1c5b0) size 54
+
+
+bool FUN_1001c5b0(void)
+
+{
+  undefined4 uVar1;
+  
+  if (DAT_100b0cef == '\0') {
+    uVar1 = FUN_1001c3f0();
+    DAT_100b0da0 = (char)uVar1 == '\0';
+    DAT_100b0cef = 1;
+    return !(bool)DAT_100b0da0;
+  }
+  return DAT_100b0da0 == '\0';
+}
+
+
+
+// FUN_1001c5f0 @ 0x1001c5f0 (RVA 0x1c5f0) size 91
+
+
+void __cdecl FUN_1001c5f0(undefined4 param_1,undefined4 param_2,int param_3)
+
+{
+  int iVar1;
+  int local_24 [6];
+  uint local_c;
+  
+  local_c = DAT_100a50c0 ^ (uint)&stack0xfffffffc;
+  if (param_3 != 0) {
+    iVar1 = FUN_10032070();
+    if (iVar1 == 0) {
+      FUN_1001b8d0((undefined1 *)local_24,"Failed to read data from PNG file via stream.");
+                    /* WARNING: Subroutine does not return */
+      __CxxThrowException_8(local_24,&DAT_100a1e04);
+    }
+  }
+  __security_check_cookie(local_c ^ (uint)&stack0xfffffffc);
+  return;
+}
+
+
+
+// FUN_1001c650 @ 0x1001c650 (RVA 0x1c650) size 49
+
+
+void __fastcall FUN_1001c650(int *param_1)
+
+{
+  int *piVar1;
+  
+  if ((void *)param_1[2] != (void *)0x0) {
+    FID_conflict__free((void *)param_1[2]);
+  }
+  if (*param_1 != 0) {
+    piVar1 = (int *)0x0;
+    if (param_1[1] != 0) {
+      piVar1 = param_1 + 1;
+    }
+    (*DAT_100b0d68)(param_1,piVar1,0);
+  }
+  return;
+}
+
+
+
+// FUN_1001c690 @ 0x1001c690 (RVA 0x1c690) size 794
+
+
+void __fastcall FUN_1001c690(undefined4 param_1)
+
+{
+  bool bVar1;
+  int iVar2;
+  int iVar3;
+  int iVar4;
+  uint uStack_e4;
+  undefined1 local_d4 [4];
+  undefined1 local_d0 [4];
+  undefined4 local_cc;
+  undefined1 local_c8 [4];
+  int local_c4;
+  int local_c0;
+  int local_bc;
+  int local_b8;
+  int local_b4;
+  int local_b0;
+  void *local_ac;
+  int local_a8 [6];
+  int local_90 [6];
+  int local_78 [6];
+  int local_60 [6];
+  int local_48 [12];
+  uint local_18;
+  undefined1 *local_14;
+  void *local_10;
+  undefined1 *puStack_c;
+  undefined4 local_8;
+  
+  local_8 = 0xffffffff;
+  puStack_c = &LAB_10072eb3;
+  local_10 = ExceptionList;
+  uStack_e4 = DAT_100a50c0 ^ (uint)&stack0xfffffffc;
+  local_14 = (undefined1 *)&uStack_e4;
+  ExceptionList = &local_10;
+  local_18 = uStack_e4;
+  bVar1 = FUN_1001c5b0();
+  if (!bVar1) {
+    FUN_1001cb80("CPngFuncs::RtPNGImageStreamRead","PNG library not loaded.");
+    ExceptionList = local_10;
+    __security_check_cookie(local_18 ^ (uint)&stack0xfffffffc);
+    return;
+  }
+  local_b4 = 0;
+  local_b0 = 0;
+  local_ac = (void *)0x0;
+  local_b8 = 0;
+  local_8 = 1;
+  local_b4 = (*DAT_100b0d80)("1.5.13",0,0,0,0,0,0);
+  if (local_b4 == 0) {
+    FUN_1001b8d0((undefined1 *)local_48,"Failed to create read struct.");
+                    /* WARNING: Subroutine does not return */
+    __CxxThrowException_8(local_48,&DAT_100a1e04);
+  }
+  local_b0 = (*DAT_100b0d90)(local_b4);
+  if (local_b0 == 0) {
+    FUN_1001b8d0((undefined1 *)local_78,"Failed to create info struct.");
+                    /* WARNING: Subroutine does not return */
+    __CxxThrowException_8(local_78,&DAT_100a1e04);
+  }
+  (*DAT_100b0d70)(local_b4,param_1,FUN_1001c5f0);
+  (*DAT_100b0d6c)(local_b4,local_b0);
+  (*DAT_100b0d98)(local_b4,local_b0,local_c8,&local_bc,&local_c0,&local_cc,&local_c4,local_d4,
+                  local_d0);
+  (*DAT_100b0d8c)(local_b4);
+  switch(local_cc) {
+  case 0:
+    if (local_c0 < 8) {
+      (*DAT_100b0d74)(local_b4);
+    }
+    break;
+  default:
+    if (0x1f < local_c4) goto LAB_1001c85f;
+    break;
+  case 2:
+    (*DAT_100b0d94)(local_b4,0xff,1);
+    goto LAB_1001c85f;
+  case 3:
+    if (local_c0 < 8) {
+      (*DAT_100b0d88)(local_b4);
+    }
+    break;
+  case 4:
+    (*DAT_100b0d7c)(local_b4);
+    goto LAB_1001c85f;
+  case 6:
+LAB_1001c85f:
+    iVar2 = FUN_100327b0();
+    local_b8 = iVar2;
+    if (iVar2 == 0) {
+      FUN_1001b8d0((undefined1 *)local_90,"Failed to create image.");
+                    /* WARNING: Subroutine does not return */
+      __CxxThrowException_8(local_90,&DAT_100a1e04);
+    }
+    iVar3 = FUN_100327d0();
+    iVar4 = local_bc;
+    if (iVar3 == 0) {
+      FUN_1001b8d0((undefined1 *)local_60,"Failed to allocate image pixels.");
+                    /* WARNING: Subroutine does not return */
+      __CxxThrowException_8(local_60,&DAT_100a1e04);
+    }
+    local_ac = _malloc(local_bc * 4);
+    iVar3 = 0;
+    if (0 < iVar4) {
+      do {
+        iVar4 = *(int *)(iVar2 + 0x10) * iVar3;
+        iVar3 = iVar3 + 1;
+        *(int *)((int)local_ac + iVar3 * 4 + -4) = iVar4 + *(int *)(iVar2 + 0x14);
+      } while (iVar3 < local_bc);
+    }
+    (*DAT_100b0da8)(local_b4,local_ac);
+    (*DAT_100b0d84)(local_b4,local_b0);
+    FUN_1001ca06();
+    return;
+  }
+  FUN_1001b8d0((undefined1 *)local_a8,"Only 32-bit PNG is currently supported!");
+                    /* WARNING: Subroutine does not return */
+  __CxxThrowException_8(local_a8,&DAT_100a1e04);
+}
+
+
+
+// Catch@1001c9aa @ 0x1001c9aa (RVA 0x1c9aa) size 86
+
+
+undefined * Catch_1001c9aa(void)
+
+{
+  int unaff_EBP;
+  
+  *(undefined1 *)(unaff_EBP + -4) = 3;
+  if (*(int *)(unaff_EBP + -0xb4) != 0) {
+    FUN_100327e0();
+    FUN_100327c0();
+    *(undefined4 *)(unaff_EBP + -0xb4) = 0;
+  }
+  FUN_1001cb80("CPngFuncs::RtPNGImageStreamRead","%s");
+  FUN_10002c00((undefined4 *)(unaff_EBP + -0x2c));
+  return &DAT_1001ca00;
+}
+
+
+

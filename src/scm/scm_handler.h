@@ -6,10 +6,12 @@
 //   0x0800 name-draw        -> CVehicleSCM::ProcessNextTextOpcode 0x51eb0
 //                              registered by FUN_10051fb0 @ 0x51fb0
 //                              (savewpn/range-decomp.txt:1188)
-//   0x0801 python-loaded    -> FUN_10023920 @ 0x23920 (body NOT dumped)
+//   0x0801 python-loaded    -> FUN_10023920 @ 0x23920 (body PORTED —
+//                              limout/scmop/decomp-chain.txt:54-63)
 //                              registered by FUN_100238d0 @ 0x238d0
 //                              (limout/decomp-chain.txt:1668)
-//   0x0802 version=9850     -> FUN_10023940 @ 0x23940 (body NOT dumped)
+//   0x0802 version=9850     -> FUN_10023940 @ 0x23940 (body PORTED —
+//                              limout/scmop/decomp-chain.txt:66-76)
 //                              registered by FUN_100238d0 @ 0x238d0
 //                              (limout/decomp-chain.txt:1669)
 //   0x0810 weapon pickup    -> CWeaponPickups::ProcessNewWeaponPickupOpcode
@@ -19,8 +21,10 @@
 //                              (savewpn/range-decomp.txt:6029)
 //   registration primitive   -> FUN_100238a0(opcode, handler, flags) @ 0x238a0
 //                              (referenced by all four sites; body NOT dumped)
-//   CScmHandler::IgnoreOpcode -> 0x234c0 (NOT in any dump on disk — STUB,
-//                              see .harness-memory/limout/port-notes-scm.md)
+//   CScmHandler::IgnoreOpcode -> 0x234c0 (body PORTED — FUN_100234c0,
+//                              limout/scmop/decomp-chain.txt:1-51; was a
+//                              stub until the scmop dump landed — see
+//                              .harness-memory/limout/port-notes-scm.md)
 //
 // Clone policy: the table is DATA (opcode + original handler RVA + status);
 // handlers bind through RegisterOpcode() as their lanes land. Undumped
@@ -42,8 +46,9 @@ public:
 		const char    *note;          // provenance / status (verbatim cites)
 	};
 
-	// Opcode table (data) — the four dumped MVL opcodes. 0800 is bound at
-	// static init; 0801/0802/0810 stay NULL until their bodies exist.
+	// Opcode table (data) — the four dumped MVL opcodes. 0800/0801/0802 are
+	// bound at static init; 0810 stays NULL (body in src/weapons/, sibling
+	// lane — bind through RegisterOpcode() once that lane lands).
 	// (Mutable: RegisterOpcode() rebinds entries.)
 	static SOpcodeEntry s_opcodes[4];
 
@@ -56,17 +61,19 @@ public:
 	// when the opcode is not in the table.
 	static bool RegisterOpcode(unsigned short opcode, TOpcodeFn fn);
 
-	// Clone-side scaffold: binds 0800 (already statically bound) and logs the
-	// three opcodes whose handler bodies are not ported yet. Intended entry
-	// point for the future plugin-init wiring lane.
+	// Clone-side scaffold: binds 0800/0801/0802 (already statically bound)
+	// and logs 0810, whose handler body is not linked from this TU yet.
+	// Intended entry point for the future plugin-init wiring lane.
 	static void RegisterMvlOpcodes(void);
 
-	// CScmHandler::IgnoreOpcode — 0.98e @ RVA 0x234c0.
-	// STUB: body NOT present in any dump on disk (checked
-	// .harness-memory/limout/decomp-chain.txt (81 fns) and
-	// savewpn/range-decomp.txt (151 fns): no FUN_100234c0 anywhere). Parameter
-	// width (unsigned short) and return semantics are UNVERIFIED guesses
-	// pending that dump — see port-notes-scm.md "Needed dumps".
+	// CScmHandler::IgnoreOpcode — 0.98e @ RVA 0x234c0 (FUN_100234c0).
+	// PORTED from limout/scmop/decomp-chain.txt:1-51: returns true for the
+	// 11 ignorable game opcodes 0x55/0x16a/0x171/0x1b4/0x1eb/0x22a/0x22b/
+	// 0x3cb/0x4bb/0x4f9/0x4fa (each after the FUN_1002e4c0 game-thunk HOOK
+	// POINT); anything else logs "Cannot ignore unknown opcode %04X." and
+	// returns false. NOTE: the original takes `this` in ECX (unused) and the
+	// opcode as a 32-bit int in EDX; the clone keeps this unsigned-short
+	// signature (high words not modelled) — see port-notes-scm.md.
 	static bool IgnoreOpcode(unsigned short opcode);
 };
 

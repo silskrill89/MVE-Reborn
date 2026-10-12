@@ -61,6 +61,31 @@ struct SMvlSaveVehicleRecord
 };
 
 // ---------------------------------------------------------------------------
+// EM-light destination block — the 0x44-byte array CMvlVehicle::
+// m_abEmLightData @ 0x27f4 (written by the CVehicleHandler::LoadXML*EmLight*
+// trio below). Field offsets recovered 1:1 from the FUN_1004e8f0/4edc0/4f090
+// dest writes.
+// ---------------------------------------------------------------------------
+struct SMvlEmLightData
+{
+	unsigned char abEnabled[3];     // @ 0x00 [0] emlights [1] emlightsingle
+	                                //        [2] taxilight (sector present)
+	unsigned char bAlwaysOn;        // @ 0x03 shared 'alwayson' flag
+	float afPosLeft[3];             // @ 0x04 emlights 'posleft'
+	float afPosRight[3];            // @ 0x10 emlights 'posright'
+	float afPosSingle[3];           // @ 0x1c emlightsingle 'position'
+	float afPosTaxi[3];             // @ 0x28 taxilight 'position'
+	unsigned char abColourOne[3];   // @ 0x34 emlights 'colourone' RGB
+	unsigned char pad37;            // @ 0x37
+	unsigned char abColourTwo[3];   // @ 0x38 emlights 'colourtwo' RGB
+	unsigned char pad3b;            // @ 0x3b
+	unsigned char abColourSingle[3];// @ 0x3c emlightsingle 'colour' RGB
+	unsigned char pad3f;            // @ 0x3f
+	unsigned char abColourTaxi[3];  // @ 0x40 taxilight 'colour' RGB
+	unsigned char pad43;            // @ 0x43 (total 0x44)
+};
+
+// ---------------------------------------------------------------------------
 // Engine / game hooks for the save lane (stubs in vehicle_handler.cpp log
 // MvlErrorLog + carry `// TODO(save): <VA>` comments; game behaviour is not
 // faked). Address of truth is the VA in the comment.
@@ -188,4 +213,30 @@ public:
 	// free every record and clear both slot maps. Called from
 	// LoadExtraSaveFile before the sidecar reload.
 	static void ClearSaveXmlRecords(void);
+
+	// === EM-light sector parsers (emlights dump 0x4e8f0-0x4f230) =========
+	// Names 1:1 from the functions' own error-log identities (strings.txt
+	// @ 0x1008b88c/0x1008bcb4/0x1008bea8). All three write into the 0x44-
+	// byte block (SMvlEmLightData / CMvlVehicle::m_abEmLightData @ 0x27f4)
+	// handed over as dest by CMvlVehicle::LoadXMLSpecialData. The
+	// forwarding decls LoadXMLEmLightData/LoadXMLEmLightSingle/
+	// LoadXMLTaxiLight in src/archive/vehicle_archive.h keep their names
+	// and route here (src/archive/vehicle_archive.cpp).
+
+	// CVehicleHandler::LoadXMLEmLightData — 0.98e @ RVA 0x4e8f0.
+	// <emlights>: 'colourone' ('primary' (60,255,0) / 'secondary'
+	// (255,0,175) / 'r,g,b' with 255-clamp), 'colourtwo' ('r,g,b'),
+	// 'posleft'/'posright' vectors, optional 'alwayson' ('true'/'false').
+	// colourone/colourtwo/posleft/posright are required (verbatim errors).
+	static bool LoadXMLEmLightData(TiXmlElement *e, void *dest);
+
+	// CVehicleHandler::LoadXMLSingleEmLightData — 0.98e @ RVA 0x4edc0.
+	// <emlightsingle>: 'colour' ('r,g,b'), 'position' vector, optional
+	// 'alwayson'. Sets dest[1]=1 at entry; writes RGB @ +0x3c, pos @ +0x1c.
+	static bool LoadXMLSingleEmLightData(TiXmlElement *e, void *dest);
+
+	// CVehicleHandler::LoadXMLTaxiEmLightData — 0.98e @ RVA 0x4f090.
+	// <taxilight>: 'colour' ('r,g,b'), 'position' vector, optional
+	// 'alwayson'. Sets dest[2]=1 at entry; writes RGB @ +0x40, pos @ +0x28.
+	static bool LoadXMLTaxiEmLightData(TiXmlElement *e, void *dest);
 };

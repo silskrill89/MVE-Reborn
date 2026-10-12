@@ -78,3 +78,18 @@ Highlights:
 - **docs/reverse-effort-template.md**: NEW retrospective + reusable playbook — how the recomp-ASAP pivot (questionnaire Stages 5–10 cancelled) turned a stalled survey effort into 4 green tranches / 13.8k LOC in ~2 days; pipeline (spec mining → name anchoring → headless export → parallel port lanes → single-owner build → milestone commit → memory sync), the 10 hard-won rules table, metrics discipline, adapt-for-next-project checklist.
 - **Metrics refresh**: Recompiled 63% → **67%** (99/148 census; census regex-normalized, prior 105/167 figure cross-checked and struck through), 320 RVA sites, 253 TODO + 77 HOOK POINT markers, 13,784 LOC. README.md now carries a per-commit milestone table with struck-through prior values as cross-checks.
 - Pending: run_export5.ps1 (8 dumps) → build-verify globals → tranche-5 lanes.
+
+## 2026-10-12 (tranche-5) — Python host, init chain, SCM bodies, media cluster — BUILD GREEN
+
+- fix-3: src/script/python_host.{h,cpp} (242/904 ln) — MvlPyApi 50-slot proc table, loader FUN_100287c0, event registry 0/1/2/3/5, script scan, .err.txt, mvlbase/mveh/mped (getPedVehicle = mped, 8 modules), 6x AppendInittab; src/core/init.{h,cpp} (83/205 ln) — 5 init-chain roots 0x43810/43870/43900/43a10/43b30 via MvlInitPatchDword/Byte seams; main.cpp wiring MvlInstallInitChainPatches(). port-notes-py.md.
+- fix-4 (5A retry): scm_handler.cpp 87->229 ln — IgnoreOpcode 0x234c0 real body (11-opcode set), 0801 MvlScmHandlePythonLoadedOpcode, 0802 MvlScmHandleVersionOpcode (0x267a=9850), MvlScmWarn (FUN_1001cce0), 4 MvlScmHook_* seams.
+- fix-5 (5C retry): src/audio/sound_handler (CSoundHandler 0x338a0/33a00/33e10), src/render/png_funcs (CPngFuncs MvlPngApi 16-slot dynamic libpng15, PngFileToTexture 0x1bed0), src/anim/custom_anim (CCustomAnimFile Load overloads + LoadVersionOne/Two structural), EmLight trio as CVehicleHandler statics (0x4e8f0/4edc0/4f090), vehicle_archive.cpp 3 one-line forwards. port-notes-media.md.
+- Build fixes: python_host.cpp engine_globals include + reinterpret_cast cap[3]; class/struct MSVC mangling (CCustomAnimFile fwd-decls struct->class in vehicle_archive.h:36 + mvl_weapon.h:21) resolved 5 LNK2019.
+- Metrics: 81
+## 2026-10-12 (tranche-5) - Python host, init chain, SCM bodies, media cluster - BUILD GREEN
+
+- fix-3: src/script/python_host.{h,cpp} (242/904 ln) - MvlPyApi 50-slot proc table, loader FUN_100287c0, event registry 0/1/2/3/5, script scan, pct-s.err.txt writers, mvlbase/mveh/mped (getPedVehicle = mped, 8 modules), 6x AppendInittab; src/core/init.{h,cpp} (83/205 ln) - 5 init-chain roots 0x43810/43870/43900/43a10/43b30 via MvlInitPatchDword/Byte seams; main.cpp wiring MvlInstallInitChainPatches(). port-notes-py.md.
+- fix-4 (5A retry): scm_handler.cpp 87->229 ln - IgnoreOpcode 0x234c0 real body (11-opcode set), 0801 MvlScmHandlePythonLoadedOpcode, 0802 MvlScmHandleVersionOpcode (0x267a=9850), MvlScmWarn (FUN_1001cce0), 4 MvlScmHook seams.
+- fix-5 (5C retry): src/audio/sound_handler (CSoundHandler 0x338a0/33a00/33e10), src/render/png_funcs (CPngFuncs MvlPngApi 16-slot dynamic libpng15, PngFileToTexture 0x1bed0), src/anim/custom_anim (CCustomAnimFile Load overloads + LoadVersionOne/Two structural), EmLight trio as CVehicleHandler statics (0x4e8f0/4edc0/4f090), vehicle_archive.cpp 3 one-line forwards. port-notes-media.md.
+- Build fixes: python_host.cpp engine_globals include + reinterpret_cast cap[3]; class/struct MSVC mangling (CCustomAnimFile fwd-decls struct->class in vehicle_archive.h:36 + mvl_weapon.h:21) resolved 5 LNK2019.
+- Metrics: 81pct recompiled (125/155 census), 513 RVA cites, 322 TODO + 115 HOOK POINT, 17735 LOC. README milestone row added.

@@ -18,14 +18,15 @@ Each commit is a milestone; the previous values are struck through as a cross-ch
 | `07be648` engine tranche | ~~10%~~ → **~30%** | ~100% of ported | limits processors, model-ID engine (2,288 patch sites), hooks |
 | `4af9792` tranche-3 | ~~30%~~ → **~50%** | ~100% of ported | hook helpers, dir manager, save system |
 | `7a0fc6e` tranche-4 | ~~50%~~ → **63%** | ~100% of ported | weapons + SCM clusters |
-| *this commit* tranche-5-prep | ~~63%~~ → **67%** | ~100% of ported | globals consolidation (engine_globals), naming rules, workflow template |
+| `272770b` tranche-5-prep | ~~63%~~ → **67%** | ~100% of ported | globals consolidation (engine_globals), naming rules, workflow template |
+| *this commit* tranche-5 | ~~67%~~ → **81%** | ~100% of ported | Python host + init chain, SCM bodies (0801/0802/IgnoreOpcode), media cluster (audio/png/ifp/emlights) |
 
 | Metric (current) | Value | Method |
 |--------|------:|--------|
-| **Recompiled** | **67%** | 99 of 148 MVL-specific census functions ported (census = RTTI-named + subsystem-mapped fns in `.serena/memories/re-098e-map.md`; excludes CRT/thunk noise from the 2,922 total functions Ghidra found) |
-| **Accuracy** | **~100% of ported code is 1:1** | Every ported function cites `0.98e @ RVA 0x…` and mirrors the decompiled original; remaining gaps are explicit `TODO(...)`/`HOOK POINT` stubs (253 + 77 markers) that log-and-skip rather than fake behavior |
+| **Recompiled** | **81%** | 125 of 155 MVL-specific census functions ported (census = RTTI-named + subsystem-mapped fns in `.serena/memories/re-098e-map.md`; excludes CRT/thunk noise from the 2,922 total functions Ghidra found) |
+| **Accuracy** | **~100% of ported code is 1:1** | Every ported function cites `0.98e @ RVA 0x…` and mirrors the decompiled original; remaining gaps are explicit `TODO(...)`/`HOOK POINT` stubs (322 + 115 markers) that log-and-skip rather than fake behavior |
 
-Honest caveat: the accuracy number measures *fidelity of what is ported*, not completeness — the TODO/hook-point stubs are placeholders for engine-internal calls whose bodies aren't ported yet. 320 distinct RVA-cited sites, 13,784 LOC in `src/`.
+Honest caveat: the accuracy number measures *fidelity of what is ported*, not completeness — the TODO/hook-point stubs are placeholders for engine-internal calls whose bodies aren't ported yet. 513 distinct RVA-cited sites, 17,735 LOC in `src/`.
 
 - RE targets: `original_files/maxovehmod*` (0.9 → 0.98e) — READ-ONLY
 - Clone implementation: `src/` — modules: loader, config, archive, engine (model-ID/limits/hooks/helpers), vehicle (XML parsers + save), weapons, scm

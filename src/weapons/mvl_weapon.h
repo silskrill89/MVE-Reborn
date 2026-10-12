@@ -18,7 +18,7 @@
 #include <vector>
 
 class TiXmlElement;
-struct CCustomAnimFile;     // src/archive/vehicle_archive.h (same loader as vehicles)
+class CCustomAnimFile;     // src/anim/custom_anim.h (same loader as vehicles) — must be 'class' for MSVC mangling match
 
 // ---------------------------------------------------------------------------
 // One shot-audio descriptor — output of CWeaponHandler::

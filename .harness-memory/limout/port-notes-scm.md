@@ -4,6 +4,7 @@
 **Decomp sources on disk**:
 - `.harness-memory/limout/savewpn/range-decomp.txt` + `range-functions.txt` (151 fns, VA 0x50A30–0x58A00)
 - `.harness-memory/limout/decomp-chain.txt` (81 fns, init chain)
+- `.harness-memory/limout/scmop/decomp-chain.txt` (142 lines; **2026-10-12 lane dump** — IgnoreOpcode 0x234c0 + opcode 0801/0802 bodies 0x23920/0x23940 + depth-1 callees)
 - `.serena/memories/re-098e-map.md` §3 SCM census
 
 **Files created (this lane, exclusive scope)**:
@@ -45,32 +46,48 @@
 | Opcode | Handler (orig) | Registered by | Source line |
 |---|---|---|---|
 | 0x0800 name-draw | `CVehicleSCM::ProcessNextTextOpcode` 0x51eb0 | FUN_10051fb0 @ 0x51fb0 | range-decomp.txt:1188 |
-| 0x0801 python-loaded | FUN_10023920 @ 0x23920 (**body not dumped**) | FUN_100238d0 @ 0x238d0 | decomp-chain.txt:1668 |
-| 0x0802 version=9850 | FUN_10023940 @ 0x23940 (**body not dumped**) | FUN_100238d0 @ 0x238d0 | decomp-chain.txt:1669 |
+| 0x0801 python-loaded | FUN_10023920 @ 0x23920 (**body PORTED** — scmop/decomp-chain.txt:54-63) | FUN_100238d0 @ 0x238d0 | decomp-chain.txt:1668 |
+| 0x0802 version=9850 | FUN_10023940 @ 0x23940 (**body PORTED** — scmop/decomp-chain.txt:66-76) | FUN_100238d0 @ 0x238d0 | decomp-chain.txt:1669 |
 | 0x0810 weapon pickup | `CWeaponPickups::ProcessNewWeaponPickupOpcode` 0x584f0 (**src/weapons/ — sibling lane**) | FUN_10058270 @ 0x58270 | range-decomp.txt:6029 |
 
 Registration primitive: `FUN_100238a0(opcode, handler, flags)` @ **0x238a0** — referenced by all four sites, **body not dumped**; clone-side scaffold = `CScmHandler::RegisterOpcode`.
 FUN_100238d0 @ 0x238d0 also installs 2 game hooks (0x44fdaf→0x100237f0, 0x45023f→0x10023830) before registering 0801/0802 — not ported (CScmHandler-adjacent, hook-point only if a later lane wants it).
 
-## 3. `CScmHandler::IgnoreOpcode` 0x234c0 — **dump NOT found**
+## 3. `CScmHandler::IgnoreOpcode` 0x234c0 — **dump found 2026-10-12, PORTED**
 
-Searched both on-disk dumps for `100234c0` / `IgnoreOpcode`: **zero hits** (decomp-chain.txt 81 fns, range-decomp.txt 151 fns). The name survives only in `re-098e-map.md` §3 (RTTI census).
-→ **Logged as a needed dump**: Ghidra decompile of `vehmod_retail.dll` 0.98e @ RVA 0x234c0.
-Meanwhile `src/scm/scm_handler.h` carries it as an **external-VAs stub** (`CScmHandler::IgnoreOpcode`): MvlErrorLog hook point + `return false` with an explicit UNVERIFIED-DEFAULT comment. Parameter width (`unsigned short`) is a guess pending the dump.
+The needed dump arrived as `limout/scmop/decomp-chain.txt` (FUN_100234c0, lines 1-51). Ported 1:1 into `scm_handler.cpp` (`CScmHandler::IgnoreOpcode`, same signature):
 
-## 4. Stub / hook-point inventory (13 total)
+- **Semantics**: `__fastcall(this, opcode)` — compare tree over the **11 ignorable game opcodes `0x55, 0x16a, 0x171, 0x1b4, 0x1eb, 0x22a, 0x22b, 0x3cb, 0x4bb, 0x4f9, 0x4fa`**. All three decomp labels (`LAB_100234e1` / `LAB_1002350b` / `LAB_10023519`) do the same — `FUN_1002e4c0(); return 1` — so the port flattens them into one switch case set. Unknown opcode → `FUN_1001cce0("CScmHandler::IgnoreOpcode", "Cannot ignore unknown opcode %04X.", opcode)` → `return 0` (decomp: `uVar2 & 0xffffff00`). Both strings preserved **verbatim**.
+- **`FUN_1002e4c0` body now known** (same dump, lines 79-86): a tail-call thunk into `gta-vc.exe!0x451010` → **HOOK POINT** `MvlScmHook_GameCall451010` (VA logged, no call performed). Note `vehicle_scm.cpp` carries the same thunk as provisional `ScmScriptArgPrep` ("opcode-argument context prep") — identity of 0x451010 still unknown either way.
+- **`FUN_1001cce0` body now known** (lines 89-108): the warning logger — `_vsprintf` into `local_808[2048]`, append `"Warning in %s: %s\n"` (fn, msg) to the log file `DAT_100b0db0`. Clone = file-local `MvlScmWarn(fn, fmt, ...)` → `MvlErrorLog("Warning in %s: %s", …)`, `vsnprintf` hardening (original `_vsprintf` is unbounded).
+- **Param width**: the original takes `this` in ECX (unused) and the opcode as a **32-bit int in EDX**; the clone keeps the established `unsigned short` signature — high words are not modelled (original would reject `0x1_0055`, clone truncates to `0x55`).
+- **Return word**: `CONCAT31(...,1)` = `return true`, `... & 0xffffff00` = `return false` — a plain `bool` in the clone (the upper bytes are the untouched EAX of the thunk call, no semantic content).
+
+## 3b. Opcode 0801/0802 handler bodies — **dump found 2026-10-12, PORTED**
+
+| Handler | Body (verbatim decomp shape) | Port |
+|---|---|---|
+| `FUN_10023920` @ 0x23920 (0801 "python-loaded") | `return FUN_1002e4d0() & 0xffffff00` | file-local `MvlScmHandlePythonLoadedOpcode()` → `MvlScmHook_GameCall463f00()` |
+| `FUN_10023940` @ 0x23940 (0802 "version=9850") | `FUN_1002e560(0, 0x267a); return FUN_1002e4b0() & 0xffffff00` | file-local `MvlScmHandleVersionOpcode()` → `MvlScmHook_SetGameDwordSlot(0, 0x267a)` + `MvlScmHook_GameCall450e50()` |
+
+- **`FUN_1002e560` body now known** (lines 121-130): `__fastcall(slot, value)` — `if (slot < 12) dword[0x7d7438 + slot*4] = value`. The bounds check is portable and ported; the **store is an engine write** → HOOK POINT `MvlScmHook_SetGameDwordSlot` logs `gta-vc.exe 0x%08X = 0x%08X` and performs **NO write**. `0x267a == 9850` decimal (the census label "version=9850" — game slot 0 is where the version word goes).
+- **`FUN_1002e4d0` / `FUN_1002e4b0` bodies now known** (lines 111-118 / 133-140): tail-call thunks into `gta-vc.exe!0x463f00` / `!0x450e50` → HOOK POINTs `MvlScmHook_GameCall463f00` / `MvlScmHook_GameCall450e50`.
+- **Return word**: both handlers return `thunk_ret & 0xffffff00` — low byte always 0. `TOpcodeFn` in the clone is `void (*)(void)` (fixed by the 0800 binding `CVehicleSCM::ProcessNextTextOpcode` = `void(void)` in `vehicle_scm.cpp`, out of scope), so the return word is **documented, not modelled** — see Open questions.
+
+## 4. Stub / hook-point inventory (16 total)
 
 vehicle_scm.cpp (12): `ScmLookupModelSlot` (0x4f3a0 — also exposed cross-lane as vehicle lane's `MvlLookupModelInfoByModelIndex`, EAX half only), `ScmTxdBaseIndex` (gta-vc.exe 0xa06320), `ScmModelInfoForSlot` (gta-vc.exe 0xa06314), `ScmResolveModelName` (0x2ebb0), `ScmScriptArgPrep` (0x2e4c0), `ScmReadScriptArg` (0x2e530, EAX+EDX channels), `ScmScriptVarVehicleId` (0x2d880), `ScmScriptGlobals` (gta-vc.exe 0xa0fde4), `ScmWriteHook` (0x22560), `ScmPatchGameBytes` (0x51cb0 direct stores), `ScmFormatResolvedName` (0x51e20 success path — hidden `%s` operand), `ProcessHookStubTable` body (0x51f90 → 0x22570).
-scm_handler.cpp (1): `IgnoreOpcode` (0x234c0).
-**No behaviour is faked**: every stub logs `MvlErrorLog("… hook point … [VA]")` and returns a documented default; the only data written is the verbatim `L"Invalid"` fallback (decomp's own failure path).
+scm_handler.cpp (4, all `MvlScmHook_*` file-local seams): `MvlScmHook_GameCall451010` (0x2e4c0 thunk → gta-vc.exe 0x451010), `MvlScmHook_GameCall463f00` (0x2e4d0 thunk → 0x463f00), `MvlScmHook_GameCall450e50` (0x2e4b0 thunk → 0x450e50), `MvlScmHook_SetGameDwordSlot` (0x2e560 store into gta-vc.exe 0x7d7438[slot]; bounds check ported, write NOT performed). Plus `MvlScmWarn` — a **real port** of the FUN_1001cce0 warning logger, not a stub.
+**No behaviour is faked**: every stub logs `MvlErrorLog("… hook point … [VA]")` (stores log the exact VA + intended value) and returns a documented default; the only data written is the verbatim `L"Invalid"` fallback (decomp's own failure path).
 
 ## 5. Needed dumps
 
-1. **`CScmHandler::IgnoreOpcode` @ RVA 0x234c0** (top priority; named in the census, absent from both dumps).
-2. **Opcode-0801/0802 handler bodies** @ 0x23920 / 0x23940 (referenced at decomp-chain:1668-9, never decompiled).
-3. **14 MVL hook-stub bodies @ RVA 0x51940–0x51c90** — referenced as jump targets by FUN_10051cb0, but the gap 0x5193c–0x51cb0 contains **no functions in range-functions.txt** (likely a Ghidra function-discovery miss — they are only reached from patched game code).
-4. **`FUN_100238a0` @ 0x238a0** (registration primitive) and **`FUN_10022560` / `FUN_10022570` @ 0x22560/0x22570** (hook writer / hook-table callee) — install-vs-restore direction of 0x51f90's loop is unknowable without 0x22570.
-5. Vararg recovery for `FUN_10051fd0` calls (Ghidra's 2-param prototype **hides the `%s` name operand** of the 0x51e20 success path) — re-decompile with the prototype marked varargs, or read the pushes at 0x51e63.
+> 2026-10-12: former items 1-2 (IgnoreOpcode 0x234c0, opcode-0801/0802 bodies) **resolved** by `limout/scmop/decomp-chain.txt` — see §3/§3b. Replacement need below is now #4.
+
+1. **14 MVL hook-stub bodies @ RVA 0x51940–0x51c90** — referenced as jump targets by FUN_10051cb0, but the gap 0x5193c–0x51cb0 contains **no functions in range-functions.txt** (likely a Ghidra function-discovery miss — they are only reached from patched game code).
+2. **`FUN_100238a0` @ 0x238a0** (registration primitive) and **`FUN_10022560` / `FUN_10022570` @ 0x22560/0x22570** (hook writer / hook-table callee) — install-vs-restore direction of 0x51f90's loop is unknowable without 0x22570.
+3. Vararg recovery for `FUN_10051fd0` calls (Ghidra's 2-param prototype **hides the `%s` name operand** of the 0x51e20 success path) — re-decompile with the prototype marked varargs, or read the pushes at 0x51e63.
+4. **Caller trace for `CScmHandler::IgnoreOpcode` (0x234c0)** — who invokes it (the FUN_100238d0-installed hook stubs at 0x237f0/0x23830?), and who consumes the opcode-handler return words (`thunk_ret & 0xffffff00`) — dispatcher VA not in any dump.
 
 ## 6. Open questions
 
@@ -84,3 +101,7 @@ scm_handler.cpp (1): `IgnoreOpcode` (0x234c0).
 - **0x518b0 / 0x51900** fall inside the vehicle lane's stated range but are not declared in their header — flagged to the orchestrator (declined here, not implemented).
 - `FUN_100238a0` flags argument (always 0 at all 4 sites) — semantics unknown.
 - Type-2 check details (`varIdx*0x5dc + globals[0] != 0`, type byte at `globals[1]+varIdx`) ported bit-faithfully but only exercised once the gta-vc.exe seams are wired.
+- **gta-vc.exe callee identities** (from the scmop thunk bodies — no labels in any dump): `0x451010` (FUN_1002e4c0 tail-call — the ignore-commit step of IgnoreOpcode + first call of ProcessNextTextOpcode), `0x463f00` (FUN_1002e4d0 tail-call — 0801 handler), `0x450e50` (FUN_1002e4b0 tail-call — 0802 handler). Plugin-sdk/reVC address pass would settle all three.
+- **12-slot dword array at gta-vc.exe 0x7d7438** (FUN_1002e560 target): slot 0 := 0x267a (9850) from the 0802 handler. Identity unknown — script globals? version block? TODO(scm) once annotated.
+- **Handler return-word semantics**: 0801/0802 return `thunk_ret & 0xffffff00` (always 0 in the low byte). The clone's `TOpcodeFn` is `void (*)(void)` (pinned by the 0800 binding in vehicle_scm.cpp, out of scope here), so the word is documented in comments only; when the dispatcher is ported, the typedef may need to widen to `unsigned int (*)(void)`.
+- **IgnoreOpcode param width**: original compares a 32-bit EDX int; clone keeps `unsigned short` per the established signature — high words unmodelled.

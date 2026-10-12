@@ -14,6 +14,7 @@
 #include "loader/log.h"
 #include "config/global_veh_xml.h"
 #include "config/mvl_settings.h"
+#include "init.h"
 
 // thelink2012/injector — header-only, already on the include path
 // (external/injector/include). Included now so future hook code needs no
@@ -69,6 +70,10 @@ DllMain(HINSTANCE hInst, DWORD reason, LPVOID reserved)
 		MvlLog("----- MVL-clone version %s, compiled on %s %s -----",
 		       MVL_VERSION_STRING, __DATE__, __TIME__);
 		PrepareMvlForLoad();
+		// TRANCHE-5B: init-chain patch roots (FUN_10043c00 callees,
+		// 0.98e @ RVA 0x43810/0x43a10/0x43900/0x43870/0x43b30); engine
+		// writes log through HOOK POINT seams (src/core/init.cpp).
+		MvlInstallInitChainPatches();
 		LoadGlobalVXMLFile();
 		LoadGlobalMXMLFile();
 		break;

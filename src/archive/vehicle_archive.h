@@ -33,7 +33,7 @@ class TiXmlElement;   // external/tinyxml — the original parsers use TinyXML
 // ---------------------------------------------------------------------------
 
 struct SMvlVehicleInfo;      // game/model-info wrapper (vtable object)
-struct CCustomAnimFile;      // custom .ifp loader (0x12b0 ctor / 0x14e0 load)
+class CCustomAnimFile;   // custom .ifp loader (0x12b0 ctor / 0x14e0 load) — must match custom_anim.h:66 (class) for MSVC mangling
 class  CMvlVehicle;          // defined below
 
 // CSevenWalker is real (src/archive/seven_walker.cpp wraps external/lzma).

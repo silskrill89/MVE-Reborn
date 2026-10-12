@@ -614,3 +614,316 @@ void *MvlGarageSlotRecord(int)
 // (tranche-4 weapons lane; signatures unchanged — decls remain in
 // vehicle_handler.h).
 #include "../weapons/weapon_handler.h"
+
+// ===========================================================================
+// CVehicleHandler EM-light sector parsers — vehmod_retail.dll 0.98e
+// (emlights/range-decomp.txt). Dest = the 0x44-byte block (SMvlEmLightData /
+// CMvlVehicle::m_abEmLightData @ 0x27f4). Log strings verbatim; error-log
+// identities are the original function names (strings.txt @ 0x1008b88c /
+// 0x1008bcb4 / 0x1008bea8). Vector elements go through MvlParseVector
+// (FUN_1001bdb0 — the exact original callee; see port-notes-media.md).
+// ===========================================================================
+
+// CVehicleHandler::LoadXMLEmLightData — 0.98e @ RVA 0x4e8f0.
+bool
+CVehicleHandler::LoadXMLEmLightData(TiXmlElement *e, void *dest)
+{
+	static const char *const fn = "CVehicleHandler::LoadXMLEmLightData";
+	unsigned char *d = (unsigned char *)dest;
+	bool bColourOne = false, bColourTwo = false;
+	bool bPosLeft = false, bPosRight = false, bAlwaysOn = false;
+
+	if(!e || !dest)
+		return false;
+
+	d[0] = 1;
+
+	for(TiXmlElement *c = e->FirstChildElement(); c;
+	    c = c->NextSiblingElement()){
+		const char *name = c->Value();
+		if(_stricmp(name, "colourone") == 0){
+			unsigned r, g, b;
+			if(bColourOne){
+				SvErr(fn, "'emlights' sector contains multiple 'colourone' elements.");
+				return false;
+			}
+			const char *t = c->GetText();
+			if(!t){
+				SvErr(fn, "Failed to read data from 'colourone' element.");
+				return false;
+			}
+			if(_stricmp(t, "primary") == 0){
+				r = 0x3c; g = 0xff; b = 0;
+			}else if(_stricmp(t, "secondary") == 0){
+				r = 0xff; g = 0; b = 0xaf;
+			}else{
+				if(sscanf(t, "%u,%u,%u", &r, &g, &b) != 3){
+					SvErr(fn, "Failed to parse the contents of 'colourone' element (format 'r,g,b').");
+					return false;
+				}
+				if(0xff < r) r = 0xff;
+				if(0xff < g) g = 0xff;
+				if(0xff < b) b = 0xff;
+			}
+			d[0x34] = (unsigned char)r;
+			d[0x35] = (unsigned char)g;
+			d[0x36] = (unsigned char)b;
+			bColourOne = true;
+		}
+		else if(_stricmp(name, "colourtwo") == 0){
+			unsigned r, g, b;
+			if(bColourTwo){
+				SvErr(fn, "'emlights' sector contains multiple 'colourtwo' elements.");
+				return false;
+			}
+			const char *t = c->GetText();
+			if(!t){
+				SvErr(fn, "Failed to read data from 'colourtwo' element.");
+				return false;
+			}
+			if(sscanf(t, "%u,%u,%u", &r, &g, &b) != 3){
+				SvErr(fn, "Failed to parse the contents of 'colourtwo' element (format 'r,g,b').");
+				return false;
+			}
+			if(0xff < r) r = 0xff;
+			if(0xff < g) g = 0xff;
+			if(0xff < b) b = 0xff;
+			d[0x38] = (unsigned char)r;
+			d[0x39] = (unsigned char)g;
+			d[0x3a] = (unsigned char)b;
+			bColourTwo = true;
+		}
+		else if(_stricmp(name, "posleft") == 0){
+			if(bPosLeft){
+				SvErr(fn, "'emlights' sector contains multiple 'posleft' vectors.");
+				return false;
+			}
+			if(!MvlParseVector(c, (float *)(d + 0x04))){
+				SvErr(fn, "Could not load 'posleft' vector.");
+				return false;
+			}
+			bPosLeft = true;
+		}
+		else if(_stricmp(name, "posright") == 0){
+			if(bPosRight){
+				SvErr(fn, "'emlights' sector contains multiple 'posright' vectors.");
+				return false;
+			}
+			if(!MvlParseVector(c, (float *)(d + 0x10))){
+				SvErr(fn, "Could not load 'posright' vector.");
+				return false;
+			}
+			bPosRight = true;
+		}
+		else if(_stricmp(name, "alwayson") == 0){
+			if(bAlwaysOn){
+				SvErr(fn, "'emlights' sector contains multiple 'alwayson' vectors.");
+				return false;
+			}
+			const char *t = c->GetText();
+			if(!t){
+				SvErr(fn, "Failed to read data from 'alwayson' element.");
+				return false;
+			}
+			if(_stricmp(t, "true") == 0){
+				d[3] = 1;
+			}else if(_stricmp(t, "false") != 0){
+				SvErr(fn, "Element 'alwayson' may only have values 'true' or 'false'.");
+				return false;
+			}
+			bAlwaysOn = true;
+		}
+		else{
+			SvErr(fn, "Unknown element '%s' in 'emlights' sector.", name);
+			return false;
+		}
+	}
+
+	if(!bColourOne){
+		SvErr(fn, "'emlights' sector is missing 'colourone' element.");
+		return false;
+	}
+	if(!bColourTwo){
+		SvErr(fn, "'emlights' sector is missing 'colourtwo' element.");
+		return false;
+	}
+	if(!bPosLeft){
+		SvErr(fn, "'emlights' sector is missing 'posleft' vector.");
+		return false;
+	}
+	if(!bPosRight){
+		SvErr(fn, "'emlights' sector is missing 'posright' vector.");
+		return false;
+	}
+	return true;
+}
+
+// CVehicleHandler::LoadXMLSingleEmLightData — 0.98e @ RVA 0x4edc0.
+bool
+CVehicleHandler::LoadXMLSingleEmLightData(TiXmlElement *e, void *dest)
+{
+	static const char *const fn = "CVehicleHandler::LoadXMLSingleEmLightData";
+	unsigned char *d = (unsigned char *)dest;
+	bool bColour = false, bPosition = false, bAlwaysOn = false;
+
+	if(!e || !dest)
+		return false;
+
+	d[1] = 1;
+
+	for(TiXmlElement *c = e->FirstChildElement(); c;
+	    c = c->NextSiblingElement()){
+		const char *name = c->Value();
+		if(_stricmp(name, "colour") == 0){
+			unsigned r, g, b;
+			if(bColour){
+				SvErr(fn, "'emlightsingle' sector contains multiple 'colour' elements.");
+				return false;
+			}
+			const char *t = c->GetText();
+			if(!t){
+				SvErr(fn, "Failed to read data from 'colour' element.");
+				return false;
+			}
+			if(sscanf(t, "%u,%u,%u", &r, &g, &b) != 3){
+				SvErr(fn, "Failed to parse the contents of 'colour' element (format 'r,g,b').");
+				return false;
+			}
+			if(0xff < r) r = 0xff;
+			if(0xff < g) g = 0xff;
+			if(0xff < b) b = 0xff;
+			d[0x3c] = (unsigned char)r;
+			d[0x3d] = (unsigned char)g;
+			d[0x3e] = (unsigned char)b;
+			bColour = true;
+		}
+		else if(_stricmp(name, "position") == 0){
+			if(bPosition){
+				SvErr(fn, "'emlightsingle' sector contains multiple 'position' vectors.");
+				return false;
+			}
+			if(!MvlParseVector(c, (float *)(d + 0x1c))){
+				SvErr(fn, "Could not load 'position' vector.");
+				return false;
+			}
+			bPosition = true;
+		}
+		else if(_stricmp(name, "alwayson") == 0){
+			if(bAlwaysOn){
+				SvErr(fn, "'emlightsingle' sector contains multiple 'alwayson' vectors.");
+				return false;
+			}
+			const char *t = c->GetText();
+			if(!t){
+				SvErr(fn, "Failed to read data from 'alwayson' element.");
+				return false;
+			}
+			if(_stricmp(t, "true") == 0){
+				d[3] = 1;
+			}else if(_stricmp(t, "false") != 0){
+				SvErr(fn, "Element 'alwayson' may only have values 'true' or 'false'.");
+				return false;
+			}
+			bAlwaysOn = true;
+		}
+		else{
+			SvErr(fn, "Unknown element '%s' in 'emlightsingle' sector.", name);
+			return false;
+		}
+	}
+
+	if(!bColour){
+		SvErr(fn, "'emlightsingle' sector is missing 'colour' element.");
+		return false;
+	}
+	if(!bPosition){
+		SvErr(fn, "'emlightsingle' sector is missing 'position' vector.");
+		return false;
+	}
+	return true;
+}
+
+// CVehicleHandler::LoadXMLTaxiEmLightData — 0.98e @ RVA 0x4f090.
+bool
+CVehicleHandler::LoadXMLTaxiEmLightData(TiXmlElement *e, void *dest)
+{
+	static const char *const fn = "CVehicleHandler::LoadXMLTaxiEmLightData";
+	unsigned char *d = (unsigned char *)dest;
+	bool bColour = false, bPosition = false, bAlwaysOn = false;
+
+	if(!e || !dest)
+		return false;
+
+	d[2] = 1;
+
+	for(TiXmlElement *c = e->FirstChildElement(); c;
+	    c = c->NextSiblingElement()){
+		const char *name = c->Value();
+		if(_stricmp(name, "colour") == 0){
+			unsigned r, g, b;
+			if(bColour){
+				SvErr(fn, "'taxilight' sector contains multiple 'colour' elements.");
+				return false;
+			}
+			const char *t = c->GetText();
+			if(!t){
+				SvErr(fn, "Failed to read data from 'colour' element.");
+				return false;
+			}
+			if(sscanf(t, "%u,%u,%u", &r, &g, &b) != 3){
+				SvErr(fn, "Failed to parse the contents of 'colour' element (format 'r,g,b').");
+				return false;
+			}
+			if(0xff < r) r = 0xff;
+			if(0xff < g) g = 0xff;
+			if(0xff < b) b = 0xff;
+			d[0x40] = (unsigned char)r;
+			d[0x41] = (unsigned char)g;
+			d[0x42] = (unsigned char)b;
+			bColour = true;
+		}
+		else if(_stricmp(name, "position") == 0){
+			if(bPosition){
+				SvErr(fn, "'taxilight' sector contains multiple 'position' vectors.");
+				return false;
+			}
+			if(!MvlParseVector(c, (float *)(d + 0x28))){
+				SvErr(fn, "Could not load 'position' vector.");
+				return false;
+			}
+			bPosition = true;
+		}
+		else if(_stricmp(name, "alwayson") == 0){
+			if(bAlwaysOn){
+				SvErr(fn, "'taxilight' sector contains multiple 'alwayson' elements.");
+				return false;
+			}
+			const char *t = c->GetText();
+			if(!t){
+				SvErr(fn, "Failed to read data from 'alwayson' element.");
+				return false;
+			}
+			if(_stricmp(t, "true") == 0){
+				d[3] = 1;
+			}else if(_stricmp(t, "false") != 0){
+				SvErr(fn, "Element 'alwayson' may only have values 'true' or 'false'.");
+				return false;
+			}
+			bAlwaysOn = true;
+		}
+		else{
+			SvErr(fn, "Unknown element '%s' in 'taxilight' sector.", name);
+			return false;
+		}
+	}
+
+	if(!bColour){
+		SvErr(fn, "'taxilight' sector is missing 'colour' element.");
+		return false;
+	}
+	if(!bPosition){
+		SvErr(fn, "'taxilight' sector is missing 'position' vector.");
+		return false;
+	}
+	return true;
+}

@@ -1,0 +1,1568 @@
+// thunk_FUN_10032ff0 @ 0x10033000 (RVA 0x33000) size 5 THUNK
+
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void thunk_FUN_10032ff0(void)
+
+{
+  FUN_1002bc70(_DAT_00a0fde4);
+  return;
+}
+
+
+
+// FUN_10033010 @ 0x10033010 (RVA 0x33010) size 42
+
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void __fastcall FUN_10033010(void *param_1)
+
+{
+  if (((void *)*_DAT_00a0fde4 <= param_1) &&
+     (param_1 < (void *)(_DAT_00a0fde4[2] * 0x5dc + *_DAT_00a0fde4))) {
+    FUN_10033700(_DAT_00a0fde4,(int)param_1);
+    return;
+  }
+  FID_conflict__free(param_1);
+  return;
+}
+
+
+
+// FUN_10033040 @ 0x10033040 (RVA 0x33040) size 31
+
+
+undefined4 * __thiscall FUN_10033040(void *this,byte param_1)
+
+{
+  FUN_10030ee0(this);
+  if ((param_1 & 1) != 0) {
+    FUN_10033010(this);
+  }
+  return this;
+}
+
+
+
+// FUN_10033060 @ 0x10033060 (RVA 0x33060) size 102
+
+
+undefined4 * __fastcall FUN_10033060(undefined4 *param_1)
+
+{
+  FUN_10030c80(param_1);
+  *param_1 = CVehicleVC::vftable;
+  FUN_10008c30(param_1 + 0x76);
+  FUN_10008c30(param_1 + 0x92);
+  FUN_10008c30(param_1 + 0x95);
+  FUN_10008c30(param_1 + 0x98);
+  FUN_10008c30(param_1 + 0x9c);
+  FUN_10008c30(param_1 + 0x9f);
+  FUN_10008c30(param_1 + 0xa2);
+  return param_1;
+}
+
+
+
+// FUN_100330d0 @ 0x100330d0 (RVA 0x330d0) size 7
+
+
+void FUN_100330d0(void)
+
+{
+  (*(code *)0x5baa40)();
+  return;
+}
+
+
+
+// FUN_100330e0 @ 0x100330e0 (RVA 0x330e0) size 7
+
+
+void FUN_100330e0(void)
+
+{
+  (*(code *)0x4c9bd0)();
+  return;
+}
+
+
+
+// FUN_100330f0 @ 0x100330f0 (RVA 0x330f0) size 7
+
+
+void FUN_100330f0(void)
+
+{
+  (*(code *)0x4c9ba0)();
+  return;
+}
+
+
+
+// FUN_10033100 @ 0x10033100 (RVA 0x33100) size 7
+
+
+void FUN_10033100(void)
+
+{
+  (*(code *)0x59f2b0)();
+  return;
+}
+
+
+
+// FUN_10033110 @ 0x10033110 (RVA 0x33110) size 7
+
+
+void FUN_10033110(void)
+
+{
+  (*(code *)0x5afab0)();
+  return;
+}
+
+
+
+// FUN_10033120 @ 0x10033120 (RVA 0x33120) size 7
+
+
+void FUN_10033120(void)
+
+{
+  (*(code *)0x513de0)();
+  return;
+}
+
+
+
+// FUN_10033130 @ 0x10033130 (RVA 0x33130) size 7
+
+
+void FUN_10033130(void)
+
+{
+  (*(code *)0x5afac0)();
+  return;
+}
+
+
+
+// FUN_10033140 @ 0x10033140 (RVA 0x33140) size 7
+
+
+void FUN_10033140(void)
+
+{
+  (*(code *)0x5a6910)();
+  return;
+}
+
+
+
+// FUN_10033150 @ 0x10033150 (RVA 0x33150) size 7
+
+
+void FUN_10033150(void)
+
+{
+  (*(code *)0x5a6920)();
+  return;
+}
+
+
+
+// FUN_10033160 @ 0x10033160 (RVA 0x33160) size 7
+
+
+void FUN_10033160(void)
+
+{
+  (*(code *)0x45e520)();
+  return;
+}
+
+
+
+// FUN_10033170 @ 0x10033170 (RVA 0x33170) size 7
+
+
+void FUN_10033170(void)
+
+{
+  (*(code *)0x518240)();
+  return;
+}
+
+
+
+// FUN_10033180 @ 0x10033180 (RVA 0x33180) size 7
+
+
+void FUN_10033180(void)
+
+{
+  (*(code *)0x518230)();
+  return;
+}
+
+
+
+// FUN_10033190 @ 0x10033190 (RVA 0x33190) size 7
+
+
+void FUN_10033190(void)
+
+{
+  (*(code *)0x51a9a0)();
+  return;
+}
+
+
+
+// FUN_100331a0 @ 0x100331a0 (RVA 0x331a0) size 7
+
+
+void FUN_100331a0(void)
+
+{
+  (*(code *)0x519e20)();
+  return;
+}
+
+
+
+// FUN_100331b0 @ 0x100331b0 (RVA 0x331b0) size 7
+
+
+void FUN_100331b0(void)
+
+{
+  (*(code *)0x5a6930)();
+  return;
+}
+
+
+
+// FUN_100331c0 @ 0x100331c0 (RVA 0x331c0) size 7
+
+
+void FUN_100331c0(void)
+
+{
+  (*(code *)0x5a6940)();
+  return;
+}
+
+
+
+// FUN_100331d0 @ 0x100331d0 (RVA 0x331d0) size 7
+
+
+void FUN_100331d0(void)
+
+{
+  (*(code *)0x51a9b0)();
+  return;
+}
+
+
+
+// FUN_100331e0 @ 0x100331e0 (RVA 0x331e0) size 7
+
+
+void FUN_100331e0(void)
+
+{
+  (*(code *)0x4d51c0)();
+  return;
+}
+
+
+
+// FUN_100331f0 @ 0x100331f0 (RVA 0x331f0) size 7
+
+
+void FUN_100331f0(void)
+
+{
+  (*(code *)0x458c80)();
+  return;
+}
+
+
+
+// FUN_10033200 @ 0x10033200 (RVA 0x33200) size 7
+
+
+void FUN_10033200(void)
+
+{
+  (*(code *)0x4d9050)();
+  return;
+}
+
+
+
+// FUN_10033210 @ 0x10033210 (RVA 0x33210) size 7
+
+
+void FUN_10033210(void)
+
+{
+  (*(code *)0x5a6950)();
+  return;
+}
+
+
+
+// FUN_10033220 @ 0x10033220 (RVA 0x33220) size 7
+
+
+void FUN_10033220(void)
+
+{
+  (*(code *)0x5b44a0)();
+  return;
+}
+
+
+
+// FUN_10033230 @ 0x10033230 (RVA 0x33230) size 7
+
+
+void FUN_10033230(void)
+
+{
+  (*(code *)0x420d30)();
+  return;
+}
+
+
+
+// FUN_10033240 @ 0x10033240 (RVA 0x33240) size 7
+
+
+void FUN_10033240(void)
+
+{
+  (*(code *)0x41c2e0)();
+  return;
+}
+
+
+
+// FUN_10033250 @ 0x10033250 (RVA 0x33250) size 4
+
+
+undefined1 __fastcall FUN_10033250(int param_1)
+
+{
+  return *(undefined1 *)(param_1 + 4);
+}
+
+
+
+// FUN_10033260 @ 0x10033260 (RVA 0x33260) size 7
+
+
+void FUN_10033260(void)
+
+{
+  (*(code *)0x5a9b50)();
+  return;
+}
+
+
+
+// FUN_10033270 @ 0x10033270 (RVA 0x33270) size 115
+
+
+undefined4 * __thiscall FUN_10033270(void *this,undefined4 param_1,undefined1 param_2)
+
+{
+  undefined4 *puVar1;
+  int iVar2;
+  
+  FUN_10033060(this);
+  *(undefined ***)this = CAutomobileVC::vftable;
+  iVar2 = 5;
+  puVar1 = (undefined4 *)((int)this + 0x2d4);
+  do {
+    FUN_10008c30(puVar1);
+    puVar1 = puVar1 + 9;
+    iVar2 = iVar2 + -1;
+  } while (-1 < iVar2);
+  puVar1 = (undefined4 *)((int)this + 0x3e4);
+  iVar2 = 3;
+  do {
+    FUN_10008c30(puVar1);
+    FUN_10008c30(puVar1 + 4);
+    puVar1 = puVar1 + 10;
+    iVar2 = iVar2 + -1;
+  } while (-1 < iVar2);
+  (*(code *)0x59e620)(param_1,param_2);
+  return this;
+}
+
+
+
+// FUN_100332f0 @ 0x100332f0 (RVA 0x332f0) size 7
+
+
+void FUN_100332f0(void)
+
+{
+  (*(code *)0x59e590)();
+  return;
+}
+
+
+
+// FUN_10033300 @ 0x10033300 (RVA 0x33300) size 7
+
+
+void FUN_10033300(void)
+
+{
+  (*(code *)0x593030)();
+  return;
+}
+
+
+
+// FUN_10033310 @ 0x10033310 (RVA 0x33310) size 7
+
+
+void FUN_10033310(void)
+
+{
+  (*(code *)0x592ed0)();
+  return;
+}
+
+
+
+// FUN_10033320 @ 0x10033320 (RVA 0x33320) size 7
+
+
+void FUN_10033320(void)
+
+{
+  (*(code *)0x589ad0)();
+  return;
+}
+
+
+
+// FUN_10033330 @ 0x10033330 (RVA 0x33330) size 7
+
+
+void FUN_10033330(void)
+
+{
+  (*(code *)0x589790)();
+  return;
+}
+
+
+
+// FUN_10033340 @ 0x10033340 (RVA 0x33340) size 7
+
+
+void FUN_10033340(void)
+
+{
+  (*(code *)0x5894e0)();
+  return;
+}
+
+
+
+// FUN_10033350 @ 0x10033350 (RVA 0x33350) size 7
+
+
+void FUN_10033350(void)
+
+{
+  (*(code *)0x588de0)();
+  return;
+}
+
+
+
+// FUN_10033360 @ 0x10033360 (RVA 0x33360) size 7
+
+
+void FUN_10033360(void)
+
+{
+  (*(code *)0x59d1f0)();
+  return;
+}
+
+
+
+// FUN_10033370 @ 0x10033370 (RVA 0x33370) size 7
+
+
+void FUN_10033370(void)
+
+{
+  (*(code *)0x59d1d0)();
+  return;
+}
+
+
+
+// FUN_10033380 @ 0x10033380 (RVA 0x33380) size 7
+
+
+void FUN_10033380(void)
+
+{
+  (*(code *)0x59d100)();
+  return;
+}
+
+
+
+// FUN_10033390 @ 0x10033390 (RVA 0x33390) size 7
+
+
+void FUN_10033390(void)
+
+{
+  (*(code *)0x59cf50)();
+  return;
+}
+
+
+
+// FUN_100333a0 @ 0x100333a0 (RVA 0x333a0) size 7
+
+
+void FUN_100333a0(void)
+
+{
+  (*(code *)0x59c950)();
+  return;
+}
+
+
+
+// FUN_100333b0 @ 0x100333b0 (RVA 0x333b0) size 7
+
+
+void FUN_100333b0(void)
+
+{
+  (*(code *)0x59c8d0)();
+  return;
+}
+
+
+
+// FUN_100333c0 @ 0x100333c0 (RVA 0x333c0) size 7
+
+
+void FUN_100333c0(void)
+
+{
+  (*(code *)0x59c890)();
+  return;
+}
+
+
+
+// FUN_100333d0 @ 0x100333d0 (RVA 0x333d0) size 7
+
+
+void FUN_100333d0(void)
+
+{
+  (*(code *)0x59c860)();
+  return;
+}
+
+
+
+// FUN_100333e0 @ 0x100333e0 (RVA 0x333e0) size 7
+
+
+void FUN_100333e0(void)
+
+{
+  (*(code *)0x59c830)();
+  return;
+}
+
+
+
+// FUN_100333f0 @ 0x100333f0 (RVA 0x333f0) size 7
+
+
+void FUN_100333f0(void)
+
+{
+  (*(code *)0x59f230)();
+  return;
+}
+
+
+
+// FUN_10033400 @ 0x10033400 (RVA 0x33400) size 7
+
+
+void FUN_10033400(void)
+
+{
+  (*(code *)0x59f270)();
+  return;
+}
+
+
+
+// FUN_10033410 @ 0x10033410 (RVA 0x33410) size 7
+
+
+void FUN_10033410(void)
+
+{
+  (*(code *)0x59c7e0)();
+  return;
+}
+
+
+
+// FUN_10033420 @ 0x10033420 (RVA 0x33420) size 7
+
+
+void FUN_10033420(void)
+
+{
+  (*(code *)0x588a30)();
+  return;
+}
+
+
+
+// FUN_10033430 @ 0x10033430 (RVA 0x33430) size 7
+
+
+void FUN_10033430(void)
+
+{
+  (*(code *)0x588a60)();
+  return;
+}
+
+
+
+// FUN_10033440 @ 0x10033440 (RVA 0x33440) size 7
+
+
+void FUN_10033440(void)
+
+{
+  (*(code *)0x588850)();
+  return;
+}
+
+
+
+// FUN_10033450 @ 0x10033450 (RVA 0x33450) size 7
+
+
+void FUN_10033450(void)
+
+{
+  (*(code *)0x5886a0)();
+  return;
+}
+
+
+
+// FUN_10033460 @ 0x10033460 (RVA 0x33460) size 7
+
+
+void FUN_10033460(void)
+
+{
+  (*(code *)0x587d50)();
+  return;
+}
+
+
+
+// FUN_10033470 @ 0x10033470 (RVA 0x33470) size 7
+
+
+void FUN_10033470(void)
+
+{
+  (*(code *)0x443e00)();
+  return;
+}
+
+
+
+// FUN_10033480 @ 0x10033480 (RVA 0x33480) size 7
+
+
+void FUN_10033480(void)
+
+{
+  (*(code *)0x588230)();
+  return;
+}
+
+
+
+// FUN_10033490 @ 0x10033490 (RVA 0x33490) size 52
+
+
+undefined4 * __thiscall FUN_10033490(void *this,undefined4 param_1,undefined1 param_2)
+
+{
+  FUN_10033060(this);
+  *(undefined ***)this = CBikeVC::vftable;
+  (*(code *)0x615740)(param_1,param_2);
+  return this;
+}
+
+
+
+// FUN_100334d0 @ 0x100334d0 (RVA 0x334d0) size 7
+
+
+void FUN_100334d0(void)
+
+{
+  (*(code *)0x6156a0)();
+  return;
+}
+
+
+
+// FUN_100334e0 @ 0x100334e0 (RVA 0x334e0) size 7
+
+
+void FUN_100334e0(void)
+
+{
+  (*(code *)0x60e3e0)();
+  return;
+}
+
+
+
+// FUN_100334f0 @ 0x100334f0 (RVA 0x334f0) size 7
+
+
+void FUN_100334f0(void)
+
+{
+  (*(code *)0x60e2b0)();
+  return;
+}
+
+
+
+// FUN_10033500 @ 0x10033500 (RVA 0x33500) size 7
+
+
+void FUN_10033500(void)
+
+{
+  (*(code *)0x60ad90)();
+  return;
+}
+
+
+
+// FUN_10033510 @ 0x10033510 (RVA 0x33510) size 7
+
+
+void FUN_10033510(void)
+
+{
+  (*(code *)0x60ad50)();
+  return;
+}
+
+
+
+// FUN_10033520 @ 0x10033520 (RVA 0x33520) size 7
+
+
+void FUN_10033520(void)
+
+{
+  (*(code *)0x60aae0)();
+  return;
+}
+
+
+
+// FUN_10033530 @ 0x10033530 (RVA 0x33530) size 7
+
+
+void FUN_10033530(void)
+
+{
+  (*(code *)0x60a540)();
+  return;
+}
+
+
+
+// FUN_10033540 @ 0x10033540 (RVA 0x33540) size 7
+
+
+void FUN_10033540(void)
+
+{
+  (*(code *)0x615010)();
+  return;
+}
+
+
+
+// FUN_10033550 @ 0x10033550 (RVA 0x33550) size 7
+
+
+void FUN_10033550(void)
+
+{
+  (*(code *)0x614ff0)();
+  return;
+}
+
+
+
+// FUN_10033560 @ 0x10033560 (RVA 0x33560) size 7
+
+
+void FUN_10033560(void)
+
+{
+  (*(code *)0x614f20)();
+  return;
+}
+
+
+
+// FUN_10033570 @ 0x10033570 (RVA 0x33570) size 7
+
+
+void FUN_10033570(void)
+
+{
+  (*(code *)0x615e20)();
+  return;
+}
+
+
+
+// FUN_10033580 @ 0x10033580 (RVA 0x33580) size 7
+
+
+void FUN_10033580(void)
+
+{
+  (*(code *)0x615e30)();
+  return;
+}
+
+
+
+// FUN_10033590 @ 0x10033590 (RVA 0x33590) size 7
+
+
+void FUN_10033590(void)
+
+{
+  (*(code *)0x615e40)();
+  return;
+}
+
+
+
+// FUN_100335a0 @ 0x100335a0 (RVA 0x335a0) size 7
+
+
+void FUN_100335a0(void)
+
+{
+  (*(code *)0x615e50)();
+  return;
+}
+
+
+
+// FUN_100335b0 @ 0x100335b0 (RVA 0x335b0) size 7
+
+
+void FUN_100335b0(void)
+
+{
+  (*(code *)0x60a450)();
+  return;
+}
+
+
+
+// FUN_100335c0 @ 0x100335c0 (RVA 0x335c0) size 7
+
+
+void FUN_100335c0(void)
+
+{
+  (*(code *)0x60a480)();
+  return;
+}
+
+
+
+// FUN_100335d0 @ 0x100335d0 (RVA 0x335d0) size 7
+
+
+void FUN_100335d0(void)
+
+{
+  (*(code *)0x60a230)();
+  return;
+}
+
+
+
+// FUN_100335e0 @ 0x100335e0 (RVA 0x335e0) size 7
+
+
+void FUN_100335e0(void)
+
+{
+  (*(code *)0x609f30)();
+  return;
+}
+
+
+
+// FUN_100335f0 @ 0x100335f0 (RVA 0x335f0) size 7
+
+
+void FUN_100335f0(void)
+
+{
+  (*(code *)0x6098f0)();
+  return;
+}
+
+
+
+// FUN_10033600 @ 0x10033600 (RVA 0x33600) size 7
+
+
+void FUN_10033600(void)
+
+{
+  (*(code *)0x609e00)();
+  return;
+}
+
+
+
+// FUN_10033610 @ 0x10033610 (RVA 0x33610) size 7
+
+
+void FUN_10033610(void)
+
+{
+  (*(code *)0x609e40)();
+  return;
+}
+
+
+
+// FUN_10033620 @ 0x10033620 (RVA 0x33620) size 52
+
+
+undefined4 * __thiscall FUN_10033620(void *this,undefined4 param_1,undefined1 param_2)
+
+{
+  FUN_10033060(this);
+  *(undefined ***)this = CBoatVC::vftable;
+  (*(code *)0x5a6470)(param_1,param_2);
+  return this;
+}
+
+
+
+// FUN_10033660 @ 0x10033660 (RVA 0x33660) size 7
+
+
+void FUN_10033660(void)
+
+{
+  (*(code *)0x5a63d0)();
+  return;
+}
+
+
+
+// FUN_10033670 @ 0x10033670 (RVA 0x33670) size 7
+
+
+void FUN_10033670(void)
+
+{
+  (*(code *)0x59fe90)();
+  return;
+}
+
+
+
+// FUN_10033680 @ 0x10033680 (RVA 0x33680) size 7
+
+
+void FUN_10033680(void)
+
+{
+  (*(code *)0x59fdd0)();
+  return;
+}
+
+
+
+// FUN_10033690 @ 0x10033690 (RVA 0x33690) size 7
+
+
+void FUN_10033690(void)
+
+{
+  (*(code *)0x5a5570)();
+  return;
+}
+
+
+
+// FUN_100336a0 @ 0x100336a0 (RVA 0x336a0) size 7
+
+
+void FUN_100336a0(void)
+
+{
+  (*(code *)0x5a4de0)();
+  return;
+}
+
+
+
+// FUN_100336b0 @ 0x100336b0 (RVA 0x336b0) size 7
+
+
+void FUN_100336b0(void)
+
+{
+  (*(code *)0x5a4bc0)();
+  return;
+}
+
+
+
+// FUN_100336c0 @ 0x100336c0 (RVA 0x336c0) size 7
+
+
+void FUN_100336c0(void)
+
+{
+  (*(code *)0x5a6370)();
+  return;
+}
+
+
+
+// FUN_100336d0 @ 0x100336d0 (RVA 0x336d0) size 7
+
+
+void FUN_100336d0(void)
+
+{
+  (*(code *)0x5a6360)();
+  return;
+}
+
+
+
+// FUN_100336e0 @ 0x100336e0 (RVA 0x336e0) size 7
+
+
+void FUN_100336e0(void)
+
+{
+  (*(code *)0x59f760)();
+  return;
+}
+
+
+
+// FUN_100336f0 @ 0x100336f0 (RVA 0x336f0) size 7
+
+
+void FUN_100336f0(void)
+
+{
+  (*(code *)0x5abaa0)();
+  return;
+}
+
+
+
+// FUN_10033700 @ 0x10033700 (RVA 0x33700) size 45
+
+
+void __thiscall FUN_10033700(void *this,int param_1)
+
+{
+  byte *pbVar1;
+  uint uVar2;
+  int iVar3;
+  
+  uVar2 = FUN_10026920(this,param_1);
+  if ((-1 < (int)uVar2) && ((int)uVar2 < *(int *)((int)this + 8))) {
+    iVar3 = uVar2 - 1;
+    pbVar1 = (byte *)(*(int *)((int)this + 4) + 1 + iVar3);
+    *pbVar1 = *pbVar1 | 0x80;
+    if (iVar3 < *(int *)((int)this + 0xc)) {
+      *(int *)((int)this + 0xc) = iVar3;
+    }
+  }
+  return;
+}
+
+
+
+// FUN_10033730 @ 0x10033730 (RVA 0x33730) size 7
+
+
+void FUN_10033730(void)
+
+{
+  (*(code *)0x5d5710)();
+  return;
+}
+
+
+
+// FUN_10033740 @ 0x10033740 (RVA 0x33740) size 33
+
+
+undefined4 FUN_10033740(undefined4 param_1,int param_2)
+
+{
+  char cVar1;
+  
+  if (param_2 == 1) {
+    cVar1 = FUN_10043c00();
+    if (cVar1 == '\0') {
+      return 0;
+    }
+  }
+  return 1;
+}
+
+
+
+// FUN_10033770 @ 0x10033770 (RVA 0x33770) size 287
+
+
+int __fastcall FUN_10033770(int *param_1,undefined1 (*param_2) [16],undefined1 *param_3)
+
+{
+  int *piVar1;
+  char cVar2;
+  char *_Str1;
+  undefined1 (*pauVar3) [16];
+  int iVar4;
+  char *pcVar5;
+  int iVar6;
+  uint _MaxCount;
+  undefined1 (*local_8) [16];
+  
+  *param_3 = 0;
+  pauVar3 = FUN_1005abd0(param_2,0x5c);
+  if (pauVar3 != (undefined1 (*) [16])0x0) {
+    param_2 = (undefined1 (*) [16])(*pauVar3 + 1);
+  }
+  pauVar3 = FUN_1005abd0(param_2,0x2f);
+  local_8 = param_2;
+  if (pauVar3 != (undefined1 (*) [16])0x0) {
+    local_8 = (undefined1 (*) [16])(*pauVar3 + 1);
+  }
+  pauVar3 = FUN_1005abd0(local_8,0x5f);
+  if (((pauVar3 != (undefined1 (*) [16])0x0) && ((*pauVar3)[1] == 's')) ||
+     (pauVar3 = FUN_1005abd0(local_8,0x2e), pauVar3 != (undefined1 (*) [16])0x0)) {
+    _MaxCount = (int)pauVar3 - (int)local_8;
+    iVar6 = 0;
+    iVar4 = *param_1;
+    piVar1 = param_1;
+    while (iVar4 != 0) {
+      _Str1 = (char *)*piVar1;
+      pcVar5 = _Str1;
+      do {
+        cVar2 = *pcVar5;
+        pcVar5 = pcVar5 + 1;
+      } while (cVar2 != '\0');
+      if ((_MaxCount <= (uint)((int)pcVar5 - (int)(_Str1 + 1))) &&
+         (iVar4 = __strnicmp(_Str1,(char *)local_8,_MaxCount), iVar4 == 0)) {
+        if (*(char *)(*piVar1 + _MaxCount) == '\0') {
+          return iVar6;
+        }
+        iVar4 = __stricmp((char *)(*piVar1 + _MaxCount),"-r");
+        if (((iVar4 == 0) && ((char *)piVar1[1] != (char *)0x0)) &&
+           ((iVar4 = __strnicmp((char *)*piVar1,(char *)piVar1[1],_MaxCount), iVar4 == 0 &&
+            (iVar4 = __stricmp((char *)(piVar1[1] + _MaxCount),"-l"), iVar4 == 0)))) {
+          *param_3 = 1;
+          return iVar6;
+        }
+      }
+      iVar6 = iVar6 + 1;
+      piVar1 = param_1 + iVar6;
+      iVar4 = param_1[iVar6];
+    }
+  }
+  return -1;
+}
+
+
+
+// FUN_100338a0 @ 0x100338a0 (RVA 0x338a0) size 341
+
+
+undefined4 __fastcall FUN_100338a0(undefined1 (*param_1) [16],int param_2)
+
+{
+  char *pcVar1;
+  undefined1 (*pauVar2) [16];
+  long lVar3;
+  undefined4 uVar4;
+  undefined1 (*local_8) [16];
+  
+  local_8 = param_1;
+  pauVar2 = FUN_1005abd0(param_1,0x5c);
+  if (pauVar2 != (undefined1 (*) [16])0x0) {
+    param_1 = (undefined1 (*) [16])(*pauVar2 + 1);
+  }
+  pauVar2 = FUN_1005abd0(param_1,0x2f);
+  if (pauVar2 != (undefined1 (*) [16])0x0) {
+    param_1 = (undefined1 (*) [16])(*pauVar2 + 1);
+  }
+  pauVar2 = FUN_1005abd0(param_1,0x5f);
+  local_8 = (undefined1 (*) [16])0x0;
+  if ((pauVar2 == (undefined1 (*) [16])0x0) || ((*pauVar2)[1] != 's')) {
+    *(undefined4 *)(param_2 + 0xc) = 0;
+    *(undefined4 *)(param_2 + 0x10) = 0xffffffff;
+  }
+  else {
+    lVar3 = _strtol((char *)(*pauVar2 + 2),(char **)&local_8,10);
+    *(long *)(param_2 + 0xc) = lVar3;
+    if ((local_8 == (undefined1 (*) [16])(*pauVar2 + 2)) || (local_8 == (undefined1 (*) [16])0x0)) {
+      uVar4 = FUN_1001cb80("CSoundHandler::FillInfoFromName",
+                           "Failed to parse loop start offset from file name.");
+      return uVar4;
+    }
+    if (lVar3 < 0) {
+      uVar4 = FUN_1001cb80("CSoundHandler::FillInfoFromName",
+                           "Loop offset start may not be negative.");
+      return uVar4;
+    }
+    if ((*local_8)[0] != 'e') {
+      uVar4 = FUN_1001cb80("CSoundHandler::FillInfoFromName",
+                           "Failed to find loop end offset indicator \'e\' from file name.");
+      return uVar4;
+    }
+    pcVar1 = *local_8;
+    lVar3 = _strtol(pcVar1 + 1,(char **)&local_8,10);
+    *(long *)(param_2 + 0x10) = lVar3;
+    if ((local_8 == (undefined1 (*) [16])(pcVar1 + 1)) || (local_8 == (undefined1 (*) [16])0x0)) {
+      uVar4 = FUN_1001cb80("CSoundHandler::FillInfoFromName",
+                           "Failed to parse loop end offset from file name.");
+      return uVar4;
+    }
+    if (*(int *)(param_2 + 0xc) < -1) {
+      uVar4 = FUN_1001cb80("CSoundHandler::FillInfoFromName","Loop offset end must be -1 or higher."
+                          );
+      return uVar4;
+    }
+    pauVar2 = local_8;
+    if ((*local_8)[0] != '.') {
+      uVar4 = FUN_1001cb80("CSoundHandler::FillInfoFromName",
+                           "After loop offset end there should be a dot.");
+      return uVar4;
+    }
+  }
+  return CONCAT31((int3)((uint)pauVar2 >> 8),1);
+}
+
+
+
+// FUN_10033a00 @ 0x10033a00 (RVA 0x33a00) size 1037
+
+
+undefined4 __fastcall
+FUN_10033a00(undefined4 param_1,int *param_2,int *param_3,uint param_4,char param_5)
+
+{
+  undefined2 uVar1;
+  uint uVar2;
+  undefined4 uVar3;
+  undefined8 *puVar4;
+  void *pvVar5;
+  int iVar6;
+  uint uVar7;
+  int iVar8;
+  uint uVar9;
+  char *pcVar10;
+  
+  if (param_4 < 0xc) {
+    uVar3 = FUN_1001cb80("CSoundHandler::FillSampleBufferFromData",
+                         "Unexpected file end in the middle of RIFF header.");
+    return uVar3;
+  }
+  if (*param_3 != 0x46464952) {
+    uVar3 = FUN_1001cb80("CSoundHandler::FillSampleBufferFromData",
+                         "Did not find a RIFF fourCC in the WAV file.");
+    return uVar3;
+  }
+  if (param_3[1] != param_4 - 8) {
+    uVar3 = FUN_1001cb80("CSoundHandler::FillSampleBufferFromData",
+                         "File size specified in RIFF header does not match actual size.");
+    return uVar3;
+  }
+  if (param_3[2] != 0x45564157) {
+    uVar3 = FUN_1001cb80("CSoundHandler::FillSampleBufferFromData",
+                         "RIFF header does not contain a WAVE fourCC.");
+    return uVar3;
+  }
+  if (param_4 < 0x14) {
+    uVar3 = FUN_1001cb80("CSoundHandler::FillSampleBufferFromData",
+                         "Unexpected file end in the middle of \'fmt \' subchunk header.");
+    return uVar3;
+  }
+  if (param_3[3] != 0x20746d66) {
+    uVar3 = FUN_1001cb80("CSoundHandler::FillSampleBufferFromData",
+                         "First subchunk is not with a \'fmt \' fourCC.");
+    return uVar3;
+  }
+  if (param_3[4] != 0x10) {
+    uVar3 = FUN_1001cb80("CSoundHandler::FillSampleBufferFromData",
+                         "First subchunk size should be 16, probably file is not in PCM format.");
+    return uVar3;
+  }
+  if (param_4 < 0x24) {
+    uVar3 = FUN_1001cb80("CSoundHandler::FillSampleBufferFromData",
+                         "Unexpected file end in the middle of \'fmt \' subchunk.");
+    return uVar3;
+  }
+  if ((short)param_3[5] != 1) {
+    uVar3 = FUN_1001cb80("CSoundHandler::FillSampleBufferFromData",
+                         "Format chunk has audio format other than 1 (PCM).");
+    return uVar3;
+  }
+  uVar7 = (uint)*(ushort *)((int)param_3 + 0x16);
+  if (*(ushort *)((int)param_3 + 0x16) == 0) {
+    uVar3 = FUN_1001cb80("CSoundHandler::FillSampleBufferFromData",
+                         "Format chunk specifies 0 channels.");
+    return uVar3;
+  }
+  if (0x10 < uVar7) {
+    uVar3 = FUN_1001cb80("CSoundHandler::FillSampleBufferFromData",
+                         "Format chunk specifies over 16 channels.");
+    return uVar3;
+  }
+  if (((uint)param_3[6] < 100) || (0x5dc00 < (uint)param_3[6])) {
+    uVar3 = FUN_1001cb80("CSoundHandler::FillSampleBufferFromData",
+                         "Format chunk specifies a sample rate out of range 100-384000.");
+    return uVar3;
+  }
+  if (*(short *)((int)param_3 + 0x22) != 0x10) {
+    uVar3 = FUN_1001cb80("CSoundHandler::FillSampleBufferFromData",
+                         "Format chunk specifies bits per sample other than 16.");
+    return uVar3;
+  }
+  uVar9 = (uint)*(ushort *)(param_3 + 8);
+  if (uVar9 < uVar7 * 2) {
+    uVar3 = FUN_1001cb80("CSoundHandler::FillSampleBufferFromData",
+                         "Block align in format chunk is smaller than channels*bitspersample.");
+    return uVar3;
+  }
+  if (uVar7 * 2 + 0x20 < uVar9) {
+    uVar3 = FUN_1001cb80("CSoundHandler::FillSampleBufferFromData",
+                         "Block align in format chunk specifies padding more than 32 bytes.");
+    return uVar3;
+  }
+  if (param_4 < 0x2c) {
+    uVar3 = FUN_1001cb80("CSoundHandler::FillSampleBufferFromData",
+                         "Unexpected file end in the middle of \'data\' subchunk header.");
+    return uVar3;
+  }
+  if (param_3[9] != 0x61746164) {
+    uVar3 = FUN_1001cb80("CSoundHandler::FillSampleBufferFromData",
+                         "Second subchunk header is not with a \'data\' fourCC.");
+    return uVar3;
+  }
+  if (param_4 < param_3[10] + 0x2cU) {
+    uVar3 = FUN_1001cb80("CSoundHandler::FillSampleBufferFromData",
+                         "Second subchunk length too large - goes beyond end of file.");
+    return uVar3;
+  }
+  if ((uint)param_3[10] % uVar9 != 0) {
+    uVar3 = FUN_1001cb80("CSoundHandler::FillSampleBufferFromData",
+                         "Second subchunk length is not a multiple of block align.");
+    return uVar3;
+  }
+  if (param_5 == '\0') {
+    if (uVar7 < 2) goto LAB_10033c96;
+    pcVar10 = "More than one channel in %s, using only the first one.";
+  }
+  else {
+    if (uVar7 < 3) goto LAB_10033c96;
+    pcVar10 = "More than two channels in %s, using only the first two.";
+  }
+  FUN_1001cce0("CSoundHandler::FillSampleBufferFromData",pcVar10);
+LAB_10033c96:
+  uVar9 = (uint)param_3[10] / (uint)*(ushort *)(param_3 + 8);
+  param_2[2] = param_3[6];
+  uVar7 = uVar9 * 2;
+  param_2[1] = uVar7;
+  if (uVar9 == 0) {
+    uVar3 = FUN_1001cb80("CSoundHandler::FillSampleBufferFromData","File contains no samples.");
+    return uVar3;
+  }
+  uVar2 = param_2[4];
+  if ((-1 < (int)uVar2) && (uVar7 < uVar2)) {
+    uVar3 = FUN_1001cb80("CSoundHandler::FillSampleBufferFromData",
+                         "Loop end offset points past the end of sample buffer.");
+    return uVar3;
+  }
+  if (uVar7 < (uint)param_2[3]) {
+    uVar3 = FUN_1001cb80("CSoundHandler::FillSampleBufferFromData",
+                         "Loop start offset points past the end of sample buffer.");
+    return uVar3;
+  }
+  if ((-1 < (int)uVar2) && ((int)uVar2 <= param_2[3])) {
+    uVar3 = FUN_1001cb80("CSoundHandler::FillSampleBufferFromData",
+                         "Loop start offset is not before end offset");
+    return uVar3;
+  }
+  if (uVar2 == 0xffffffff) {
+    param_2[4] = uVar7 - 2;
+  }
+  puVar4 = _malloc(uVar7);
+  iVar8 = 0;
+  *param_2 = (int)puVar4;
+  if (0 < (int)uVar9) {
+    do {
+      uVar1 = *(undefined2 *)((uint)*(ushort *)(param_3 + 8) * iVar8 + 0x2c + (int)param_3);
+      puVar4 = (undefined8 *)CONCAT22((short)((uint)*(ushort *)(param_3 + 8) * iVar8 >> 0x10),uVar1)
+      ;
+      *(undefined2 *)(*param_2 + iVar8 * 2) = uVar1;
+      iVar8 = iVar8 + 1;
+    } while (iVar8 < (int)uVar9);
+  }
+  if (param_5 != '\0') {
+    *(undefined8 *)(param_2 + 5) = *(undefined8 *)param_2;
+    *(undefined8 *)(param_2 + 7) = *(undefined8 *)(param_2 + 2);
+    param_2[9] = param_2[4];
+    pvVar5 = _malloc(param_2[6]);
+    param_2[5] = (int)pvVar5;
+    if (*(ushort *)((int)param_3 + 0x16) < 2) {
+      FUN_1001cc00("Wave file %s - using channel 0 for both left and right samples.");
+      puVar4 = FUN_1005c330((undefined8 *)param_2[5],(undefined8 *)*param_2,param_2[6]);
+    }
+    else {
+      puVar4 = (undefined8 *)
+               FUN_1001cc00("Wave file %s - using channels 0 and 1 as left and right samples.");
+      iVar8 = 0;
+      if (0 < (int)uVar9) {
+        do {
+          iVar6 = (uint)*(ushort *)(param_3 + 8) * iVar8;
+          uVar1 = *(undefined2 *)(iVar6 + 0x2e + (int)param_3);
+          *(undefined2 *)(param_2[5] + iVar8 * 2) = uVar1;
+          iVar8 = iVar8 + 1;
+        } while (iVar8 < (int)uVar9);
+        return CONCAT31((int3)(CONCAT22((short)((uint)iVar6 >> 0x10),uVar1) >> 8),1);
+      }
+    }
+  }
+  return CONCAT31((int3)((uint)puVar4 >> 8),1);
+}
+
+
+
+// FUN_10033e10 @ 0x10033e10 (RVA 0x33e10) size 192
+
+
+undefined4 __fastcall
+FUN_10033e10(int *param_1,int param_2,undefined1 (*param_3) [16],int *param_4,uint param_5)
+
+{
+  int *piVar1;
+  int iVar2;
+  undefined4 uVar3;
+  uint local_8;
+  
+  local_8 = (uint)param_1 & 0xffffff00;
+  iVar2 = FUN_10033770(param_1,param_3,(undefined1 *)&local_8);
+  if (iVar2 == -1) {
+    uVar3 = FUN_1001cb80("CSoundHandler::LoadSoundFile","Could not find slot for sound file %s.");
+    return uVar3;
+  }
+  piVar1 = (int *)(param_2 + iVar2 * 0x14);
+  if (*(int *)(param_2 + iVar2 * 0x14) != 0) {
+    uVar3 = FUN_1001cb80("CSoundHandler::LoadSoundFile","Duplicate file on the same slot, %s.");
+    return uVar3;
+  }
+  uVar3 = FUN_100338a0(param_3,(int)piVar1);
+  if ((char)uVar3 == '\0') {
+    uVar3 = FUN_1001cb80("CSoundHandler::LoadSoundFile",
+                         "Could not get sound info from audio file name %s.");
+    return uVar3;
+  }
+  uVar3 = FUN_10033a00(param_3,piVar1,param_4,param_5,(char)local_8);
+  if ((char)uVar3 == '\0') {
+    uVar3 = FUN_1001cb80("CSoundHandler::LoadSoundFile","Could not read sample buffer from file %s."
+                        );
+    return uVar3;
+  }
+  return CONCAT31((int3)((uint)uVar3 >> 8),1);
+}
+
+
+
+// FUN_10033ed0 @ 0x10033ed0 (RVA 0x33ed0) size 49
+
+
+int __fastcall FUN_10033ed0(int param_1)
+
+{
+  int iVar1;
+  
+  if (999999 < param_1) {
+    if (param_1 < 1100000) {
+      iVar1 = FUN_10054db0(param_1 + -1000000);
+      return iVar1;
+    }
+    if (param_1 < 1200000) {
+      iVar1 = FUN_1004fc30(param_1 + -1100000);
+      return iVar1;
+    }
+  }
+  return 0;
+}
+
+
+

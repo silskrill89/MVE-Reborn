@@ -1,0 +1,483 @@
+// FUN_1004e8f0 @ 0x1004e8f0 (RVA 0x4e8f0) size 1206
+
+
+uint __fastcall FUN_1004e8f0(int param_1,undefined1 *param_2)
+
+{
+  bool bVar1;
+  bool bVar2;
+  bool bVar3;
+  bool bVar4;
+  bool bVar5;
+  char cVar6;
+  int iVar7;
+  int iVar8;
+  char *_Src;
+  uint uVar9;
+  uint local_1c;
+  uint local_18;
+  uint local_14;
+  char *local_10;
+  uint local_c;
+  
+  iVar7 = FUN_10034be0(param_1);
+  bVar5 = false;
+  bVar4 = false;
+  bVar3 = false;
+  bVar2 = false;
+  *param_2 = 1;
+  if (iVar7 != 0) {
+    local_c = 0xff;
+    bVar1 = false;
+    bVar5 = false;
+    bVar4 = false;
+    bVar3 = false;
+    bVar2 = false;
+    do {
+      iVar8 = __stricmp((char *)(*(int *)(iVar7 + 0x20) + 8),"colourone");
+      if (iVar8 == 0) {
+        if (bVar2) {
+          uVar9 = FUN_1001cb80("CVehicleHandler::LoadXMLEmLightData",
+                               "\'emlights\' sector contains multiple \'colourone\' elements.");
+          return uVar9 & 0xffffff00;
+        }
+        local_10 = (char *)FUN_100350f0(iVar7);
+        if (local_10 == (char *)0x0) {
+          uVar9 = FUN_1001cb80("CVehicleHandler::LoadXMLEmLightData",
+                               "Failed to read data from \'colourone\' element.");
+          return uVar9 & 0xffffff00;
+        }
+        iVar8 = __stricmp(local_10,"primary");
+        if (iVar8 == 0) {
+          local_1c = 0x3c;
+          local_18 = 0xff;
+          local_14 = 0;
+        }
+        else {
+          iVar8 = __stricmp(local_10,"secondary");
+          if (iVar8 == 0) {
+            local_1c = 0xff;
+            local_18 = 0;
+            local_14 = 0xaf;
+          }
+          else {
+            iVar8 = FID_conflict__sscanf(local_10,"%u,%u,%u",&local_1c,&local_18,&local_14);
+            if (iVar8 != 3) {
+              uVar9 = FUN_1001cb80("CVehicleHandler::LoadXMLEmLightData",
+                                   "Failed to parse the contents of \'colourone\' element (format \'r,g,b\')."
+                                  );
+              return uVar9 & 0xffffff00;
+            }
+            if (0xff < local_1c) {
+              local_1c = 0xff;
+            }
+            if (0xff < local_18) {
+              local_18 = 0xff;
+            }
+            if (0xff < local_14) {
+              local_14 = local_c;
+            }
+          }
+        }
+        param_2[0x34] = (char)local_1c;
+        param_2[0x35] = (char)local_18;
+        param_2[0x36] = (char)local_14;
+        bVar2 = true;
+      }
+      else {
+        iVar8 = __stricmp((char *)(*(int *)(iVar7 + 0x20) + 8),"colourtwo");
+        if (iVar8 == 0) {
+          if (bVar3) {
+            uVar9 = FUN_1001cb80("CVehicleHandler::LoadXMLEmLightData",
+                                 "\'emlights\' sector contains multiple \'colourtwo\' elements.");
+            return uVar9 & 0xffffff00;
+          }
+          _Src = (char *)FUN_100350f0(iVar7);
+          if (_Src == (char *)0x0) {
+            uVar9 = FUN_1001cb80("CVehicleHandler::LoadXMLEmLightData",
+                                 "Failed to read data from \'colourtwo\' element.");
+            return uVar9 & 0xffffff00;
+          }
+          iVar8 = FID_conflict__sscanf(_Src,"%u,%u,%u",&local_1c,&local_18,&local_14);
+          if (iVar8 != 3) {
+            uVar9 = FUN_1001cb80("CVehicleHandler::LoadXMLEmLightData",
+                                 "Failed to parse the contents of \'colourtwo\' element (format \'r,g,b\')."
+                                );
+            return uVar9 & 0xffffff00;
+          }
+          if (0xff < local_1c) {
+            local_1c = 0xff;
+          }
+          if (0xff < local_18) {
+            local_18 = 0xff;
+          }
+          if (0xff < local_14) {
+            local_14 = local_c;
+          }
+          param_2[0x38] = (char)local_1c;
+          param_2[0x39] = (char)local_18;
+          param_2[0x3a] = (char)local_14;
+          bVar3 = true;
+        }
+        else {
+          iVar8 = __stricmp((char *)(*(int *)(iVar7 + 0x20) + 8),"posleft");
+          if (iVar8 == 0) {
+            if (bVar4) {
+              uVar9 = FUN_1001cb80("CVehicleHandler::LoadXMLEmLightData",
+                                   "\'emlights\' sector contains multiple \'posleft\' vectors.");
+              return uVar9 & 0xffffff00;
+            }
+            cVar6 = FUN_1001bdb0(iVar7,(int)(param_2 + 4));
+            if (cVar6 == '\0') {
+              uVar9 = FUN_1001cb80("CVehicleHandler::LoadXMLEmLightData",
+                                   "Could not load \'posleft\' vector.");
+              return uVar9 & 0xffffff00;
+            }
+            bVar4 = true;
+          }
+          else {
+            iVar8 = __stricmp((char *)(*(int *)(iVar7 + 0x20) + 8),"posright");
+            if (iVar8 == 0) {
+              if (bVar5) {
+                uVar9 = FUN_1001cb80("CVehicleHandler::LoadXMLEmLightData",
+                                     "\'emlights\' sector contains multiple \'posright\' vectors.");
+                return uVar9 & 0xffffff00;
+              }
+              cVar6 = FUN_1001bdb0(iVar7,(int)(param_2 + 0x10));
+              if (cVar6 == '\0') {
+                uVar9 = FUN_1001cb80("CVehicleHandler::LoadXMLEmLightData",
+                                     "Could not load \'posright\' vector.");
+                return uVar9 & 0xffffff00;
+              }
+              bVar5 = true;
+            }
+            else {
+              iVar8 = __stricmp((char *)(*(int *)(iVar7 + 0x20) + 8),"alwayson");
+              if (iVar8 != 0) {
+                uVar9 = FUN_1001cb80("CVehicleHandler::LoadXMLEmLightData",
+                                     "Unknown element \'%s\' in \'emlights\' sector.");
+                return uVar9 & 0xffffff00;
+              }
+              if (bVar1) {
+                uVar9 = FUN_1001cb80("CVehicleHandler::LoadXMLEmLightData",
+                                     "\'emlights\' sector contains multiple \'alwayson\' vectors.");
+                return uVar9 & 0xffffff00;
+              }
+              local_10 = (char *)FUN_100350f0(iVar7);
+              if (local_10 == (char *)0x0) {
+                uVar9 = FUN_1001cb80("CVehicleHandler::LoadXMLEmLightData",
+                                     "Failed to read data from \'alwayson\' element.");
+                return uVar9 & 0xffffff00;
+              }
+              iVar8 = __stricmp(local_10,"true");
+              if (iVar8 == 0) {
+                param_2[3] = 1;
+              }
+              else {
+                iVar8 = __stricmp(local_10,"false");
+                if (iVar8 != 0) {
+                  uVar9 = FUN_1001cb80("CVehicleHandler::LoadXMLEmLightData",
+                                       "Element \'alwayson\' may only have values \'true\' or \'false\'."
+                                      );
+                  return uVar9 & 0xffffff00;
+                }
+              }
+              bVar1 = true;
+            }
+          }
+        }
+      }
+      iVar7 = FUN_10034c10(iVar7);
+    } while (iVar7 != 0);
+  }
+  if (!bVar2) {
+    uVar9 = FUN_1001cb80("CVehicleHandler::LoadXMLEmLightData",
+                         "\'emlights\' sector is missing \'colourone\' element.");
+    return uVar9 & 0xffffff00;
+  }
+  if (!bVar3) {
+    uVar9 = FUN_1001cb80("CVehicleHandler::LoadXMLEmLightData",
+                         "\'emlights\' sector is missing \'colourtwo\' element.");
+    return uVar9 & 0xffffff00;
+  }
+  if (!bVar4) {
+    uVar9 = FUN_1001cb80("CVehicleHandler::LoadXMLEmLightData",
+                         "\'emlights\' sector is missing \'posleft\' vector.");
+    return uVar9 & 0xffffff00;
+  }
+  if (!bVar5) {
+    uVar9 = FUN_1001cb80("CVehicleHandler::LoadXMLEmLightData",
+                         "\'emlights\' sector is missing \'posright\' vector.");
+    return uVar9 & 0xffffff00;
+  }
+  return 1;
+}
+
+
+
+// FUN_1004edc0 @ 0x1004edc0 (RVA 0x4edc0) size 719
+
+
+uint __fastcall FUN_1004edc0(int param_1,int param_2)
+
+{
+  bool bVar1;
+  bool bVar2;
+  bool bVar3;
+  char cVar4;
+  int iVar5;
+  int iVar6;
+  char *pcVar7;
+  uint uVar8;
+  uint local_1c;
+  uint local_18;
+  uint local_14;
+  int local_10;
+  uint local_c;
+  
+  local_10 = param_2;
+  iVar5 = FUN_10034be0(param_1);
+  bVar1 = false;
+  bVar3 = false;
+  bVar2 = false;
+  *(undefined1 *)(param_2 + 1) = 1;
+  if (iVar5 != 0) {
+    local_c = 0xff;
+    do {
+      iVar6 = __stricmp((char *)(*(int *)(iVar5 + 0x20) + 8),"colour");
+      if (iVar6 == 0) {
+        if (bVar2) {
+          uVar8 = FUN_1001cb80("CVehicleHandler::LoadXMLSingleEmLightData",
+                               "\'emlightsingle\' sector contains multiple \'colour\' elements.");
+          return uVar8 & 0xffffff00;
+        }
+        pcVar7 = (char *)FUN_100350f0(iVar5);
+        if (pcVar7 == (char *)0x0) {
+          uVar8 = FUN_1001cb80("CVehicleHandler::LoadXMLSingleEmLightData",
+                               "Failed to read data from \'colour\' element.");
+          return uVar8 & 0xffffff00;
+        }
+        iVar6 = FID_conflict__sscanf(pcVar7,"%u,%u,%u",&local_1c,&local_18,&local_14);
+        if (iVar6 != 3) {
+          uVar8 = FUN_1001cb80("CVehicleHandler::LoadXMLSingleEmLightData",
+                               "Failed to parse the contents of \'colour\' element (format \'r,g,b\')."
+                              );
+          return uVar8 & 0xffffff00;
+        }
+        if (0xff < local_1c) {
+          local_1c = 0xff;
+        }
+        if (0xff < local_18) {
+          local_18 = 0xff;
+        }
+        if (0xff < local_14) {
+          local_14 = local_c;
+        }
+        *(char *)(param_2 + 0x3c) = (char)local_1c;
+        *(char *)(param_2 + 0x3d) = (char)local_18;
+        *(char *)(param_2 + 0x3e) = (char)local_14;
+        bVar2 = true;
+      }
+      else {
+        iVar6 = __stricmp((char *)(*(int *)(iVar5 + 0x20) + 8),"position");
+        if (iVar6 == 0) {
+          if (bVar3) {
+            uVar8 = FUN_1001cb80("CVehicleHandler::LoadXMLSingleEmLightData",
+                                 "\'emlightsingle\' sector contains multiple \'position\' vectors.")
+            ;
+            return uVar8 & 0xffffff00;
+          }
+          cVar4 = FUN_1001bdb0(iVar5,param_2 + 0x1c);
+          if (cVar4 == '\0') {
+            uVar8 = FUN_1001cb80("CVehicleHandler::LoadXMLSingleEmLightData",
+                                 "Could not load \'position\' vector.");
+            return uVar8 & 0xffffff00;
+          }
+          bVar3 = true;
+        }
+        else {
+          iVar6 = __stricmp((char *)(*(int *)(iVar5 + 0x20) + 8),"alwayson");
+          if (iVar6 != 0) {
+            uVar8 = FUN_1001cb80("CVehicleHandler::LoadXMLSingleEmLightData",
+                                 "Unknown element \'%s\' in \'emlightsingle\' sector.");
+            return uVar8 & 0xffffff00;
+          }
+          if (bVar1) {
+            uVar8 = FUN_1001cb80("CVehicleHandler::LoadXMLSingleEmLightData",
+                                 "\'emlightsingle\' sector contains multiple \'alwayson\' vectors.")
+            ;
+            return uVar8 & 0xffffff00;
+          }
+          pcVar7 = (char *)FUN_100350f0(iVar5);
+          if (pcVar7 == (char *)0x0) {
+            uVar8 = FUN_1001cb80("CVehicleHandler::LoadXMLSingleEmLightData",
+                                 "Failed to read data from \'alwayson\' element.");
+            return uVar8 & 0xffffff00;
+          }
+          iVar6 = __stricmp(pcVar7,"true");
+          if (iVar6 == 0) {
+            *(undefined1 *)(local_10 + 3) = 1;
+          }
+          else {
+            iVar6 = __stricmp(pcVar7,"false");
+            if (iVar6 != 0) {
+              uVar8 = FUN_1001cb80("CVehicleHandler::LoadXMLSingleEmLightData",
+                                   "Element \'alwayson\' may only have values \'true\' or \'false\'."
+                                  );
+              return uVar8 & 0xffffff00;
+            }
+          }
+          bVar1 = true;
+          param_2 = local_10;
+        }
+      }
+      iVar5 = FUN_10034c10(iVar5);
+    } while (iVar5 != 0);
+  }
+  if (!bVar2) {
+    uVar8 = FUN_1001cb80("CVehicleHandler::LoadXMLSingleEmLightData",
+                         "\'emlightsingle\' sector is missing \'colour\' element.");
+    return uVar8 & 0xffffff00;
+  }
+  if (bVar3) {
+    return 1;
+  }
+  uVar8 = FUN_1001cb80("CVehicleHandler::LoadXMLSingleEmLightData",
+                       "\'emlightsingle\' sector is missing \'position\' vector.");
+  return uVar8 & 0xffffff00;
+}
+
+
+
+// FUN_1004f090 @ 0x1004f090 (RVA 0x4f090) size 719
+
+
+uint __fastcall FUN_1004f090(int param_1,int param_2)
+
+{
+  bool bVar1;
+  bool bVar2;
+  bool bVar3;
+  char cVar4;
+  int iVar5;
+  int iVar6;
+  char *pcVar7;
+  uint uVar8;
+  uint local_1c;
+  uint local_18;
+  uint local_14;
+  int local_10;
+  uint local_c;
+  
+  local_10 = param_2;
+  iVar5 = FUN_10034be0(param_1);
+  bVar1 = false;
+  bVar3 = false;
+  bVar2 = false;
+  *(undefined1 *)(param_2 + 2) = 1;
+  if (iVar5 != 0) {
+    local_c = 0xff;
+    do {
+      iVar6 = __stricmp((char *)(*(int *)(iVar5 + 0x20) + 8),"colour");
+      if (iVar6 == 0) {
+        if (bVar2) {
+          uVar8 = FUN_1001cb80("CVehicleHandler::LoadXMLTaxiEmLightData",
+                               "\'taxilight\' sector contains multiple \'colour\' elements.");
+          return uVar8 & 0xffffff00;
+        }
+        pcVar7 = (char *)FUN_100350f0(iVar5);
+        if (pcVar7 == (char *)0x0) {
+          uVar8 = FUN_1001cb80("CVehicleHandler::LoadXMLTaxiEmLightData",
+                               "Failed to read data from \'colour\' element.");
+          return uVar8 & 0xffffff00;
+        }
+        iVar6 = FID_conflict__sscanf(pcVar7,"%u,%u,%u",&local_1c,&local_18,&local_14);
+        if (iVar6 != 3) {
+          uVar8 = FUN_1001cb80("CVehicleHandler::LoadXMLTaxiEmLightData",
+                               "Failed to parse the contents of \'colour\' element (format \'r,g,b\')."
+                              );
+          return uVar8 & 0xffffff00;
+        }
+        if (0xff < local_1c) {
+          local_1c = 0xff;
+        }
+        if (0xff < local_18) {
+          local_18 = 0xff;
+        }
+        if (0xff < local_14) {
+          local_14 = local_c;
+        }
+        *(char *)(param_2 + 0x40) = (char)local_1c;
+        *(char *)(param_2 + 0x41) = (char)local_18;
+        *(char *)(param_2 + 0x42) = (char)local_14;
+        bVar2 = true;
+      }
+      else {
+        iVar6 = __stricmp((char *)(*(int *)(iVar5 + 0x20) + 8),"position");
+        if (iVar6 == 0) {
+          if (bVar3) {
+            uVar8 = FUN_1001cb80("CVehicleHandler::LoadXMLTaxiEmLightData",
+                                 "\'taxilight\' sector contains multiple \'position\' vectors.");
+            return uVar8 & 0xffffff00;
+          }
+          cVar4 = FUN_1001bdb0(iVar5,param_2 + 0x28);
+          if (cVar4 == '\0') {
+            uVar8 = FUN_1001cb80("CVehicleHandler::LoadXMLTaxiEmLightData",
+                                 "Could not load \'position\' vector.");
+            return uVar8 & 0xffffff00;
+          }
+          bVar3 = true;
+        }
+        else {
+          iVar6 = __stricmp((char *)(*(int *)(iVar5 + 0x20) + 8),"alwayson");
+          if (iVar6 != 0) {
+            uVar8 = FUN_1001cb80("CVehicleHandler::LoadXMLTaxiEmLightData",
+                                 "Unknown element \'%s\' in \'taxilight\' sector.");
+            return uVar8 & 0xffffff00;
+          }
+          if (bVar1) {
+            uVar8 = FUN_1001cb80("CVehicleHandler::LoadXMLTaxiEmLightData",
+                                 "\'taxilight\' sector contains multiple \'alwayson\' elements.");
+            return uVar8 & 0xffffff00;
+          }
+          pcVar7 = (char *)FUN_100350f0(iVar5);
+          if (pcVar7 == (char *)0x0) {
+            uVar8 = FUN_1001cb80("CVehicleHandler::LoadXMLTaxiEmLightData",
+                                 "Failed to read data from \'alwayson\' element.");
+            return uVar8 & 0xffffff00;
+          }
+          iVar6 = __stricmp(pcVar7,"true");
+          if (iVar6 == 0) {
+            *(undefined1 *)(local_10 + 3) = 1;
+          }
+          else {
+            iVar6 = __stricmp(pcVar7,"false");
+            if (iVar6 != 0) {
+              uVar8 = FUN_1001cb80("CVehicleHandler::LoadXMLTaxiEmLightData",
+                                   "Element \'alwayson\' may only have values \'true\' or \'false\'."
+                                  );
+              return uVar8 & 0xffffff00;
+            }
+          }
+          bVar1 = true;
+          param_2 = local_10;
+        }
+      }
+      iVar5 = FUN_10034c10(iVar5);
+    } while (iVar5 != 0);
+  }
+  if (!bVar2) {
+    uVar8 = FUN_1001cb80("CVehicleHandler::LoadXMLTaxiEmLightData",
+                         "\'taxilight\' sector is missing \'colour\' element.");
+    return uVar8 & 0xffffff00;
+  }
+  if (bVar3) {
+    return 1;
+  }
+  uVar8 = FUN_1001cb80("CVehicleHandler::LoadXMLTaxiEmLightData",
+                       "\'taxilight\' sector is missing \'position\' vector.");
+  return uVar8 & 0xffffff00;
+}
+
+
+

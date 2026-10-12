@@ -1,0 +1,32 @@
+// FUN_10051cb0 @ 0x10051cb0 (RVA 0x51cb0) size 248
+
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void FUN_10051cb0(void)
+
+{
+  FUN_10022560((undefined1 *)0x42dc9d,0x10051940);
+  FUN_10022560((undefined1 *)0x5f3345,0x100519a0);
+  FUN_10022560((undefined1 *)0x5f36a2,0x10051a10);
+  FUN_10022560((undefined1 *)0x5f36b9,0x10051a70);
+  FUN_10022560((undefined1 *)0x61d925,0x10051ad0);
+  FUN_10022560((undefined1 *)0x42e23a,0x10051ae0);
+  FUN_10022560((undefined1 *)0x42e13a,0x10051b00);
+  FUN_10022560((undefined1 *)0x42cb49,0x10051b20);
+  FUN_10022560((undefined1 *)0x4bf902,0x10051b60);
+  FUN_10022560((undefined1 *)0x4bfa28,0x10051b90);
+  FUN_10022560((undefined1 *)0x4bfc1c,0x10051bf0);
+  FUN_10022560((undefined1 *)0x42c72c,0x10051c30);
+  FUN_10022560((undefined1 *)0x61a803,0x10051c70);
+  FUN_10022560((undefined1 *)0x4a4723,0x10051c90);
+  _DAT_004bfc6c = 0x90909090;
+  _DAT_004bfc70 = 0x9090;
+  _DAT_005f337a = 0x901c75ff;
+  DAT_005f337e = 0x90;
+  FUN_10051fb0();
+  return;
+}
+
+
+
