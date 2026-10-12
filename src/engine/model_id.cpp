@@ -13,7 +13,7 @@
 //   * Error reporting goes through MvlErrorLog() with the original message
 //     literals preserved via ReportProblem().
 #include "../core/stdafx.h"
-#include "model_id.h"
+#include "model_id.h"      // also pulls engine_globals.h (shared DAT_* storage)
 #include "game_hooks.h"
 #include "../loader/log.h"
 
@@ -43,25 +43,10 @@ ReportProblem(const char *context, const char *format, ...)
 }
 
 // ---------------------------------------------------------------------------
-// Plugin-side .data globals (0.98e RVAs cited; types provisional).
+// Shared plugin .data globals now live in engine_globals.cpp (single storage
+// owner; see engine_globals.h for the Mvl* names + original DAT_ RVAs and
+// globals-map.md for the census). This TU reads/writes them in the ports.
 // ---------------------------------------------------------------------------
-static uint8_t  DAT_100b0c41 = 0;    // 0.98e @ RVA 0xb0c41  - long-model-ids enabled flag
-static uint8_t  DAT_100b17e9 = 0;    // 0.98e @ RVA 0xb17e9  - paranoid model-name checks
-static void    *DAT_100b0cd8 = NULL; // 0.98e @ RVA 0xb0cd8  - streaming buffer (MVL-owned)
-static int      DAT_100b0ce0 = 0;    // 0.98e @ RVA 0xb0ce0  - streaming buffer capacity
-static void    *DAT_100b0cdc = NULL; // 0.98e @ RVA 0xb0cdc  - model-pointer buffer
-static int      DAT_100b0ce4 = 0;    // 0.98e @ RVA 0xb0ce4  - model-pointer buffer capacity
-static uint32_t *DAT_100b0ce8 = NULL; // 0.98e @ RVA 0xb0ce8 - saved new texture pool
-static uint32_t *DAT_100a6314 = NULL; // 0.98e @ RVA 0xa6314 - model-pointer buffer base
-static uint8_t  *DAT_100a631c = NULL; // 0.98e @ RVA 0xa631c - streaming buffer base (old/new)
-static int      DAT_100a6318 = 0;    // 0.98e @ RVA 0xa6318  - anim start index (old)
-static int      DAT_100a6320 = 0;    // 0.98e @ RVA 0xa6320  - texture start index (old)
-static int      DAT_100a6328 = 0;    // 0.98e @ RVA 0xa6328  - collision start index (old)
-
-// Shared scratch (declared in model_id.h; written by the VC directory hooks).
-uint32_t DAT_10124f14 = 0;      // 0.98e @ RVA 0x124f14 - model index being created
-char     DAT_10124f24[24] = {}; // 0.98e @ RVA 0x124f24 - model name being created
-uint8_t  DAT_10124f30[16] = {}; // 0.98e @ RVA 0x124f30 - ID-less model directory (+4/+8 ints)
 
 // ---------------------------------------------------------------------------
 // VC 1.0 exe addresses referenced by the ported functions (RVA = VA - 0x400000).
@@ -533,9 +518,10 @@ CLongModelId::ExtendTxdIndexMovsx(void)
 void
 MvlSetLongModelIdsEnabled(bool enabled)
 {
-	// Original: DAT_100b0c41 (0.98e @ RVA 0xb0c41), read via FUN_100173d0 and
+	// Original: MvlLongModelIdsEnabled (0.98e @ RVA 0xb0c41), read via FUN_100173d0 and
 	// used by FUN_10017390 to gate the whole CLongModelId family.
-	DAT_100b0c41 = enabled ? 1u : 0u;
+	MvlLongModelIdsEnabled = enabled ? static_cast<uint8_t>(1u)
+	                                 : static_cast<uint8_t>(0u);
 }
 
 // ---------------------------------------------------------------------------
@@ -615,28 +601,28 @@ void
 CModelIndexLimit::ReplaceStreamingBufferRefs(int maxModelId)
 {
 	// 0.98e @ RVA 0x17410 (FUN_10017410). Sites: plugin .data @ RVA 0xacde8.
-	if (DAT_100b0cd8 == NULL || DAT_100b0ce0 < maxModelId) {
-		DAT_100b0ce0 = maxModelId;
-		DAT_100b0cd8 = malloc((static_cast<size_t>(maxModelId) * 5 + 0x23) * 4);
-		if (DAT_100b0cd8 == NULL) {
+	if (MvlStreamingBuffer == NULL || MvlStreamingBufferCapacity < maxModelId) {
+		MvlStreamingBufferCapacity = maxModelId;
+		MvlStreamingBuffer = malloc((static_cast<size_t>(maxModelId) * 5 + 0x23) * 4);
+		if (MvlStreamingBuffer == NULL) {
 			ReportProblem("CModelIndexLimit::ReplaceStreamingBufferRefs",
 			              "Out of memory (%d models).", maxModelId);
 			return;
 		}
 	}
 
-	uint8_t       *newBase = static_cast<uint8_t*>(DAT_100b0cd8);
-	const uint8_t *oldBase = DAT_100a631c;
+	uint8_t       *newBase = static_cast<uint8_t*>(MvlStreamingBuffer);
+	const uint8_t *oldBase = MvlStreamingBufferBase;
 
-	memcpy(DAT_100b0cd8, DAT_100a631c,
-	       (static_cast<size_t>(DAT_100a6318) * 5 + 0x73) * 4);
+	memcpy(MvlStreamingBuffer, MvlStreamingBufferBase,
+	       (static_cast<size_t>(MvlColIdBoundary) * 5 + 0x73) * 4);
 
 	for (size_t i = 0; i < sizeof(kStreamingBufferSites) / sizeof(kStreamingBufferSites[0]); ++i) {
 		const uint32_t siteAddress = kStreamingBufferSites[i];
 
 		// Original: skip only when long-model-ids are on AND the site is one of
 		// the two sites handled specially elsewhere.
-		if (DAT_100b0c41 != 0 &&
+		if (MvlLongModelIdsEnabled != 0 &&
 		    (siteAddress == kVC_StreamingSkipSite1 || siteAddress == kVC_StreamingSkipSite2))
 			continue;
 
@@ -651,8 +637,8 @@ CModelIndexLimit::ReplaceStreamingBufferRefs(int maxModelId)
 			    siteAddress != kVC_ColStartRef2 && siteAddress != kVC_ColStartRef1) {
 				ReportProblem("CModelIndexLimit::ReplaceStreamingBufferRefs",
 				              "Problem at %08X.", siteAddress);
-				// Original reloads puVar4/puVar6 here; DAT_100b0cd8 and
-				// DAT_100a631c cannot have changed inside the loop -> no-op.
+				// Original reloads puVar4/puVar6 here; MvlStreamingBuffer and
+				// MvlStreamingBufferBase cannot have changed inside the loop -> no-op.
 			}
 		} else {
 			*site = (stored - oldBaseValue) +
@@ -660,7 +646,7 @@ CModelIndexLimit::ReplaceStreamingBufferRefs(int maxModelId)
 		}
 	}
 
-	DAT_100a631c = newBase;
+	MvlStreamingBufferBase = newBase;
 	MvlWriteDword(reinterpret_cast<void*>(static_cast<uintptr_t>(kVC_StreamingCapacity)),
 	              static_cast<uint32_t>(maxModelId));
 }
@@ -669,22 +655,22 @@ void
 CModelIndexLimit::ReplaceModelPointerBufferRefs(int maxModelId)
 {
 	// 0.98e @ RVA 0x17510 (FUN_10017510). Sites: plugin .data @ RVA 0xada18.
-	if (DAT_100b0cdc != NULL && maxModelId > DAT_100b0ce4) {
-		free(DAT_100b0cdc);
-		DAT_100b0cdc = NULL; // clone safety: keep state consistent if malloc fails
+	if (MvlModelPointerBuffer != NULL && maxModelId > MvlModelPointerBufferCapacity) {
+		free(MvlModelPointerBuffer);
+		MvlModelPointerBuffer = NULL; // clone safety: keep state consistent if malloc fails
 	}
-	if (DAT_100b0cdc == NULL) {
-		DAT_100b0ce4 = maxModelId;
-		DAT_100b0cdc = malloc(static_cast<size_t>(maxModelId) * 4 + 0x1C);
-		if (DAT_100b0cdc == NULL) {
+	if (MvlModelPointerBuffer == NULL) {
+		MvlModelPointerBufferCapacity = maxModelId;
+		MvlModelPointerBuffer = malloc(static_cast<size_t>(maxModelId) * 4 + 0x1C);
+		if (MvlModelPointerBuffer == NULL) {
 			ReportProblem("CModelIndexLimit::ReplaceModelPointerBufferRefs",
 			              "Out of memory (%d models).", maxModelId);
 			return;
 		}
 	}
 
-	const uint32_t newBaseValue = static_cast<uint32_t>(reinterpret_cast<uintptr_t>(DAT_100b0cdc));
-	const uint32_t oldBaseValue = static_cast<uint32_t>(reinterpret_cast<uintptr_t>(DAT_100a6314));
+	const uint32_t newBaseValue = static_cast<uint32_t>(reinterpret_cast<uintptr_t>(MvlModelPointerBuffer));
+	const uint32_t oldBaseValue = static_cast<uint32_t>(reinterpret_cast<uintptr_t>(MvlModelLookupRegistry));
 
 	for (size_t i = 0; i < sizeof(kModelPointerSites) / sizeof(kModelPointerSites[0]); ++i) {
 		const uint32_t siteAddress = kModelPointerSites[i];
@@ -718,7 +704,7 @@ CModelIndexLimit::ReplaceModelPointerBufferRefs(int maxModelId)
 		}
 	}
 
-	DAT_100a6314 = static_cast<uint32_t*>(DAT_100b0cdc);
+	MvlModelLookupRegistry = static_cast<uint32_t*>(MvlModelPointerBuffer);
 }
 
 void
@@ -727,16 +713,16 @@ CModelIndexLimit::ReplaceTexStartIndexRefs(int texStart, uint32_t texCount)
 	// 0.98e @ RVA 0x175f0 (FUN_100175f0). Sites: plugin .data @ RVA 0xae390.
 	for (size_t i = 0; i < sizeof(kTexStartSites) / sizeof(kTexStartSites[0]); ++i) {
 		int *site = reinterpret_cast<int*>(static_cast<uintptr_t>(kTexStartSites[i]));
-		if (*site == DAT_100a6320)
+		if (*site == MvlModelIdBoundary)
 			*site = texStart;
-		else if (*site == -DAT_100a6320)
+		else if (*site == -MvlModelIdBoundary)
 			*site = -texStart;
 		else
 			ReportProblem("CModelIndexLimit::ReplaceTexStartIndexRefs", "Problem at %08X.",
 			              kTexStartSites[i]);
 	}
 
-	const uint32_t newStart = static_cast<uint32_t>(reinterpret_cast<uintptr_t>(DAT_100a631c)) +
+	const uint32_t newStart = static_cast<uint32_t>(reinterpret_cast<uintptr_t>(MvlStreamingBufferBase)) +
 	                          8u + static_cast<uint32_t>(texStart) * 0x14u;
 	MvlWriteDword(reinterpret_cast<void*>(static_cast<uintptr_t>(kVC_TexStartRef1)), newStart);
 	MvlWriteDword(reinterpret_cast<void*>(static_cast<uintptr_t>(kVC_TexStartRef2)), newStart);
@@ -753,7 +739,7 @@ CModelIndexLimit::ReplaceTexStartIndexRefs(int texStart, uint32_t texCount)
 		VcFunc<void (__cdecl *)(void)>(kVC_TexPoolRebuild1)();
 		uint32_t *newPool = vcTexPool; // set by the VC rebuild call
 
-		int copyCount = DAT_100a6328 - DAT_100a6320;
+		int copyCount = MvlTxdIdBoundary - MvlModelIdBoundary;
 		if (static_cast<int>(texCount) < copyCount)
 			copyCount = static_cast<int>(texCount);
 		const size_t copyBytes = static_cast<size_t>(static_cast<uint32_t>(copyCount));
@@ -771,11 +757,11 @@ CModelIndexLimit::ReplaceTexStartIndexRefs(int texStart, uint32_t texCount)
 
 		vcTexPool = oldPool;
 		VcFunc<void (__cdecl *)(void)>(kVC_TexPoolRebuild2)();
-		DAT_100b0ce8 = newPool;
+		MvlSavedTexturePool = newPool;
 		vcTexPool = newPool;
 	}
 
-	DAT_100a6320 = texStart;
+	MvlModelIdBoundary = texStart;
 }
 
 void
@@ -784,21 +770,21 @@ CModelIndexLimit::ReplaceColStartIndexRefs(int colStart, uint32_t colCount)
 	// 0.98e @ RVA 0x17720 (FUN_10017720). Sites: plugin .data @ RVA 0xad948.
 	for (size_t i = 0; i < sizeof(kColStartSites) / sizeof(kColStartSites[0]); ++i) {
 		int *site = reinterpret_cast<int*>(static_cast<uintptr_t>(kColStartSites[i]));
-		if (*site == DAT_100a6328)
+		if (*site == MvlTxdIdBoundary)
 			*site = colStart;
-		else if (*site == -DAT_100a6328)
+		else if (*site == -MvlTxdIdBoundary)
 			*site = -colStart;
 		else
 			ReportProblem("CModelIndexLimit::ReplaceColStartIndexRefs", "Problem at %08X.",
 			              kColStartSites[i]);
 	}
 
-	const uint32_t base = static_cast<uint32_t>(reinterpret_cast<uintptr_t>(DAT_100a631c)) +
+	const uint32_t base = static_cast<uint32_t>(reinterpret_cast<uintptr_t>(MvlStreamingBufferBase)) +
 	                      static_cast<uint32_t>(colStart) * 0x14u;
 	MvlWriteDword(reinterpret_cast<void*>(static_cast<uintptr_t>(kVC_ColStartRef1)), base + 9u);
 	MvlWriteDword(reinterpret_cast<void*>(static_cast<uintptr_t>(kVC_ColStartRef2)), base + 8u);
 	MvlWriteDword(reinterpret_cast<void*>(static_cast<uintptr_t>(kVC_ColExtraRef1)), 0x6Au);
-	DAT_100a6328 = colStart;
+	MvlTxdIdBoundary = colStart;
 	MvlWriteDword(reinterpret_cast<void*>(static_cast<uintptr_t>(kVC_ColExtraRef2)), 0x68u);
 	MvlWriteDword(reinterpret_cast<void*>(static_cast<uintptr_t>(kVC_ColExtraRef3)), colCount);
 }
@@ -809,15 +795,15 @@ CModelIndexLimit::ReplaceAnimStartIndexRefs(int animStart)
 	// 0.98e @ RVA 0x177c0 (FUN_100177c0). Sites: plugin .data @ RVA 0xad8b0.
 	for (size_t i = 0; i < sizeof(kAnimStartSites) / sizeof(kAnimStartSites[0]); ++i) {
 		int *site = reinterpret_cast<int*>(static_cast<uintptr_t>(kAnimStartSites[i]));
-		if (*site == DAT_100a6318)
+		if (*site == MvlColIdBoundary)
 			*site = animStart;
-		else if (*site == -DAT_100a6318)
+		else if (*site == -MvlColIdBoundary)
 			*site = -animStart;
 		else
 			ReportProblem("CModelIndexLimit::ReplaceAnimStartIndexRefs", "Problem at %08X.",
 			              kAnimStartSites[i]);
 	}
-	DAT_100a6318 = animStart;
+	MvlColIdBoundary = animStart;
 }
 
 void
@@ -839,9 +825,9 @@ CModelIndexLimit::RegisterModelForLookup(uint32_t modelIndex, int modelPtr)
 	}
 	lowerName[len] = '\0';
 
-	// Original (gated on DAT_100b17e9): look the name up in the map and report
+	// Original (gated on MvlParanoidModelNameChecks): look the name up in the map and report
 	// a duplicate with the previous index. Clone: hash registry.
-	if (DAT_100b17e9 != 0) {
+	if (MvlParanoidModelNameChecks != 0) {
 		const int previous = LookupModelName(lowerName);
 		if (previous >= 0) {
 			ReportProblem("CModelIndexLimit::RegisterModelForLookup",
@@ -851,7 +837,7 @@ CModelIndexLimit::RegisterModelForLookup(uint32_t modelIndex, int modelPtr)
 	}
 
 	// Model-pointer registration is unconditional in the original.
-	reinterpret_cast<int*>(DAT_100a6314)[modelIndex] = modelPtr;
+	reinterpret_cast<int*>(MvlModelLookupRegistry)[modelIndex] = modelPtr;
 	InsertModelName(lowerName, static_cast<int>(modelIndex));
 }
 
@@ -859,26 +845,26 @@ uint32_t
 CModelIndexLimit::VerifyModelHasColModel(void)
 {
 	// 0.98e @ RVA 0x17f60 (FUN_10017f60).
-	const int modelIndex = static_cast<int>(DAT_10124f14);
-	const int modelPtr = reinterpret_cast<const int*>(DAT_100a6314)[modelIndex];
+	const int modelIndex = static_cast<int>(MvlCreatingModelIndex);
+	const int modelPtr = reinterpret_cast<const int*>(MvlModelLookupRegistry)[modelIndex];
 	int result = 0;
 
 	if (modelPtr != 0) {
-		if (DAT_100b17e9 != 0) {
+		if (MvlParanoidModelNameChecks != 0) {
 			const char *realName = reinterpret_cast<const char*>(
 			    static_cast<uintptr_t>(static_cast<uint32_t>(modelPtr) + 4u));
-			if (_stricmp(DAT_10124f24, realName) != 0) {
+			if (_stricmp(MvlCreatingModelName, realName) != 0) {
 				ReportProblem("CModelIndexLimit::VerifyModelHasColModel",
 				              "Creating instance of model %d with name %s - real name of the model is %s!",
-				              modelIndex, DAT_10124f24, realName);
+				              modelIndex, MvlCreatingModelName, realName);
 			}
 		}
-		result = reinterpret_cast<const int*>(DAT_100a6314)[modelIndex];
+		result = reinterpret_cast<const int*>(MvlModelLookupRegistry)[modelIndex];
 		if (*reinterpret_cast<const int*>(static_cast<uintptr_t>(
 		        static_cast<uint32_t>(result) + 0x1Cu)) == 0) {
 			ReportProblem("CModelIndexLimit::VerifyModelHasColModel",
 			              "Cannot create instance of model %d (%s), no colmodel.",
-			              modelIndex, DAT_10124f24);
+			              modelIndex, MvlCreatingModelName);
 			return 0u; // original: reporter return & 0xFFFFFF00 -> AL = 0 (false)
 		}
 	}
@@ -890,17 +876,17 @@ uint32_t
 CModelIndexLimit::VerifyDirectoryCanAdd(void)
 {
 	// 0.98e @ RVA 0x18030 (FUN_10018030).
-	// DAT_10124f30 is the ID-less model directory object; +4 / +8 are ints.
+	// MvlCreatingModelDirectory is the ID-less model directory object; +4 / +8 are ints.
 	// TODO(RE): which field is the count vs the limit is not visible in the
 	// decomp; condition kept exactly as decompiled (field4 <= field8 -> fail).
-	const uintptr_t dir = reinterpret_cast<uintptr_t>(&DAT_10124f30[0]);
+	const uintptr_t dir = reinterpret_cast<uintptr_t>(&MvlCreatingModelDirectory[0]);
 	const int32_t field4 = *reinterpret_cast<const int32_t*>(dir + 4);
 	const int32_t field8 = *reinterpret_cast<const int32_t*>(dir + 8);
 
 	if (field4 <= field8) {
 		ReportProblem("CModelIndexLimit::VerifyDirectoryCanAdd",
 		              "Cannot add model %s to list of ID-less models - limit full (%d).",
-		              DAT_10124f24, field8);
+		              MvlCreatingModelName, field8);
 		return 0u; // AL = 0 (false)
 	}
 	return 1u; // AL = 1 (true)
@@ -917,11 +903,11 @@ CModelIndexLimit::CaptureVcLimits(void)
 		return v;
 	};
 
-	DAT_100a6314 = reinterpret_cast<uint32_t*>(
+	MvlModelLookupRegistry = reinterpret_cast<uint32_t*>(
 	    static_cast<uintptr_t>(readVc(kVC_ModelPtrBaseImm)));
-	DAT_100a631c = reinterpret_cast<uint8_t*>(
+	MvlStreamingBufferBase = reinterpret_cast<uint8_t*>(
 	    static_cast<uintptr_t>(readVc(kVC_StreamingBaseImm)));
-	DAT_100a6320 = static_cast<int>(readVc(kVC_TexStartImm));
-	DAT_100a6328 = static_cast<int>(readVc(kVC_ColStartImm));
-	DAT_100a6318 = static_cast<int>(readVc(kVC_AnimStartImm));
+	MvlModelIdBoundary = static_cast<int>(readVc(kVC_TexStartImm));
+	MvlTxdIdBoundary = static_cast<int>(readVc(kVC_ColStartImm));
+	MvlColIdBoundary = static_cast<int>(readVc(kVC_AnimStartImm));
 }

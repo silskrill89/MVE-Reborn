@@ -67,3 +67,14 @@ Highlights:
 - Build root cause: stale premake regen — src/weapons/ + src/scm/ were absent from vehmod.vcxproj (written after last regen) → 2 phantom LNK2019s. Fix: `cmd //c premake5.cmd` regen + 2 compile fixes (CMvlWeapon::GetWeaponSlot accessor added; MvlPickupSetupRecord fwd decl added).
 - BUILD GREEN: vehmod.dll linked + postbuild deploy ran (H:\games\VC\vehmod_retail.dll).
 - **Metrics (user request)**: recompiled = 63% (105/167 MVL-specific census fns ported 1:1, from re-098e-map.md census; 2922 total fns incl. CRT/thunks excluded); accuracy = ~100% of ported code is 1:1 (332 RVA-cited sites; remaining gaps are 287 TODO + 84 HOOK POINT stubs that log-and-skip). Both numbers posted in README.md Status section.
+
+## 2026-10-12 (questionnaire close + memory sync)
+- Questionnaire Stages 5–10 completed (Stage 4 Q4.10 = a-c: weekly + on-new-findings + when-blocked cadence). All 10 stages answered → PLAN.md §9 decision record written (parity baseline 0.99d; MSVC+clang-cl; C++11/14; vendored deps; free-to-differ import surface; /W4 WAE; full TDD; MIT-style; dual-loading legacy+modern; conservative name anchoring; python33/libpng15 black-box; unified clone + runtime exe detection; rejected hypotheses logged).
+- Memory layers synced: memory-bank/activeContext.md + progress.md rewritten to tranche-4 state; .serena/memories/project.md status block added; sadie re-indexed; agentmemory saved.
+- Process refinements recorded (from tranche lessons): ALWAYS regen premake after new source dirs before build (stale vcxproj → phantom LNK2019); fix-1 session permanently dead.
+
+## 2026-10-12 (tranche-5-prep) — globals consolidation bound as rules, workflow template, metrics 67%
+- **AGENTS.md**: added binding Globals/data naming rule (directive 2026-10-12): semantic `Mvl*` name in code, original `DAT_* @ RVA` only as trailing comment; canonical shared-global storage = `src/engine/engine_globals.{h,cpp}` (71 duplicate per-TU statics already removed).
+- **docs/reverse-effort-template.md**: NEW retrospective + reusable playbook — how the recomp-ASAP pivot (questionnaire Stages 5–10 cancelled) turned a stalled survey effort into 4 green tranches / 13.8k LOC in ~2 days; pipeline (spec mining → name anchoring → headless export → parallel port lanes → single-owner build → milestone commit → memory sync), the 10 hard-won rules table, metrics discipline, adapt-for-next-project checklist.
+- **Metrics refresh**: Recompiled 63% → **67%** (99/148 census; census regex-normalized, prior 105/167 figure cross-checked and struck through), 320 RVA sites, 253 TODO + 77 HOOK POINT markers, 13,784 LOC. README.md now carries a per-commit milestone table with struck-through prior values as cross-checks.
+- Pending: run_export5.ps1 (8 dumps) → build-verify globals → tranche-5 lanes.

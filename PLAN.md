@@ -150,3 +150,57 @@ Batch E: `mvl/script` (Python host) — only if still wanted after core parity
 - 7z implementation choice for `mvl/archive` (vendored 7z SDK vs static extract-only).
 - Whether `mvl/script` (Python host) survives to the end-version or gets replaced
   by a native C++ script API.
+
+## 9. Decision record (questionnaire answers merged 2026-10-11)
+
+Answers from the 10-stage questionnaire; these EXPAND the sections above and
+override any conflicting default. Unanswered sub-points keep their defaults.
+
+### Stage 1 — Mission (expands §1)
+- 1.1 extras: **all three** — xmlgen tool clone, public source release, installer script.
+- 1.2 rebuild targets: **both** shim (`vehmod_chooser.flt`) + main DLL.
+- 1.3 parity baseline: **0.99d** (not 0.98e; 0.99d = newest public, fetched from ModDB).
+- 1.4 non-goal: byte-identical binary (parity is behavioral).
+- 1.5 legacy/modern: **dual-loading** — "keep identical for old stuff, for new stuff
+  when transitioning to modern stuff we will have better system that allows legacy
+  and modern loading side by side for compatibility."
+- 1.6 RE methodology itself is a deliverable (cloneable approach).
+- 1.7 first demo: one 7z vehicle spawns with wheels + audio.
+- 1.8 priority: archive → limits → extras → script.
+- 1.9 end users: both modders + players.
+- 1.10 addition: "The 'Windowed Mode' Lead (Confirmed Source Code)" — WindowedMode
+  source already cloned (see §3).
+
+### Stage 2 — Constraints (expands §2)
+- C6 toolchain: **MSVC + clang-cl** both allowed.
+- C7 language level: **C++11/14 ceiling** — lean, original idiom.
+- C8 deps: **vendor everything** (no external package managers at build time).
+- C9 import surface: **free to differ** from the original's DLL import surface.
+- C10 purity: **no exceptions** to pure C/C++ (C1 holds absolutely).
+- C11 perf: no measurable regression vs original.
+- C12 warnings: **/W4 + warnings-as-errors** on our own code.
+- C13 testing: **full TDD**.
+- C14 commits: per green batch.
+- C15 license: **MIT-style**.
+
+### Stage 3 — Internet hunt (expands §3)
+- 3.6 anchor: verify against `H:\games\VC\gta-vc.exe` (VC 1.0 exe base).
+- 3.8 author contact: "we can't reach him, community member asked to get tool going,
+  we are actively trying to find contact with maxorator" — community-driven revival.
+- 3.10 hunt priority: **old versions first** (fill the 0.9→0.98e ladder gaps).
+- 3.9 intel-log format (`docs/MVL/intel-log.md`) confirmed OK.
+
+### Stage 4 — RE methodology (expands §4)
+- 4.1 name anchoring: **conservative first** (only high-confidence renames).
+- 4.2 stop rule: full-mapping (all functions classified) for scoped ranges.
+- 4.6 python33/libpng15: **black-box** (treat as opaque deps, document interface only).
+- 4.7 exe variants: **unified clone + runtime exe detection** (retail/steam in one binary).
+- 4.9 rejected hypotheses must be logged (not silently dropped).
+- 4.10 RE summary cadence: **a-c** — weekly consolidation + on every new major
+  finding + whenever a lane gets blocked.
+
+### Open questions §8 — resolutions
+- Ghidra: installed (12.1.4, E:\dev(dave)\tools\ghidra); IDA Free 9.3 installed.
+- MVL_GAME_DIR = H:\games\VC (setx'd; see AGENTS.md).
+- 7z: vendored 7z SDK (LZMA SDK) chosen — in tree at external/lzma.
+- Python host: keep as late-phase C ABI bridge (C2), revisit after core parity.

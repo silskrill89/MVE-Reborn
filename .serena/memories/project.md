@@ -2,6 +2,13 @@
 
 Reverse-engineering rebuild of **Maxo's Vehicle Loader (MVL)** — a GTA Vice City 1.0 DLL plugin (`vehmod_retail.dll`, also distributed as `.flt`). MVL implements an XML + 7z vehicle-archive configuration system with Python 3.3 scripting hooks and direct engine patching. Goal: clone the functionality from binary RE, then later port to GTA San Andreas.
 
+## Status (2026-10-12): recomp sprint tranche-4 pushed
+- 63% recompiled (105/167 census fns 1:1), accuracy ~100% of ported code; build GREEN; pushed to https://github.com/silskrill89/MVE-Reborn.git (5 commits, HEAD 7a0fc6e).
+- src/ modules: loader, config, archive, engine, vehicle, weapons, scm. Full inventory + metrics in README.md + docs/MVL/re-daily.md.
+- Questionnaire Stages 1–10 answered → PLAN.md §9 decision record. Parity baseline 0.99d.
+- Board: fix-2/fix-3/fix-4 reusable; fix-1 dead (2 empty results).
+- Next tranches: Python host (FUN_100287c0), missing hook stubs (0x51940–0x51c90, 0x234c0, 0801/0802), engine_globals consolidation, audio/PNG/IFP/EM-lights.
+
 ## RE Targets
 
 | Target | Path | Notes |

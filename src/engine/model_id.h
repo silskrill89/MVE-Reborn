@@ -19,13 +19,12 @@
 #include <stddef.h>
 
 // ---------------------------------------------------------------------------
-// Shared scratch written by the VC streaming / directory hook handlers.
-// All are plugin .data globals in the original; the clone defines them here so
-// hook units can feed this subsystem (sizes except where noted are provisional).
+// Shared scratch written by the VC streaming / directory hook handlers:
+// MvlCreatingModelIndex / MvlCreatingModelName / MvlCreatingModelDirectory
+// (originals DAT_10124f14 / DAT_10124f24 / DAT_10124f30). Single storage now
+// lives in engine_globals.cpp; declared there with the other shared globals.
 // ---------------------------------------------------------------------------
-extern uint32_t DAT_10124f14;      // 0.98e @ RVA 0x124f14 - model index being created
-extern char     DAT_10124f24[24];  // 0.98e @ RVA 0x124f24 - model name being created
-extern uint8_t  DAT_10124f30[16];  // 0.98e @ RVA 0x124f30 - model directory; +4/+8 = counts
+#include "engine_globals.h"
 
 // ---------------------------------------------------------------------------
 // CLongModelId  (0.98e @ RVA 0x17170 .. 0x17250)

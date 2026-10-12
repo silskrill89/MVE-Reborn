@@ -8,18 +8,20 @@
 //   * FUN_10017f60 / FUN_10018030 are byte-for-byte the bodies already ported
 //     as CModelIndexLimit::VerifyModelHasColModel / VerifyDirectoryCanAdd in
 //     model_id.cpp (same RVAs, same messages, same AL semantics). They read
-//     the shared scratch DAT_10124f14/f24/f30 (extern in model_id.h, defined
-//     in model_id.cpp) and the model-pointer buffer base DAT_100a6314, which
-//     is a file-static inside model_id.cpp. To keep ONE implementation and a
-//     single owner for that buffer base, these two functions delegate to the
-//     already-ported methods instead of duplicating the logic with a second,
-//     disconnected copy of DAT_100a6314.
+//     the shared scratch MvlCreatingModelIndex / MvlCreatingModelName /
+//     MvlCreatingModelDirectory (originals DAT_10124f14/f24/f30) and the
+//     model-lookup registry MvlModelLookupRegistry (original DAT_100a6314),
+//     which lives inside model_id.cpp's CModelIndexLimit methods. To keep ONE
+//     implementation and a single owner for that buffer base, these two
+//     functions delegate to the already-ported methods instead of duplicating
+//     the logic with a second, disconnected copy.
 //   * FUN_100180a0 is ported in full, but its 9 E9-JMP installs target plugin
 //     handlers at RVAs 0x17DB0..0x18060 whose bodies are absent from the
 //     limout dumps; the installs are therefore NOT applied yet (logged once).
 #include "../core/stdafx.h"
 #include "dirmgr.h"
-#include "model_id.h"
+#include "model_id.h"      // Verify* methods + engine_globals.h via model_id.h
+#include "engine_globals.h"
 #include "game_hooks.h"
 #include "../loader/log.h"
 
@@ -40,11 +42,12 @@ uint32_t FUN_10018030(void)
 }
 
 // 0.98e @ RVA 0x180a0 - directory hook-site installer (guarded, one-shot).
-static char DAT_100b0c43 = 0; // 0.98e @ RVA 0xb0c43 - installer-done flag
+// Guard flag: MvlDirHooksInstalled (original DAT_100b0c43 @ RVA 0xb0c43,
+// single storage in engine_globals.cpp).
 
 void FUN_100180a0(void)
 {
-	if (DAT_100b0c43 != '\0')
+	if (MvlDirHooksInstalled != '\0')
 		return;
 
 	// Original install list (FUN_10022560 = MvlWriteJmp):
@@ -68,5 +71,5 @@ void FUN_100180a0(void)
 	MvlErrorLog("helpers: TODO(helpers): FUN_100180a0 - directory hooks not "
 	            "installed (handlers 0x10017db0..0x10018060 unported)");
 
-	DAT_100b0c43 = '\x01';
+	MvlDirHooksInstalled = '\x01';
 }

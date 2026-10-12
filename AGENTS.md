@@ -22,6 +22,16 @@ original MVL symbol names wherever RE recovered them (RTTI gave 136: CMvlSetting
 CMvlVehicle, CVehicleHandler, LoadXMLBasic, LoadVehicleArchives, …). Decompiled
 original ↔ clone code must map 1:1 by name. Unnamed functions get provisional
 names from the same convention, logged with confidence in re-*.md.
+
+**Globals/data naming rule (binding, user directive 2026-10-12)**: unnamed
+plugin data (`DAT_*`, `UNK_*`, raw RVAs) MUST get a semantic `Mvl*` name in
+code (e.g. `MvlDirHooksInstalled` for `DAT_100b0c43`); the original Ghidra name
++ RVA survives only as a trailing comment (`// DAT_100b0c43 @ RVA 0xb0c43`)
+for grep-ability. Canonical storage for shared globals lives in
+`src/engine/engine_globals.{h,cpp}` — never re-declare per-TU statics.
+Rationale: the reversed tree stays faithful (every symbol traceable to the
+binary) while remaining readable/modernizable later — fixes, cleanups and the
+modern-mod adaptation layer can then use semantic names throughout.
 - **Plugin target**: `vehmod`
 - **Primary RE target**: `original_files/maxovehmod098e/vehmod_retail.dll`
 - **Version range**: `original_files/maxovehmod*` 0.9 → 0.98e (+ `xmlgen_launcher`)

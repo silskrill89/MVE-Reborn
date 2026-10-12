@@ -21,6 +21,7 @@
 //     return the decomp's default; marked TODO(helpers) with the VA.
 #include "../core/stdafx.h"
 #include "model_helpers.h"
+#include "engine_globals.h"
 #include "model_id.h"
 #include "dirmgr.h"
 #include "game_hooks.h"
@@ -35,41 +36,10 @@
 #endif
 
 // ---------------------------------------------------------------------------
-// Section 1: plugin-side .data globals (0.98e RVAs; types provisional).
-// NOTE: several of these also exist as file-statics in game_hooks.cpp /
-// model_id.cpp (DAT_100b2450, DAT_100b641e, DAT_100a6318, DAT_100b0c41, ...).
-// The originals are single shared globals; the clone fragments them per-TU
-// until an engine-globals consolidation pass. See port-notes-helpers.md Q1.
+// Section 1: plugin-side .data globals now live in engine_globals.cpp (single
+// storage owner; see engine_globals.h for the Mvl* names + original DAT_ RVAs
+// and globals-map.md for the census). This TU reads/writes them in the ports.
 // ---------------------------------------------------------------------------
-static void    *DAT_1013a59c  = NULL;      // 0.98e @ RVA 0x13a59c - entity (FUN_1001b610)
-static int32_t  DAT_1013c55c  = 0;         // 0.98e @ RVA 0x13c55c - entity (FUN_1003a450)
-static int32_t  DAT_1013dc2c  = 0;         // 0.98e @ RVA 0x13dc2c - entity (FUN_1003a810)
-static char     DAT_100b1a1c  = 0;         // 0.98e @ RVA 0xb1a1c  - skip free flag
-static int32_t  DAT_100b2450  = 0;         // 0.98e @ RVA 0xb2450  - active entity temp
-static char     DAT_100b263b  = 0;         // 0.98e @ RVA 0xb263b  - flag toggling 0x571820
-static int32_t  DAT_100b6498  = 0;         // 0.98e @ RVA 0xb6498  - primary livery colour
-static int32_t  DAT_100b649c  = 0;         // 0.98e @ RVA 0xb649c  - alternate livery colour
-static int32_t  DAT_1013dc50  = 0;         // 0.98e @ RVA 0x13dc50 - entity (FUN_1003b9d0)
-static char    *DAT_1013c1fc  = NULL;      // 0.98e @ RVA 0x13c1fc - paint byte 2 buffer
-static char    *DAT_1013a5a8  = NULL;      // 0.98e @ RVA 0x13a5a8 - paint byte 1 buffer
-static int32_t  DAT_1013c568  = 0;         // 0.98e @ RVA 0x13c568 - entity (FUN_1003bae0)
-static char    *DAT_1013a5a4  = NULL;      // 0.98e @ RVA 0x13a5a4 - paint byte 1 buffer
-static char    *DAT_1013db88  = NULL;      // 0.98e @ RVA 0x13db88 - paint byte 2 buffer
-static char     DAT_1013c290[32] = {};     // 0.98e @ RVA 0x13c290 - "vc%u" name buffer
-static uint8_t  DAT_100b641e[0xED] = {};   // 0.98e @ RVA 0xb641e  - bypass class table (0x82..0xEC)
-static int32_t  DAT_100b2804[16] = {};     // 0.98e @ RVA 0xb2804  - slot class table (size provisional)
-static int32_t  DAT_100b51d8[16 * 0x61] = {}; // 0.98e @ RVA 0xb51d8 - per-slot class list (size provisional)
-static char     DAT_100b1793  = 0;         // 0.98e @ RVA 0xb1793  - wheel-cache feature flag
-static uint32_t DAT_100b0c3c  = 0;         // 0.98e @ RVA 0xb0c3c  - cache generation stamp
-static int32_t  DAT_100b17bc  = 0;         // 0.98e @ RVA 0xb17bc  - configured col count (driver)
-static uint32_t DAT_100b17e0  = 0;         // 0.98e @ RVA 0xb17e0  - configured tex count (driver)
-static int32_t  DAT_100b17e4  = 0;         // 0.98e @ RVA 0xb17e4  - configured model count (driver)
-static char     DAT_100b0c42  = 0;         // 0.98e @ RVA 0xb0c42  - col/anim patch installed flag
-static int32_t  DAT_100a6318  = 0;         // 0.98e @ RVA 0xa6318  - anim pool count (see Q1 note)
-static void    *DAT_100b0cd0  = NULL;      // 0.98e @ RVA 0xb0cd0  - anim pool buffer
-static int32_t  DAT_100b0cd4  = 0;         // 0.98e @ RVA 0xb0cd4  - anim pool capacity
-static char     DAT_100b0c41  = 0;         // 0.98e @ RVA 0xb0c41  - long-model-ids enabled (see Q1)
-static int32_t  DAT_100a6d48  = 0;         // 0.98e @ RVA 0xa6d48  - model-index base offset
 
 // ---------------------------------------------------------------------------
 // VC 1.0 game addresses referenced below (RVA = VA - 0x400000).
@@ -506,7 +476,7 @@ static void __fastcall FUN_10008990(void *this_, void * /*edx*/, float *m)
 // 0.98e @ RVA 0x4f3a0 - directory entry lookup by model index.
 static int *__fastcall FUN_1004f3a0(int32_t modelIndex)
 {
-	int *entry = FUN_1004f380(modelIndex - DAT_100a6d48);
+	int *entry = FUN_1004f380(modelIndex - MvlModelIndexBaseOffset);
 	if (entry == NULL || entry[0] == 0)
 		return NULL;
 	return entry;
@@ -547,7 +517,7 @@ static void __fastcall FUN_1003a350(int32_t entity)
 {
 	int32_t parts = FUN_1004f400(entity);
 	int32_t model = *reinterpret_cast<int32_t *>(static_cast<uintptr_t>(entity + 0x120));
-	if (parts == 0 || model == 0 || DAT_100b1793 == 0)
+	if (parts == 0 || model == 0 || MvlWheelCacheFeatureFlag == 0)
 		return;
 	const uint32_t flags = *reinterpret_cast<uint32_t *>(
 	    static_cast<uintptr_t>(model + 0xCC));
@@ -572,7 +542,7 @@ static void __fastcall FUN_1003a350(int32_t entity)
 	PokeByte(kVC_CacheByte2, restore);
 	PokeByte(kVC_CacheByte3, restore);
 	*reinterpret_cast<uint32_t *>(static_cast<uintptr_t>(parts + 0xE8)) =
-	    DAT_100b0c3c;
+	    MvlWheelCacheGenerationStamp;
 }
 
 // 0.98e @ RVA 0x2f890 - parts-object init pair (two unported sub-inits).
@@ -740,36 +710,36 @@ static uint32_t __fastcall FUN_1003a900(int32_t param_1, int32_t param_2,
 	return 0;
 }
 
-// 0.98e @ RVA 0x17290 - grows the anim pool to DAT_100a6318 + 100 entries
-// (0xFFFFFFFF-filled), only while the long-model-id flag DAT_100b0c41 is set.
+// 0.98e @ RVA 0x17290 - grows the anim pool to MvlColIdBoundary + 100 entries
+// (0xFFFFFFFF-filled), only while the long-model-id flag MvlLongModelIdsEnabled is set.
 static void FUN_10017290(void)
 {
-	int32_t capacity = DAT_100a6318;
-	if (DAT_100b0c41 == 0)
+	int32_t capacity = MvlColIdBoundary;
+	if (MvlLongModelIdsEnabled == 0)
 		return;
-	if (DAT_100b0cd0 != NULL) {
-		if (DAT_100a6318 + 100 <= DAT_100b0cd4)
+	if (MvlAnimPoolBuffer != NULL) {
+		if (MvlColIdBoundary + 100 <= MvlAnimPoolCapacity)
 			return; // still big enough
-		free(DAT_100b0cd0);
-		DAT_100b0cd0 = NULL;
+		free(MvlAnimPoolBuffer);
+		MvlAnimPoolBuffer = NULL;
 	}
 	capacity += 100;
-	DAT_100b0cd4 = capacity;
-	DAT_100b0cd0 = malloc(static_cast<size_t>(capacity) * 4u);
-	if (DAT_100b0cd0 == NULL) {
+	MvlAnimPoolCapacity = capacity;
+	MvlAnimPoolBuffer = malloc(static_cast<size_t>(capacity) * 4u);
+	if (MvlAnimPoolBuffer == NULL) {
 		MvlErrorLog("helpers: FUN_10017290: anim pool alloc failed (%d entries)",
 		            capacity);
 		return;
 	}
-	uint32_t *p = static_cast<uint32_t *>(DAT_100b0cd0);
+	uint32_t *p = static_cast<uint32_t *>(MvlAnimPoolBuffer);
 	for (int32_t i = 0; i < capacity; ++i)
 		p[i] = 0xFFFFFFFFu;
 }
 
-// 0.98e @ RVA 0x17940 - col/anim code-site patches (guarded by DAT_100b0c42).
+// 0.98e @ RVA 0x17940 - col/anim code-site patches (guarded by MvlColAnimPatchesInstalled).
 static void FUN_10017940(void)
 {
-	if (DAT_100b0c42 != 0)
+	if (MvlColAnimPatchesInstalled != 0)
 		return;
 
 	// Original installs 5 E9 JMPs via FUN_10022560 (MvlWriteJmp) from VC
@@ -795,33 +765,33 @@ static void FUN_10017940(void)
 	memcpy(reinterpret_cast<void *>(0x0062A038u), &patchCmpEsi, 2);
 	PokeByte(0x0062A03Au, patchImm8);
 
-	DAT_100b0c42 = 1;
+	MvlColAnimPatchesInstalled = 1;
 }
 
 // ===========================================================================
 // Section 5: depth-0 roots (the 11 helpers + driver).
 // ===========================================================================
 
-// 0.98e @ RVA 0x1b610 - attach/detach fixup pair on DAT_1013a59c.
+// 0.98e @ RVA 0x1b610 - attach/detach fixup pair on MvlAttachFixupEntity.
 void FUN_1001b610(void)
 {
-	void *entity = DAT_1013a59c;
-	FUN_1001b640(DAT_1013a59c, '\0');
+	void *entity = MvlAttachFixupEntity;
+	FUN_1001b640(MvlAttachFixupEntity, '\0');
 	FUN_1001b640(entity, '\x01');
 	FUN_1001b5b0(entity);
 }
 
-// 0.98e @ RVA 0x3a450 - per-frame wheel-cache refresh for DAT_1013c55c.
+// 0.98e @ RVA 0x3a450 - per-frame wheel-cache refresh for MvlWheelCacheEntity.
 void FUN_1003a450(void)
 {
-	const int32_t entity = DAT_1013c55c;
+	const int32_t entity = MvlWheelCacheEntity;
 	int32_t parts = FUN_1004f400(entity);
 	if (parts == 0)
 		return;
 
 	if (*reinterpret_cast<int32_t *>(static_cast<uintptr_t>(parts + 0xE4)) != 0 &&
 	    static_cast<uint32_t>(*reinterpret_cast<int32_t *>(
-	        static_cast<uintptr_t>(parts + 0xE8))) != DAT_100b0c3c) {
+	        static_cast<uintptr_t>(parts + 0xE8))) != MvlWheelCacheGenerationStamp) {
 		// Cache generation mismatch: rebuild.
 		FUN_1003a410(entity);
 		FUN_1003a350(entity);
@@ -843,12 +813,12 @@ void FUN_1003a450(void)
 	}
 }
 
-// 0.98e @ RVA 0x3a810 - teardown of the cached parts block of DAT_1013dc2c.
+// 0.98e @ RVA 0x3a810 - teardown of the cached parts block of MvlPartsTeardownEntity.
 // Returns 1 (AL) on success / nothing-to-do, 0 on failure (original EAX
 // semantics preserved: the decomp returns `x & 0xffffff00` for 0).
 uint32_t FUN_1003a810(void)
 {
-	const int32_t entity = DAT_1013dc2c;
+	const int32_t entity = MvlPartsTeardownEntity;
 	const int32_t modelIndex = FUN_1002d880(); // TODO(helpers): stub -> 0
 	int *dirEntry = FUN_1004f3a0(modelIndex);
 	if (dirEntry == NULL)
@@ -867,7 +837,7 @@ uint32_t FUN_1003a810(void)
 	if (*reinterpret_cast<int32_t *>(static_cast<uintptr_t>(parts)) != dirEntry[0])
 		return 0; // model ID mismatch - bail (AL = 0)
 
-	if (DAT_100b1a1c == '\0') {
+	if (MvlSkipPartsFreeFlag == '\0') {
 		const int32_t count = dirEntry[0xA18];
 		for (int32_t i = 0; i < count; ++i) {
 			// Records at byte 0x60 of the block, stride 0x24 ints? No: the
@@ -892,13 +862,13 @@ uint32_t FUN_1003a810(void)
 // 0.98e @ RVA 0x3af20 - per-frame part (door/window/extra) state machine.
 // Known decompiler losses (all marked TODO at the use sites):
 //   * the entity base for FUN_1004f400 came back as extraout registers; the
-//     active-entity temp DAT_100b2450 is the only candidate,
+//     active-entity temp MvlActiveEntityTemp is the only candidate,
 //   * the per-part record stride (0x24) is inconsistent with fields up to
 //     +0x74 in the same record - transcribed literally, verify vs disasm.
 void FUN_1003af20(void)
 {
-	// TODO(helpers): entity base = DAT_100b2450 is a decompiler-loss guess.
-	const int32_t entity = DAT_100b2450;
+	// TODO(helpers): entity base = MvlActiveEntityTemp is a decompiler-loss guess.
+	const int32_t entity = MvlActiveEntityTemp;
 	const int32_t modelIndex = FUN_1002d880(); // TODO(helpers): stub -> 0
 	int *dirEntry = FUN_1004f3a0(modelIndex);
 	if (dirEntry == NULL)
@@ -1162,9 +1132,9 @@ void FUN_1003b580(void)
 
 	bool patch = false;
 	if (dirEntry == NULL) {
-		patch = (DAT_100b263b == '\0');
+		patch = (MvlPartFlagDisable == '\0');
 	} else {
-		patch = (DAT_100b263b == '\0') &&
+		patch = (MvlPartFlagDisable == '\0') &&
 		        (*reinterpret_cast<char *>(
 		             reinterpret_cast<uint8_t *>(dirEntry) + 0xAF3 * 4) != 0);
 		// NOTE: decomp indexes piVar2[0xaf3] (int units) then reads it as char.
@@ -1270,24 +1240,24 @@ void __fastcall FUN_1003b840(int32_t param_1, int32_t param_2, int32_t param_3,
 	// Livery group: 4 slots (iVar3 steps 2 while < 8).
 	for (int32_t k = 0; k < 8; k += 2) {
 		const int32_t obj = dirEntry[0x9F5 + k / 2];
-		if (param_4 == 0 || DAT_100b6498 == 0 || DAT_100b649c == 0 || obj == 0)
+		if (param_4 == 0 || MvlPrimaryLiveryColor == 0 || MvlAlternateLiveryColor == 0 || obj == 0)
 			continue;
 		const uint8_t mask = PeekByte(static_cast<uint32_t>(param_4) + 0x1F9);
 		const uint32_t bits = PeekU32(static_cast<uint32_t>(param_4) + 0x2B0);
 		uint32_t *slot = reinterpret_cast<uint32_t *>(static_cast<uintptr_t>(obj));
 		if ((mask & 0x40u) == 0u || ((bits >> (k & 0x1F)) & 3u) != 0u)
-			*slot = static_cast<uint32_t>(DAT_100b6498);
+			*slot = static_cast<uint32_t>(MvlPrimaryLiveryColor);
 		else
-			*slot = static_cast<uint32_t>(DAT_100b649c);
+			*slot = static_cast<uint32_t>(MvlAlternateLiveryColor);
 	}
 }
 
-// 0.98e @ RVA 0x3b9d0 - random paint for DAT_1013dc50.
+// 0.98e @ RVA 0x3b9d0 - random paint for MvlPaintRandomEntity.
 void FUN_1003b9d0(void)
 {
-	const int32_t entity = DAT_1013dc50;
-	char *paint1 = DAT_1013a5a8;
-	char *paint2 = DAT_1013c1fc;
+	const int32_t entity = MvlPaintRandomEntity;
+	char *paint1 = MvlPaintRandomByte1Ptr;
+	char *paint2 = MvlPaintRandomByte2Ptr;
 
 	if (*reinterpret_cast<const char *>(static_cast<uintptr_t>(entity + 0x154)) == 0 ||
 	    PeekByte(kVC_PaintByteGlobal2) != 0) {
@@ -1336,17 +1306,16 @@ void FUN_1003b9d0(void)
 	}
 }
 
-// 0.98e @ RVA 0x3bae0 - paint-variant round-robin for DAT_1013c568.
-// TODO(helpers): reads the model-pointer buffer DAT_100a6314, which lives as
-// a file-static in model_id.cpp (shared-global fragmentation, see Q1); the
-// local copy stays NULL until consolidation, and the lookup is skipped then.
-static uint32_t *DAT_100a6314 = NULL; // 0.98e @ RVA 0xa6314
+// 0.98e @ RVA 0x3bae0 - paint-variant round-robin for MvlPaintVariantEntity.
+// Reads the shared model-lookup registry (MvlModelLookupRegistry /
+// MvlModelLookupRegistry, now single-storage in engine_globals.cpp); the lookup stays
+// guarded until CModelIndexLimit::CaptureVcLimits has filled it.
 
 void FUN_1003bae0(void)
 {
-	char *paint2 = DAT_1013db88;
-	const int32_t entity = DAT_1013c568;
-	char *paint1 = DAT_1013a5a4;
+	char *paint2 = MvlPaintVariantByte2Ptr;
+	const int32_t entity = MvlPaintVariantEntity;
+	char *paint1 = MvlPaintVariantByte1Ptr;
 
 	if (*reinterpret_cast<const uint8_t *>(static_cast<uintptr_t>(entity + 0x154)) == 0 ||
 	    PeekByte(kVC_PaintByteGlobal2) != 0) {
@@ -1394,8 +1363,8 @@ void FUN_1003bae0(void)
 		    *reinterpret_cast<const char *>(static_cast<uintptr_t>(player + 0x1A0)) == *paint1 &&
 		    *reinterpret_cast<const char *>(static_cast<uintptr_t>(player + 0x1A1)) == *paint2) {
 			const int32_t idx = FUN_1002d880(); // TODO(helpers): stub -> 0
-			if (DAT_100a6314 == NULL ||
-			    DAT_100a6314[static_cast<uint32_t>(idx)] !=
+			if (MvlModelLookupRegistry == NULL ||
+			    MvlModelLookupRegistry[static_cast<uint32_t>(idx)] !=
 	                static_cast<uint32_t>(entity)) {
 				*variant = static_cast<uint8_t>((*variant + 1u) % count);
 				if (FUN_1003cfc0(static_cast<int32_t>(modelIndex))) {
@@ -1414,28 +1383,28 @@ void FUN_1003bae0(void)
 	}
 }
 
-// 0.98e @ RVA 0x3de20 - formats "vc%u" (GetTickCount) into DAT_1013c290.
+// 0.98e @ RVA 0x3de20 - formats "vc%u" (GetTickCount) into MvlGeneratedVcNameBuffer.
 char *FUN_1003de20(void)
 {
 	const DWORD tick = GetTickCount();
-	snprintf(DAT_1013c290, sizeof(DAT_1013c290), "vc%u",
+	snprintf(MvlGeneratedVcNameBuffer, sizeof(MvlGeneratedVcNameBuffer), "vc%u",
 	         static_cast<unsigned>(tick));
-	return DAT_1013c290;
+	return MvlGeneratedVcNameBuffer;
 }
 
 // 0.98e @ RVA 0x4f7e0 - set AI class (slot table or per-slot 0x61 list).
 void __fastcall FUN_1004f7e0(int32_t modelId, int32_t slot)
 {
 	const uint32_t id = static_cast<uint32_t>(modelId);
-	if (id - 0x82u < 0x6Bu && DAT_100b641e[id] != 0) {
-		DAT_100b2804[slot] = modelId;
+	if (id - 0x82u < 0x6Bu && MvlKeyClassBypassTable[id] != 0) {
+		MvlAiClassSlotTable[slot] = modelId;
 		return;
 	}
 	// Per-slot entry counter lives in the VC .data table at 0x9785A8.
 	uint32_t *count = reinterpret_cast<uint32_t *>(
 	    static_cast<uintptr_t>(kVC_ClassCounterBase)) + slot;
 	if (*count < 0x61u) {
-		DAT_100b51d8[slot * 0x61 + static_cast<int32_t>(*count)] = modelId;
+		MvlAiClassSlotList[slot * 0x61 + static_cast<int32_t>(*count)] = modelId;
 		++(*count);
 	}
 }
@@ -1454,9 +1423,9 @@ void __fastcall FUN_1004f7e0(int32_t modelId, int32_t slot)
 //    the call carries exactly one int argument = streamingMax + 100.)
 void FUN_10017820(void)
 {
-	const int32_t modelCount = DAT_100b17e4;
-	const uint32_t texCount = DAT_100b17e0;
-	const int32_t colCount = DAT_100b17bc;
+	const int32_t modelCount = MvlConfiguredModelLimit;
+	const uint32_t texCount = static_cast<uint32_t>(MvlConfiguredTexDictLimit);
+	const int32_t colCount = MvlConfiguredColFileLimit;
 
 	CModelIndexLimit::CaptureVcLimits();
 
