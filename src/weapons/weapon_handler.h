@@ -1,5 +1,5 @@
 // weapon_handler.h — CWeaponHandler: weapon registry, archives, audio XML,
-// save-XML load, wlist dump.
+// save-XML load/write, wlist dump.
 //
 // Faithful recompilation from decompiled vehmod_retail.dll 0.98e (decomp:
 // .harness-memory/limout/savewpn/range-decomp.txt, 0x54850-0x57320 subset).
@@ -97,6 +97,28 @@ public:
 	// slots by archive totalSize (hash) then by archive path stricmp.
 	static CMvlWeapon *FindWeaponForIdentity(void);
 
+	// === Save-XML write (inverse of the load section) =====================
+
+	// FUN_10056880 @ 0x56880 — (provisional) WriteSaveXmlWeaponInfoIdentity:
+	// builds the <identity> record: <archivehash>%08X</archivehash>
+	// (GetArchiveTotalSize) + <archivename>%s</archivename>
+	// (GetArchivePath). NULL for unknown ids.
+	static TiXmlElement *WriteSaveXmlWeaponInfoIdentity(int weaponId);
+
+	// FUN_10056aa0 @ 0x56aa0 — (provisional) WriteSaveXmlPlayerWeaponInfo:
+	// <weapon> = <identity> + <ammo>%d</ammo>. Signature is __fastcall
+	// (id in ecx, ammo in edx) — binary-verified (the decomp drops the
+	// hidden 2nd param; it is pushed as the vsprintf vararg).
+	// NULL for unknown ids.
+	static TiXmlElement *WriteSaveXmlPlayerWeaponInfo(int weaponId, int ammo);
+
+	// FUN_10056c00 @ 0x56c00 — (provisional) WriteSaveXmlPlayerWeapons:
+	// <playerweps> root; walks the player ped's 10 weapon slots (ped+0x408,
+	// stride 0x18; id @ +0x00, ammo @ +0x0c — binary-verified) and emits one
+	// <weapon> record per slot holding a registered MVL id (> 0). Ped/slot
+	// access → HOOK seams (no engine data → no records).
+	static TiXmlElement *WriteSaveXmlPlayerWeapons(unsigned playerCtx);
+
 	// === Dump / cleanup ===================================================
 
 	// CWeaponHandler::DumpWeaponXML — 0x98e @ RVA 0x57320.
@@ -105,9 +127,14 @@ public:
 	// table iteration is engine data → HOOK; format strings 1:1.
 	static void DumpWeaponXML(void);
 
-	// CWeaponHandler::ApplySaveData — 0x98e @ RVA 0x56db0 — engine save-apply
-	// (give weapons to the player); NOT ported this lane (see notes).
-	static void ApplySaveDataHooked(void);   // TODO(weap): 0x56db0
+	// CWeaponHandler::ApplySaveData — 0.98e @ RVA 0x56db0 (name confirmed by
+	// its error string "CWeaponHandler::ApplySaveData"). Applies the 10
+	// pending (weaponId, ammo) save slots (DAT_10117960..0x101179b0) to the
+	// player ped: FUN_10030560 give-weapon (id, ammo, 0, 0, 1) when the ped
+	// slot (ped+0x408+i*0x18) is empty, else warns verbatim "Cannot apply
+	// weapon %s, slot collision." (FUN_1001cce0). Ped/give access → HOOK
+	// seams (perform NOTHING). Game call entry: thunk FUN_10056db0 @ 0x51470.
+	static void ApplySaveData(unsigned playerCtx);
 
 	// --- registry state (original globals, see header top) ---
 	static CMvlWeapon *s_weapons[MVL_WEAPON_SLOT_COUNT];   // @ DAT_10117820[100..1099]
@@ -137,3 +164,9 @@ const char *MvlStockWeaponAnimgroupName(int index);      // TODO(weap): DAT_0068
 bool  MvlStockWeaponFillProperties(int index, CMvlWeapon *out); // TODO(weap): 0x782a14 rec
 // FUN_1000cbb0 @ 0xcbb0 — insert the weapon into the game's weapon store.
 void  MvlGameRegisterWeapon(int id, CMvlWeapon *w); // TODO(weap): 0xcbb0
+// Save-write engine seams (HOOK POINT stubs — log intended VA+value via
+// MvlErrorLog and perform NOTHING; never fake engine behavior):
+void *MvlGameGetPlayerPed(unsigned playerCtx);      // FUN_1002dfd0 @ 0x2dfd0
+bool  MvlGameGetPedWeaponSlot(void *ped, int slot,  // ped+0x408+slot*0x18
+                              int *outWeaponId, int *outAmmo);
+void  MvlGameGiveWeapon(void *ped, int weaponId, int ammo); // FUN_10030560 @ 0x30560

@@ -11,6 +11,7 @@
 
 #include "tinyxml.h"
 
+#include <new>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -57,6 +58,21 @@ HErr(const char *fn, const char *fmt, ...)
 	_snprintf(buf, sizeof(buf), "%s: %s", fn, msg);
 	buf[sizeof(buf) - 1] = '\0';
 	MvlErrorLog("%s", buf);
+}
+
+// ---------------------------------------------------------------------------
+// FUN_10051db0 @ RVA 0x51db0 — save-XML sprintf helper. The original is
+// _vsprintf_s(buf, 0x104, fmt, ...) into the 260-byte local_118 buffer; the
+// varargs are invisible in the decomp (2-param prototype) and were recovered
+// from the binary's push sites.
+// ---------------------------------------------------------------------------
+static void
+SaveSprintf(char *buf, const char *fmt, ...)
+{
+	va_list ap;
+	va_start(ap, fmt);
+	vsprintf_s(buf, 0x104, fmt, ap);   // CRT name fix: MSVC declares vsprintf_s (original _vsprintf_s intent, 260-byte buffer)
+	va_end(ap);
 }
 
 // ---------------------------------------------------------------------------
@@ -560,6 +576,132 @@ void CWeaponHandlerClearSaveData(void)
 }
 
 // ===========================================================================
+// Save-XML write cluster — the inverse of the load section above. Record
+// shape (mvlsave sidecar, matches LoadSaveXmlPlayerWeapons 0x567a0):
+//   <playerweps>
+//     <weapon>
+//       <identity>
+//         <archivehash>%08X</archivehash>   (GetArchiveTotalSize)
+//         <archivename>%s</archivename>     (GetArchivePath)
+//       </identity>
+//       <ammo>%d</ammo>
+//     </weapon>                             (one per registered MVL weapon)
+//   </playerweps>
+// ===========================================================================
+
+// ===========================================================================
+// FUN_10056880 @ RVA 0x56880 — (provisional) WriteSaveXmlWeaponInfoIdentity.
+// Builds the <identity> element for the weapon id; NULL for unknown ids
+// (GetWeaponById miss). sprintf args binary-verified: %08X of FUN_10054170
+// (GetArchiveTotalSize), %s of FUN_10054160 (GetArchivePath).
+// ===========================================================================
+TiXmlElement *
+CWeaponHandler::WriteSaveXmlWeaponInfoIdentity(int weaponId)
+{
+	CMvlWeapon *w = GetWeaponById(weaponId);   // FUN_10054890 @ 0x54890
+	if(!w)
+		return 0;
+
+	TiXmlElement *identity = new (std::nothrow) TiXmlElement("identity");
+	if(!identity)
+		return 0;
+
+	char buf[0x104];   // local_118
+	SaveSprintf(buf, "%08X", w->GetArchiveTotalSize());   // FUN_10054170 @ 0x54170
+	{
+		TiXmlElement *hash = new (std::nothrow) TiXmlElement("archivehash");
+		TiXmlText *text = new (std::nothrow) TiXmlText(buf);
+		if(hash && text)
+			hash->LinkEndChild(text);
+		else
+			delete text;
+		if(hash)
+			identity->LinkEndChild(hash);
+	}
+
+	SaveSprintf(buf, "%s", w->GetArchivePath());          // FUN_10054160 @ 0x54160
+	{
+		TiXmlElement *name = new (std::nothrow) TiXmlElement("archivename");
+		TiXmlText *text = new (std::nothrow) TiXmlText(buf);
+		if(name && text)
+			name->LinkEndChild(text);
+		else
+			delete text;
+		if(name)
+			identity->LinkEndChild(name);
+	}
+	return identity;
+}
+
+// ===========================================================================
+// FUN_10056aa0 @ RVA 0x56aa0 — (provisional) WriteSaveXmlPlayerWeaponInfo.
+// <weapon> = <identity> (recursive writer above) + <ammo>%d</ammo>; NULL for
+// unknown ids. The original is __fastcall with TWO params (id in ecx, ammo in
+// edx) — binary-verified (mov edi,edx at fn+0x2e; EDI is pushed as the "%d"
+// vsprintf vararg). The decomp shows one param and hides the vararg behind
+// FUN_10051db0's 2-param prototype.
+// ===========================================================================
+TiXmlElement *
+CWeaponHandler::WriteSaveXmlPlayerWeaponInfo(int weaponId, int ammo)
+{
+	CMvlWeapon *w = GetWeaponById(weaponId);   // FUN_10054890 @ 0x54890
+	if(!w)
+		return 0;
+
+	char buf[0x104];   // local_118
+	SaveSprintf(buf, "%d", ammo);   // hidden edx param (binary-verified)
+
+	TiXmlElement *weapon = new (std::nothrow) TiXmlElement("weapon");
+	if(!weapon)
+		return 0;
+
+	TiXmlElement *identity = WriteSaveXmlWeaponInfoIdentity(weaponId);
+	if(identity)
+		weapon->LinkEndChild(identity);
+
+	TiXmlElement *ammoEl = new (std::nothrow) TiXmlElement("ammo");
+	TiXmlText *text = new (std::nothrow) TiXmlText(buf);
+	if(ammoEl && text)
+		ammoEl->LinkEndChild(text);
+	else
+		delete text;
+	if(ammoEl)
+		weapon->LinkEndChild(ammoEl);
+	return weapon;
+}
+
+// ===========================================================================
+// FUN_10056c00 @ RVA 0x56c00 — (provisional) WriteSaveXmlPlayerWeapons.
+// <playerweps> root. Walks the player ped's 10 weapon slots (ped+0x408,
+// stride 0x18 = 6 ints); a slot yields a record only when its type field
+// (> 0) resolves through GetWeaponById — stock weapons live in the vanilla
+// save, the sidecar carries MVL weapons only. Slot reads are binary-verified:
+// mov ecx,[esi] (id @ +0x00), mov edx,[esi+0xc] (ammo @ +0x0c) feed
+// FUN_10056aa0(ecx,edx). Ped lookup FUN_1002dfd0 @ 0x2dfd0 → HOOK seam.
+// ===========================================================================
+TiXmlElement *
+CWeaponHandler::WriteSaveXmlPlayerWeapons(unsigned playerCtx)
+{
+	void *ped = MvlGameGetPlayerPed(playerCtx);   // FUN_1002dfd0 @ 0x2dfd0
+
+	TiXmlElement *root = new (std::nothrow) TiXmlElement("playerweps");
+	if(!root)
+		return 0;
+
+	for(int i = 0; i < MVL_PLAYER_WEP_SAVE_SLOTS; i++){
+		int id = 0, ammo = 0;
+		if(!MvlGameGetPedWeaponSlot(ped, i, &id, &ammo))
+			continue;   // HOOK seam: no engine data — never fabricate
+		if(id > 0){
+			TiXmlElement *rec = WriteSaveXmlPlayerWeaponInfo(id, ammo);
+			if(rec)
+				root->LinkEndChild(rec);
+		}
+	}
+	return root;
+}
+
+// ===========================================================================
 // CWeaponHandler::DumpWeaponXML — 0x98e @ RVA 0x57320
 // Creates mvl\wlist (error "Failed to create mvl/wlist directory."), then
 // writes one mvl\wlist\<name>.xml per stock weapon (lowercased name). When
@@ -696,14 +838,45 @@ CWeaponHandler::DumpWeaponXML(void)
 }
 
 // ===========================================================================
-// CWeaponHandler::ApplySaveDataHooked — TODO(weap): 0x56db0 CWeaponHandler::
-// ApplySaveData (game save-apply: give stored weapons to the player; not
-// part of this lane's scope — engine patch flow).
+// CWeaponHandler::ApplySaveData — 0.98e @ RVA 0x56db0 (name confirmed by its
+// warn string "CWeaponHandler::ApplySaveData"). Role verified from the decomp
+// + binary: it applies the 10 pending (weaponId, ammo) save pairs
+// (DAT_10117960..0x101179b0, filled by LoadSaveXmlPlayerWeaponInfo and
+// cleared by ClearSaveData) to the player ped. Per slot: if the ped weapon
+// slot (ped+0x408+i*0x18, stride 0x18) is empty (type < 1) it calls
+// FUN_10030560(ped, id, ammo, 0, 0, 1) (engine give-weapon); otherwise it
+// warns verbatim "Cannot apply weapon %s, slot collision." (FUN_1001cce0)
+// with FUN_10054150(GetWeaponById(id)) = the weapon name. Ped lookup
+// FUN_1002dfd0 @ 0x2dfd0 and the give call are engine access → HOOK seams
+// (perform NOTHING). Game-side entry is thunk FUN_10056db0 @ 0x51470.
 // ===========================================================================
 void
-CWeaponHandler::ApplySaveDataHooked(void)
+CWeaponHandler::ApplySaveData(unsigned playerCtx)
 {
-	MvlErrorLog("TODO(weap): 0x56db0 CWeaponHandler::ApplySaveData");
+	static const char *const fn = "CWeaponHandler::ApplySaveData";
+
+	void *ped = MvlGameGetPlayerPed(playerCtx);   // FUN_1002dfd0 @ 0x2dfd0
+
+	for(int i = 0; i < MVL_PLAYER_WEP_SAVE_SLOTS; i++){
+		int id = s_anPlayerSaveWeapon[i];   // *piVar2 @ DAT_10117960+i*8
+		if(id == 0)
+			continue;   // empty pending slot
+		int ammo = s_anPlayerSaveAmmo[i];   // piVar2[1] @ +4
+
+		int curId = 0, curAmmo = 0;
+		if(!MvlGameGetPedWeaponSlot(ped, i, &curId, &curAmmo))
+			continue;   // HOOK seam: no engine data — never fabricate
+
+		if(curId < 1){
+			// FUN_10030560(ped, id, ammo, 0, 0, 1) — give the weapon.
+			MvlGameGiveWeapon(ped, id, ammo);
+		}
+		else {
+			CMvlWeapon *w = GetWeaponById(id);   // FUN_10054890 @ 0x54890
+			HWarn(fn, "Cannot apply weapon %s, slot collision.",
+			      w ? w->GetName() : "");   // FUN_10054150 @ 0x54150
+		}
+	}
 }
 
 // ===========================================================================
@@ -743,4 +916,38 @@ bool MvlStockWeaponFillProperties(int, CMvlWeapon *out)
 void MvlGameRegisterWeapon(int, CMvlWeapon *)
 {
 	MvlErrorLog("TODO(weap): 0xcbb0 MvlGameRegisterWeapon");
+}
+
+// ---------------------------------------------------------------------------
+// Save-write engine seams (see weapon_handler.h). HOOK POINT stubs: log the
+// intended VA + value via MvlErrorLog and perform NOTHING — never fake
+// engine behavior.
+// ---------------------------------------------------------------------------
+void *
+MvlGameGetPlayerPed(unsigned playerCtx)
+{
+	MvlErrorLog("HOOK POINT @ 0x2dfd0: player ped lookup (ctx=%08X) — "
+	            "engine access not hooked", playerCtx);
+	return 0;
+}
+
+bool
+MvlGameGetPedWeaponSlot(void *ped, int slot, int *outWeaponId, int *outAmmo)
+{
+	MvlErrorLog("HOOK POINT @ ped+0x408+0x%X (slot %d of %p): read weapon "
+	            "slot id @ +0x00 / ammo @ +0x0c — engine access not hooked",
+	            slot * 0x18, slot, ped);
+	if(outWeaponId)
+		*outWeaponId = 0;
+	if(outAmmo)
+		*outAmmo = 0;
+	return false;
+}
+
+void
+MvlGameGiveWeapon(void *ped, int weaponId, int ammo)
+{
+	MvlErrorLog("HOOK POINT @ 0x30560: give weapon id=%d ammo=%d to ped %p "
+	            "(flags 0, 0, 1) — engine access not hooked",
+	            weaponId, ammo, ped);
 }

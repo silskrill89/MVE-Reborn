@@ -141,3 +141,31 @@ to enumerate the full game-address table.
 - Enumerate ALL FUN_10022560/10022590 call sites in FUN_10043c00 + depth-1 callees → complete patch-site table (patch-sites.md).
 - Map remaining ~2786 unnamed functions via string-xref clustering (strings.txt has xref columns).
 - Decompile the 19 hook stubs (0x1003dff0–0x1003e320) to identify what each hooked VC site does.
+
+
+## Census addenda (tranches 5-6, 2026-10-12)
+
+Function identities recovered after the initial census; counted in the progress metric.
+
+| RVA | Role | Status |
+|---|---|---|
+| 0x28cd0 | event registry (eventGameStart/eventFrame/eventBulletFired) | ported |
+| 0x29310 | script scan (mvl\scripts) | ported |
+| 0x29580 | CWD guard | ported |
+| 0x23920 | SCM opcode 0801 handler | ported |
+| 0x23940 | SCM opcode 0802 handler | ported |
+| 0x1cce0 | MvlScmWarn warning logger | ported |
+| 0x56880 | WriteSaveXmlWeaponInfoIdentity | ported |
+| 0x56aa0 | WriteSaveXmlPlayerWeaponInfo | ported |
+| 0x56c00 | WriteSaveXmlPlayerWeapons | ported |
+| 0x51db0 | SaveSprintf helper | ported |
+| 0x25a70 | mveh pool getter | ported |
+| 0x25b00 | mveh pool-slot lookup | stub |
+| 0x290d0 | event-handler map insert | stub |
+| 0x27b90 | mveh.getTuningPartCount | ported |
+| 0x27bf0 | mveh.getTuningPartName | ported |
+| 0x27c50 | mveh.getTuningPartVarCount | ported |
+| 0x27cb0 | mveh.getVehUsedTuningPart | ported |
+| 0x27d50 | mveh.setVehUsedTuningPart | ported |
+| 0x27de0 | mveh.getVehModelAIType | ported |
+| 0x27f60 | mveh.setCarTaxiLightState | ported |

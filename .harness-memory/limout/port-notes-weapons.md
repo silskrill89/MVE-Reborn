@@ -184,3 +184,90 @@ pairs (DAT_10117960+i*8).
 | src/weapons/weapon_pickups.h | CWeaponPickups + SMvlPickupSpawn + pool/SCM hooks |
 | src/weapons/weapon_pickups.cpp | spawn XML chain, opcode 0810, CreateWeaponPickup |
 | src/vehicle/vehicle_handler.{h,cpp} | STUB SYNC ONLY: two CWeaponHandler stub defs replaced by the real ones (decls kept; comments updated) |
+
+## 6. Save-XML write side (ported — supersedes §1 row `ApplySaveDataHooked` and open question 8/9)
+
+Counterpart of the load cluster (0x56560/0x56640/0x567a0/0x56cb0). The three
+writers are **unnamed** in the binary (no strings, not in the RTTI census
+row) — provisional names mirror the load family. `ApplySaveData` IS named
+(string `"CWeaponHandler::ApplySaveData"` in the warn call). Everything below
+was verified against the pristine DLL bytes (vehmod_retail.dll 0.98e) because
+Ghidra's 2-param prototype for `FUN_10051db0` hides ALL vsprintf varargs in
+the decomp.
+
+| Original name | RVA | Status | Notes |
+|---|---|---|---|
+| FUN_10056880 (prov. WriteSaveXmlWeaponInfoIdentity) | 0x56880 | DONE | `<identity>` = `<archivehash>%08X</archivehash>` (FUN_10054170 = GetArchiveTotalSize) + `<archivename>%s</archivename>` (FUN_10054160 = GetArchivePath); NULL for unknown ids (FUN_10054890 miss) |
+| FUN_10056aa0 (prov. WriteSaveXmlPlayerWeaponInfo) | 0x56aa0 | DONE | `<weapon>` = `<identity>` (calls 0x56880 with the same id) + `<ammo>%d</ammo>`; NULL for unknown ids |
+| FUN_10056c00 (prov. WriteSaveXmlPlayerWeapons) | 0x56c00 | DONE (ped HOOKED) | `<playerweps>` root; 10 ped weapon slots; returns the root element |
+| CWeaponHandler::ApplySaveData | 0x56db0 | DONE (engine HOOKED) | pending (id, ammo) pairs → ped give-weapon / collision warn; name string-confirmed |
+| FUN_10051db0 (SaveSprintf helper) | 0x51db0 | DONE (static helper) | `_vsprintf_s(buf, 0x104, fmt, ...)` — the 260-byte `local_118` buffer |
+| thunk_FUN_10056db0 | 0x51470 | OBSERVED | 5-byte `jmp` thunk — the game-side hook entry for ApplySaveData; not code |
+
+### Binary-verified signature/layout corrections (bytes, not decomp)
+
+1. **FUN_10056aa0 has TWO __fastcall params** — `id` in ECX, `ammo` in EDX.
+   Prologue is `mov edi,edx` (fn+0x2e) and EDI is pushed as the `"%d"`
+   vsprintf vararg before `call FUN_10051db0` (fn+0x4c). The decomp shows one
+   param because FUN_10051db0's prototype is `(char*, char*)` and the vararg
+   is invisible at every call site.
+2. **FUN_10056c00's slot walk** (fn+0x70): `mov ecx,[esi]` = weapon id @
+   slot+0x00, `mov edx,[esi+0x0c]` = ammo @ slot+0x0c (CWeapon.m_nAmmoTotal),
+   `call FUN_10056aa0` — then `add esi,0x18` (CWeapon stride 0x18) × 10,
+   `jle` skip when id ≤ 0. The ped base is `FUN_1002dfd0(param_1)` and the
+   array starts at +0x408.
+3. **FUN_10056880 sprintf args**: `call FUN_10054170` → `push eax` → `"%08X"`;
+   `call FUN_10054160` → `push eax` → `"%s"` (fn+0x79/0x8b and fn+0x13e/0x150).
+4. **FUN_10056db0 give call** (fn+0x41): `push 1 / push 0 / push 0 /
+   push [esi+4] / push ecx(id) / mov ecx,ebx(ped) / call FUN_10030560` —
+   give-weapon (ped, id, ammo, 0, 0, 1). Loop end compares the pending-pair
+   pointer against `0x101179b0` (10 pairs × 8 bytes from DAT_10117960).
+
+### Record shape (mvlsave sidecar — inverse of LoadSaveXmlPlayerWeapons)
+
+```xml
+<playerweps>
+  <weapon>
+    <identity>
+      <archivehash>08X of GetArchiveTotalSize</archivehash>
+      <archivename>GetArchivePath</archivename>
+    </identity>
+    <ammo>int</ammo>
+  </weapon>
+</playerweps>
+```
+
+Only slots whose type resolves through `GetWeaponById` (MVL ids 100..1099)
+produce records — stock weapons stay in the vanilla save; the sidecar carries
+MVL weapons only. `<ammo>` round-trips the load-side clamp (1..100000).
+
+### ApplySaveData (0x56db0) — verified role
+
+Applies the 10 pending `(weaponId, ammo)` pairs (DAT_10117960..0x101179b0,
+written by `LoadSaveXmlPlayerWeaponInfo`, cleared by `ClearSaveData` 0x56d40)
+to the player ped. Per slot i: empty ped slot (`ped+0x408+i*0x18` type < 1) →
+`FUN_10030560(ped, id, ammo, 0, 0, 1)`; occupied → warn verbatim `"Cannot
+apply weapon %s, slot collision."` under `"CWeaponHandler::ApplySaveData"`
+with `FUN_10054150(FUN_10054890(id))` (the weapon name). Exactly the same
+message the LOAD side warns with (0x56640). The old `ApplySaveDataHooked`
+TODO is replaced by the real port.
+
+### Engine seams added (weapon_handler.{h,cpp}) — HOOK POINT, perform NOTHING
+
+| Seam | Original | Logs |
+|---|---|---|
+| `MvlGameGetPlayerPed` | FUN_1002dfd0 @ 0x2dfd0 | intended VA + ctx |
+| `MvlGameGetPedWeaponSlot` | ped+0x408+slot*0x18 reads | intended VA + slot/ped |
+| `MvlGameGiveWeapon` | FUN_10030560 @ 0x30560 | intended VA + id/ammo/flags |
+
+With the seams unhooked the writers emit an empty `<playerweps/>` and
+ApplySaveData gives nothing — no engine behavior is ever fabricated.
+
+### Adjacent, out of this port's scope
+
+- **FUN_10056e20 @ 0x56e20** (slot sanitizer: clamps ped weapon types > 0x24
+  to 0 at DAT_1013dd90+0x408, stride 0x18 × 10) — save-boundary companion,
+  not requested; not ported.
+- **The save-write root** that calls FUN_10056c00 (vehicle-side `<vehicles>`
+  writer of the `_mvl.xml` sidecar, cf. `LoadExtraSaveFile` 0x51340) lives
+  outside this dump — vehicle lane's future write side.
