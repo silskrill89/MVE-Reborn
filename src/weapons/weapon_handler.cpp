@@ -378,6 +378,12 @@ CWeaponHandler::LoadWeaponArchives(void)
 
 			char path[0x104];
 			_snprintf(path, sizeof(path), "mvl\\weapons\\%s", fd.cFileName);
+			// BUGFIX(stable-1.0): MSVC _snprintf does NOT NUL-terminate when
+			// the formatted name reaches the buffer size ("mvl\weapons\" +
+			// a 255-char filename does); force termination before path is
+			// handed to LoadFromArchive (an unterminated stack buffer would
+			// be read past its object by any strlen-style consumer).
+			path[sizeof(path) - 1] = '\0';
 
 			CMvlWeapon *w = GetNewSlotForArchive(fd.cFileName);
 			if(!w){
@@ -734,6 +740,11 @@ CWeaponHandler::DumpWeaponXML(void)
 		// the original lowercases the whole path (sprintf "mvl\\wlist\\%s.xml")
 		char path[0x104];
 		_snprintf(path, sizeof(path), "mvl\\wlist\\%s.xml", name);
+		// BUGFIX(stable-1.0): _snprintf leaves the buffer unterminated on
+		// truncation (stock names are short today, but MvlStockWeaponTableName
+		// is engine data); without this the tolower walk below runs past
+		// path[] and lowercases adjacent stack bytes.
+		path[sizeof(path) - 1] = '\0';
 		for(char *p = path; *p; p++)
 			*p = (char)tolower((unsigned char)*p);
 

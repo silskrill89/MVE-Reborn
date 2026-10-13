@@ -278,7 +278,13 @@ CCustomAnimFile::LoadVersionOne(RwStream *pStream)
 	SMvlAnimObject *anim = 0;
 	unsigned nRead = 0;               // byte accounting (decomp running sums)
 	char id4[4];
-	unsigned char info[0x2c];         // sequence info block (0x2c max)
+	// sequence info block (0x2c max).
+	// BUGFIX(stable-1.0): +1 byte kept NUL at all times — the block is passed
+	// as the "%s" operand of the "…%d,%d(%s) info section…" throws from RAW
+	// archive bytes (no terminator guarantee => stack over-read), and bytes
+	// past a short read (want < 0x2c) must not carry stale stack garbage into
+	// the info+0x1c frame-count read below.
+	unsigned char info[0x2c + 1];
 	float afTrans[3];
 
 	try{
@@ -293,8 +299,13 @@ CCustomAnimFile::LoadVersionOne(RwStream *pStream)
 
 		nAnimCount = (int32_t)nAnims;
 		apAnims = (SMvlAnimObject **)malloc((size_t)nAnims * 4);  // FUN_10058e9a
-		if(apAnims == 0)
-			return false;             // CLONE-GUARD: allocation failure
+		if(apAnims == 0){
+			// CLONE-GUARD: allocation failure.
+			// BUGFIX(stable-1.0): reset the count so apAnims==NULL with
+			// nAnimCount>0 is never observable by the dtor/post-process.
+			nAnimCount = 0;
+			return false;
+		}
 		for(i = 0; i < nAnims; i++)
 			apAnims[i] = 0;
 
@@ -338,7 +349,13 @@ CCustomAnimFile::LoadVersionOne(RwStream *pStream)
 				SMvlAnimSequence *seq =
 					(SMvlAnimSequence *)((unsigned char *)hier->pSeqArray +
 					                     (size_t)j * 0x30);
-				unsigned want, got, k;
+				unsigned want, got;
+				// BUGFIX(stable-1.0): signed loop bound — the decomp compares
+				// `iVar4 < (int)local_1bc[8]` (range-decomp.txt:403); the
+				// port's (unsigned) cast turns a negative nFrameCount into
+				// ~4G iterations over seq->pFrames if the SetInfo seam ever
+				// stores one.
+				int k;
 				uint32_t nFrames;
 				bool bKRTS = false, bKRT0 = false;
 
@@ -347,9 +364,13 @@ CCustomAnimFile::LoadVersionOne(RwStream *pStream)
 				nRead += MvlIfpReadChunkId(pStream, id4, 0);     // DAT_1007a73c
 				nRead += MvlIfpReadChunkId(pStream, id4, 0);     // DAT_1007a744
 
-				// Info block: min(sectionSize, 0x2c) bytes, skip overhead.
-				want = hdr2.nSize > 0x2c ? 0x2c : hdr2.nSize;
-				got = MvlRwStreamRead(pStream, info, want);
+			// Info block: min(sectionSize, 0x2c) bytes, skip overhead.
+			want = hdr2.nSize > 0x2c ? 0x2c : hdr2.nSize;
+			// BUGFIX(stable-1.0): zero the block every iteration so a short
+			// read leaves NULs (not stale bytes from the previous sequence)
+			// in the tail the %s throws / info+0x1c frame count read from.
+			memset(info, 0, sizeof(info));
+			got = MvlRwStreamRead(pStream, info, want);
 				nRead += got;
 				if(got != want)
 					AnimThrow("Failed to read animation sequence %d,%d(%s) info section, req %d, read %d.",
@@ -362,7 +383,13 @@ CCustomAnimFile::LoadVersionOne(RwStream *pStream)
 
 				MvlAnimSeqSetInfo(seq, info);                     // FUN_10007710
 				if(hdr2.nSize == 0x2c)
-					MvlAnimSeqSetExtra(seq, (int16_t)*(uint32_t *)(info + 0x20));
+					// BUGFIX(stable-1.0): the extra word lives at info+0x28,
+					// not +0x20 — decomp FUN_10001740 passes local_38
+					// (EBP-0x38; info buffer at EBP-0x60 => +0x28) to
+					// FUN_10007700 (range-decomp.txt:368-370); +0x20 is an
+					// unreferenced gap. (No behavior change while
+					// MvlAnimSeqSetExtra is a logging stub.)
+					MvlAnimSeqSetExtra(seq, (int16_t)*(uint32_t *)(info + 0x28));
 
 				nFrames = *(uint32_t *)(info + 0x1c);
 				if(nFrames != 0){
@@ -382,7 +409,7 @@ CCustomAnimFile::LoadVersionOne(RwStream *pStream)
 					if(seq->pFrames == 0)
 						return false;     // CLONE-GUARD: TODO seam leaves 0
 
-					for(k = 0; k < (unsigned)seq->nFrameCount; k++){
+					for(k = 0; k < (int)seq->nFrameCount; k++){
 						unsigned char abQuat[0x20];
 						unsigned char *frame =
 							(unsigned char *)seq->pFrames +
@@ -466,11 +493,16 @@ CCustomAnimFile::LoadVersionTwo(RwStream *pStream)
 	static const char *const fn = "CCustomAnimFile::LoadVersionTwo";
 	SMvlAnimObject *anim = 0;
 	unsigned nRead = 0;
-	unsigned char abBlock[16];
 	float afTrans[3];
 
 	try{
 		int32_t i;
+		// BUGFIX(stable-1.0): the "Animation block name" read is
+		// MvlIfpReadName24 = a 0x18-byte read (FUN_10002810); the decomp's
+		// target local_40 is also 24 bytes (range-decomp.txt:575/620). The
+		// port's 16-byte buffer let 8 bytes of untrusted IFP data smash the
+		// stack on EVERY ANP3 load.
+		unsigned char abBlock[24];
 
 		nRead += MvlIfpReadName24(pStream, abBlock,
 		                         "Animation block name");         // FUN_10002810
@@ -480,15 +512,24 @@ CCustomAnimFile::LoadVersionTwo(RwStream *pStream)
 			AnimThrow("Animation file claims to contain over 500 animations.");
 
 		apAnims = (SMvlAnimObject **)malloc((size_t)nAnimCount * 4);
-		if(apAnims == 0)
-			return false;             // CLONE-GUARD: allocation failure
+		if(apAnims == 0){
+			// CLONE-GUARD: allocation failure.
+			// BUGFIX(stable-1.0): keep count/apAnims consistent (see v1).
+			nAnimCount = 0;
+			return false;
+		}
 		for(i = 0; i < nAnimCount; i++)
 			apAnims[i] = 0;
 
 		for(i = 0; i < nAnimCount; i++){
 			SMvlAnimHierarchy *hier;
 			unsigned char abFrame[16];
-			uint32_t j;
+			// BUGFIX(stable-1.0): signed sequence index/bound — the decomp
+			// compares `(int)local_dc < (int)*(short *)(hier + 0x1c)`
+			// (range-decomp.txt:698); the port's (uint32_t) cast turned a
+			// negative nSeqCount (raw wire word 0x8000..0xFFFF passes the
+			// signed >0x32 check) into ~4B iterations walking pSeqArray.
+			int32_t j;
 
 			anim = (SMvlAnimObject *)MvlAnimAllocAnim();          // FUN_10007360/0x7470
 			if(anim == 0)
@@ -516,7 +557,7 @@ CCustomAnimFile::LoadVersionTwo(RwStream *pStream)
 			if(hier->pSeqArray == 0)
 				return false;         // CLONE-GUARD: TODO seam returns 0
 
-			for(j = 0; j < (uint32_t)hier->nSeqCount; j++){
+			for(j = 0; j < hier->nSeqCount; j++){
 				SMvlAnimSequence *seq =
 					(SMvlAnimSequence *)((unsigned char *)hier->pSeqArray +
 					                     (size_t)j * 0x30);
@@ -525,18 +566,26 @@ CCustomAnimFile::LoadVersionTwo(RwStream *pStream)
 
 				nRead += MvlIfpReadName24(pStream, seq->szName,
 				                         "Animation sequence name");
+				// BUGFIX(stable-1.0): seq->szName is 24 raw wire bytes with
+				// no NUL guarantee; the "%s" throw operands below would scan
+				// past the field into the rest of the 0x30 record (and the
+				// next one) when a crafted name fills all 24 bytes. Terminated
+				// copy — identical text for any well-formed name.
+				char seqName[25];
+				memcpy(seqName, seq->szName, 24);
+				seqName[24] = '\0';
 				nRead += MvlIfpReadRaw(pStream, &nType, 4,
 				                       "Animation sequence type");
 				if(nType != 3 && nType != 4)
 					AnimThrow("Animation hierarchy %d (%s) bone %d (%s) unknown type %d.",
-					          (int)i, hier->szName, (int)j, seq->szName, (int)nType);
+					          (int)i, hier->szName, (int)j, seqName, (int)nType);
 				nRead += MvlIfpReadRaw(pStream, &nFrames, 4,
 				                       "Number of frames in a sequence");
 				nRead += MvlIfpReadRaw(pStream, abBoneIdx, 4,
 				                       "Bone index of a sequence");
 				if(nFrames > 10000)
 					AnimThrow("Animation sequence %d,%d(%s) claims to have over 10000 frames.",
-					          (int)i, (int)j, seq->szName);
+					          (int)i, (int)j, seqName);
 
 				MvlAnimSeqSetExtra(seq, (int16_t)*(uint32_t *)abBoneIdx); // FUN_10007700
 				if(nFrames > 0)

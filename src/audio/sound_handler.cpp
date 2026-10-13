@@ -303,7 +303,13 @@ CSoundHandler::FillSampleBufferFromData(const char *fileName,
 		SndErr(fn, "Second subchunk header is not with a 'data' fourCC.");
 		return false;
 	}
-	if(size < h->nDataSize + 0x2cU){
+	// BUGFIX(stable-1.0): the original form `size < h->nDataSize + 0x2cU`
+	// (decomp 0x98e @ 0x1417) WRAPS for nDataSize >= 0xFFFFFFE4: the check
+	// passes, frames = nDataSize/blockAlign stays large, malloc(frames*2)
+	// can succeed (e.g. nDataSize=0xFFFFFFE0, blockAlign=0x20 -> 16MB) and
+	// the deinterleave loop below then reads gigabytes past the archive
+	// buffer. Compare without the addition (size >= 0x2c guaranteed above).
+	if(h->nDataSize > size - 0x2cU){
 		SndErr(fn, "Second subchunk length too large - goes beyond end of file.");
 		return false;
 	}
@@ -371,8 +377,16 @@ CSoundHandler::FillSampleBufferFromData(const char *fileName,
 		right->nLoopEnd = info->nLoopEnd;
 
 		right->pBuffer = malloc(right->nBufferBytes);
-		if(right->pBuffer == 0)
-			return false;   // CLONE-GUARD: allocation failure (original unchecked)
+		if(right->pBuffer == 0){
+			// CLONE-GUARD: allocation failure (original unchecked).
+			// BUGFIX(stable-1.0): roll back the channel-0 buffer — otherwise
+			// the slot is left half-loaded (info->pBuffer non-NULL with no
+			// usable right channel): the caller reports failure, the orphaned
+			// buffer is never freed, and any retry hits "Duplicate file".
+			free(info->pBuffer);
+			info->pBuffer = 0;
+			return false;
+		}
 
 		if(h->nChannels < 2){
 			SndMsg("Wave file %s - using channel 0 for both left and right samples.",

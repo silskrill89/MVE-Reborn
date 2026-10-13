@@ -8,7 +8,7 @@
 // Constraint C2 (no vendored Python headers yet): all Python C-API traffic
 // goes through the MvlPyApi proc table below - the same indirection the
 // original uses (its own .data slots DAT_100b16bc..DAT_100b1780 filled by
-// GetProcAddress inside FUN_100287c0). When the late-phase bridge lands,
+// GetProcAddress inside MvlPyLoadInterpreter). When the late-phase bridge lands,
 // only MvlPyApi's signatures need widening, not the call sites.
 #pragma once
 
@@ -101,7 +101,7 @@ extern MvlPyApi g_MvlPyApi;
 //    comments per AGENTS.md Globals rule).
 // ---------------------------------------------------------------------------
 
-// DAT_100b0da3 @ RVA 0xb0da3 - "Python interpreter loaded" flag (set by FUN_100287c0).
+// DAT_100b0da3 @ RVA 0xb0da3 - "Python interpreter loaded" flag (set by MvlPyLoadInterpreter).
 extern uint8_t MvlPyLoaded;
 
 // DAT_10124f48 @ RVA 0x124f48 - <game dir>\mvl\scripts\ path buffer (260).
@@ -117,7 +117,7 @@ extern uint8_t MvlScriptPathBuilt;
 extern int32_t MvlScriptDirDepth;
 
 // Error-capture state (original object at DAT_1011c328; layout recovered from
-// FUN_10029ff0 / FUN_1002a0a0 field uses).
+// MvlPyBeginStderrCapture / MvlPyEndStderrCapture field uses).
 struct SMvlPyErrCapture
 {
 	int32_t depth;        // +0x00 reentrancy count
@@ -128,7 +128,7 @@ struct SMvlPyErrCapture
 };
 extern SMvlPyErrCapture MvlPyErrCapture; // DAT_1011c328 @ RVA 0x11c328
 
-// Event registry: name -> id, populated by FUN_10028cd0 (original
+// Event registry: name -> id, populated by MvlPyRegisterEvents (original
 // MSVC std::map at DAT_1011c344 @ RVA 0x11c344).
 struct SMvlPyEvent { const char *name; int32_t id; };
 extern SMvlPyEvent MvlPyEventTable[8]; // DAT_1011c344 (map -> static table)
@@ -144,72 +144,72 @@ extern SMvlPyEvent MvlPyEventTable[8]; // DAT_1011c344 (map -> static table)
 // 0.98e @ RVA 0x287c0 (1289 B) - LoadLibraryA("python33.dll") + GetProcAddress
 // fill of g_MvlPyApi (50 slots, failure of any = "Couldn't load python
 // interpreter."), MvlPyLoaded=1 + "Python interpreter loaded.", module
-// inittab registration (FUN_10024fd0/26940/25a30/27a30/281c0/23d10/26f80/
-// 27370), Py_Initialize, script scan (FUN_10029310). Returns 1 in AL.
-uint32_t FUN_100287c0(void);
+// inittab registration (MvlPyAppendInittabMbase/26940/25a30/27a30/281c0/23d10/26f80/
+// 27370), Py_Initialize, script scan (MvlPyScanScripts). Returns 1 in AL.
+uint32_t MvlPyLoadInterpreter(void);
 
 // 0.98e @ RVA 0x28cd0 (1009 B) - registers event names into the event table:
 //   0 eventGameStart / 1 eventFrame / 2 eventInternalAddAnim /
 //   3 eventInternalBlendAnim / 5 eventBulletFired.
-void FUN_10028cd0(void);
+void MvlPyRegisterEvents(void);
 
 // 0.98e @ RVA 0x29310 (622 B) - scans *.py in the scripts dir (chdir guard
-// FUN_10029580), strips extension, drops stale <name>.err.txt (FUN_1002a170),
+// MvlPyScriptDirGuard), strips extension, drops stale <name>.err.txt (MvlPyDeleteErrFile),
 // imports via PyUnicode_FromString + PyImport_Import under stderr capture
-// (FUN_10029ff0/2a0a0), logs "Successfully/Failed to load script '%s'.",
-// writes errors (FUN_1002a1d0).
-void FUN_10029310(void);
+// (MvlPyBeginStderrCapture/2a0a0), logs "Successfully/Failed to load script '%s'.",
+// writes errors (MvlPyWriteErrFile).
+void MvlPyScanScripts(void);
 
 // 0.98e @ RVA 0x29580 (215 B) - scripts-dir CWD guard: 0 = enter (saves CWD,
 // SetCurrentDirectoryA(MvlScriptDirPath), depth++), non-0 = leave (depth--,
 // restore at depth 0). Also one-shot builds MvlScriptDirPath from
 // GetModuleFileNameA + "mvl\scripts\" (string @ 0x1007e85c). Returns 1 in AL.
-uint32_t FUN_10029580(char enter);
+uint32_t MvlPyScriptDirGuard(char enter);
 
 // 0.98e @ RVA 0x2a170 (92 B) - deletes "<name>.err.txt" (inside scripts dir).
-void FUN_1002a170(const char *scriptName);
+void MvlPyDeleteErrFile(const char *scriptName);
 
 // 0.98e @ RVA 0x2a1d0 (148 B) - appends captured error text to
-// "<name>.err.txt" (fopen "a+", fputs, fclose) when capture depth==0 and
-// text non-empty. Original __thiscall (capture object); lowered to __fastcall
-// + dummy EDX (MSVC C3865).
-void __fastcall FUN_1002a1d0(void *capture, void* /*edx*/, const char *scriptName);
+// "<name>.err.txt" (fopen "a+", fprintf "%s\n", fclose) when capture depth==0
+// and text non-empty. Original __thiscall (capture object); lowered to
+// __fastcall + dummy EDX (MSVC C3865).
+void __fastcall MvlPyWriteErrFile(void *capture, void* /*edx*/, const char *scriptName);
 
 // 0.98e @ RVA 0x29ff0 (161 B) - begin stderr capture: caches io.StringIO
 // (PyImport_ImportModule("io") + GetAttr "StringIO"), swaps sys.stderr.
-uint32_t __fastcall FUN_10029ff0(int32_t *capture);
+uint32_t __fastcall MvlPyBeginStderrCapture(int32_t *capture);
 
 // 0.98e @ RVA 0x2a0a0 (194 B) - end capture: StringIO.getvalue -> captured
 // bytes, close(), restore sys.stderr.
-void __fastcall FUN_1002a0a0(int32_t *capture);
+void __fastcall MvlPyEndStderrCapture(int32_t *capture);
 
 // ---------------------------------------------------------------------------
 // 4. Entity-handle marshalling (shared by all module methods).
 // ---------------------------------------------------------------------------
 
 // 0.98e @ RVA 0x25010 (67 B) - PyObject -> ASCII char buffer (bounded copy).
-uint32_t __fastcall FUN_10025010(void *obj, char *out, int32_t outLen);
+uint32_t __fastcall MvlPyCopyAsciiArg(void *obj, char *out, int32_t outLen);
 
 // 0.98e @ RVA 0x25100 (82 B) - (kind, index) -> entity-identifier tuple
 // (PyTuple of 2 longs; index -1 -> Py_BuildValue(None)).
-void *FUN_10025100(int32_t kind, int32_t index);
+void *MvlPyMakeEntityId(int32_t kind, int32_t index);
 
 // 0.98e @ RVA 0x25b00 (131 B) - game entity -> handle (kind in bits 0x1c..0x1e
 // from entity+0x50&7; 0xFFFFFFFF = none, 0xFFFFFFFE = player).
-uint32_t FUN_10025b00(int32_t entity);
+uint32_t MvlPyMakeEntityHandle(int32_t entity);
 
 // 0.98e @ RVA 0x25ba0 (122 B) - PyObject -> game entity (None + errOK flag,
 // "Argument is not an entity identifier." / "Entity does not exist." errors).
-int32_t __fastcall FUN_10025ba0(void *obj, char errOnNone);
+int32_t __fastcall MvlPyArgToEntity(void *obj, char errOnNone);
 
 // 0.98e @ RVA 0x25a70 (115 B) - handle -> game entity (kind dispatch on
 // game pools; HOOK POINT - pool getters unported).
-int32_t __fastcall FUN_10025a70(uint32_t handle);
+int32_t __fastcall MvlPyResolveEntityHandle(uint32_t handle);
 
 // 0.98e @ RVA 0x250e0 (20 B) / 0x25160 (20 B) - tuple field 1 as
 // long / longlong.
-int32_t __fastcall FUN_100250e0(void *tuple);
-int64_t __fastcall FUN_10025160(void *tuple);
+int32_t __fastcall MvlPyIdTupleIndex(void *tuple);
+int64_t __fastcall MvlPyIdTupleIndex64(void *tuple);
 
 // ---------------------------------------------------------------------------
 // 5. Module method ports (original PyCFunction: (self, args) -> PyObject*).
@@ -250,19 +250,19 @@ void *MvlPyMpedGetPedVehicle(void *self, void *args);          // FUN_10026990 @
 // 0.98e @ RVA 0x29660 (157 B) - event name -> handler-slot index (-1 when
 // unknown); original was the std::map find at DAT_1011c344 (flat-table
 // strcmp scan per the recorded structural decision).
-int32_t FUN_10029660(const char *name);
+int32_t MvlPyEventSlotByName(const char *name);
 
-// 0.98e @ RVA 0x290d0 (520 B) - event-handler insert: slot via FUN_10029660,
+// 0.98e @ RVA 0x290d0 (520 B) - event-handler insert: slot via MvlPyEventSlotByName,
 // dedup by callable pointer, ob_refcnt incref, append (original std::map +
 // std::list machinery replaced by the flat MvlPyEventHandlers arrays -
 // structural decision in the .cpp file header).
-void FUN_100290d0(const char *name, void *callable);
+void MvlPyAddEventHandler(const char *name, void *callable);
 
 // 0.98e @ RVA 0x23db0 - animation-type identifier -> anim-association object
 // ("Argument is not an animation type identifier." / "Animation type does
 // not exist."); its callee FUN_10002f60 @ 0x2f60 is a below-window HOOK
 // POINT seam (body not recovered).
-int32_t __fastcall FUN_10023db0(void *obj);
+int32_t __fastcall MvlPyAnimTypeToAssoc(void *obj);
 
 // 0.98e @ RVA 0x24110 - manim.initAnimType("Oiii") - writes the three
 // anim-type u16 fields (+0x2c / +0x0e / +0x2e) on the association object;

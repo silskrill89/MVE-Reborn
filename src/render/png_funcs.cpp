@@ -152,6 +152,11 @@ CPngFuncs::LoadPngFuncs(void)
 	if(nMissing != 0){
 		PngErr(fn, "%d functions are missing from libpng15.dll", nMissing);
 		FreeLibrary(hModule);
+		// BUGFIX(stable-1.0): zero the proc table — the slots resolved before
+		// the failing GetProcAddress calls now point INTO THE UNLOADED DLL;
+		// any later non-EnsureLoaded caller (e.g. FreeReadState's
+		// png_destroy_read_struct guard) would jump into freed memory.
+		memset(&g_MvlPngApi, 0, sizeof(g_MvlPngApi));
 		return false;
 	}
 	return true;
@@ -243,6 +248,13 @@ CPngFuncs::RtPNGImageStreamRead(void *stream)
 		g_MvlPngApi.png_get_IHDR(pngPtr, infoPtr, &width, &height, &bitDepth,
 		                         &colorType, &interlaceType, &compressionType,
 		                         &filterType);
+		// BUGFIX(stable-1.0): corrupt-IHDR guard — the row-pointer build below
+		// does malloc(height * 4), which wraps on x86 for height > 0x3FFFFFFF
+		// (PNG allows dims up to 2^31-1), turning the fill loop into a heap
+		// overflow. Reject before any allocation (libpng's own 1.5 user limits
+		// normally cap this at 1,000,000, so no legitimate image is affected).
+		if(width == 0 || height == 0 || width > 0x3FFFFFFF || height > 0x3FFFFFFF)
+			PngThrow("PNG dimensions are out of range.");
 		g_MvlPngApi.png_set_strip_16(pngPtr);
 
 		switch(colorType){
@@ -277,6 +289,22 @@ CPngFuncs::RtPNGImageStreamRead(void *stream)
 			}
 			g_MvlPngApi.png_read_image(pngPtr, rows);
 			g_MvlPngApi.png_read_end(pngPtr, infoPtr);
+			// BUGFIX(stable-1.0): tear down the clone-local row array + the
+			// libpng read/info structs here — the original does this through
+			// FUN_1001ca06 (MvlPngReadCleanup, "row array + read struct"),
+			// but the clone's stub takes no arguments and cannot reach these
+			// locals, so every successful decode leaked them. The
+			// MvlPngReadCleanup() call below is kept (call identity) for the
+			// engine lane's own global-state cleanup, if any; it cannot
+			// reference the objects freed here (no shared state today).
+			{
+				free(rows);
+				rows = 0;
+				void *infoPtrPtr = (infoPtr != 0) ? (void *)&infoPtr : 0;
+				g_MvlPngApi.png_destroy_read_struct(&pngPtr, infoPtrPtr, 0);
+				pngPtr = 0;
+				infoPtr = 0;
+			}
 			MvlPngReadCleanup();                  // FUN_1001ca06 (out of range)
 			return image;
 		default:
@@ -295,6 +323,22 @@ CPngFuncs::RtPNGImageStreamRead(void *stream)
 			MvlRwImageReleasePixels(image);       // FUN_100327e0
 			MvlRwImageDelete(image);              // FUN_100327c0
 			image = 0;
+		}
+		// BUGFIX(stable-1.0): the clone locals hold the row-pointer array and
+		// the libpng read/info structs — free/destroy them here (the original
+		// catch is in the same cleanup family as FUN_1001ca06 "row array +
+		// read struct"; the port's catch previously leaked both on EVERY
+		// error path, including the currently-reachable PngReadCallback
+		// short-read throw).
+		if(rows != 0){
+			free(rows);
+			rows = 0;
+		}
+		if(pngPtr != 0 && g_MvlPngApi.png_destroy_read_struct != 0){
+			void *infoPtrPtr = (infoPtr != 0) ? (void *)&infoPtr : 0;
+			g_MvlPngApi.png_destroy_read_struct(&pngPtr, infoPtrPtr, 0);
+			pngPtr = 0;
+			infoPtr = 0;
 		}
 		PngErr(fn, "%s", e.msg);
 		return 0;

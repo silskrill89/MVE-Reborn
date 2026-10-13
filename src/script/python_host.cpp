@@ -36,7 +36,7 @@ SMvlPyErrCapture MvlPyErrCapture = {};             // DAT_1011c328 @ RVA 0x11c32
 // MSVC std::map at DAT_1011c344 @ RVA 0x11c344 - flat table + trailing count
 // replaces it, same keys/ids).
 SMvlPyEvent MvlPyEventTable[8] = {
-	{ "eventGameStart",          -1 }, // id 0 assigned by FUN_10028cd0
+	{ "eventGameStart",          -1 }, // id 0 assigned by MvlPyRegisterEvents
 	{ "eventFrame",              -1 }, // id 1
 	{ "eventInternalAddAnim",    -1 }, // id 2
 	{ "eventInternalBlendAnim",  -1 }, // id 3
@@ -92,7 +92,7 @@ struct MvlPyTypeHead
 {
 	uint8_t pad[0x18];        // up to tp_dealloc
 	void  (*tp_dealloc)(void *); // +0x18
-	// +0x54 = tp_flags (read by validation helpers; see FUN_10025060)
+	// +0x54 = tp_flags (read by validation helpers; see MvlPyIsEntityIdTuple)
 };
 
 // Original decrements ob_refcnt and runs tp_dealloc at 0 when it hits 0 - the
@@ -111,38 +111,52 @@ static void MvlPyDecref(void *obj)
 // ---------------------------------------------------------------------------
 
 // 0.98e @ RVA 0x2a170 (92 B) - delete "<name>.err.txt" in the scripts dir.
-void FUN_1002a170(const char *scriptName)
+void MvlPyDeleteErrFile(const char *scriptName) // FUN_1002a170 @ RVA 0x2a170
 {
 	char path[260];
-	if (FUN_10029580('\0') == 0)
+	if (MvlPyScriptDirGuard('\0') == 0)
 		return;
 	snprintf(path, sizeof(path), "%s.err.txt", scriptName);
 	DeleteFileA(path);
-	FUN_10029580('\x01');
+	MvlPyScriptDirGuard('\x01');
 }
 
 // 0.98e @ RVA 0x2a1d0 (148 B) - append captured stderr text to
 // "<name>.err.txt". Original __thiscall (capture object); lowered.
-void __fastcall FUN_1002a1d0(void *capture, void* /*edx*/, const char *scriptName)
+void __fastcall MvlPyWriteErrFile(void *capture, void* /*edx*/, const char *scriptName) // FUN_1002a1d0 @ RVA 0x2a1d0
 {
 	char path[260];
 	int32_t *cap = static_cast<int32_t *>(capture);
 
 	if (cap[0] >= 1)   // capture still open - deferred (original: < 1 required)
 		return;
-	if (FUN_10029580('\0') == 0)
+	if (MvlPyScriptDirGuard('\0') == 0)
 		return;
 
-	const char *text = reinterpret_cast<const char *>(static_cast<uintptr_t>(cap[3])); // captured bytes ptr (cap[3] holds an int32 handle)
+	// BUGFIX(stable-1.0): cap[3] (SMvlPyErrCapture::captured) holds the
+	// PyBytes* produced by PyUnicode_AsASCIIString in MvlPyEndStderrCapture (0.98e @
+	// RVA 0x2a0a0) - NOT a char*. The original fetches the text through its
+	// capture-object getter FUN_1002a2e0 (0.98e @ RVA 0x2a2e0, below-window)
+	// before writing; the old raw-pointer cast fputs()'ed the bytes OBJECT
+	// header (garbage output + unbounded read past the object). Route through
+	// the PyBytes_AsString slot instead (unreachable with cap[3]==0, i.e.
+	// only after a successful interpreter load, so the slot is populated).
+	const char *text = NULL;
+	if (cap[3] != 0)
+		text = g_MvlPyApi.PyBytes_AsString(
+		    reinterpret_cast<void *>(static_cast<intptr_t>(cap[3])));
 	if (text != NULL && *text != '\0') {
 		snprintf(path, sizeof(path), "%s.err.txt", scriptName);
 		FILE *f = fopen(path, "a+");
 		if (f != NULL) {
-			fputs(text, f); // original: FUN_1005a769(fputs) + trailing DAT_1007e8b4 ("\r\n"?)
+			// 0.98e @ RVA 0x2a1d0: fprintf(f, "%s\n", text) - format
+			// string "%s\n" @ RVA 0x7e8b4; the old fputs() dropped the
+			// trailing newline the original wrote per error line.
+			fprintf(f, "%s\n", text);
 			fclose(f);
 		}
 	}
-	FUN_10029580('\x01');
+	MvlPyScriptDirGuard('\x01');
 }
 
 // ---------------------------------------------------------------------------
@@ -150,7 +164,7 @@ void __fastcall FUN_1002a1d0(void *capture, void* /*edx*/, const char *scriptNam
 // ---------------------------------------------------------------------------
 
 // 0.98e @ RVA 0x29ff0 (161 B) - begin capture.
-uint32_t __fastcall FUN_10029ff0(int32_t *capture)
+uint32_t __fastcall MvlPyBeginStderrCapture(int32_t *capture) // FUN_10029ff0 @ RVA 0x29ff0
 {
 	if (capture[0] > 0) {              // nested: just count
 		capture[0]++;
@@ -183,7 +197,7 @@ uint32_t __fastcall FUN_10029ff0(int32_t *capture)
 
 // 0.98e @ RVA 0x2a0a0 (194 B) - end capture: getvalue() -> captured, close,
 // restore sys.stderr.
-void __fastcall FUN_1002a0a0(int32_t *capture)
+void __fastcall MvlPyEndStderrCapture(int32_t *capture) // FUN_1002a0a0 @ RVA 0x2a0a0
 {
 	int32_t depth = capture[0];
 	if (depth <= 0)
@@ -222,7 +236,7 @@ void __fastcall FUN_1002a0a0(int32_t *capture)
 // 0.98e @ RVA 0x29580 (215 B) - enter/leave the scripts dir; one-shot path
 // build (GetModuleFileNameA + last '\' truncate + "mvl\scripts\"
 // string @ 0x1007e85c).
-uint32_t FUN_10029580(char enter)
+uint32_t MvlPyScriptDirGuard(char enter) // FUN_10029580 @ RVA 0x29580
 {
 	if (MvlScriptPathBuilt == 0) {
 		GetModuleFileNameA(NULL, MvlScriptDirPath, 0x104);
@@ -257,7 +271,7 @@ uint32_t FUN_10029580(char enter)
 // ===========================================================================
 
 // 0.98e @ RVA 0x25010 (67 B) - PyObject -> bounded ASCII buffer (returns 1/0).
-uint32_t __fastcall FUN_10025010(void *obj, char *out, int32_t outLen)
+uint32_t __fastcall MvlPyCopyAsciiArg(void *obj, char *out, int32_t outLen) // FUN_10025010 @ RVA 0x25010
 {
 	void *bytes = g_MvlPyApi.PyUnicode_AsASCIIString(obj);
 	if (bytes == NULL) {
@@ -271,7 +285,7 @@ uint32_t __fastcall FUN_10025010(void *obj, char *out, int32_t outLen)
 }
 
 // 0.98e @ RVA 0x25100 (82 B) - (kind, index) -> 2-tuple identifier; -1 -> None.
-void *FUN_10025100(int32_t kind, int32_t index)
+void *MvlPyMakeEntityId(int32_t kind, int32_t index) // FUN_10025100 @ RVA 0x25100
 {
 	if (index == -1)
 		return g_MvlPyApi.Py_BuildValue("");
@@ -282,14 +296,14 @@ void *FUN_10025100(int32_t kind, int32_t index)
 }
 
 // 0.98e @ RVA 0x250e0 (20 B) - tuple field 1 as long.
-int32_t __fastcall FUN_100250e0(void *tuple)
+int32_t __fastcall MvlPyIdTupleIndex(void *tuple) // FUN_100250e0 @ RVA 0x250e0
 {
 	void *item = g_MvlPyApi.PyTuple_GetItem(tuple, 1);
 	return static_cast<int32_t>(g_MvlPyApi.PyLong_AsLong(item));
 }
 
 // 0.98e @ RVA 0x25160 (20 B) - tuple field 1 as long long.
-int64_t __fastcall FUN_10025160(void *tuple)
+int64_t __fastcall MvlPyIdTupleIndex64(void *tuple) // FUN_10025160 @ RVA 0x25160
 {
 	void *item = g_MvlPyApi.PyTuple_GetItem(tuple, 1);
 	return static_cast<int64_t>(g_MvlPyApi.PyLong_AsLongLong(item));
@@ -300,7 +314,7 @@ int64_t __fastcall FUN_10025160(void *tuple)
 // field types. C2 shim: flag test via PyType_IsSubtype against the cached
 // tuple slot is unavailable (no PyTuple_Type slot resolved by 0x287c0!), so
 // the flag word at +0x54 is read directly as the decomp does.
-static uint32_t FUN_10025060(void *obj, uint32_t expectKind)
+static uint32_t MvlPyIsEntityIdTuple(void *obj, uint32_t expectKind) // FUN_10025060 @ RVA 0x25060
 {
 	(void)expectKind;
 	MvlPyObjectHead *h = static_cast<MvlPyObjectHead *>(obj);
@@ -317,7 +331,7 @@ static uint32_t FUN_10025060(void *obj, uint32_t expectKind)
 // 0x1c.. (1 ped, 2 vehicle, 3 object, 4 building per pool getters).
 // HOOK POINT: the four pool getters (VC globals 0x97F240 / 0xA0FDE4 /
 // 0x97F2AC / 0x94DBE0) and index fetchers are engine seams.
-int32_t __fastcall FUN_10025a70(uint32_t handle)
+int32_t __fastcall MvlPyResolveEntityHandle(uint32_t handle) // FUN_10025a70 @ RVA 0x25a70
 {
 	static uint32_t (*const kPoolGetters[4])(uint32_t, uint32_t) = { NULL, NULL, NULL, NULL };
 	// TODO(engine): FUN_100267a0/268b0/26840/267d0 pool getters unported.
@@ -327,7 +341,7 @@ int32_t __fastcall FUN_10025a70(uint32_t handle)
 		return 0;
 	uint32_t kind = (handle >> 0x1c) & 7u;
 	if (kind < 1 || kind > 4 || kPoolGetters[kind - 1] == NULL) {
-		MvlErrorLog("helpers: TODO(helpers): FUN_10025a70 pool getter kind %u - HOOK POINT", kind);
+		MvlErrorLog("helpers: TODO(helpers): MvlPyResolveEntityHandle pool getter kind %u - HOOK POINT", kind);
 		return 0;
 	}
 	return static_cast<int32_t>(kPoolGetters[kind - 1](
@@ -336,17 +350,17 @@ int32_t __fastcall FUN_10025a70(uint32_t handle)
 
 // 0.98e @ RVA 0x25b00 (131 B) - game entity -> handle (kind from entity+0x50
 // & 7). HOOK POINT: pool slot lookups (FUN_10026760/26870/26800/0008040).
-uint32_t FUN_10025b00(int32_t entity)
+uint32_t MvlPyMakeEntityHandle(int32_t entity) // FUN_10025b00 @ RVA 0x25b00
 {
 	if (entity == 0)
 		return 0xFFFFFFFFu;
-	MVL_HELPERS_TODO(FUN_10025b00); // pool slot lookups unported
+	MVL_HELPERS_TODO(MvlPyMakeEntityHandle); // pool slot lookups unported
 	(void)entity;
 	return 0xFFFFFFFFu;
 }
 
 // 0.98e @ RVA 0x25ba0 (122 B) - PyObject -> game entity with errors.
-int32_t __fastcall FUN_10025ba0(void *obj, char errOnNone)
+int32_t __fastcall MvlPyArgToEntity(void *obj, char errOnNone) // FUN_10025ba0 @ RVA 0x25ba0
 {
 	if (obj == NULL)
 		return 0;
@@ -358,12 +372,12 @@ int32_t __fastcall FUN_10025ba0(void *obj, char errOnNone)
 		}
 		return 0;
 	}
-	if (FUN_10025060(obj, 1) == 0) {
+	if (MvlPyIsEntityIdTuple(obj, 1) == 0) {
 		g_MvlPyApi.PyErr_SetString(g_MvlPyApi.PyExc_KeyError,
 		                          "Argument is not an entity identifier.");
 		return 0;
 	}
-	int32_t entity = FUN_10025a70(static_cast<uint32_t>(FUN_100250e0(obj)));
+	int32_t entity = MvlPyResolveEntityHandle(static_cast<uint32_t>(MvlPyIdTupleIndex(obj)));
 	if (entity != 0)
 		return entity;
 	g_MvlPyApi.PyErr_SetString(g_MvlPyApi.PyExc_KeyError,
@@ -380,7 +394,7 @@ int32_t __fastcall FUN_10025ba0(void *obj, char errOnNone)
 // 0.98e @ RVA 0x28cd0 (1009 B) - registers event names -> ids in the event
 // map (original: MSVC std::map<std::string,int> at DAT_1011c344, inserted via
 // FUN_1002a3f0/1002a570/100186d0). Names/ids verbatim from the decomp.
-void FUN_10028cd0(void)
+void MvlPyRegisterEvents(void) // FUN_10028cd0 @ RVA 0x28cd0
 {
 	static const SMvlPyEvent kEvents[] = {
 		{ "eventGameStart",         0 },
@@ -396,9 +410,9 @@ void FUN_10028cd0(void)
 }
 
 // 0.98e @ RVA 0x29310 (622 B) - scan *.py in the scripts dir and import each.
-void FUN_10029310(void)
+void MvlPyScanScripts(void) // FUN_10029310 @ RVA 0x29310
 {
-	if (FUN_10029580('\0') == 0)
+	if (MvlPyScriptDirGuard('\0') == 0)
 		return;
 
 	char oldCwd[260];
@@ -413,23 +427,32 @@ void FUN_10029310(void)
 			char name[64];
 			strncpy(name, fd.cFileName, 0x3f);
 			name[0x3f] = '\0';
-			char *dot = strrchr(name, '.');
+			// BUGFIX(stable-1.0): the original strips at the FIRST dot
+			// (strchr, FUN_1005abd0 @ RVA 0x5abd0; decomp MvlPyScanScripts @
+			// RVA 0x29310) - the old strrchr() imported "my.script.py" as
+			// "my.script" instead of "my". The original then faults on a
+			// dotless name (impossible for *.py matches); the NULL guard
+			// stays as a defensive net.
+			char *dot = strchr(name, '.');
 			if (dot != NULL)
 				*dot = '\0'; // strip extension
 
-			FUN_1002a170(name); // drop stale <name>.err.txt
+			MvlPyDeleteErrFile(name); // drop stale <name>.err.txt
 
 			void *pyName = g_MvlPyApi.PyUnicode_FromString(name);
-			FUN_10029ff0(reinterpret_cast<int32_t *>(&MvlPyErrCapture));
+			MvlPyBeginStderrCapture(reinterpret_cast<int32_t *>(&MvlPyErrCapture));
 			void *mod = g_MvlPyApi.PyImport_Import(pyName);
 			g_MvlPyApi.PyErr_Print();
-			FUN_1002a0a0(reinterpret_cast<int32_t *>(&MvlPyErrCapture));
-			FUN_1002a1d0(&MvlPyErrCapture, NULL, name);
+			MvlPyEndStderrCapture(reinterpret_cast<int32_t *>(&MvlPyErrCapture));
+			MvlPyWriteErrFile(&MvlPyErrCapture, NULL, name);
 
 			if (mod == NULL) {
-				MvlErrorLog("Failed to load script '%s'.", fd.cFileName);
+				// BUGFIX(stable-1.0): both scan messages went through
+				// FUN_1001cc00 (0.98e @ RVA 0x1cc00) = message channel ->
+				// MvlLog per the repo mapping, not the error log.
+				MvlLog("Failed to load script '%s'.", fd.cFileName);
 			} else {
-				MvlErrorLog("Successfully loaded script '%s'.", fd.cFileName);
+				MvlLog("Successfully loaded script '%s'.", fd.cFileName);
 				// Original records module name into the loaded-script map
 				// (DAT_1011c33c) keyed by module object; clone keeps the
 				// registry as a TODO (see port-notes-py.md Q2).
@@ -441,7 +464,7 @@ void FUN_10029310(void)
 		FindClose(find);
 	}
 
-	FUN_10029580('\x01');
+	MvlPyScriptDirGuard('\x01');
 	(void)oldCwd;
 }
 
@@ -450,27 +473,30 @@ void FUN_10029310(void)
 // ===========================================================================
 
 // Inittab registrations (defined Section 9) + below-window stubs.
-void FUN_10025a30(void);
-void FUN_10026940(void);
-void FUN_10026f80(void);
-void FUN_10027370(void);
-void FUN_10027a30(void);
-void FUN_100281c0(void);
-static void FUN_10024fd0(void);
-static void FUN_10023d10(void);
+void MvlPyAppendInittabMent(void);
+void MvlPyAppendInittabMped(void);
+void MvlPyAppendInittabMrw(void);
+void MvlPyAppendInittabMscm(void);
+void MvlPyAppendInittabMveh(void);
+void MvlPyAppendInittabMworld(void);
+static void MvlPyAppendInittabMbase(void);
+static void MvlPyAppendInittabManim(void);
 
 // 0.98e @ RVA 0x287c0 (1289 B) - python33.dll load + proc-table fill.
 // The original resolves 51 symbols one-by-one and ORs the failure flags;
 // the same set is resolved here through a name table into g_MvlPyApi.
-uint32_t FUN_100287c0(void)
+uint32_t MvlPyLoadInterpreter(void) // FUN_100287c0 @ RVA 0x287c0
 {
-	if ((char)FUN_10029580('\0') == '\0')
+	if ((char)MvlPyScriptDirGuard('\0') == '\0')
 		return 0;
 
 	HMODULE hMod = LoadLibraryA("python33.dll");
 	if (hMod == NULL) {
-		MvlErrorLog("Couldn't load python interpreter.");
-		FUN_10029580('\x01');
+		// BUGFIX(stable-1.0): original logs this via FUN_1001cc00 (0.98e @
+		// RVA 0x1cc00) = message channel -> MvlLog per the repo mapping
+		// (vehicle_archive.cpp / log.h), not the error log.
+		MvlLog("Couldn't load python interpreter.");
+		MvlPyScriptDirGuard('\x01');
 		return 0;
 	}
 
@@ -539,27 +565,29 @@ uint32_t FUN_100287c0(void)
 			++missing;
 	}
 	if (missing > 0) {
-		MvlErrorLog("Couldn't load all python functions %08X %08X.",
-		            (unsigned)missing, 0u);
-		FUN_10029580('\x01');
+		// BUGFIX(stable-1.0): cc00 = message channel (see above).
+		MvlLog("Couldn't load all python functions %08X %08X.",
+		       (unsigned)missing, 0u);
+		MvlPyScriptDirGuard('\x01');
 		return 0;
 	}
 
 	MvlPyLoaded = 1; // DAT_100b0da3 @ RVA 0xb0da3
-	MvlErrorLog("Python interpreter loaded.");
+	// BUGFIX(stable-1.0): cc00 = message channel (see above).
+	MvlLog("Python interpreter loaded.");
 
-	FUN_10028cd0();      // event name registration
-	FUN_10024fd0();      // HOOK POINT: mbase inittab (below-window callee)
-	FUN_10026940();      // mped inittab
-	FUN_10025a30();      // ment inittab
-	FUN_10027a30();      // mveh inittab
-	FUN_100281c0();      // mworld inittab
-	FUN_10023d10();      // HOOK POINT: manim inittab (below-window callee)
-	FUN_10026f80();      // mrw inittab
-	FUN_10027370();      // mscm inittab
+	MvlPyRegisterEvents();      // event name registration
+	MvlPyAppendInittabMbase();      // HOOK POINT: mbase inittab (below-window callee)
+	MvlPyAppendInittabMped();      // mped inittab
+	MvlPyAppendInittabMent();      // ment inittab
+	MvlPyAppendInittabMveh();      // mveh inittab
+	MvlPyAppendInittabMworld();      // mworld inittab
+	MvlPyAppendInittabManim();      // HOOK POINT: manim inittab (below-window callee)
+	MvlPyAppendInittabMrw();      // mrw inittab
+	MvlPyAppendInittabMscm();      // mscm inittab
 	g_MvlPyApi.Py_Initialize();
-	FUN_10029310();      // script scan
-	FUN_10029580('\x01');
+	MvlPyScanScripts();      // script scan
+	MvlPyScriptDirGuard('\x01');
 	return 1;
 }
 
@@ -573,19 +601,19 @@ uint32_t FUN_100287c0(void)
 // thunks stay HOOK POINTs until the def-blocks are recovered (Q3).
 // ===========================================================================
 
-// Below-window registration stubs called by FUN_100287c0 (bodies at 0x24fd0 /
+// Below-window registration stubs called by MvlPyLoadInterpreter (bodies at 0x24fd0 /
 // 0x23d10 are outside the 0x25000..0x2a200 dump). PE evidence (immediates in
 // the wrappers): 0x24fd0 = push init 0x24ff0; push [0xa65f4] (PyModuleDef
 // m_name = "mbase"); 0x23d10 = push init 0x23d30; push [0xa6400] ("manim").
 // TODO(helpers): 0x10024fd0 unported (mbase inittab, init fn 0x24ff0);
 // TODO(helpers): 0x10023d10 unported (manim inittab, init fn 0x23d30).
-static void FUN_10024fd0(void)
+static void MvlPyAppendInittabMbase(void) // FUN_10024fd0 @ RVA 0x24fd0
 {
-	MVL_HELPERS_TODO(FUN_10024fd0); // mbase module init registration
+	MVL_HELPERS_TODO(MvlPyAppendInittabMbase); // mbase module init registration
 }
-static void FUN_10023d10(void)
+static void MvlPyAppendInittabManim(void) // FUN_10023d10 @ RVA 0x23d10
 {
-	MVL_HELPERS_TODO(FUN_10023d10); // manim module init registration
+	MVL_HELPERS_TODO(MvlPyAppendInittabManim); // manim module init registration
 }
 
 // Module init thunks (LAB_ stubs in the original - PyModule_Create2 with the
@@ -599,14 +627,14 @@ static void MvlPyModuleInitHook(const char *module)
 // 0.98e @ RVA 0x25a30 (21 B) - AppendInittab(PTR_DAT_100a6628, LAB_10025a50).
 // Name is loaded from [0xa6628] = PyModuleDef m_name -> "ment" (the clone
 // previously passed a stale "mvlbase" parse-label; PE + scripts say ment).
-void FUN_10025a30(void)
+void MvlPyAppendInittabMent(void) // FUN_10025a30 @ RVA 0x25a30
 {
 	g_MvlPyApi.PyImport_AppendInittab("ment",
 	    reinterpret_cast<void *>(&MvlPyModuleInitHook));
 }
 
 // 0.98e @ RVA 0x26940 (21 B) - AppendInittab(PTR_DAT_100a682c, LAB_10026960).
-void FUN_10026940(void)
+void MvlPyAppendInittabMped(void) // FUN_10026940 @ RVA 0x26940
 {
 	g_MvlPyApi.PyImport_AppendInittab("mped",
 	    reinterpret_cast<void *>(&MvlPyModuleInitHook));
@@ -614,7 +642,7 @@ void FUN_10026940(void)
 
 // 0.98e @ RVA 0x26f80 (21 B) - AppendInittab(PTR_DAT_100a6860, LAB_10026fa0).
 // Name from [0xa6860] = PyModuleDef m_name -> "mrw" (clone said "ment").
-void FUN_10026f80(void)
+void MvlPyAppendInittabMrw(void) // FUN_10026f80 @ RVA 0x26f80
 {
 	g_MvlPyApi.PyImport_AppendInittab("mrw",
 	    reinterpret_cast<void *>(&MvlPyModuleInitHook));
@@ -622,21 +650,21 @@ void FUN_10026f80(void)
 
 // 0.98e @ RVA 0x27370 (21 B) - AppendInittab(PTR_DAT_100a6944, LAB_10027390).
 // Name from [0xa6944] = PyModuleDef m_name -> "mscm" (clone said "mrw").
-void FUN_10027370(void)
+void MvlPyAppendInittabMscm(void) // FUN_10027370 @ RVA 0x27370
 {
 	g_MvlPyApi.PyImport_AppendInittab("mscm",
 	    reinterpret_cast<void *>(&MvlPyModuleInitHook));
 }
 
 // 0.98e @ RVA 0x27a30 (21 B) - AppendInittab(PTR_DAT_100a6978, LAB_10027a50).
-void FUN_10027a30(void)
+void MvlPyAppendInittabMveh(void) // FUN_10027a30 @ RVA 0x27a30
 {
 	g_MvlPyApi.PyImport_AppendInittab("mveh",
 	    reinterpret_cast<void *>(&MvlPyModuleInitHook));
 }
 
 // 0.98e @ RVA 0x281c0 (21 B) - AppendInittab(PTR_s_mworld_100a6a6c, LAB_100281e0).
-void FUN_100281c0(void)
+void MvlPyAppendInittabMworld(void) // FUN_100281c0 @ RVA 0x281c0
 {
 	g_MvlPyApi.PyImport_AppendInittab("mworld",
 	    reinterpret_cast<void *>(&MvlPyModuleInitHook));
@@ -670,7 +698,7 @@ void *MvlPyMbaseLogPrint(void *self, void *args)                 // FUN_10025280
 
 // 0.98e @ RVA 0x252d0 (236 B) - mbase.registerCallback (event-handler bind,
 // 2 args: name str, callable). PyMethodDef ml_name "registerCallback" (mbase
-// table @ RVA 0xa6648). Verifies arg types then calls FUN_100290d0(name, fn)
+// table @ RVA 0xa6648). Verifies arg types then calls MvlPyAddEventHandler(name, fn)
 // (the map insert - flat-table port in Section 11).
 void *MvlPyMbaseRegisterCallback(void *self, void *args)         // FUN_100252d0 @ RVA 0x252d0 (mbase.registerCallback)
 {
@@ -680,7 +708,7 @@ void *MvlPyMbaseRegisterCallback(void *self, void *args)         // FUN_100252d0
 	void *nameObj = g_MvlPyApi.PyTuple_GetItem(args, 0);
 	void *fnObj = g_MvlPyApi.PyTuple_GetItem(args, 1);
 	char name[64];
-	if (FUN_10025010(nameObj, name, 0x40) == 0) {
+	if (MvlPyCopyAsciiArg(nameObj, name, 0x40) == 0) {
 		g_MvlPyApi.PyErr_SetString(g_MvlPyApi.PyExc_KeyError,
 		                          "Event name string read error.");
 		return MvlPyNoneResult();
@@ -690,7 +718,7 @@ void *MvlPyMbaseRegisterCallback(void *self, void *args)         // FUN_100252d0
 		                          "Argument two should be a function.");
 		return MvlPyNoneResult();
 	}
-	FUN_100290d0(name, fnObj); // 0.98e @ RVA 0x290d0 (event-handler insert)
+	MvlPyAddEventHandler(name, fnObj); // 0.98e @ RVA 0x290d0 (event-handler insert)
 	return MvlPyTrueResult();
 }
 
@@ -709,7 +737,7 @@ void *MvlPyMbaseSetHudMessage(void *self, void *args)            // FUN_100254b0
 		return MvlPyNoneResult();
 	if (slot == 0) {
 		// TODO(helpers): FUN_1002e870 HUD push unported - log-only seam.
-		MVL_HELPERS_TODO(FUN_1002e870);
+		MVL_HELPERS_TODO(HudPush); // engine seam: FUN_1002e870 @ RVA 0x2e870
 		MvlErrorLog("script: setHudMessage \"%s\" - HOOK POINT", text ? text : "");
 	}
 	return MvlPyTrueResult();
@@ -736,7 +764,12 @@ void *MvlPyMvehCreateVehicle(void *self, void *args)             // FUN_10027a70
 
 	// Registry checks use the engine_globals shared registry (original
 	// DAT_100a6314 / DAT_100a6320 - model-lookup registry + model boundary).
-	if (modelIndex < 0 || modelIndex >= MvlModelIdBoundary)
+	// BUGFIX(stable-1.0): also refuse when the registry table itself is
+	// unwired - the original always had DAT_100a6314/DAT_100a6320 populated
+	// together, but a future engine-lane state of (boundary>0, registry==NULL)
+	// would deref NULL on the line below.
+	if (modelIndex < 0 || modelIndex >= MvlModelIdBoundary ||
+	    MvlModelLookupRegistry == NULL)
 		return MvlPyNoneResult();
 	int32_t info = reinterpret_cast<int32_t *>(MvlModelLookupRegistry)[modelIndex];
 	if (info == 0)
@@ -746,7 +779,7 @@ void *MvlPyMvehCreateVehicle(void *self, void *args)             // FUN_10027a70
 
 	// TODO(helpers): FUN_10008bc0 / FUN_1003df80 spawn chain unported
 	// (engine seams - vehicle creation + flag stamps 0x1F8/0x50/0x230).
-	MVL_HELPERS_TODO(FUN_1003df80);
+	MVL_HELPERS_TODO(VehicleSpawnChain); // engine seam: FUN_1003df80 @ RVA 0x3df80
 	MvlErrorLog("script: createVehicle model=%d - HOOK POINT (spawn chain)",
 	            modelIndex);
 	return MvlPyNoneResult();
@@ -759,12 +792,12 @@ void *MvlPyMvehGetVehicleHealth(void *self, void *args)          // FUN_10028000
 	void *obj = NULL;
 	if (g_MvlPyApi.PyArg_ParseTuple(args, "O:mveh.getVehicleHealth", &obj) == 0)
 		return NULL;
-	int32_t entity = FUN_10025ba0(obj, '\x01');
+	int32_t entity = MvlPyArgToEntity(obj, '\x01');
 	if (entity == 0)
 		return NULL;
 	// TODO(helpers): FUN_1002d870 entity-type / FUN_1002d790 vehicle-cast
 	// engine seams (type 2 = vehicle).
-	MVL_HELPERS_TODO(FUN_1002d870);
+	MVL_HELPERS_TODO(EntityTypeQuery); // engine seam: FUN_1002d870 @ RVA 0x2d870
 	g_MvlPyApi.PyErr_SetString(g_MvlPyApi.PyExc_KeyError,
 	                          "Entity type is not vehicle.");
 	return NULL;
@@ -779,11 +812,11 @@ void *MvlPyMvehSetVehicleHealth(void *self, void *args)          // FUN_10028080
 	if (g_MvlPyApi.PyArg_ParseTuple(args, "Of:mveh.setVehicleHealth",
 	                                &obj, &health) == 0)
 		return NULL;
-	int32_t entity = FUN_10025ba0(obj, '\x01');
+	int32_t entity = MvlPyArgToEntity(obj, '\x01');
 	if (entity == 0)
 		return NULL;
 	// TODO(helpers): FUN_1002d870/FUN_1002d790 seams; store at vehicle+0x204.
-	MVL_HELPERS_TODO(FUN_1002d790);
+	MVL_HELPERS_TODO(VehicleCast); // engine seam: FUN_1002d790 @ RVA 0x2d790
 	MvlErrorLog("script: setVehicleHealth(%d, %f) - HOOK POINT",
 	            entity, health);
 	return MvlPyTrueResult();
@@ -798,10 +831,10 @@ void *MvlPyMvehBlowVehicleUp(void *self, void *args)             // FUN_10028110
 	if (g_MvlPyApi.PyArg_ParseTuple(args, "OO:mveh.blowVehicleUp",
 	                                &vehObj, &attObj) == 0)
 		return NULL;
-	int32_t vehicle = FUN_10025ba0(vehObj, '\x01');
+	int32_t vehicle = MvlPyArgToEntity(vehObj, '\x01');
 	if (vehicle == 0)
 		return NULL;
-	int32_t attacker = FUN_10025ba0(attObj, '\0');
+	int32_t attacker = MvlPyArgToEntity(attObj, '\0');
 	if (g_MvlPyApi.PyErr_Occurred() != NULL)
 		return NULL;
 	// TODO(helpers): vtable+0x80 blow-up call on the vehicle (engine seam).
@@ -817,12 +850,12 @@ void *MvlPyMpedGetPedVehicle(void *self, void *args)             // FUN_10026990
 	void *obj = NULL;
 	if (g_MvlPyApi.PyArg_ParseTuple(args, "O:mped.getPedVehicle", &obj) == 0)
 		return NULL;
-	int32_t ped = FUN_10025ba0(obj, '\x01');
+	int32_t ped = MvlPyArgToEntity(obj, '\x01');
 	if (ped == 0)
 		return NULL;
 	// TODO(helpers): FUN_1002d870 type-3 (ped) check + FUN_1002d760 ped cast +
 	// +0x3A8 vehicle slot / +0x3AC inside-vehicle flag (engine seams).
-	MVL_HELPERS_TODO(FUN_1002d760);
+	MVL_HELPERS_TODO(PedCast); // engine seam: FUN_1002d760 @ RVA 0x2d760
 	return MvlPyNoneResult();
 }
 
@@ -839,7 +872,7 @@ void *MvlPyMvehGetTuningPartCount(void *self, void *args)        // FUN_10027b90
 	if (g_MvlPyApi.PyArg_ParseTuple(args, "i:mveh.getTuningPartCount",
 	                                &model) == 0)
 		return MvlPyNoneResult();
-	MVL_HELPERS_TODO(FUN_1003b780); // tuning-part count (engine seam)
+	MVL_HELPERS_TODO(TuningPartCountLookup); // engine seam: FUN_1003b780 @ RVA 0x3b780
 	return g_MvlPyApi.Py_BuildValue("i", 0);
 }
 
@@ -851,7 +884,7 @@ void *MvlPyMvehGetTuningPartName(void *self, void *args)         // FUN_10027bf0
 	if (g_MvlPyApi.PyArg_ParseTuple(args, "ii:mveh.getTuningPartName",
 	                                &model, &index) == 0)
 		return MvlPyNoneResult();
-	MVL_HELPERS_TODO(FUN_1003b740);
+	MVL_HELPERS_TODO(TuningPartNameLookup); // engine seam: FUN_1003b740 @ RVA 0x3b740
 	return MvlPyNoneResult();
 }
 
@@ -876,7 +909,7 @@ void *MvlPyMvehGetVehUsedTuningPart(void *self, void *args)      // FUN_10027cb0
 	if (g_MvlPyApi.PyArg_ParseTuple(args, "Oi:mveh.getVehUsedTuningPart",
 	                                &obj, &index) == 0)
 		return MvlPyNoneResult();
-	if (FUN_10025ba0(obj, '\x01') == 0)
+	if (MvlPyArgToEntity(obj, '\x01') == 0)
 		return NULL;
 	MVL_HELPERS_TODO(FUN_10027cb0_body);
 	return g_MvlPyApi.Py_BuildValue("i", 0);
@@ -891,7 +924,7 @@ void *MvlPyMvehSetVehUsedTuningPart(void *self, void *args)      // FUN_10027d50
 	if (g_MvlPyApi.PyArg_ParseTuple(args, "Oii:mveh.setVehUsedTuningPart",
 	                                &obj, &index, &value) == 0)
 		return MvlPyNoneResult();
-	if (FUN_10025ba0(obj, '\x01') == 0)
+	if (MvlPyArgToEntity(obj, '\x01') == 0)
 		return NULL;
 	MVL_HELPERS_TODO(FUN_10027d50_body);
 	return MvlPyTrueResult();
@@ -918,7 +951,7 @@ void *MvlPyMvehSetCarTaxiLightState(void *self, void *args)      // FUN_10027f60
 	if (g_MvlPyApi.PyArg_ParseTuple(args, "Oi:mveh.setCarTaxiLightState",
 	                                &obj, &on) == 0)
 		return MvlPyNoneResult();
-	if (FUN_10025ba0(obj, '\x01') == 0)
+	if (MvlPyArgToEntity(obj, '\x01') == 0)
 		return NULL;
 	MVL_HELPERS_TODO(FUN_10027f60_body);
 	return MvlPyTrueResult();
@@ -926,9 +959,9 @@ void *MvlPyMvehSetCarTaxiLightState(void *self, void *args)      // FUN_10027f60
 
 // ===========================================================================
 // Section 11: event-handler registry tail + manim module (final three ports).
-// Sources: pyaudio/range-decomp.txt FUN_10029660 @ 0x29660 and
-// missing33/decomp-chain.txt FUN_100290d0 / FUN_10024110 (=
-// MvlPyManimInitAnimType) / FUN_10023db0
+// Sources: pyaudio/range-decomp.txt MvlPyEventSlotByName @ 0x29660 and
+// missing33/decomp-chain.txt MvlPyAddEventHandler / FUN_10024110 (=
+// MvlPyManimInitAnimType) / MvlPyAnimTypeToAssoc
 // (depth-0 roots + the 0x23db0 depth-1 export). The original event registry
 // is an MSVC std::map + per-event std::list pair (DAT_1011c344 map of nodes
 // @ DAT_1011c34c, list heads stride 8 @ DAT_1011c43c, sizes stride 8 @
@@ -941,10 +974,10 @@ void *MvlPyMvehSetCarTaxiLightState(void *self, void *args)      // FUN_10027f60
 // 0.98e @ RVA 0x29660 (157 B) - event name -> handler-slot index, -1 when
 // unknown. Original: strlen + MSVC std::string build + map find
 // (FUN_100181c0 @ DAT_1011c344); the index EAX return the decompiler lost is
-// read by the caller FUN_100290d0 (iVar3, "if (-1 < iVar3)"). Flat-table
+// read by the caller MvlPyAddEventHandler (iVar3, "if (-1 < iVar3)"). Flat-table
 // strcmp scan = the recorded structural decision (same keys/order).
 // ---------------------------------------------------------------------------
-int32_t FUN_10029660(const char *name)
+int32_t MvlPyEventSlotByName(const char *name) // FUN_10029660 @ RVA 0x29660
 {
 	if (name == NULL)
 		return -1;
@@ -959,15 +992,15 @@ int32_t FUN_10029660(const char *name)
 
 // ---------------------------------------------------------------------------
 // 0.98e @ RVA 0x290d0 (520 B) - event-handler insert. Original: slot lookup
-// via FUN_10029660, map-find dedup on the callable pointer (FUN_100061f0),
+// via MvlPyEventSlotByName, map-find dedup on the callable pointer (FUN_100061f0),
 // ob_refcnt incref, node alloc (FUN_1002a4c0) + list insert (FUN_1002a720)
 // + map rebalance (FUN_1002a610), size guard "list<T> too long" (abort via
 // FUN_10058e3e, does not return). Flat-table port per the structural
 // decision: dedup by scanning handlers[0..count), append at count.
 // ---------------------------------------------------------------------------
-void FUN_100290d0(const char *name, void *callable)
+void MvlPyAddEventHandler(const char *name, void *callable) // FUN_100290d0 @ RVA 0x290d0
 {
-	int32_t idx = FUN_10029660(name);
+	int32_t idx = MvlPyEventSlotByName(name);
 	if (idx < 0)
 		return;                                        // unknown event: silent (original)
 	SMvlPyHandlerSlot &slot = MvlPyEventHandlers[idx];
@@ -985,6 +1018,11 @@ void FUN_100290d0(const char *name, void *callable)
 	if (slot.count >= MVL_PY_MAX_HANDLERS) {
 		// ORIGINAL: FUN_10058e3e("list<T> too long") - does not return.
 		// Clone logs the verbatim message and returns (task-prescribed).
+		// BUGFIX(stable-1.0): undo the incref before returning - the original
+		// aborted the process here so its unmatched +1 never mattered; the
+		// clone returns, and the leaked incref would pin the callable object
+		// (refcount never reaches 0 -> tp_dealloc never runs).
+		MvlPyDecref(callable);
 		MvlErrorLog("list<T> too long");
 		return;
 	}
@@ -1011,18 +1049,18 @@ static int32_t MvlAnimAssocLookup(int32_t typeId)
 // 0.98e @ RVA 0x23db0 - animation-type identifier -> anim-association object.
 // Body RECOVERED as a depth-1 export (missing33/decomp-chain.txt:3539-3559;
 // the task brief's "below-window, body not recovered" applies to its callee
-// FUN_10002f60 @ 0x2f60, seamed above): kind-check via FUN_10025060(obj, 3)
+// FUN_10002f60 @ 0x2f60, seamed above): kind-check via MvlPyIsEntityIdTuple(obj, 3)
 // -> PyErr_SetString(PyExc_KeyError, verbatim), tuple field 1 via
-// FUN_100250e0, lookup, miss -> the second verbatim error.
+// MvlPyIdTupleIndex, lookup, miss -> the second verbatim error.
 // ---------------------------------------------------------------------------
-int32_t __fastcall FUN_10023db0(void *obj)
+int32_t __fastcall MvlPyAnimTypeToAssoc(void *obj) // FUN_10023db0 @ RVA 0x23db0
 {
-	if ((char)FUN_10025060(obj, 3) == 0) {             // decomp: (char)uVar1 == '\0'
+	if ((char)MvlPyIsEntityIdTuple(obj, 3) == 0) {             // decomp: (char)uVar1 == '\0'
 		g_MvlPyApi.PyErr_SetString(g_MvlPyApi.PyExc_KeyError,
 			"Argument is not an animation type identifier.");
 		return 0;
 	}
-	int32_t assoc = MvlAnimAssocLookup(FUN_100250e0(obj));
+	int32_t assoc = MvlAnimAssocLookup(MvlPyIdTupleIndex(obj));
 	if (assoc == 0) {
 		g_MvlPyApi.PyErr_SetString(g_MvlPyApi.PyExc_KeyError,
 			"Animation type does not exist.");
@@ -1047,7 +1085,7 @@ void *MvlPyManimInitAnimType(void *self, void *args)             // FUN_10024110
 		// has already set the TypeError, so NULL propagates it (CPython-
 		// correct); every other method returns None here, this one is 1:1.
 		return NULL;
-	int32_t assoc = FUN_10023db0(obj);
+	int32_t assoc = MvlPyAnimTypeToAssoc(obj);
 	if (assoc == 0)
 		return NULL;                                   // decomp return 0 (error already set)
 	{

@@ -601,14 +601,32 @@ void
 CModelIndexLimit::ReplaceStreamingBufferRefs(int maxModelId)
 {
 	// 0.98e @ RVA 0x17410 (FUN_10017410). Sites: plugin .data @ RVA 0xacde8.
-	if (MvlStreamingBuffer == NULL || MvlStreamingBufferCapacity < maxModelId) {
-		MvlStreamingBufferCapacity = maxModelId;
-		MvlStreamingBuffer = malloc((static_cast<size_t>(maxModelId) * 5 + 0x23) * 4);
-		if (MvlStreamingBuffer == NULL) {
+	// BUGFIX(stable-1.0): (a) allocation is clamped to at least the copy size
+	// below - the original (max*5+0x23)*4 form is 80 dwords SHORTER than the
+	// (colBoundary*5+0x73)*4 copy whenever maxModelId < MvlColIdBoundary+16,
+	// which heap-overflowed the fresh buffer for small configured model limits
+	// (deviation: crash-guard clamp, buffer only grows); (b) the previous
+	// MvlStreamingBuffer is now freed on the grow path - it was leaked (pointer
+	// overwritten without free; the sibling ReplaceModelPointerBufferRefs frees
+	// first); (c) capacity is committed only after a successful allocation
+	// (was committed before malloc, leaving capacity>0 with buffer NULL).
+	const size_t copyDwords = (static_cast<size_t>(MvlColIdBoundary) * 5 + 0x73);
+	size_t allocBytes = (static_cast<size_t>(maxModelId) * 5 + 0x23) * 4;
+	if (copyDwords * 4 > allocBytes)
+		allocBytes = copyDwords * 4; // BUGFIX clamp (see above)
+
+	void *oldBuffer = MvlStreamingBuffer;
+	if (oldBuffer == NULL || MvlStreamingBufferCapacity < maxModelId) {
+		void *fresh = malloc(allocBytes);
+		if (fresh == NULL) {
 			ReportProblem("CModelIndexLimit::ReplaceStreamingBufferRefs",
 			              "Out of memory (%d models).", maxModelId);
-			return;
+			return; // old buffer + capacity untouched (consistent state)
 		}
+		MvlStreamingBufferCapacity = maxModelId;
+		MvlStreamingBuffer = fresh;
+		if (oldBuffer != NULL)
+			free(oldBuffer); // BUGFIX(stable-1.0): was leaked (see header note)
 	}
 
 	uint8_t       *newBase = static_cast<uint8_t*>(MvlStreamingBuffer);
@@ -739,7 +757,23 @@ CModelIndexLimit::ReplaceTexStartIndexRefs(int texStart, uint32_t texCount)
 		VcFunc<void (__cdecl *)(void)>(kVC_TexPoolRebuild1)();
 		uint32_t *newPool = vcTexPool; // set by the VC rebuild call
 
+		// BUGFIX(stable-1.0): the original trusted the VC rebuild (0x581010) to
+		// repopulate the pool pointer; when it does not, the newPool[0/1]
+		// derefs below crash on NULL. Restore the old pool pointer and bail
+		// (deviation: crash-guard only; the site rewrites above already ran, so
+		// the boundary is still advanced to keep state consistent).
+		if (newPool == NULL) {
+			vcTexPool = oldPool;
+			MvlErrorLog("CModelIndexLimit::ReplaceTexStartIndexRefs: VC "
+			            "tex-pool rebuild (RVA 0x181010) returned NULL - copy skipped");
+			MvlModelIdBoundary = texStart;
+			return;
+		}
+
 		int copyCount = MvlTxdIdBoundary - MvlModelIdBoundary;
+		if (copyCount < 0)
+			copyCount = 0; // BUGFIX(stable-1.0): negative count would wrap the
+			               // size_t memcpy lengths to ~4GB (crash-guard)
 		if (static_cast<int>(texCount) < copyCount)
 			copyCount = static_cast<int>(texCount);
 		const size_t copyBytes = static_cast<size_t>(static_cast<uint32_t>(copyCount));
@@ -750,10 +784,10 @@ CModelIndexLimit::ReplaceTexStartIndexRefs(int texStart, uint32_t texCount)
 		       reinterpret_cast<const void*>(static_cast<uintptr_t>(oldPool[0])),
 		       copyBytes * kTexEntrySize);
 
-		int iVar4 = static_cast<int>(newPool[2]);
+		int mergedTexCount = static_cast<int>(newPool[2]);
 		if (static_cast<int>(oldPool[3]) < static_cast<int>(newPool[2]))
-			iVar4 = static_cast<int>(oldPool[3]);
-		newPool[3] = static_cast<uint32_t>(iVar4);
+			mergedTexCount = static_cast<int>(oldPool[3]);
+		newPool[3] = static_cast<uint32_t>(mergedTexCount);
 
 		vcTexPool = oldPool;
 		VcFunc<void (__cdecl *)(void)>(kVC_TexPoolRebuild2)();
@@ -837,6 +871,23 @@ CModelIndexLimit::RegisterModelForLookup(uint32_t modelIndex, int modelPtr)
 	}
 
 	// Model-pointer registration is unconditional in the original.
+	// BUGFIX(stable-1.0): registry guards - the clone pointer is only seeded
+	// by CaptureVcLimits (wiring hazard), and the original trusted the caller
+	// for the index (a bad modelIndex heap-overflowed the registry buffer).
+	// The capacity guard is skipped while capacity==0 (pre-relocation phase,
+	// registry still points into the VC image).
+	if (MvlModelLookupRegistry == NULL) {
+		ReportProblem("CModelIndexLimit::RegisterModelForLookup",
+		              "Model registry not initialised - skipped %s.", lowerName);
+		return;
+	}
+	if (MvlModelPointerBufferCapacity != 0 &&
+	    modelIndex >= static_cast<uint32_t>(MvlModelPointerBufferCapacity)) {
+		ReportProblem("CModelIndexLimit::RegisterModelForLookup",
+		              "Model index %u beyond registry capacity %d - skipped %s.",
+		              modelIndex, MvlModelPointerBufferCapacity, lowerName);
+		return;
+	}
 	reinterpret_cast<int*>(MvlModelLookupRegistry)[modelIndex] = modelPtr;
 	InsertModelName(lowerName, static_cast<int>(modelIndex));
 }
@@ -845,6 +896,15 @@ uint32_t
 CModelIndexLimit::VerifyModelHasColModel(void)
 {
 	// 0.98e @ RVA 0x17f60 (FUN_10017f60).
+	// BUGFIX(stable-1.0): registry guards - the clone pointer is only seeded
+	// by CaptureVcLimits (wiring hazard; the original was always valid .data),
+	// and an absurd MvlCreatingModelIndex would OOB-read the registry.
+	// Capacity guard skipped while capacity==0 (pre-relocation phase).
+	if (MvlModelLookupRegistry == NULL)
+		return 0u;
+	if (MvlModelPointerBufferCapacity != 0 &&
+	    MvlCreatingModelIndex >= static_cast<uint32_t>(MvlModelPointerBufferCapacity))
+		return 0u;
 	const int modelIndex = static_cast<int>(MvlCreatingModelIndex);
 	const int modelPtr = reinterpret_cast<const int*>(MvlModelLookupRegistry)[modelIndex];
 	int result = 0;

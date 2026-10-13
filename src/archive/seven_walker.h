@@ -78,6 +78,9 @@ private:
 	// Cached entry table
 	UInt32 m_numEntries;
 	std::vector<std::string> m_names;
+	std::vector<UInt32> m_indices;   // BUGFIX(stable-1.0): archive-entry index per
+	                                  // cached name (m_db index incl. dirs; m_names
+	                                  // skips dirs so the vectors can diverge)
 	std::string m_path;
 	bool m_open;
 };

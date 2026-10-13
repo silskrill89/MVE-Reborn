@@ -17,6 +17,11 @@
 #include "../loader/log.h"
 
 #define kWalkerInputBufSize ((size_t)1 << 18) // 7zMain.c:35 kInputBufSize
+// BUGFIX(stable-1.0): cap for SzArEx_GetFileNameUtf16's returned length
+// (includes the NUL). The header is untrusted; on x86 a len near 2^31 would
+// overflow len * sizeof(UInt16) in the scratch alloc below. 64K wchars is
+// orders of magnitude beyond any real archive name.
+#define kWalkerMaxNameChars ((size_t)1 << 16)
 
 CSevenWalker::CSevenWalker()
 	: m_blockIndex(0xFFFFFFFF), m_outBuffer(NULL), m_outBufferSize(0),
@@ -60,6 +65,7 @@ CSevenWalker::Close(void)
 	m_archiveStream.wres = 0;
 
 	m_names.clear();
+	m_indices.clear();   // BUGFIX(stable-1.0): index map dies with the names
 	m_numEntries = 0;
 	m_path.clear();
 	m_open = false;
@@ -112,6 +118,7 @@ bool
 CSevenWalker::BuildNameTable(void)
 {
 	m_names.clear();
+	m_indices.clear();   // BUGFIX(stable-1.0): keep archive-entry indices in sync
 	m_numEntries = 0;
 
 	// Scratch buffer for UTF-16 names, grown to the max needed length.
@@ -124,6 +131,16 @@ CSevenWalker::BuildNameTable(void)
 			continue;
 
 		const size_t len = SzArEx_GetFileNameUtf16(&m_db, i, NULL); // 7z.h:146
+		// BUGFIX(stable-1.0): untrusted-header guards. len includes the NUL
+		// so a valid name is >= 1; len == 0 would underflow (len - 1) below
+		// into a SIZE_MAX read, and a huge len would overflow
+		// tempSize * sizeof(UInt16) on x86. Reject both.
+		if(len == 0 || len > kWalkerMaxNameChars){
+			MvlErrorLog("archive: entry %u has invalid UTF-16 name length %u",
+			            (unsigned)i, (unsigned)len);
+			ok = false;
+			break;
+		}
 		if(len > tempSize){
 			SzFree(NULL, temp);
 			tempSize = len;
@@ -141,6 +158,13 @@ CSevenWalker::BuildNameTable(void)
 			break;
 		}
 		m_names.push_back(name);
+		// BUGFIX(stable-1.0): remember the real archive-entry index. The
+		// cached list skips directories, so from the first dir entry on,
+		// list index != m_db index; SzArEx_GetFileSize/Extract take the
+		// m_db index. Vehicle archives are flat in practice, but untrusted
+		// input can carry dirs — without this map we'd extract the wrong
+		// entry (or a directory's block).
+		m_indices.push_back(i);
 	}
 
 	if(temp){
@@ -223,7 +247,9 @@ CSevenWalker::GetEntrySize(UInt32 index) const
 {
 	if(index >= m_numEntries)
 		return 0;
-	return SzArEx_GetFileSize(&m_db, index); // 7z.h:133
+	// BUGFIX(stable-1.0): map through m_indices — the cached list skips
+	// directories, so a raw list index can name a different archive entry.
+	return SzArEx_GetFileSize(&m_db, m_indices[index]); // 7z.h:133
 }
 
 bool
@@ -231,7 +257,7 @@ CSevenWalker::IsDirectory(UInt32 index) const
 {
 	if(index >= m_numEntries)
 		return true;
-	return SzArEx_IsDir(&m_db, index) != 0;
+	return SzArEx_IsDir(&m_db, m_indices[index]) != 0;   // BUGFIX: index map
 }
 
 bool
@@ -243,13 +269,28 @@ CSevenWalker::ExtractToMemory(UInt32 index, std::vector<unsigned char> &out)
 
 	size_t offset = 0;
 	size_t outSizeProcessed = 0;
-	const SRes res = SzArEx_Extract(&m_db, &m_lookStream.vt, index,
+	// BUGFIX(stable-1.0): extract by the real archive-entry index (the
+	// cached list drops directories, so list index != m_db index).
+	const SRes res = SzArEx_Extract(&m_db, &m_lookStream.vt, m_indices[index],
 	    &m_blockIndex, &m_outBuffer, &m_outBufferSize,
 	    &offset, &outSizeProcessed,
 	    &m_allocImp, &m_allocTempImp); // 7zArcIn.c:1650
 	if(res != SZ_OK){
 		MvlErrorLog("archive: extract of '%s' failed (SRes %d)",
 		            GetEntryName(index), (int)res);
+		return false;
+	}
+
+	// BUGFIX(stable-1.0): the (offset, outSizeProcessed) pair is produced by
+	// the SDK from untrusted archive data — clamp the slice to the cache the
+	// SDK reports, so a corrupt header cannot turn the assign below into an
+	// out-of-bounds read of m_outBuffer.
+	if(m_outBuffer == NULL || offset > m_outBufferSize ||
+	   outSizeProcessed > m_outBufferSize - offset){
+		MvlErrorLog("archive: extract of '%s' returned out-of-range slice "
+		            "(offset %u size %u of %u)",
+		            GetEntryName(index), (unsigned)offset,
+		            (unsigned)outSizeProcessed, (unsigned)m_outBufferSize);
 		return false;
 	}
 

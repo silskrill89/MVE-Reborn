@@ -41,10 +41,12 @@ extern uint32_t MvlAnimRedirectSlot;       // DAT_101241D8
 extern uint32_t *MvlRemapSiteTable[61];     // DAT_100aed68 (0xf4 bytes)
 // 0.98e @ RVA 0xaeff0 .. 0xaf00c - 8 pointers to bytes patched 0x10 -> 0x7F.
 extern uint8_t *MvlBytePatchPtrs[8];        // DAT_100aeff0..DAT_100af00c
-// 0.98e @ RVA 0xaf014 - 14 code sites built up as
+// 0.98e @ RVA 0xaf018 - 14 code sites (asm-verified; Ghidra's decomp renders
+// the same table loads as (&DAT_100af014)[i+1] - identical addresses) built
+// up as
 //   site[0]=0x80, site[1]=MvlCodePatchByteA[i], site[2]=0x7C,
 //   site[3]=MvlCodePatchByteB[i], site[4..0xD]=NOP (0x90).
-extern uint8_t *MvlCodePatchSites[14];      // DAT_100af014 (see Q: +4 oddity)
+extern uint8_t *MvlCodePatchSites[14];      // DAT_100af018 @ RVA 0xaf018
 extern uint8_t  MvlCodePatchByteA[14];      // DAT_100af060
 extern uint8_t  MvlCodePatchByteB[14];      // DAT_100aee5c
 // 0.98e @ RVA 0xaf0a8 - 23 code-site pointers holding RW chunk versions
@@ -58,25 +60,25 @@ extern uint32_t *MvlClumpVersionSites[23];  // DAT_100af0a8 (0x5c bytes)
 // 0.98e @ RVA 0x43810 - writes 9 code-site immediates: VC 0x58BFC4/0x58BFBE/
 // 0x58BFB8/0x58BFF6/0x58BFF0/0x58BFEA <- &MvlModelRedirectSlots[3..8] and
 // VC 0x58C912/0x58C90C/0x58C906 <- &MvlModelRedirectSlots[0..2].
-void FUN_10043810(void);
+void MvlInitWireModelRedirects(void);
 
 // 0.98e @ RVA 0x43870 - writes 3 code-site immediates: VC 0x597FA4 and
 // 0x5980BD <- &MvlAnimRedirectSlot, VC 0x598221 <- &MvlModelRedirectAux.
-void FUN_10043870(void);
+void MvlInitWireAnimRedirects(void);
 
 // 0.98e @ RVA 0x43900 - builds 14 code stubs (0x80 / byteA / 0x7C / byteB /
 // 10x NOP) at the sites in MvlCodePatchSites.
-void FUN_10043900(void);
+void MvlInitPatchCodeStubs(void);
 
 // 0.98e @ RVA 0x43a10 - remaps immediates at the 61 MvlRemapSiteTable sites
 // (value in (0x8118CF, 0x8118FD) -> +0xF92ACE0, i.e. 0x8118D0..0x8118FC
 // retargeted into plugin .data 0x1013C5B0..) and byte-patches the 8
 // MvlBytePatchPtrs targets 0x10 -> 0x7F.
-void FUN_10043a10(void);
+void MvlInitRemapImmediates(void);
 
 // 0.98e @ RVA 0x43b30 - remaps RW clump chunk-version immediates at the 23
 // MvlClumpVersionSites targets: 0x34003 -> 0x36003.
-void FUN_10043b30(void);
+void MvlInitRemapClumpVersions(void);
 
 // Runs the five roots in the recovered FUN_10043c00 order
 // (0x43810 -> 0x43a10 -> 0x43900 -> 0x43870 -> 0x43b30).

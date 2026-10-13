@@ -158,18 +158,30 @@ CMvlWeapon::LoadFromArchive(const char *archivePath, int id)
 	m_nWeaponId = id;                     // @ 0x84
 
 	try{
+		// Stage-failure messages are the VERBATIM immediates pushed at
+		// 0x98e @ RVA 0x52150 (strings.txt: "Parsing weapon archive failed."
+		// @0x1008cae4, "Loading weapon XML file failed." @0x1008cb04,
+		// "Loading weapon icon file failed." @0x1008cb24,
+		// "Loading weapon texture file failed." @0x1008cb48,
+		// "Loading weapon model file failed." @0x1008cb6c).
+		// BUGFIX(stable-1.0): the port used placeholder texts ("ParseArchive
+		// failed", …) — orphans of the recovered verbatim strings. The scope
+		// stage reuses the icon string: six stage checks vs five distinct
+		// 052150 strings, and only the icon string has the anomalous refcount
+		// (2 total / 1 code xref — tail-merged icon+scope failure block;
+		// OPEN QUESTION in the report).
 		if(!ParseArchive(m_szArchivePath))
-			WepThrow("ParseArchive failed");
+			WepThrow("Parsing weapon archive failed.");
 		if(!LoadXMLFile())
-			WepThrow("LoadXMLFile failed");
+			WepThrow("Loading weapon XML file failed.");
 		if(!LoadIconFile())
-			WepThrow("LoadIconFile failed");
+			WepThrow("Loading weapon icon file failed.");
 		if(!LoadScopeFile())
-			WepThrow("LoadScopeFile failed");
+			WepThrow("Loading weapon icon file failed.");   // merged block (see above)
 		if(!LoadTextureFile())
-			WepThrow("LoadTextureFile failed");
+			WepThrow("Loading weapon texture file failed.");
 		if(!LoadModelFile())
-			WepThrow("LoadModelFile failed");
+			WepThrow("Loading weapon model file failed.");
 		LoadAnimFile();   // logs its own failure; return not checked (original)
 
 		// Fill empty audio slots from the stock weapon for this logical id
@@ -211,29 +223,45 @@ CMvlWeapon::ParseArchive(const char *archivePath)
 	for(UInt32 i = 0; i < num; i++)
 		m_nArchiveTotalSize += (unsigned)walker.GetEntrySize(i);
 
+	// BUGFIX(stable-1.0): an entry-level failure (extract / register) now
+	// fails the stage — the decomp's two failure paths (7z-load fail and the
+	// entry `break`) share one epilogue and hence one return value; the port
+	// returned false for one and true for the other, and `true` silently
+	// shipped weapons with half-registered archives while orphaning the
+	// verbatim "Parsing weapon archive failed." string.
+	bool ok = true;
 	for(UInt32 i = 0; i < num; i++){
 		const char *name = walker.GetEntryName(i);
 		std::vector<unsigned char> tmp;
 		if(!walker.ExtractToMemory(i, tmp)){
 			WepErr("CMvlWeapon::ParseArchive",
 			       "Could not load file '%s' from archive '%s'.", name, archivePath);
+			ok = false;
 			break;
 		}
 		unsigned size = (unsigned)tmp.size();
-		void *data = malloc(size ? size : 1);
-		if(!data)
+		// BUGFIX(stable-1.0): +1 NUL byte — LoadXMLFile feeds this buffer to
+		// TinyXML's Parse(buf, 0, ...) which reads it via strlen (no length
+		// parameter); raw 7z-entry bytes are not terminated, so the original
+		// malloc(size) over-read the heap for every weapon XML load.
+		void *data = malloc((size_t)size + 1);
+		if(!data){
+			ok = false;
 			break;
+		}
 		if(size)
 			memcpy(data, &tmp[0], size);
+		((char *)data)[size] = '\0';
 		if(!RegisterArchiveFile(name, data, size)){
 			WepErr("CMvlWeapon::ParseArchive",
 			       "Could not register file '%s' from archive '%s'.", name,
 			       archivePath);
+			ok = false;
 			break;
 		}
 	}
 	walker.Close();
-	return true;
+	return ok;
 }
 
 // ===========================================================================
@@ -270,9 +298,25 @@ CMvlWeapon::RegisterArchiveFile(const char *name, void *data, unsigned size)
 		return false;
 	}
 	if(WepNameEndsWith(name, ".wav")){
-		// CSoundHandler::LoadSoundFile @ 0x33e10 — name table "gunshot"
-		// (PTR_s_gunshot_r_100af5dc), slot block @ 0x30.
-		bool ok = MvlSoundLoadFile("gunshot", &m_abSoundSlots[0][0], name, data, size);
+		// CSoundHandler::LoadSoundFile @ 0x33e10 — name table
+		// &PTR_s_gunshot_r_100af5dc (savewpn/range-decomp.txt:1625), slot
+		// block @ 0x30.
+		// BUGFIX(stable-1.0): the original passes the ADDRESS OF a
+		// NULL-terminated .data pointer table, never a string literal —
+		// passing "gunshot" made FindSlotForName interpret the literal's
+		// bytes as a pointer (names[0] = 'g','u','n','s') and crash on the
+		// first archive .wav. Reconstructed table from the 0.98e string
+		// table: gunshot-r @ 0x1008cc14, gunshot-l @ 0x1008cc20,
+		// reload @ 0x1008cc2c, shotecho @ 0x1008cc34 (gunshot-r/-l/shotecho
+		// have zero code xrefs => data-table entries) — 4 entries ==
+		// m_abSoundSlots[4][20]; the "-r"/"-l" adjacency is what
+		// FindSlotForName's stereo-pair rule keys on. OPEN: exact order of
+		// reload/shotecho in the original .data table (see report).
+		static const char *const kWeaponSoundSlotNames[] = {
+			"gunshot-r", "gunshot-l", "reload", "shotecho", 0
+		};
+		bool ok = MvlSoundLoadFile(kWeaponSoundSlotNames, &m_abSoundSlots[0][0],
+		                            name, data, size);
 		if(!ok)
 			WepErr("CMvlWeapon::RegisterArchiveFile", "Loading sound file %s failed.", name);
 		free(data);
@@ -323,13 +367,20 @@ CMvlWeapon::RegisterArchiveFile(const char *name, void *data, unsigned size)
 bool
 CMvlWeapon::LoadTextureFile(void)
 {
+	// BUGFIX(stable-1.0): hoist the stream — the original keeps it live
+	// across the catch (register ESI) and the SHARED tail FUN_1005290f
+	// closes it on every path (`if(unaff_ESI != 0) FUN_10032090()`;
+	// savewpn/range-decomp.txt:1729-1733). The port closed it only inside
+	// the try, leaking the RwStream whenever the catch fired.
+	void *stream = 0;
+
 	if(m_pTxdBuf == 0)
 		return true;
 
 	try{
 		if(!MvlRecognizeTextureData(m_pTxdBuf, m_anBufSizes[2]))
 			WepThrow("Failed to recognize texture.");
-		void *stream = MvlRwMemoryStreamOpen(m_pTxdBuf, m_anBufSizes[2]);
+		stream = MvlRwMemoryStreamOpen(m_pTxdBuf, m_anBufSizes[2]);
 		if(!stream)
 			WepThrow("Could not open memory stream for texture file.");
 		if(MvlRwStreamFindChunkHeader(stream) == 0)
@@ -337,12 +388,14 @@ CMvlWeapon::LoadTextureFile(void)
 		m_pTxd = MvlRwReadTextureDictionary(stream);   // @ 0x108
 		if(!m_pTxd)
 			WepThrow("Loading texture dictionary from .txd file failed.");
-		MvlRwMemoryStreamClose(stream);
 	}catch(const SWepLoadError &e){
 		WepErr("CMvlWeapon::LoadTextureFile", "%s", e.msg);
 	}
 
-	// FUN_1005290f @ 0x5290f tail — free the .txd buffer.
+	// FUN_1005290f @ 0x5290f tail — close the stream (if opened), then free
+	// the .txd buffer (original order in the tail helper).
+	if(stream != 0)
+		MvlRwMemoryStreamClose(stream);
 	free(m_pTxdBuf);
 	m_pTxdBuf = 0;
 	return true;
@@ -354,12 +407,18 @@ CMvlWeapon::LoadTextureFile(void)
 bool
 CMvlWeapon::LoadModelFile(void)
 {
+	// BUGFIX(stable-1.0): hoist the stream — same as LoadTextureFile: the
+	// original's shared tail FUN_10052b75 closes it on EVERY path
+	// (`if(unaff_EDI != 0) FUN_10032090()`; range-decomp.txt:1847-1849);
+	// the port closed it only inside the try, leaking the RwStream on catch.
+	void *stream = 0;
+
 	if(m_pDffBuf == 0)
 		return true;
 
 	try{
 		MvlRwClumpReadPrep();   // FUN_10032760 @ 0x32760
-		void *stream = MvlRwMemoryStreamOpen(m_pDffBuf, m_anBufSizes[1]);
+		stream = MvlRwMemoryStreamOpen(m_pDffBuf, m_anBufSizes[1]);
 		if(!stream)
 			WepThrow("Could not open memory stream for DFF file.");
 		if(MvlRwStreamFindChunkHeader(stream) == 0)
@@ -378,16 +437,17 @@ CMvlWeapon::LoadModelFile(void)
 		MvlRwNormalizeModel();                        // FUN_1002eb80 @ 0x2eb80
 		m_nModelIndex = -1;                            // @ 0xe0
 		m_nModelIndex2 = -1;                           // @ 0xe4
-		MvlRwMemoryStreamClose(stream);
 	}catch(const SWepLoadError &e){
 		WepErr("CMvlWeapon::LoadModelFile", "%s", e.msg);
 	}
 
 	// FUN_10052b75 @ 0x52b75 tail — tex-dict mode, weapon clump register,
-	// stream close, free the .dff buffer.
+	// stream close, free the .dff buffer (original helper order).
 	MvlRwTexDictReadPrep();   // FUN_10032750
 	if(m_pAtomic)
 		MvlWeaponClumpRegister(m_pAtomic);   // FUN_10031450 @ 0x31450
+	if(stream != 0)
+		MvlRwMemoryStreamClose(stream);
 	free(m_pDffBuf);
 	m_pDffBuf = 0;
 	return true;
@@ -400,6 +460,16 @@ CMvlWeapon::LoadModelFile(void)
 bool
 MvlWeaponLoadImageTexture(void **buf, unsigned size, void **outTex)
 {
+	// BUGFIX(stable-1.0): hoist stream + image — the original's catch
+	// (Catch@10052d0e) destroys the half-built image and falls through to
+	// the SHARED tail FUN_10052d68, which closes the stream AND frees the
+	// raw buffer on every path (range-decomp.txt:1921-1932 + 1940-1957).
+	// The port returned straight out of the catch: leaked the RwStream and
+	// the raw buffer, and never called the image teardown it cites.
+	void *stream = 0;
+	void *image = 0;
+	bool ok = true;
+
 	if(buf == 0 || *buf == 0){
 		WepErr("CMvlWeapon::LoadImageTexture",
 		       "Buffer is not loaded - file does not exist.");
@@ -407,26 +477,32 @@ MvlWeaponLoadImageTexture(void **buf, unsigned size, void **outTex)
 	}
 	*outTex = 0;
 	try{
-		void *stream = MvlRwMemoryStreamOpen(*buf, size);
+		stream = MvlRwMemoryStreamOpen(*buf, size);
 		if(!stream)
 			WepThrow("Could not open memory stream for icon file.");
-		void *image = MvlPngReadImage(stream);   // FUN_1001c690 @ 0x1c690
+		image = MvlPngReadImage(stream);   // FUN_1001c690 @ 0x1c690
 		if(!image)
 			WepThrow("Could not read RwImage from PNG file.");
 		*outTex = MvlImageToTexture(image);      // FUN_1001ca90 @ 0x1ca90
 		if(!*outTex)
 			WepThrow("Could not get texture from RwImage.");
-		MvlRwMemoryStreamClose(stream);
 	}catch(const SWepLoadError &e){
-		// Catch @ RVA 0x52d0e destroys the image when the texture failed
-		// (FUN_100327c0 @ 0x327c0) — HOOK note for the engine lane.
+		// Catch @ RVA 0x52d0e: destroy the image only when the texture
+		// conversion failed (decomp: `if(image != 0 && *outTex == 0) FUN_100327c0()`).
+		// MvlPngDestroyImage is the TODO(weap) stub for FUN_100327c0 — the
+		// call identity is wired now so the engine lane only replaces the body.
+		if(image != 0 && *outTex == 0)
+			MvlPngDestroyImage(image);
 		WepErr("CMvlWeapon::LoadImageTexture", "%s", e.msg);
-		return false;
+		ok = false;
 	}
-	// FUN_10052d68 @ 0x52d68 tail — stream close + free the raw buffer.
+	// FUN_10052d68 @ 0x52d68 tail — stream close + free the raw buffer
+	// (runs after the catch too, exactly like the original).
+	if(stream != 0)
+		MvlRwMemoryStreamClose(stream);
 	free(*buf);
 	*buf = 0;
-	return true;
+	return ok;
 }
 
 // ===========================================================================
@@ -623,10 +699,17 @@ CMvlWeapon::LoadXMLSectionBasic(TiXmlElement *sector)
 				return false;
 			}
 			// logic selection (FUN_10059d7f allocs in the original):
-			if(m_nLogicalId == 80)                 // 0x50 → CWeaponLogicSpike
+			// BUGFIX(stable-1.0): a weapon XML with two <basic> sectors (or
+			// repeated logicalids) must not leak the first logic object when
+			// reassigning m_pLogic.
+			if(m_nLogicalId == 80){                // 0x50 → CWeaponLogicSpike
+				delete m_pLogic;
 				m_pLogic = new CWeaponLogicSpike(this);
-			else if(m_nLogicalId == 81)            // 0x51 → CWeaponLogicHat
+			}
+			else if(m_nLogicalId == 81){           // 0x51 → CWeaponLogicHat
+				delete m_pLogic;
 				m_pLogic = new CWeaponLogicHat(this);
+			}
 			else if(m_nLogicalId > 0x23)           // other >35 → 0
 				m_nLogicalId = 0;
 			bLogicalId = true;
@@ -911,8 +994,13 @@ CMvlWeapon::Release(void)
 	free(m_pIfpBuf);  m_pIfpBuf = 0;  m_anBufSizes[4] = 0;
 	free(m_pScopeBuf);m_pScopeBuf = 0;m_anBufSizes[5] = 0;
 	for(int i = 0; i < 4; i++){
-		// sound slot objects freed via their owning handler (0x33e10 lineage);
-		// HOOK: the original frees *slot through the sound-object dtor.
+		// FUN_10053f10 @ 0x53f10 frees the slot's first dword plainly
+		// (decomp: if(*puVar2) free(*puVar2); *puVar2 = 0;
+		// savewpn/range-decomp.txt:2893-2902) — the dword is the malloc'd
+		// sample buffer from FillSampleBufferFromData.
+		// BUGFIX(stable-1.0): the port zeroed the pointer WITHOUT freeing it
+		// (leaked every loaded weapon .wav buffer on Release).
+		free(*(void **)&m_abSoundSlots[i][0]);
 		*(void **)&m_abSoundSlots[i][0] = 0;
 	}
 	m_nWeaponId = 0;                 // decomp clears 0x84 and 0x88

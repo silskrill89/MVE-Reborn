@@ -30,7 +30,7 @@ public:
 	// === RTTI-recovered names (error strings embedded in the 0.98e DLL) ===
 
 	// CVehicleSCM::SetNextTextForVehicleId — 0.98e @ RVA 0x51e20 (opcode 0800).
-	// Validates a vehicle model index (pool lookup FUN_1004f3a0 @ RVA 0x4f3a0;
+	// Validates a vehicle model index (pool lookup MvlGetModelDirRecord @ RVA 0x4f3a0;
 	// slot range-checked against the "TXD base index" limit gta-vc.exe
 	// DAT_00a06320) and formats the display name into the next-text buffer
 	// (DAT_100b77d8). Failures log the verbatim "Opcode 800h - ..." messages

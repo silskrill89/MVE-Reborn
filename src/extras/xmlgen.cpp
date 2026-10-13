@@ -70,7 +70,7 @@ int  MvlFetchedDataCount = 0;                 // DAT_100b2454 @ RVA 0xb2454
 void **MvlModelInfoPtrs = 0;                  // DAT_100a6314 @ RVA 0xa6314 (init 0x92D4C8)
 unsigned char MvlRgbColoursEnabled = 0;       // DAT_100b1a1f @ RVA 0xb1a1f
 
-// FUN_1004f3a0 (0.98e @ RVA 0x4f3a0) registry record for a model id:
+// MvlGetModelDirRecord (0.98e @ RVA 0x4f3a0) registry record for a model id:
 //   sub  ecx, [DAT_100a6d48]  ; DAT_100a6d48 @ RVA 0xa6d48, .data init 0x1770
 //   call FUN_1004f380 (= MvlVehicleRegGet, vehicle_archive.h @ 0x4f380)
 //   if (!rec || *(int*)rec == 0) return NULL;
@@ -78,7 +78,7 @@ unsigned char MvlRgbColoursEnabled = 0;       // DAT_100b1a1f @ RVA 0xb1a1f
 // the Heli*/boat getters below fall through to their id-based defaults.
 static int MvlRegistryIdOffset = 0x1770;      // DAT_100a6d48 @ RVA 0xa6d48 (.data init 6000)
 
-static void *FUN_1004f3a0(int modelId)
+static void *MvlGetModelDirRecord(int modelId)
 {
 	void *rec = MvlVehicleRegGet(modelId - MvlRegistryIdOffset);
 	if(rec == 0 || *(const int *)rec == 0)
@@ -93,7 +93,7 @@ static void *FUN_1004f3a0(int modelId)
 static int MvlExtraFlagsByModelId[256];       // DAT_100b2438 @ RVA 0xb2438
 static unsigned char MvlExtraFlagsInitDone;   // DAT_100b1a1e @ RVA 0xb1a1e
 
-static void FUN_1003cfe0(void)
+static void MvlInitDefaultExtraFlags(void)           // FUN_1003cfe0 @ RVA 0x3cfe0
 {
 	int *t = MvlExtraFlagsByModelId;
 	if(MvlExtraFlagsInitDone)
@@ -133,16 +133,16 @@ static void FUN_1003cfe0(void)
 	MvlExtraFlagsInitDone = 1;
 }
 
-// FUN_1003d120 (0.98e @ RVA 0x3d120) — <extraflags> getter, recovered name
+// MvlGetExtraFlags (0.98e @ RVA 0x3d120) — <extraflags> getter, recovered name
 // unknown (no error string): registry record dword @+0x10, else default table.
-static int FUN_1003d120(int modelId)
+static int MvlGetExtraFlags(int modelId)
 {
-	void *rec = FUN_1004f3a0(modelId);
+	void *rec = MvlGetModelDirRecord(modelId);
 	if(rec)
 		return *(const int *)((const char *)rec + 0x10);   // asm: mov eax,[eax+0x10]
 	if((unsigned)(modelId - 0x82) > 0x6a)                 // ids 130..236 only
 		return 0;
-	FUN_1003cfe0();
+	MvlInitDefaultExtraFlags();
 	return MvlExtraFlagsByModelId[modelId];
 }
 
@@ -355,7 +355,7 @@ static const float kMvlRadToDegNum = 180.0f;           // @ RVA 0x8df08 (0x43340
 static const float kMvlRadToDegDen = 3.14159274f;      // @ RVA 0x8de7c (0x40490FDB)
 
 // ---------------------------------------------------------------------------
-// FUN_1002ebb0 (0.98e @ RVA 0x2ebb0) — tail thunk `mov eax,0x584f30; jmp eax`
+// MvlTextGet (0.98e @ RVA 0x2ebb0) — tail thunk `mov eax,0x584f30; jmp eax`
 // into gta-vc.exe: CText::Get(this=TheText @ 0x94B220, const char *key) ->
 // wchar_t* (plugin-sdk plugin_vc/game_vc/CText.cpp). Used for <name>%ls with
 // the model's game name (@ SMvlGameModelInfo::m_gameName).
@@ -367,7 +367,7 @@ MvlTextGet(const char *key)
 {
 	static bool s_logged = false;
 	if(!s_logged){
-		MvlErrorLog("HOOK POINT 0x584f30 CText::Get (via FUN_1002ebb0 @ 0x2ebb0; "
+		MvlErrorLog("HOOK POINT 0x584f30 CText::Get (via MvlTextGet @ 0x2ebb0; "
 		            "TheText @ 0x94b220) — wide vehicle name lookup not wired");
 		s_logged = true;
 	}
@@ -385,7 +385,7 @@ MvlTextGet(const char *key)
 // ___libm_error_support path (0x6d70c) handles Inf/NaN — identity there is
 // unobservable from shipped output. OPEN QUESTION in port-notes.
 // ---------------------------------------------------------------------------
-static double FUN_1006d1e0(double x)
+static double MvlRadRoundTrip(double x)              // FUN_1006d1e0 @ RVA 0x6d1e0
 {
 	return x;
 }
@@ -402,7 +402,7 @@ static double FUN_1006d1e0(double x)
 // FUN_1003ce30 @ 0x3ce30 — "Checks for model %d, which has not been loaded."
 static int HeliGetType(int modelId)
 {
-	void *rec = FUN_1004f3a0(modelId);
+	void *rec = MvlGetModelDirRecord(modelId);
 	if(rec){
 		if(*(const int *)rec != modelId){
 			XmlgenError("HeliGetType", "Checks for model %d, which has not been loaded.", modelId);
@@ -423,7 +423,7 @@ static int HeliGetType(int modelId)
 // FUN_1003cea0 @ 0x3cea0 — "HeliGetWeaponType"
 static int HeliGetWeaponType(int modelId)
 {
-	void *rec = FUN_1004f3a0(modelId);
+	void *rec = MvlGetModelDirRecord(modelId);
 	if(rec){
 		if(*(const int *)rec == modelId){
 			if((*(const unsigned *)((const char *)rec + 0x39 * 4) & 0x20000U) != 0)
@@ -444,7 +444,7 @@ static int HeliGetWeaponType(int modelId)
 // immediates: 6.15f/0.5f, 6.15f/0.72f, 5.15f/0.8f.
 static void HeliGetRotorSettings(int modelId, float *rotorRadiusOut, float *rotorDamMultOut)
 {
-	void *rec = FUN_1004f3a0(modelId);
+	void *rec = MvlGetModelDirRecord(modelId);
 	if(rec){
 		if(*(const int *)rec != modelId){
 			*rotorRadiusOut = 6.15f;    // 0x40c4cccd
@@ -492,14 +492,14 @@ struct SMvlBoatEngine
 	float fFrequencyIncrease;
 };
 
-static void FUN_1003cc70(int modelId, SMvlBoatEngine *out)
+static void MvlGetBoatEngine(int modelId, SMvlBoatEngine *out) // FUN_1003cc70 @ RVA 0x3cc70
 {
 	// The original leaves `out` untouched on the no-match path (returns 0
 	// without writing); clone zeroes first to avoid reading uninitialised
 	// memory — logged deviation, see port-notes.
 	memset(out, 0, sizeof(*out));
 
-	void *rec = FUN_1004f3a0(modelId);
+	void *rec = MvlGetModelDirRecord(modelId);
 	if(rec == 0){
 		// Defaults (asm, exact field order +0x00/+0x08/+0x10/+0x04/+0x0C):
 		if(modelId == 0x88){
@@ -585,7 +585,7 @@ GenerateDefaultXML(void)
 		// Loop-top locals (asm @ 0x40e8e..0x40f0d):
 		int handlingId = mi->m_handlingId;                 // movzx ecx, word [esi+0x46]
 		int vehType    = mi->m_vehicleType;                // mov eax, [esi+0x3c]
-		int extraFlags = FUN_1003d120(modelId);            // -> [ebp-0x60], <extraflags>
+		int extraFlags = MvlGetExtraFlags(modelId);            // -> [ebp-0x60], <extraflags>
 		int heliType   = HeliGetType(modelId);             // -> [ebp-0x68]
 		int heliWeapon = HeliGetWeaponType(modelId);       // -> [ebp-0x7c]
 		float rotorRadius = 0.0f, rotorDamMult = 0.0f;     // HeliGetRotorSettings -> EDX/stack (asm @ 0x40efc)
@@ -730,7 +730,7 @@ GenerateDefaultXML(void)
 		}
 		if(vehType == 1){
 			SMvlBoatEngine be;
-			FUN_1003cc70(modelId, &be);                  // output via EDX (asm @ 0x41353)
+			MvlGetBoatEngine(modelId, &be);                  // output via EDX (asm @ 0x41353)
 			fprintf(f, "\n\t\t<boatengine>\n");
 			fprintf(f, "\t\t\t<type>%d</type>\n",                 be.nType);
 			fprintf(f, "\t\t\t<basevolume>%d</basevolume>\n",     be.nBaseVolume);
@@ -873,7 +873,7 @@ GenerateDefaultXML(void)
 			// FUN_1006d1e0 round-trip (identity, see helper) feeds maxlean/
 			// wheelieang/stoppieang: float(raw)*180/pi (asm @ 0x41db6..0x41dd2);
 			// fullanimlean skips the helper (no call, asm @ 0x41dee).
-			#define MVL_BIKE_DEG(v) ((float)((float)FUN_1006d1e0((double)(v)) * kMvlRadToDegNum / kMvlRadToDegDen))
+			#define MVL_BIKE_DEG(v) ((float)((float)MvlRadRoundTrip((double)(v)) * kMvlRadToDegNum / kMvlRadToDegDen))
 			fprintf(f, "\t<bikehandling>\n");
 			fprintf(f, "\t\t<leanfwdcom>%f</leanfwdcom>\n",         (double)bike->m_fLeanFwdCOM);
 			fprintf(f, "\t\t<leanfwdforce>%f</leanfwdforce>\n",     (double)bike->m_fLeanFwdForce);

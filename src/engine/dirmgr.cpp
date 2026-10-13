@@ -1,8 +1,8 @@
 // dirmgr.cpp - ports of the 3 MVL 0.98e directory-manager functions.
 //
 // Source: .harness-memory/limout/dirmgr/range-decomp.txt (Ghidra decomp of
-// vehmod_retail.dll 0.98e). Every function cites its original RVA; FUN_<VA>
-// names kept per the binding naming policy.
+// vehmod_retail.dll 0.98e). Every function cites its original RVA and keeps
+// a "FUN_<VA> @ RVA 0x..." name cite (see limout/renames-engine.md).
 //
 // Porting notes:
 //   * FUN_10017f60 / FUN_10018030 are byte-for-byte the bodies already ported
@@ -29,23 +29,23 @@
 #error "MVL clone: dirmgr.cpp is x86-only (VC 1.0 plugin)."
 #endif
 
-// 0.98e @ RVA 0x17f60 - CModelIndexLimit::VerifyModelHasColModel.
-uint32_t FUN_10017f60(void)
+// FUN_10017f60 (0.98e @ RVA 0x17f60) - CModelIndexLimit::VerifyModelHasColModel.
+uint32_t MvlVerifyModelHasColModel(void)
 {
 	return CModelIndexLimit::VerifyModelHasColModel();
 }
 
-// 0.98e @ RVA 0x18030 - CModelIndexLimit::VerifyDirectoryCanAdd.
-uint32_t FUN_10018030(void)
+// FUN_10018030 (0.98e @ RVA 0x18030) - CModelIndexLimit::VerifyDirectoryCanAdd.
+uint32_t MvlVerifyDirectoryCanAdd(void)
 {
 	return CModelIndexLimit::VerifyDirectoryCanAdd();
 }
 
-// 0.98e @ RVA 0x180a0 - directory hook-site installer (guarded, one-shot).
+// FUN_100180a0 (0.98e @ RVA 0x180a0) - directory hook-site installer (guarded, one-shot).
 // Guard flag: MvlDirHooksInstalled (original DAT_100b0c43 @ RVA 0xb0c43,
 // single storage in engine_globals.cpp).
 
-void FUN_100180a0(void)
+void MvlInstallDirHooks(void)
 {
 	if (MvlDirHooksInstalled != '\0')
 		return;
@@ -68,7 +68,7 @@ void FUN_100180a0(void)
 	// TODO(helpers): 0x10017eb0 unported; TODO(helpers): 0x10017ef0 unported;
 	// TODO(helpers): 0x10017f30 unported; TODO(helpers): 0x10017ff0 unported;
 	// TODO(helpers): 0x10018060 unported.
-	MvlErrorLog("helpers: TODO(helpers): FUN_100180a0 - directory hooks not "
+	MvlErrorLog("helpers: TODO(helpers): MvlInstallDirHooks - directory hooks not "
 	            "installed (handlers 0x10017db0..0x10018060 unported)");
 
 	MvlDirHooksInstalled = '\x01';

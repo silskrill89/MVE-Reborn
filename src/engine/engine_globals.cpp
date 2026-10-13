@@ -92,7 +92,12 @@ int32_t  MvlFrameWaitRemainingMs    = 0;   // DAT_1013dbf4 @ RVA 0x13dbf4
 // ---------------------------------------------------------------------------
 // 5. Key/class tables + livery colours.
 // ---------------------------------------------------------------------------
-uint8_t  MvlKeyClassBypassTable[0xED] = {};          // DAT_100b641e @ RVA 0xb641e
+// BUGFIX(stable-1.0): size [0xED] -> [0xF0]. The original table region spans
+// RVA 0xb641e..0xb650e (the InitVehicles port range-checks default car ids to
+// [0x82, 0xEF] and writes MvlKeyClassBypassTable[id]); the old 0xED bound
+// excluded indices 0xED..0xEF, so that (out-of-scope, vehicle lane) write went
+// 1-3 bytes past this array. 0xF0 covers every index the 0.98e code paths use.
+uint8_t  MvlKeyClassBypassTable[0xF0] = {};          // DAT_100b641e @ RVA 0xb641e
 int32_t  MvlAiClassSlotTable[16]      = {};          // DAT_100b2804 @ RVA 0xb2804
 int32_t  MvlAiClassSlotList[16 * 0x61] = {};         // DAT_100b51d8 @ RVA 0xb51d8
 int32_t  MvlPrimaryLiveryColor        = 0;           // DAT_100b6498 @ RVA 0xb6498

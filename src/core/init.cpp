@@ -23,7 +23,7 @@ uint32_t MvlAnimRedirectSlot      = 0;  // DAT_101241D8 @ RVA 0x1241d8
 
 uint32_t *MvlRemapSiteTable[61]  = {};  // DAT_100aed68 @ RVA 0xaed68 (contents undumped)
 uint8_t  *MvlBytePatchPtrs[8]    = {};  // DAT_100aeff0..DAT_100af00c @ RVA 0xaeff0
-uint8_t  *MvlCodePatchSites[14]  = {};  // DAT_100af014 @ RVA 0xaf014 (off-by-one in decomp)
+uint8_t  *MvlCodePatchSites[14]  = {};  // DAT_100af018 @ RVA 0xaf018 (14 slots; asm-verified, see FUN_10043900)
 uint8_t   MvlCodePatchByteA[14]  = {};  // DAT_100af060 @ RVA 0xaf060 (contents undumped)
 uint8_t   MvlCodePatchByteB[14]  = {};  // DAT_100aee5c @ RVA 0xaee5c (contents undumped)
 uint32_t *MvlClumpVersionSites[23] = {}; // DAT_100af0a8 @ RVA 0xaf0a8 (contents undumped)
@@ -53,7 +53,7 @@ static void MvlInitPatchByte(uint32_t va, uint8_t value, const char *what)
 // Decompiled as `_DAT_0058bfc4 = &DAT_1012449c; ...` - nine code-site
 // immediates repointed at the MVL-owned redirect slots.
 // ---------------------------------------------------------------------------
-void FUN_10043810(void)
+void MvlInitWireModelRedirects(void)                 // FUN_10043810 @ RVA 0x43810
 {
 	// target VC site -> redirect slot index (decomp order, 1:1).
 	static const struct { uint32_t site; int slot; } kStores[9] = {
@@ -79,7 +79,7 @@ void FUN_10043810(void)
 // ---------------------------------------------------------------------------
 // FUN_10043870 - 0.98e @ RVA 0x43870 (anim redirect wiring).
 // ---------------------------------------------------------------------------
-void FUN_10043870(void)
+void MvlInitWireAnimRedirects(void)                  // FUN_10043870 @ RVA 0x43870
 {
 	uint32_t animSlot = static_cast<uint32_t>(reinterpret_cast<uintptr_t>(
 	    &MvlAnimRedirectSlot)); // &DAT_101241d8
@@ -93,15 +93,20 @@ void FUN_10043870(void)
 
 // ---------------------------------------------------------------------------
 // FUN_10043900 - 0.98e @ RVA 0x43900 (14 code stubs).
-// Per site (decomp loop, uVar3 = 1..14 over the table at DAT_100af014):
+// Per site (0.98e @ RVA 0x43900 loop, uVar2 = 0..13):
 //   site[0] = 0x80; site[1] = byteA[i]; site[2] = 0x7C; site[3] = byteB[i];
 //   *(dword*)(site+4) = *(dword*)(site+8) = 0x90909090; *(word*)(site+0xC) = 0x9090.
-// NOTE: the decomp indexes the site table as (&DAT_100af018)[i] =
-// DAT_100af014 + (i+1)*4 (Ghidra off-by-one flavor); preserved 1:1 by taking
-// entry i+1 of a 15-slot table view. Table contents were never dumped ->
-// NULL rows are skipped through the seam log.
+// NOTE (BUGFIX(stable-1.0), asm-verified against vehmod_retail.dll 0.98e):
+// the site-pointer table is 14 dwords at DAT_100af018 @ RVA 0xaf018..0xaf04c.
+// Ghidra renders the same loads two ways - (&DAT_100af018)[i] and
+// *(&DAT_100af014 + (i+1)*4) - identical addresses; its byte-store of 0x80
+// at "(&DAT_100af018)[i]" is a decompiler artifact (the asm stores 0x80
+// THROUGH the site pointer, i.e. site[0]). The previous "15-slot i+1" story
+// in this comment was wrong and would have misled the wiring lane to extract
+// the table 4 bytes early. Table contents were never dumped -> NULL rows are
+// skipped through the seam log.
 // ---------------------------------------------------------------------------
-void FUN_10043900(void)
+void MvlInitPatchCodeStubs(void)                     // FUN_10043900 @ RVA 0x43900
 {
 	for (int i = 0; i < 14; ++i) {
 		uint8_t *site = MvlCodePatchSites[i];
@@ -141,7 +146,7 @@ void FUN_10043900(void)
 // i.e. retarget into plugin .data). Then 8 byte patches 0x10 -> 0x7F at the
 // targets of MvlBytePatchPtrs.
 // ---------------------------------------------------------------------------
-void FUN_10043a10(void)
+void MvlInitRemapImmediates(void)                    // FUN_10043a10 @ RVA 0x43a10
 {
 	for (int i = 0; i < 61; ++i) {
 		uint32_t *site = MvlRemapSiteTable[i]; // DAT_100aed68 rows (undumped)
@@ -175,7 +180,7 @@ void FUN_10043a10(void)
 // 23 rows of MvlClumpVersionSites (0x5c/4): immediate 0x34003 -> 0x36003
 // (RW clump chunk version 3.4/3.5 -> 3.6 acceptance).
 // ---------------------------------------------------------------------------
-void FUN_10043b30(void)
+void MvlInitRemapClumpVersions(void)                 // FUN_10043b30 @ RVA 0x43b30
 {
 	for (int i = 0; i < 23; ++i) {
 		uint32_t *site = MvlClumpVersionSites[i]; // DAT_100af0a8 rows (undumped)
@@ -197,9 +202,9 @@ void FUN_10043b30(void)
 // ---------------------------------------------------------------------------
 void MvlInstallInitChainPatches(void)
 {
-	FUN_10043810();
-	FUN_10043a10();
-	FUN_10043900();
-	FUN_10043870();
-	FUN_10043b30();
+	MvlInitWireModelRedirects();
+	MvlInitRemapImmediates();
+	MvlInitPatchCodeStubs();
+	MvlInitWireAnimRedirects();
+	MvlInitRemapClumpVersions();
 }

@@ -32,6 +32,10 @@ MvlScmWarn(const char *fn, const char *fmt, ...)
 	va_start(ap, fmt);
 	vsnprintf(msg, sizeof(msg), fmt, ap);  // decomp: _vsprintf (unbounded)
 	va_end(ap);
+	// BUGFIX(stable-1.0): force termination (MSVC vsnprintf does not
+	// NUL-terminate on truncation) — every sibling log wrapper in the port
+	// does this; msg feeds the "%s" operand below.
+	msg[sizeof(msg) - 1] = '\0';
 	MvlErrorLog("Warning in %s: %s", fn, msg);   // decomp: "Warning in %s: %s\n"
 }
 
@@ -48,7 +52,7 @@ MvlScmWarn(const char *fn, const char *fmt, ...)
 static void
 MvlScmHook_GameCall451010(void)
 {
-	MvlErrorLog("SCM hook point (not implemented): call gta-vc.exe!0x451010 [0.98e @ RVA 0x2e4c0 FUN_1002e4c0 tail-call thunk]");
+	MvlErrorLog("SCM hook point (not implemented): call gta-vc.exe!0x451010 [0.98e @ RVA 0x2e4c0 MvlScmHook_GameCall451010 tail-call thunk]");
 }
 
 // FUN_1002e4d0 @ RVA 0x2e4d0 — thunk body (scmop dump:111-118): a single
@@ -57,7 +61,7 @@ MvlScmHook_GameCall451010(void)
 static void
 MvlScmHook_GameCall463f00(void)
 {
-	MvlErrorLog("SCM hook point (not implemented): call gta-vc.exe!0x463f00 [0.98e @ RVA 0x2e4d0 FUN_1002e4d0 tail-call thunk]");
+	MvlErrorLog("SCM hook point (not implemented): call gta-vc.exe!0x463f00 [0.98e @ RVA 0x2e4d0 MvlScmHook_GameCall463f00 tail-call thunk]");
 }
 
 // FUN_1002e4b0 @ RVA 0x2e4b0 — thunk body (scmop dump:133-140): a single
@@ -66,7 +70,7 @@ MvlScmHook_GameCall463f00(void)
 static void
 MvlScmHook_GameCall450e50(void)
 {
-	MvlErrorLog("SCM hook point (not implemented): call gta-vc.exe!0x450e50 [0.98e @ RVA 0x2e4b0 FUN_1002e4b0 tail-call thunk]");
+	MvlErrorLog("SCM hook point (not implemented): call gta-vc.exe!0x450e50 [0.98e @ RVA 0x2e4b0 MvlScmHook_GameCall450e50 tail-call thunk]");
 }
 
 // FUN_1002e560 @ RVA 0x2e560 — __fastcall(slot, value) (scmop dump:121-130):
@@ -81,7 +85,7 @@ MvlScmHook_SetGameDwordSlot(int slot, unsigned int value)
 {
 	if(slot < 12){                                                // decomp: if (param_1 < 0xc)
 		unsigned int addr = 0x7d7438u + (unsigned int)slot * 4u;  // decomp: param_1 * 4 + 0x7d7438
-		MvlErrorLog("SCM hook point (not implemented): write gta-vc.exe 0x%08X = 0x%08X [0.98e @ RVA 0x2e560 FUN_1002e560 slot %d of 12]",
+		MvlErrorLog("SCM hook point (not implemented): write gta-vc.exe 0x%08X = 0x%08X [0.98e @ RVA 0x2e560 MvlScmHook_SetGameDwordSlot slot %d of 12]",
 		            addr, value, slot);
 	}
 }
@@ -102,13 +106,13 @@ static void MvlScmHandleVersionOpcode(void);        // FUN_10023940 @ 0x23940
 // ---------------------------------------------------------------------------
 CScmHandler::SOpcodeEntry CScmHandler::s_opcodes[4] = {
 	{ 0x0800, &CVehicleSCM::ProcessNextTextOpcode, 0x51eb0,
-	  "name-draw; registered by FUN_10051fb0 @ 0x51fb0 via FUN_100238a0 @ 0x238a0" },
+	  "name-draw; registered by CVehicleSCM::RegisterNextTextOpcode @ 0x51fb0 via CScmHandler::RegisterOpcode @ 0x238a0" },  // FUN_10051fb0 @ 0x51fb0, FUN_100238a0 @ 0x238a0
 	{ 0x0801, &MvlScmHandlePythonLoadedOpcode, 0x23920,
-	  "python-loaded; body ported (scmop/decomp-chain.txt:54-63); registered by FUN_100238d0 @ 0x238d0 (decomp-chain.txt:1668)" },
+	  "python-loaded; body ported (scmop/decomp-chain.txt:54-63); registered @ 0x238d0 (decomp-chain.txt:1668)" },  // FUN_100238d0 @ 0x238d0
 	{ 0x0802, &MvlScmHandleVersionOpcode, 0x23940,
-	  "version=9850; body ported (scmop/decomp-chain.txt:66-76); registered by FUN_100238d0 @ 0x238d0 (decomp-chain.txt:1669)" },
+	  "version=9850; body ported (scmop/decomp-chain.txt:66-76); registered @ 0x238d0 (decomp-chain.txt:1669)" },  // FUN_100238d0 @ 0x238d0
 	{ 0x0810, NULL, 0x584f0,
-	  "weapon pickup; body in src/weapons/ (sibling lane, extern seam in scm_handler.h); registered by FUN_10058270 @ 0x58270 (range-decomp.txt:6029)" },
+	  "weapon pickup; body in src/weapons/ (sibling lane, extern seam in scm_handler.h); registered @ 0x58270 (range-decomp.txt:6029)" },  // FUN_10058270 @ 0x58270
 };
 
 // ---------------------------------------------------------------------------

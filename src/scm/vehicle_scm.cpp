@@ -42,7 +42,7 @@ ScmHookPoint(const char *what, const char *cite)
 // Undumped engine/game seams (all HOOK POINTs; defaults documented).
 // ---------------------------------------------------------------------------
 
-// FUN_1004f3a0 @ RVA 0x4f3a0 — pool/model lookup: decomp reads EAX (entry
+// MvlGetModelDirRecord @ RVA 0x4f3a0 — pool/model lookup: decomp reads EAX (entry
 // pointer, NULL = none) and EDX (pool slot index left as a side channel,
 // Ghidra "extraout_EDX"). NOTE: the vehicle lane exposes the EAX half as
 // MvlLookupModelInfoByModelIndex (vehicle_handler.h, TODO(save): 0x4f3a0);
@@ -50,7 +50,7 @@ ScmHookPoint(const char *what, const char *cite)
 static void
 ScmLookupModelSlot(int modelIdx, void **entryOut, int *slotOut)
 {
-	ScmHookPoint("FUN_1004f3a0 model/pool lookup (EAX entry + EDX slot)", "0.98e @ RVA 0x4f3a0");
+	ScmHookPoint("MvlGetModelDirRecord model/pool lookup (EAX entry + EDX slot)", "0.98e @ RVA 0x4f3a0");
 	*entryOut = NULL;
 	*slotOut  = 0;
 	(void)modelIdx;
@@ -75,12 +75,12 @@ ScmModelInfoForSlot(int slot)
 	return 0;
 }
 
-// FUN_1002ebb0 @ RVA 0x2ebb0 — resolves the model display name before the
+// MvlTextGet @ RVA 0x2ebb0 — resolves the model display name before the
 // type-6 success path formats it.
 static void
 ScmResolveModelName(void)
 {
-	ScmHookPoint("FUN_1002ebb0 model-name resolve", "0.98e @ RVA 0x2ebb0");
+	ScmHookPoint("MvlTextGet model-name resolve", "0.98e @ RVA 0x2ebb0");
 }
 
 // FUN_1002e4c0 @ RVA 0x2e4c0 — opcode-argument context prep (first call in
@@ -88,7 +88,7 @@ ScmResolveModelName(void)
 static void
 ScmScriptArgPrep(void)
 {
-	ScmHookPoint("FUN_1002e4c0 opcode-argument context prep", "0.98e @ RVA 0x2e4c0");
+	ScmHookPoint("ScmScriptArgPrep opcode-argument context prep", "0.98e @ RVA 0x2e4c0");  // FUN_1002e4c0 @ 0x2e4c0
 }
 
 // FUN_1002e530 @ RVA 0x2e530 — read script opcode argument N: EAX = value,
@@ -99,18 +99,18 @@ static int s_scriptArgType;
 static void
 ScmReadScriptArg(int index)
 {
-	ScmHookPoint("FUN_1002e530 script opcode argument read (EAX value / EDX type)", "0.98e @ RVA 0x2e530");
+	ScmHookPoint("ScmReadScriptArg script opcode argument read (EAX value / EDX type)", "0.98e @ RVA 0x2e530");  // FUN_1002e530 @ 0x2e530
 	(void)index;
 	s_scriptArgValue = 0;
 	s_scriptArgType  = 0;
 }
 
-// FUN_1002d880 @ RVA 0x2d880 — resolve the vehicle id held in the script
+// MvlGetActiveModelIndex @ RVA 0x2d880 — resolve the vehicle id held in the script
 // variable (type-2 path). Default -1 => "Invalid" text, never a fabricated id.
 static int
 ScmScriptVarVehicleId(void)
 {
-	ScmHookPoint("FUN_1002d880 vehicle id from script variable", "0.98e @ RVA 0x2d880");
+	ScmHookPoint("MvlGetActiveModelIndex vehicle id from script variable", "0.98e @ RVA 0x2d880");
 	return -1;
 }
 
@@ -149,8 +149,8 @@ ScmPatchGameBytes(unsigned int addr, unsigned int value, unsigned int size)
 static unsigned int
 ScmFormatResolvedName(void)
 {
-	ScmHookPoint("success-path name format into DAT_100b77d8 (hidden %s operand of FUN_10051fd0)",
-	             "0.98e @ RVA 0x51e20 / name via 0x2ebb0");
+	ScmHookPoint("success-path name format into DAT_100b77d8 (hidden %s operand of CVehicleSCM::FormatNextTextBuffer)",
+	             "0.98e @ RVA 0x51e20 / name via 0x2ebb0");  // FUN_10051fd0 @ 0x51fd0
 	return 0;   // == (vswprintf_s count & 0xffffff00) for any count < 256
 }
 
@@ -165,7 +165,7 @@ CVehicleSCM::SetNextTextForVehicleId(int vehicleModelId)
 	if(vehicleModelId >= 0){                    // decomp: if (-1 < param_1)
 		void *entry = NULL;
 		int slot = 0;
-		ScmLookupModelSlot(vehicleModelId, &entry, &slot);   // FUN_1004f3a0 @ 0x4f3a0 (EAX/EDX)
+		ScmLookupModelSlot(vehicleModelId, &entry, &slot);   // MvlGetModelDirRecord @ 0x4f3a0 (EAX/EDX)
 		int txdBase = ScmTxdBaseIndex();                     // gta-vc.exe DAT_00a06320
 		if(slot < txdBase){                                  // decomp: extraout_EDX < DAT_100a6320
 			if(entry){
@@ -177,7 +177,7 @@ CVehicleSCM::SetNextTextForVehicleId(int vehicleModelId)
 				msg = "Opcode 800h - specified vehicle model index is not in use.";
 			}
 			else if(*(const char *)(info + 0x19) == 6){      // model-info type field @ +0x19 == 6
-				ScmResolveModelName();                       // FUN_1002ebb0 @ 0x2ebb0
+				ScmResolveModelName();                       // MvlTextGet @ 0x2ebb0
 				return ScmFormatResolvedName();              // LAB_10051e63 (same path)
 			}
 			else{
@@ -222,7 +222,7 @@ CVehicleSCM::ProcessNextTextOpcode(void)
 			}
 		}
 		if(ok){
-			int vehId = ScmScriptVarVehicleId();  // FUN_1002d880 @ 0x2d880
+			int vehId = ScmScriptVarVehicleId();  // MvlGetActiveModelIndex @ 0x2d880
 			SetNextTextForVehicleId(vehId);
 			return;
 		}
@@ -265,8 +265,8 @@ CVehicleSCM::ProcessHookStubTable(void)
 	// (0x4c / 4 = 19, matching the 19-function hook-stub cluster
 	// re-098e-map.md §2). Table content and FUN_10022570's
 	// install-vs-restore direction are NOT in the dump => HOOK POINT.
-	ScmHookPoint("hook-stub table walk: 19 x FUN_10022570 @ RVA 0x22570 over DAT_100af590",
-	             "0.98e @ RVA 0x51f90");
+	ScmHookPoint("hook-stub table walk: 19 x hook-stub callee @ RVA 0x22570 over DAT_100af590",
+	             "0.98e @ RVA 0x51f90");  // FUN_10022570 @ 0x22570 (install-vs-restore direction unknown)
 }
 
 // ===========================================================================

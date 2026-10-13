@@ -2,7 +2,7 @@
 //
 // Source: .harness-memory/limout/helpers/decomp-chain.txt (Ghidra decomp of
 // vehmod_retail.dll 0.98e, image base 0x10000000). Every function carries its
-// original RVA; Ghidra FUN_<VA> names kept per the binding naming policy.
+// original RVA + a "FUN_<VA> (0.98e @ RVA 0x...)" cite (see renames-engine.md).
 //
 // Layout of this TU:
 //   1. plugin .data globals (file-local, provisional types; see port notes)
@@ -97,150 +97,150 @@ inline uint32_t PeekU32(uint32_t va)
 // Each is marked: TODO(helpers): <VA> unported.
 // ===========================================================================
 
-// TODO(helpers): 0x1001af70 unported - entity -> attachment lookup.
-static int32_t __fastcall FUN_1001af70(int32_t entity)
+// FUN_1001af70 (0.98e @ RVA 0x1af70) - TODO(helpers): unported - entity -> attachment lookup.
+static int32_t __fastcall MvlFindEntityAttachment(int32_t entity)
 {
-	MVL_HELPERS_TODO(FUN_1001af70);
+	MVL_HELPERS_TODO(MvlFindEntityAttachment);
 	(void)entity;
 	return 0;
 }
 
-// TODO(helpers): 0x1001b280 unported - attachment world-position build.
-static void __fastcall FUN_1001b280(void *out, void *entity, float a, float b)
+// FUN_1001b280 (0.98e @ RVA 0x1b280) - TODO(helpers): unported - attachment world-position build.
+static void __fastcall MvlBuildAttachmentWorldPos(void *out, void *entity, float a, float b)
 {
-	MVL_HELPERS_TODO(FUN_1001b280);
+	MVL_HELPERS_TODO(MvlBuildAttachmentWorldPos);
 	(void)out; (void)entity; (void)a; (void)b;
 }
 
-// TODO(helpers): 0x1001b640 unported - attach/detach transform fixup
+// FUN_1001b640 (0.98e @ RVA 0x1b640) - TODO(helpers): unported - attach/detach transform fixup
 // (implicit XMM inputs lost by the decompiler; not recoverable 1:1).
-static void __fastcall FUN_1001b640(void *param_1, char param_2)
+static void __fastcall MvlFixupAttachTransform(void *entity, char stage)
 {
-	MVL_HELPERS_TODO(FUN_1001b640);
-	(void)param_1; (void)param_2;
+	MVL_HELPERS_TODO(MvlFixupAttachTransform);
+	(void)entity; (void)stage;
 }
 
 // TODO(helpers): 0x1002d880 unported - "current model/directory index"
 // (decomp depends on an ECX value produced by FUN_100173d0).
-static int32_t FUN_1002d880(void)
+static int32_t MvlGetActiveModelIndex(void)
 {
-	MVL_HELPERS_TODO(FUN_1002d880);
+	MVL_HELPERS_TODO(MvlGetActiveModelIndex);
 	return 0;
 }
 
 // TODO(helpers): 0x1003d120 unported - current model extra-flags fetch.
-static uint32_t __fastcall FUN_1003d120(int32_t modelIndex)
+static uint32_t __fastcall MvlGetExtraFlags(int32_t modelIndex)
 {
-	MVL_HELPERS_TODO(FUN_1003d120);
+	MVL_HELPERS_TODO(MvlGetExtraFlags);
 	(void)modelIndex;
 	return 0;
 }
 
-// TODO(helpers): 0x1004f380 unported - directory slot array indexer.
-static int *__fastcall FUN_1004f380(int32_t index)
+// FUN_1004f380 (0.98e @ RVA 0x4f380) - TODO(helpers): unported - directory slot array indexer.
+static int *__fastcall MvlVehicleRegGet(int32_t index)
 {
-	MVL_HELPERS_TODO(FUN_1004f380);
+	MVL_HELPERS_TODO(MvlVehicleRegGet);
 	(void)index;
 	return NULL;
 }
 
-// TODO(helpers): 0x1002faa0 unported - cached-parts destructor thunk.
-static void thunk_FUN_1002faa0(void *mem)
+// thunk_FUN_1002faa0 (0.98e @ RVA 0x2faa0) - TODO(helpers): unported - cached-parts destructor thunk.
+static void MvlPartsCacheDtorThunk(void *mem)
 {
-	MVL_HELPERS_TODO(thunk_FUN_1002faa0);
+	MVL_HELPERS_TODO(MvlPartsCacheDtorThunk);
 	(void)mem;
 }
 
-// TODO(helpers): 0x10059d7f unported - plugin-CRT operator new(size);
+// FUN_10059d7f (0.98e @ RVA 0x59d7f) - TODO(helpers): unported - plugin-CRT operator new(size);
 // falls back to plain malloc (same static-CRT heap the original used).
-static void *FUN_10059d7f(size_t size)
+static void *MvlPluginOperatorNew(size_t size)
 {
-	MVL_HELPERS_TODO(FUN_10059d7f);
+	MVL_HELPERS_TODO(MvlPluginOperatorNew);
 	void *p = malloc(size);
 	if (!p)
-		MvlErrorLog("helpers: FUN_10059d7f: out of memory (%u)", (unsigned)size);
+		MvlErrorLog("helpers: MvlPluginOperatorNew: out of memory (%u)", (unsigned)size);
 	return p;
 }
 
-// TODO(helpers): 0x1002f690 unported - parts-object constructor.
-static void *__fastcall FUN_1002f690(void *obj)
+// FUN_1002f690 (0.98e @ RVA 0x2f690) - TODO(helpers): unported - parts-object constructor.
+static void *__fastcall MvlPartsObjectCtor(void *obj)
 {
-	MVL_HELPERS_TODO(FUN_1002f690);
+	MVL_HELPERS_TODO(MvlPartsObjectCtor);
 	return obj;
 }
 
-// TODO(helpers): 0x1002f8b0 unported - parts-object data fill.
-static void __fastcall FUN_1002f8b0(void *obj, const uint8_t *src)
+// FUN_1002f8b0 (0.98e @ RVA 0x2f8b0) - TODO(helpers): unported - parts-object data fill.
+static void __fastcall MvlPartsObjectFill(void *obj, const uint8_t *src)
 {
-	MVL_HELPERS_TODO(FUN_1002f8b0);
+	MVL_HELPERS_TODO(MvlPartsObjectFill);
 	(void)obj; (void)src;
 }
 
-// TODO(helpers): 0x1002f8a0 unported - parts-object sub-init.
-static void __fastcall FUN_1002f8a0(void *obj)
+// FUN_1002f8a0 (0.98e @ RVA 0x2f8a0) - TODO(helpers): unported - parts-object sub-init.
+static void __fastcall MvlPartsObjectSubInitA(void *obj)
 {
-	MVL_HELPERS_TODO(FUN_1002f8a0);
+	MVL_HELPERS_TODO(MvlPartsObjectSubInitA);
 	(void)obj;
 }
 
-// TODO(helpers): 0x1002f880 unported - parts-object sub-init.
-static void __fastcall FUN_1002f880(int32_t obj)
+// FUN_1002f880 (0.98e @ RVA 0x2f880) - TODO(helpers): unported - parts-object sub-init.
+static void __fastcall MvlPartsObjectSubInitB(int32_t obj)
 {
-	MVL_HELPERS_TODO(FUN_1002f880);
+	MVL_HELPERS_TODO(MvlPartsObjectSubInitB);
 	(void)obj;
 }
 
-// TODO(helpers): 0x1002e8d0 unported - wheel-cache flush body.
-static void FUN_1002e8d0(void)
+// FUN_1002e8d0 (0.98e @ RVA 0x2e8d0) - TODO(helpers): unported - wheel-cache flush body.
+static void MvlFlushWheelCacheBody(void)
 {
-	MVL_HELPERS_TODO(FUN_1002e8d0);
+	MVL_HELPERS_TODO(MvlFlushWheelCacheBody);
 }
 
 // ---------------------------------------------------------------------------
 // RenderWare/game-frame thunk family: each is a tail call into VC 1.0 code
 // (decomp shows `(*(code *)0x64xxxx)()`), not recoverable as C. TODO stubs.
 // ---------------------------------------------------------------------------
-// TODO(helpers): 0x10031ec0 unported - RW frame sync (VC 0x644AD0).
-static void FUN_10031ec0(void) { MVL_HELPERS_TODO(FUN_10031ec0); }
-// TODO(helpers): 0x10031da0 unported - RW frame update (VC 0x6445F0).
-static void FUN_10031da0(void) { MVL_HELPERS_TODO(FUN_10031da0); }
-// TODO(helpers): 0x10031d90 unported - RW frame update (VC 0x644470).
-static void FUN_10031d90(void) { MVL_HELPERS_TODO(FUN_10031d90); }
-// TODO(helpers): 0x10031ee0 unported - RW frame update (VC 0x644D00).
-static void FUN_10031ee0(void) { MVL_HELPERS_TODO(FUN_10031ee0); }
-// TODO(helpers): 0x10031d40 unported - RW matrix push (VC 0x6437B0).
-static void FUN_10031d40(void) { MVL_HELPERS_TODO(FUN_10031d40); }
-// TODO(helpers): 0x10032140 unported - RW matrix pop (VC 0x647160).
-static void FUN_10032140(void) { MVL_HELPERS_TODO(FUN_10032140); }
-// TODO(helpers): 0x100092f0 unported - quaternion normalize chain.
-static void FUN_100092f0(void) { MVL_HELPERS_TODO(FUN_100092f0); }
-// TODO(helpers): 0x10009300 unported (called by FUN_100092f0).
-static void FUN_10009300(void) { MVL_HELPERS_TODO(FUN_10009300); }
-// TODO(helpers): 0x100080d0 unported (called by FUN_100092f0 / FUN_10008590).
-static void FUN_100080d0(void *p) { MVL_HELPERS_TODO(FUN_100080d0); (void)p; }
+// FUN_10031ec0 (0.98e @ RVA 0x31ec0) - TODO(helpers): unported - RW frame sync (VC 0x644AD0).
+static void MvlRwFrameSync(void) { MVL_HELPERS_TODO(MvlRwFrameSync); }
+// FUN_10031da0 (0.98e @ RVA 0x31da0) - TODO(helpers): unported - RW frame update (VC 0x6445F0).
+static void MvlRwPartDestroyGeometry(void) { MVL_HELPERS_TODO(MvlRwPartDestroyGeometry); }
+// FUN_10031d90 (0.98e @ RVA 0x31d90) - TODO(helpers): unported - RW frame update (VC 0x644470).
+static void MvlRwFrameUpdate2(void) { MVL_HELPERS_TODO(MvlRwFrameUpdate2); }
+// FUN_10031ee0 (0.98e @ RVA 0x31ee0) - TODO(helpers): unported - RW frame update (VC 0x644D00).
+static void MvlRwFrameUpdate3(void) { MVL_HELPERS_TODO(MvlRwFrameUpdate3); }
+// FUN_10031d40 (0.98e @ RVA 0x31d40) - TODO(helpers): unported - RW matrix push (VC 0x6437B0).
+static void MvlRwMatrixPush(void) { MVL_HELPERS_TODO(MvlRwMatrixPush); }
+// FUN_10032140 (0.98e @ RVA 0x32140) - TODO(helpers): unported - RW matrix pop (VC 0x647160).
+static void MvlRwMatrixPop(void) { MVL_HELPERS_TODO(MvlRwMatrixPop); }
+// FUN_100092f0 (0.98e @ RVA 0x92f0) - TODO(helpers): unported - quaternion normalize chain.
+static void MvlQuatNormalizeChain(void) { MVL_HELPERS_TODO(MvlQuatNormalizeChain); }
+// FUN_10009300 (0.98e @ RVA 0x9300) - TODO(helpers): unported (called by FUN_100092f0).
+static void MvlQuatNormalizeSub(void) { MVL_HELPERS_TODO(MvlQuatNormalizeSub); }
+// FUN_100080d0 (0.98e @ RVA 0x80d0) - TODO(helpers): unported (called by FUN_100092f0 / FUN_10008590).
+static void MvlQuatNormalizeElem(void *p) { MVL_HELPERS_TODO(MvlQuatNormalizeElem); (void)p; }
 
-// TODO(helpers): 0x10031380 unported - part frame teardown (needs the RW
+// FUN_10031380 (0.98e @ RVA 0x31380) - TODO(helpers): unported - part frame teardown (needs the RW
 // vtable at _DAT_007870c0; returns 1 in EAX per decomp).
-static uint32_t __fastcall FUN_10031380(int32_t part)
+static uint32_t __fastcall MvlRwAtomicDestroy(int32_t part)
 {
-	MVL_HELPERS_TODO(FUN_10031380);
+	MVL_HELPERS_TODO(MvlRwAtomicDestroy);
 	(void)part;
 	return 1;
 }
 
-// TODO(helpers): 0x1003ab00 unported - projectile/fire-effect emitter
+// FUN_1003ab00 (0.98e @ RVA 0x3ab00) - TODO(helpers): unported - projectile/fire-effect emitter
 // (heavy FPU + lost-ECX chain; not recoverable 1:1 from the decomp).
-static void __fastcall FUN_1003ab00(int32_t a, int32_t b, int32_t c, int32_t d)
+static void __fastcall MvlEmitProjectileEffect(int32_t a, int32_t b, int32_t c, int32_t d)
 {
-	MVL_HELPERS_TODO(FUN_1003ab00);
+	MVL_HELPERS_TODO(MvlEmitProjectileEffect);
 	(void)a; (void)b; (void)c; (void)d;
 }
 
-// TODO(helpers): 0x1002dff0 unported - game call into VC 0x4BC1E0
+// FUN_1002dff0 (0.98e @ RVA 0x2dff0) - TODO(helpers): unported - game call into VC 0x4BC1E0
 // (returns the local player ped; default 0 = none).
-static int32_t __fastcall FUN_1002dff0(int32_t unused)
+static int32_t __fastcall MvlGetLocalPlayerPed(int32_t unused)
 {
-	MVL_HELPERS_TODO(FUN_1002dff0);
+	MVL_HELPERS_TODO(MvlGetLocalPlayerPed);
 	(void)unused;
 	return 0;
 }
@@ -249,58 +249,58 @@ static int32_t __fastcall FUN_1002dff0(int32_t unused)
 // CVector / CQuaternion leaf family (pure math, but bodies live in sections
 // the decomp did not emit; pass-through defaults keep callers linkable).
 // ---------------------------------------------------------------------------
-// TODO(helpers): 0x10008f50 unported - CVector product (result written to ret).
-static float *__fastcall FUN_10008f50(float *a, float *b)
+// FUN_10008f50 (0.98e @ RVA 0x8f50) - TODO(helpers): unported - CVector product (result written to ret).
+static float *__fastcall MvlVectorProduct1(float *a, float *b)
 {
-	MVL_HELPERS_TODO(FUN_10008f50);
+	MVL_HELPERS_TODO(MvlVectorProduct1);
 	(void)b;
 	return a;
 }
-// TODO(helpers): 0x10008fc0 unported - CQuaternion Normalise body.
-static float *__fastcall FUN_10008fc0(float *q)
+// FUN_10008fc0 (0.98e @ RVA 0x8fc0) - TODO(helpers): unported - CQuaternion Normalise body.
+static float *__fastcall MvlQuatNormaliseBody(float *q)
 {
-	MVL_HELPERS_TODO(FUN_10008fc0);
+	MVL_HELPERS_TODO(MvlQuatNormaliseBody);
 	return q;
 }
-// TODO(helpers): 0x10008ee0 unported - CVector product (2nd variant).
-static float *__fastcall FUN_10008ee0(float *a, float *b)
+// FUN_10008ee0 (0.98e @ RVA 0x8ee0) - TODO(helpers): unported - CVector product (2nd variant).
+static float *__fastcall MvlVectorProduct2(float *a, float *b)
 {
-	MVL_HELPERS_TODO(FUN_10008ee0);
+	MVL_HELPERS_TODO(MvlVectorProduct2);
 	(void)b;
 	return a;
 }
-// TODO(helpers): 0x10008590 unported - CQuaternion slerp (implicit XMM args).
-static void __fastcall FUN_10008590(void *this_, void *a, void *b)
+// FUN_10008590 (0.98e @ RVA 0x8590) - TODO(helpers): unported - CQuaternion slerp (implicit XMM args).
+static void __fastcall MvlQuatMid(void *this_, void *a, void *b)
 {
-	MVL_HELPERS_TODO(FUN_10008590);
+	MVL_HELPERS_TODO(MvlQuatMid);
 	(void)this_; (void)a; (void)b;
 }
-// TODO(helpers): 0x10008ce0 unported - CVector ctor pass-through.
-static void *__fastcall FUN_10008ce0(void *ret) { MVL_HELPERS_TODO(FUN_10008ce0); return ret; }
-// TODO(helpers): 0x10009060 unported - CQuaternion Get pass-through.
-static void *__fastcall FUN_10009060(void *ret) { MVL_HELPERS_TODO(FUN_10009060); return ret; }
-// TODO(helpers): 0x10009190 unported - CQuaternion Get pass-through.
-static void *__fastcall FUN_10009190(void *ret) { MVL_HELPERS_TODO(FUN_10009190); return ret; }
-// TODO(helpers): 0x10009330 unported - CVector length helper (pass-through).
-static float *__fastcall FUN_10009330(float *v) { MVL_HELPERS_TODO(FUN_10009330); return v; }
-// TODO(helpers): 0x10008c30 unported - CVector zero-init.
-static void *__fastcall FUN_10008c30(void *v)
+// FUN_10008ce0 (0.98e @ RVA 0x8ce0) - TODO(helpers): unported - CVector ctor pass-through.
+static void *__fastcall MvlVectorCtorPass(void *ret) { MVL_HELPERS_TODO(MvlVectorCtorPass); return ret; }
+// FUN_10009060 (0.98e @ RVA 0x9060) - TODO(helpers): unported - CQuaternion Get pass-through.
+static void *__fastcall MvlQuatGetPass1(void *ret) { MVL_HELPERS_TODO(MvlQuatGetPass1); return ret; }
+// FUN_10009190 (0.98e @ RVA 0x9190) - TODO(helpers): unported - CQuaternion Get pass-through.
+static void *__fastcall MvlQuatGetPass2(void *ret) { MVL_HELPERS_TODO(MvlQuatGetPass2); return ret; }
+// FUN_10009330 (0.98e @ RVA 0x9330) - TODO(helpers): unported - CVector length helper (pass-through).
+static float *__fastcall MvlVectorLengthPass(float *v) { MVL_HELPERS_TODO(MvlVectorLengthPass); return v; }
+// FUN_10008c30 (0.98e @ RVA 0x8c30) - TODO(helpers): unported - CVector zero-init.
+static void *__fastcall MvlVectorZero(void *v)
 {
-	MVL_HELPERS_TODO(FUN_10008c30);
+	MVL_HELPERS_TODO(MvlVectorZero);
 	memset(v, 0, 12);
 	return v;
 }
-// TODO(helpers): 0x10008c50 unported - CVector zero-init variant.
-static void *__fastcall FUN_10008c50(void *v)
+// FUN_10008c50 (0.98e @ RVA 0x8c50) - TODO(helpers): unported - CVector zero-init variant.
+static void *__fastcall MvlVectorZeroVariant(void *v)
 {
-	MVL_HELPERS_TODO(FUN_10008c50);
+	MVL_HELPERS_TODO(MvlVectorZeroVariant);
 	memset(v, 0, 12);
 	return v;
 }
-// TODO(helpers): 0x10008250 unported - CQuaternion Set pass-through.
-static void *__fastcall FUN_10008250(void *q, void *src)
+// FUN_10008250 (0.98e @ RVA 0x8250) - TODO(helpers): unported - CQuaternion Set pass-through.
+static void *__fastcall MvlEulerToQuat(void *q, void *src)
 {
-	MVL_HELPERS_TODO(FUN_10008250);
+	MVL_HELPERS_TODO(MvlEulerToQuat);
 	(void)src;
 	return q;
 }
@@ -308,85 +308,85 @@ static void *__fastcall FUN_10008250(void *q, void *src)
 // ---------------------------------------------------------------------------
 // Fire-effect / game-object family used by FUN_1003a900 / FUN_1003af20.
 // ---------------------------------------------------------------------------
-// TODO(helpers): 0x1002e750 unported - effect object alloc (default 0 = none).
-static int32_t FUN_1002e750(void) { MVL_HELPERS_TODO(FUN_1002e750); return 0; }
-// TODO(helpers): 0x1002e780 unported - effect object flag setup.
-static void __fastcall FUN_1002e780(int32_t obj, uint32_t flags)
-{ MVL_HELPERS_TODO(FUN_1002e780); (void)obj; (void)flags; }
-// TODO(helpers): 0x1002e170 unported - effect object matrix fixup.
-static void __fastcall FUN_1002e170(int32_t m) { MVL_HELPERS_TODO(FUN_1002e170); (void)m; }
-// TODO(helpers): 0x1000b170 unported - effect registration (returns 0).
-static uint32_t FUN_1000b170(void) { MVL_HELPERS_TODO(FUN_1000b170); return 0; }
+// FUN_1002e750 (0.98e @ RVA 0x2e750) - TODO(helpers): unported - effect object alloc (default 0 = none).
+static int32_t MvlAllocEffectObject(void) { MVL_HELPERS_TODO(MvlAllocEffectObject); return 0; }
+// FUN_1002e780 (0.98e @ RVA 0x2e780) - TODO(helpers): unported - effect object flag setup.
+static void __fastcall MvlSetupEffectFlags(int32_t obj, uint32_t flags)
+{ MVL_HELPERS_TODO(MvlSetupEffectFlags); (void)obj; (void)flags; }
+// FUN_1002e170 (0.98e @ RVA 0x2e170) - TODO(helpers): unported - effect object matrix fixup.
+static void __fastcall MvlFixupEffectMatrix(int32_t m) { MVL_HELPERS_TODO(MvlFixupEffectMatrix); (void)m; }
+// FUN_1000b170 (0.98e @ RVA 0xb170) - TODO(helpers): unported - effect registration (returns 0).
+static uint32_t MvlRegisterEffect(void) { MVL_HELPERS_TODO(MvlRegisterEffect); return 0; }
 
 // ---------------------------------------------------------------------------
 // FUN_1003af20 support family (render state + per-ped lookups).
 // ---------------------------------------------------------------------------
-// TODO(helpers): 0x10037a60 unported - RNG/seed fetch used by the emitter.
-static void FUN_10037a60(void) { MVL_HELPERS_TODO(FUN_10037a60); }
-// TODO(helpers): 0x1000b130 unported - render alpha state.
-static void __fastcall FUN_1000b130(int a, int b, int c, int d)
-{ MVL_HELPERS_TODO(FUN_1000b130); (void)a; (void)b; (void)c; (void)d; }
-// TODO(helpers): 0x1000b120 unported - render state flush.
-static void FUN_1000b120(void) { MVL_HELPERS_TODO(FUN_1000b120); }
-// TODO(helpers): 0x1000b070 unported - render state reset.
-static void FUN_1000b070(void) { MVL_HELPERS_TODO(FUN_1000b070); }
-// TODO(helpers): 0x1000b090 unported - render state toggle.
-static void FUN_1000b090(void) { MVL_HELPERS_TODO(FUN_1000b090); }
-// TODO(helpers): 0x1000b080 unported - render state toggle.
-static void FUN_1000b080(void) { MVL_HELPERS_TODO(FUN_1000b080); }
-// TODO(helpers): 0x1002dfd0 unported - player ped lookup (default 0).
-static int32_t __fastcall FUN_1002dfd0(int32_t unused)
-{ MVL_HELPERS_TODO(FUN_1002dfd0); (void)unused; return 0; }
-// TODO(helpers): 0x1006cc5a unported - float10 trig (returns 0.0).
-static double FUN_1006cc5a(void) { MVL_HELPERS_TODO(FUN_1006cc5a); return 0.0; }
-// TODO(helpers): 0x1006d730 unported - float->double widen.
-static double FUN_1006d730(float f) { MVL_HELPERS_TODO(FUN_1006d730); return (double)f; }
-// TODO(helpers): 0x1006e460 unported - double->float narrow (returns input).
-static float FUN_1006e460(double d) { MVL_HELPERS_TODO(FUN_1006e460); return (float)d; }
-// TODO(helpers): 0x1006ccc0 unported - trig helper.
-static void FUN_1006ccc0(void *p) { MVL_HELPERS_TODO(FUN_1006ccc0); (void)p; }
-// TODO(helpers): 0x1002e340 unported - effect matrix combine.
-static void __fastcall FUN_1002e340(void *a, void *b, void *c)
-{ MVL_HELPERS_TODO(FUN_1002e340); (void)a; (void)b; (void)c; }
-// TODO(helpers): 0x10009380 unported - CVector store pass-through.
-static void *__fastcall FUN_10009380(void *v) { MVL_HELPERS_TODO(FUN_10009380); return v; }
-// TODO(helpers): 0x10009490 unported - effect position update.
-static void FUN_10009490(void) { MVL_HELPERS_TODO(FUN_10009490); }
-// TODO(helpers): 0x10009480 unported - effect frame update.
-static void FUN_10009480(void) { MVL_HELPERS_TODO(FUN_10009480); }
-// TODO(helpers): 0x1002ec60 unported - effect light attach.
-static void FUN_1002ec60(void) { MVL_HELPERS_TODO(FUN_1002ec60); }
-// TODO(helpers): 0x1001b100 unported - attachment fixup apply.
-static void __fastcall FUN_1001b100(int32_t entity)
-{ MVL_HELPERS_TODO(FUN_1001b100); (void)entity; }
-// TODO(helpers): 0x1001b240 unported - attachment failure path.
-static void __fastcall FUN_1001b240(int32_t entity)
-{ MVL_HELPERS_TODO(FUN_1001b240); (void)entity; }
-// TODO(helpers): 0x1001af90 unported - attachment slot query (returns 0).
-static int32_t __fastcall FUN_1001af90(int32_t a, int32_t b, void *c)
-{ MVL_HELPERS_TODO(FUN_1001af90); (void)a; (void)b; (void)c; return 0; }
-// TODO(helpers): 0x1001b080 unported - attachment offset query (returns 0).
-static int32_t __fastcall FUN_1001b080(void *a, void *b)
-{ MVL_HELPERS_TODO(FUN_1001b080); (void)a; (void)b; return 0; }
-// TODO(helpers): 0x1001b1a0 unported - attachment world matrix fetch.
-static void __fastcall FUN_1001b1a0(int32_t entity, void *out)
-{ MVL_HELPERS_TODO(FUN_1001b1a0); (void)entity; (void)out; }
-// TODO(helpers): 0x10032bf0 unported - part frame step 1.
-static void FUN_10032bf0(void) { MVL_HELPERS_TODO(FUN_10032bf0); }
-// TODO(helpers): 0x10032b70 unported - part frame step 2.
-static void __fastcall FUN_10032b70(int32_t *p)
-{ MVL_HELPERS_TODO(FUN_10032b70); (void)p; }
-// TODO(helpers): 0x10032300 unported - part frame step 3.
-static void FUN_10032300(void) { MVL_HELPERS_TODO(FUN_10032300); }
-// TODO(helpers): 0x10032810 unported - part frame step 4 (returns 0).
-static int32_t FUN_10032810(void) { MVL_HELPERS_TODO(FUN_10032810); return 0; }
-// TODO(helpers): 0x10032b30 unported - part frame step 5.
-static void FUN_10032b30(void) { MVL_HELPERS_TODO(FUN_10032b30); }
-// TODO(helpers): 0x10031cc0 unported - part frame fetch (returns 0).
-static int32_t FUN_10031cc0(void) { MVL_HELPERS_TODO(FUN_10031cc0); return 0; }
+// FUN_10037a60 (0.98e @ RVA 0x37a60) - TODO(helpers): unported - RNG/seed fetch used by the emitter.
+static void MvlFetchEffectRngSeed(void) { MVL_HELPERS_TODO(MvlFetchEffectRngSeed); }
+// FUN_1000b130 (0.98e @ RVA 0xb130) - TODO(helpers): unported - render alpha state.
+static void __fastcall MvlSetRenderAlphaState(int a, int b, int c, int d)
+{ MVL_HELPERS_TODO(MvlSetRenderAlphaState); (void)a; (void)b; (void)c; (void)d; }
+// FUN_1000b120 (0.98e @ RVA 0xb120) - TODO(helpers): unported - render state flush.
+static void MvlFlushRenderState(void) { MVL_HELPERS_TODO(MvlFlushRenderState); }
+// FUN_1000b070 (0.98e @ RVA 0xb070) - TODO(helpers): unported - render state reset.
+static void MvlResetRenderState(void) { MVL_HELPERS_TODO(MvlResetRenderState); }
+// FUN_1000b090 (0.98e @ RVA 0xb090) - TODO(helpers): unported - render state toggle.
+static void MvlToggleRenderState1(void) { MVL_HELPERS_TODO(MvlToggleRenderState1); }
+// FUN_1000b080 (0.98e @ RVA 0xb080) - TODO(helpers): unported - render state toggle.
+static void MvlToggleRenderState2(void) { MVL_HELPERS_TODO(MvlToggleRenderState2); }
+// FUN_1002dfd0 (0.98e @ RVA 0x2dfd0) - TODO(helpers): unported - player ped lookup (default 0).
+static int32_t __fastcall MvlGameGetPlayerPed(int32_t unused)
+{ MVL_HELPERS_TODO(MvlGameGetPlayerPed); (void)unused; return 0; }
+// FUN_1006cc5a (0.98e @ RVA 0x6cc5a) - TODO(helpers): unported - float10 trig (returns 0.0).
+static double MvlCrtFloat10Trig(void) { MVL_HELPERS_TODO(MvlCrtFloat10Trig); return 0.0; }
+// FUN_1006d730 (0.98e @ RVA 0x6d730) - TODO(helpers): unported - float->double widen.
+static double MvlCrtWidenFloatToDouble(float f) { MVL_HELPERS_TODO(MvlCrtWidenFloatToDouble); return (double)f; }
+// FUN_1006e460 (0.98e @ RVA 0x6e460) - TODO(helpers): unported - double->float narrow (returns input).
+static float MvlCrtNarrowDoubleToFloat(double d) { MVL_HELPERS_TODO(MvlCrtNarrowDoubleToFloat); return (float)d; }
+// FUN_1006ccc0 (0.98e @ RVA 0x6ccc0) - TODO(helpers): unported - trig helper.
+static void MvlCrtTrigHelper(void *p) { MVL_HELPERS_TODO(MvlCrtTrigHelper); (void)p; }
+// FUN_1002e340 (0.98e @ RVA 0x2e340) - TODO(helpers): unported - effect matrix combine.
+static void __fastcall MvlCombineEffectMatrix(void *a, void *b, void *c)
+{ MVL_HELPERS_TODO(MvlCombineEffectMatrix); (void)a; (void)b; (void)c; }
+// FUN_10009380 (0.98e @ RVA 0x9380) - TODO(helpers): unported - CVector store pass-through.
+static void *__fastcall MvlVectorStorePass(void *v) { MVL_HELPERS_TODO(MvlVectorStorePass); return v; }
+// FUN_10009490 (0.98e @ RVA 0x9490) - TODO(helpers): unported - effect position update.
+static void MvlUpdateEffectPosition(void) { MVL_HELPERS_TODO(MvlUpdateEffectPosition); }
+// FUN_10009480 (0.98e @ RVA 0x9480) - TODO(helpers): unported - effect frame update.
+static void MvlUpdateEffectFrame(void) { MVL_HELPERS_TODO(MvlUpdateEffectFrame); }
+// FUN_1002ec60 (0.98e @ RVA 0x2ec60) - TODO(helpers): unported - effect light attach.
+static void MvlAttachEffectLight(void) { MVL_HELPERS_TODO(MvlAttachEffectLight); }
+// FUN_1001b100 (0.98e @ RVA 0x1b100) - TODO(helpers): unported - attachment fixup apply.
+static void __fastcall MvlApplyAttachmentFixup(int32_t entity)
+{ MVL_HELPERS_TODO(MvlApplyAttachmentFixup); (void)entity; }
+// FUN_1001b240 (0.98e @ RVA 0x1b240) - TODO(helpers): unported - attachment failure path.
+static void __fastcall MvlHandleAttachmentFailure(int32_t entity)
+{ MVL_HELPERS_TODO(MvlHandleAttachmentFailure); (void)entity; }
+// FUN_1001af90 (0.98e @ RVA 0x1af90) - TODO(helpers): unported - attachment slot query (returns 0).
+static int32_t __fastcall MvlQueryAttachmentSlot(int32_t a, int32_t b, void *c)
+{ MVL_HELPERS_TODO(MvlQueryAttachmentSlot); (void)a; (void)b; (void)c; return 0; }
+// FUN_1001b080 (0.98e @ RVA 0x1b080) - TODO(helpers): unported - attachment offset query (returns 0).
+static int32_t __fastcall MvlQueryAttachmentOffset(void *a, void *b)
+{ MVL_HELPERS_TODO(MvlQueryAttachmentOffset); (void)a; (void)b; return 0; }
+// FUN_1001b1a0 (0.98e @ RVA 0x1b1a0) - TODO(helpers): unported - attachment world matrix fetch.
+static void __fastcall MvlFetchAttachmentWorldMatrix(int32_t entity, void *out)
+{ MVL_HELPERS_TODO(MvlFetchAttachmentWorldMatrix); (void)entity; (void)out; }
+// FUN_10032bf0 (0.98e @ RVA 0x32bf0) - TODO(helpers): unported - part frame step 1.
+static void MvlPartFrameStep1(void) { MVL_HELPERS_TODO(MvlPartFrameStep1); }
+// FUN_10032b70 (0.98e @ RVA 0x32b70) - TODO(helpers): unported - part frame step 2.
+static void __fastcall MvlPartFrameStep2(int32_t *p)
+{ MVL_HELPERS_TODO(MvlPartFrameStep2); (void)p; }
+// FUN_10032300 (0.98e @ RVA 0x32300) - TODO(helpers): unported - part frame step 3.
+static void MvlPartFrameStep3(void) { MVL_HELPERS_TODO(MvlPartFrameStep3); }
+// FUN_10032810 (0.98e @ RVA 0x32810) - TODO(helpers): unported - part frame step 4 (returns 0).
+static int32_t MvlPartFrameStep4(void) { MVL_HELPERS_TODO(MvlPartFrameStep4); return 0; }
+// FUN_10032b30 (0.98e @ RVA 0x32b30) - TODO(helpers): unported - part frame step 5.
+static void MvlPartFrameStep5(void) { MVL_HELPERS_TODO(MvlPartFrameStep5); }
+// FUN_10031cc0 (0.98e @ RVA 0x31cc0) - TODO(helpers): unported - part frame fetch (returns 0).
+static int32_t MvlFetchPartFrame(void) { MVL_HELPERS_TODO(MvlFetchPartFrame); return 0; }
 
 // FUN_1001cce0 (0.98e @ RVA 0x1cce0) - second logger flavor (context + fmt).
-static void FUN_1001cce0(const char *context, const char *format, ...)
+static void MvlOrigWarnLog(const char *context, const char *format, ...)
 {
 	char msg[512];
 	va_list args;
@@ -398,8 +398,8 @@ static void FUN_1001cce0(const char *context, const char *format, ...)
 }
 
 // FUN_1001cb80 (0.98e @ RVA 0x1cb80) - primary plugin logger; same shape as
-// ReportProblem, kept under the original name for call sites in the decomp.
-static void FUN_1001cb80(const char *context, const char *format, ...)
+// ReportProblem. Clone-side wrapper is MvlErrorLog (see renames-engine.md).
+static void MvlOrigErrorLog(const char *context, const char *format, ...)
 {
 	char msg[512];
 	va_list args;
@@ -414,26 +414,26 @@ static void FUN_1001cb80(const char *context, const char *format, ...)
 // Section 4: depth-1 ports (self-contained implementations).
 // ===========================================================================
 
-// 0.98e @ RVA 0x4f400 - parts-block accessor: *(entity + 0x1D4).
-static int32_t __fastcall FUN_1004f400(int32_t entity)
+// FUN_1004f400 (0.98e @ RVA 0x4f400) - parts-block accessor: *(entity + 0x1D4).
+static int32_t __fastcall MvlGetPartsBlock(int32_t entity)
 {
 	return *reinterpret_cast<int32_t *>(static_cast<uintptr_t>(entity + 0x1D4));
 }
 
-// 0.98e @ RVA 0x2fb00 - "has geometry": *(obj + 0x2C) != 0.
-static bool __fastcall FUN_1002fb00(int32_t obj)
+// FUN_1002fb00 (0.98e @ RVA 0x2fb00) - "has geometry": *(obj + 0x2C) != 0.
+static bool __fastcall MvlHasGeometry(int32_t obj)
 {
 	return *reinterpret_cast<int32_t *>(static_cast<uintptr_t>(obj + 0x2C)) != 0;
 }
 
-// 0.98e @ RVA 0x31ca0 - part -> RW frame: *(part + 4).
-static int32_t __fastcall FUN_10031ca0(int32_t part)
+// FUN_10031ca0 (0.98e @ RVA 0x31ca0) - part -> RW frame: *(part + 4).
+static int32_t __fastcall MvlRwClumpSetup(int32_t part)
 {
 	return *reinterpret_cast<int32_t *>(static_cast<uintptr_t>(part + 4));
 }
 
-// 0.98e @ RVA 0x80f0 - CQuaternion::SetIdentity.
-static uint32_t *__fastcall FUN_100080f0(uint32_t *q)
+// FUN_100080f0 (0.98e @ RVA 0x80f0) - CQuaternion::SetIdentity.
+static uint32_t *__fastcall MvlAnimQuatInit(uint32_t *q)
 {
 	q[0] = 0;
 	q[1] = 0;
@@ -442,8 +442,8 @@ static uint32_t *__fastcall FUN_100080f0(uint32_t *q)
 	return q;
 }
 
-// 0.98e @ RVA 0x8c90 - CVector copy (original __thiscall; C3865-lowered).
-static void *__fastcall FUN_10008c90(void *this_, void * /*edx*/, uint32_t *src)
+// FUN_10008c90 (0.98e @ RVA 0x8c90) - CVector copy (original __thiscall; C3865-lowered).
+static void *__fastcall MvlVectorCopy(void *this_, void * /*edx*/, uint32_t *src)
 {
 	uint32_t *dst = static_cast<uint32_t *>(this_);
 	dst[0] = src[0];
@@ -452,9 +452,9 @@ static void *__fastcall FUN_10008c90(void *this_, void * /*edx*/, uint32_t *src)
 	return this_;
 }
 
-// 0.98e @ RVA 0x8990 - CQuaternion::Get (quaternion -> 3x3 matrix rows).
+// FUN_10008990 (0.98e @ RVA 0x8990) - CQuaternion::Get (quaternion -> 3x3 matrix rows).
 // Original __thiscall; C3865-lowered to __fastcall + dummy EDX.
-static void __fastcall FUN_10008990(void *this_, void * /*edx*/, float *m)
+static void __fastcall MvlQuatGetMatrix(void *this_, void * /*edx*/, float *m)
 {
 	const float x = reinterpret_cast<float *>(this_)[0];
 	const float y = reinterpret_cast<float *>(this_)[1];
@@ -474,22 +474,22 @@ static void __fastcall FUN_10008990(void *this_, void * /*edx*/, float *m)
 }
 
 // 0.98e @ RVA 0x4f3a0 - directory entry lookup by model index.
-static int *__fastcall FUN_1004f3a0(int32_t modelIndex)
+static int *__fastcall MvlGetModelDirRecord(int32_t modelIndex)
 {
-	int *entry = FUN_1004f380(modelIndex - MvlModelIndexBaseOffset);
+	int *entry = MvlVehicleRegGet(modelIndex - MvlModelIndexBaseOffset);
 	if (entry == NULL || entry[0] == 0)
 		return NULL;
 	return entry;
 }
 
-// 0.98e @ RVA 0x3cfc0 - "directory entry exists for model index".
-static bool __fastcall FUN_1003cfc0(int32_t modelIndex)
+// FUN_1003cfc0 (0.98e @ RVA 0x3cfc0) - "directory entry exists for model index".
+static bool __fastcall MvlModelDirEntryExists(int32_t modelIndex)
 {
-	return FUN_1004f3a0(modelIndex) != NULL;
+	return MvlGetModelDirRecord(modelIndex) != NULL;
 }
 
-// 0.98e @ RVA 0x59f55 - MSVC CRT rand() (per-thread _holdrand LCG).
-static uint32_t FUN_10059f55(void)
+// FUN_10059f55 (0.98e @ RVA 0x59f55) - MSVC CRT rand() (per-thread _holdrand LCG).
+static uint32_t MvlPluginRand(void)
 {
 	// TODO(helpers): original seeds _holdrand per-thread via __getptid();
 	// the clone uses one process-wide LCG until TLS is introduced.
@@ -498,24 +498,24 @@ static uint32_t FUN_10059f55(void)
 	return (s_holdrand >> 16) & 0x7FFFu;
 }
 
-// 0.98e @ RVA 0x3a410 - frees the cached parts block of the entity.
-static void __fastcall FUN_1003a410(int32_t entity)
+// FUN_1003a410 (0.98e @ RVA 0x3a410) - frees the cached parts block of the entity.
+static void __fastcall MvlFreePartsCache(int32_t entity)
 {
-	int32_t parts = FUN_1004f400(entity);
+	int32_t parts = MvlGetPartsBlock(entity);
 	if (parts == 0)
 		return;
 	int32_t block = *reinterpret_cast<int32_t *>(static_cast<uintptr_t>(parts + 0xE4));
 	if (block == 0)
 		return;
-	thunk_FUN_1002faa0(reinterpret_cast<void *>(static_cast<uintptr_t>(block)));
+	MvlPartsCacheDtorThunk(reinterpret_cast<void *>(static_cast<uintptr_t>(block)));
 	free(reinterpret_cast<void *>(static_cast<uintptr_t>(block)));
 	*reinterpret_cast<uint32_t *>(static_cast<uintptr_t>(parts + 0xE4)) = 0;
 }
 
-// 0.98e @ RVA 0x3a350 - (re)builds the wheel-parts cache for the entity.
-static void __fastcall FUN_1003a350(int32_t entity)
+// FUN_1003a350 (0.98e @ RVA 0x3a350) - (re)builds the wheel-parts cache for the entity.
+static void __fastcall MvlBuildWheelCache(int32_t entity)
 {
-	int32_t parts = FUN_1004f400(entity);
+	int32_t parts = MvlGetPartsBlock(entity);
 	int32_t model = *reinterpret_cast<int32_t *>(static_cast<uintptr_t>(entity + 0x120));
 	if (parts == 0 || model == 0 || MvlWheelCacheFeatureFlag == 0)
 		return;
@@ -524,49 +524,55 @@ static void __fastcall FUN_1003a350(int32_t entity)
 	if ((flags & 0x60000u) == 0)
 		return;
 
-	void *obj = FUN_10059d7f(0x58);
-	obj = (obj != NULL) ? FUN_1002f690(obj) : NULL;
+	void *obj = MvlPluginOperatorNew(0x58);
+	obj = (obj != NULL) ? MvlPartsObjectCtor(obj) : NULL;
 	*reinterpret_cast<void **>(static_cast<uintptr_t>(parts + 0xE4)) = obj;
 
-	// Original zeroes 3 VC .text bytes around the fill call, then restores
-	// them from the single .data byte at 0x6DDE20 (code-site patching).
-	MvlUnlockGameText();
-	PokeByte(kVC_CacheByte1, 0);
-	PokeByte(kVC_CacheByte2, 0);
-	PokeByte(kVC_CacheByte3, 0);
-	FUN_1002f8b0(obj, reinterpret_cast<const uint8_t *>(
-	                  static_cast<uintptr_t>(*reinterpret_cast<int32_t *>(
-	                      static_cast<uintptr_t>(entity + 0x4C)))));
-	const uint8_t restore = PeekByte(kVC_CacheRestoreByte);
-	PokeByte(kVC_CacheByte1, restore);
-	PokeByte(kVC_CacheByte2, restore);
-	PokeByte(kVC_CacheByte3, restore);
-	*reinterpret_cast<uint32_t *>(static_cast<uintptr_t>(parts + 0xE8)) =
-	    MvlWheelCacheGenerationStamp;
+	// BUGFIX(stable-1.0): the original trusted malloc; on allocation failure
+	// the fill + .text pokes below ran against a NULL object. Skip the whole
+	// fill block when obj == NULL (deviation: crash-guard; the cache pointer
+	// stays NULL and FUN_1003a450's `cache != 0` check already skips it).
+	if (obj != NULL) {
+		// Original zeroes 3 VC .text bytes around the fill call, then restores
+		// them from the single .data byte at 0x6DDE20 (code-site patching).
+		MvlUnlockGameText();
+		PokeByte(kVC_CacheByte1, 0);
+		PokeByte(kVC_CacheByte2, 0);
+		PokeByte(kVC_CacheByte3, 0);
+		MvlPartsObjectFill(obj, reinterpret_cast<const uint8_t *>(
+		                  static_cast<uintptr_t>(*reinterpret_cast<int32_t *>(
+		                      static_cast<uintptr_t>(entity + 0x4C)))));
+		const uint8_t restore = PeekByte(kVC_CacheRestoreByte);
+		PokeByte(kVC_CacheByte1, restore);
+		PokeByte(kVC_CacheByte2, restore);
+		PokeByte(kVC_CacheByte3, restore);
+		*reinterpret_cast<uint32_t *>(static_cast<uintptr_t>(parts + 0xE8)) =
+		    MvlWheelCacheGenerationStamp;
+	}
 }
 
-// 0.98e @ RVA 0x2f890 - parts-object init pair (two unported sub-inits).
-static void __fastcall FUN_1002f890(void *obj)
+// FUN_1002f890 (0.98e @ RVA 0x2f890) - parts-object init pair (two unported sub-inits).
+static void __fastcall MvlInitPartsObject(void *obj)
 {
-	FUN_1002f8a0(obj);
-	FUN_1002f880(static_cast<int32_t>(reinterpret_cast<intptr_t>(obj)));
+	MvlPartsObjectSubInitA(obj);
+	MvlPartsObjectSubInitB(static_cast<int32_t>(reinterpret_cast<intptr_t>(obj)));
 }
 
-// 0.98e @ RVA 0x2e8e0 - wheel-cache flush (delegates to FUN_1002e8d0).
-static void FUN_1002e8e0(void)
+// FUN_1002e8e0 (0.98e @ RVA 0x2e8e0) - wheel-cache flush (delegates to FUN_1002e8d0).
+static void MvlFlushWheelCache(void)
 {
-	FUN_1002e8d0();
+	MvlFlushWheelCacheBody();
 }
 
-// 0.98e @ RVA 0x8d90 - CVector transform helper (original __thiscall).
-static void *__fastcall FUN_10008d90(void *this_, void * /*edx*/,
+// FUN_10008d90 (0.98e @ RVA 0x8d90) - CVector transform helper (original __thiscall).
+static void *__fastcall MvlVectorTransform(void *this_, void * /*edx*/,
                                       uint32_t *out, float *v)
 {
 	uint32_t tmp[3];
 	tmp[0] = reinterpret_cast<uint32_t *>(this_)[0];
 	tmp[1] = reinterpret_cast<uint32_t *>(this_)[1];
 	tmp[2] = reinterpret_cast<uint32_t *>(this_)[2];
-	float *r = FUN_10008f50(reinterpret_cast<float *>(tmp), v);
+	float *r = MvlVectorProduct1(reinterpret_cast<float *>(tmp), v);
 	const float z = r[2];
 	out[0] = reinterpret_cast<uint32_t *>(r)[0];
 	out[1] = reinterpret_cast<uint32_t *>(r)[1];
@@ -575,60 +581,60 @@ static void *__fastcall FUN_10008d90(void *this_, void * /*edx*/,
 	return out;
 }
 
-// 0.98e @ RVA 0x8e30 - CQuaternion::Normalise wrapper (original __thiscall).
-static void *__fastcall FUN_10008e30(void *this_, void * /*edx*/, uint32_t *out)
+// FUN_10008e30 (0.98e @ RVA 0x8e30) - CQuaternion::Normalise wrapper (original __thiscall).
+static void *__fastcall MvlQuatNormaliseWrapper(void *this_, void * /*edx*/, uint32_t *out)
 {
 	uint32_t tmp[3];
 	tmp[0] = reinterpret_cast<uint32_t *>(this_)[0];
 	tmp[1] = reinterpret_cast<uint32_t *>(this_)[1];
 	tmp[2] = reinterpret_cast<uint32_t *>(this_)[2];
-	float *r = FUN_10008fc0(reinterpret_cast<float *>(tmp));
+	float *r = MvlQuatNormaliseBody(reinterpret_cast<float *>(tmp));
 	out[0] = reinterpret_cast<uint32_t *>(r)[0];
 	out[1] = reinterpret_cast<uint32_t *>(r)[1];
 	out[2] = reinterpret_cast<uint32_t *>(r)[2];
 	return out;
 }
 
-// 0.98e @ RVA 0x8d10 - CVector product helper (original __thiscall).
-static void *__fastcall FUN_10008d10(void *this_, void * /*edx*/,
+// FUN_10008d10 (0.98e @ RVA 0x8d10) - CVector product helper (original __thiscall).
+static void *__fastcall MvlVectorProductHelper(void *this_, void * /*edx*/,
                                       uint32_t *out, float *v)
 {
 	uint32_t tmp[3];
 	tmp[0] = reinterpret_cast<uint32_t *>(this_)[0];
 	tmp[1] = reinterpret_cast<uint32_t *>(this_)[1];
 	tmp[2] = reinterpret_cast<uint32_t *>(this_)[2];
-	float *r = FUN_10008ee0(reinterpret_cast<float *>(tmp), v);
+	float *r = MvlVectorProduct2(reinterpret_cast<float *>(tmp), v);
 	out[0] = reinterpret_cast<uint32_t *>(r)[0];
 	out[1] = reinterpret_cast<uint32_t *>(r)[1];
 	out[2] = reinterpret_cast<uint32_t *>(r)[2];
 	return out;
 }
 
-// 0.98e @ RVA 0x1b5b0 - attachment post-fixup when extra-flag 0x400000 set.
-static void __fastcall FUN_1001b5b0(void *param_1)
+// FUN_1001b5b0 (0.98e @ RVA 0x1b5b0) - attachment post-fixup when extra-flag 0x400000 set.
+static void __fastcall MvlAttachmentPostFixup(void *entity)
 {
-	int32_t attach = FUN_1001af70(static_cast<int32_t>(
-	    reinterpret_cast<intptr_t>(param_1)));
+	int32_t attach = MvlFindEntityAttachment(static_cast<int32_t>(
+	    reinterpret_cast<intptr_t>(entity)));
 	if (attach == 0)
 		return;
-	const int32_t modelIndex = FUN_1002d880();
-	const uint32_t flags = FUN_1003d120(modelIndex);
+	const int32_t modelIndex = MvlGetActiveModelIndex();
+	const uint32_t flags = MvlGetExtraFlags(modelIndex);
 	if ((flags & 0x400000u) != 0 &&
 	    *reinterpret_cast<int32_t *>(static_cast<uintptr_t>(attach + 4)) == 0) {
 		// Original reads a CVector at entity+0x34 as two floats (Ghidra
 		// undefined8 split); keep both halves.
 		const uint64_t posBits = *reinterpret_cast<const uint64_t *>(
-		    reinterpret_cast<const uint8_t *>(param_1) + 0x34);
+		    reinterpret_cast<const uint8_t *>(entity) + 0x34);
 		float out[16]; // decomp used a stack slot below ESP; size is ample
-		FUN_1001b280(out, param_1,
+		MvlBuildAttachmentWorldPos(out, entity,
 		             static_cast<float>(posBits),
 		             static_cast<float>(posBits >> 32));
 	}
 }
 
-// 0.98e @ RVA 0x3a900 - spawns a fire effect on a free class slot.
-static uint32_t __fastcall FUN_1003a900(int32_t param_1, int32_t param_2,
-                                        uint32_t *param_3, char param_4)
+// FUN_1003a900 (0.98e @ RVA 0x3a900) - spawns a fire effect on a free class slot.
+static uint32_t __fastcall MvlSpawnFireEffect(int32_t entity, int32_t frameMatrix,
+                                        uint32_t *origin, char flags)
 {
 	constexpr int32_t kSlotCount = 32; // (0x7DBC14 - 0x7DB894) / 0x1C
 
@@ -638,38 +644,38 @@ static uint32_t __fastcall FUN_1003a900(int32_t param_1, int32_t param_2,
 		if (entry[0x0C] != 0) // &DAT_007db894 + i*0x1C - occupied
 			continue;
 
-		const int32_t obj = FUN_1002e750();
+		const int32_t obj = MvlAllocEffectObject();
 		if (obj == 0)
 			return 0;
 		*reinterpret_cast<uint32_t *>(static_cast<uintptr_t>(
 		    kVC_ClassObjTable + static_cast<uint32_t>(i) * 4u)) =
 		    static_cast<uint32_t>(obj);
-		FUN_1002e780(obj, 0x111);
+		MvlSetupEffectFlags(obj, 0x111);
 
-		uint32_t local_28[3] = {}; // CVector
-		uint32_t local_38[4] = {}; // CQuaternion
-		uint32_t local_78[3] = {}; // CMatrix rows scratch
-		uint32_t local_6c = 0;
-		uint32_t local_68[4] = {};
-		uint32_t local_58[4] = {};
-		uint32_t local_48[4] = {};
-		uint32_t local_1c[3] = {};
+		uint32_t euler[3] = {}; // CVector
+		uint32_t quat[4] = {}; // CQuaternion
+		uint32_t matRows[3] = {}; // CMatrix rows scratch
+		uint32_t unusedLocal = 0;
+		uint32_t zeroUp[4] = {};
+		uint32_t zeroAt[4] = {};
+		uint32_t pos[4] = {};
+		uint32_t midPos[3] = {};
 
-		*reinterpret_cast<uint32_t *>(static_cast<uintptr_t>(param_2 + 0x0C)) = 0;
-		(void)local_6c;
-		FUN_10008250(local_38, local_28);
-		FUN_10008990(local_38, NULL, reinterpret_cast<float *>(local_78));
-		FUN_10008c90(local_48, NULL, param_3);
-		FUN_10031d90();
-		FUN_10008c50(local_1c);
-		FUN_10032140();
-		FUN_10008f50(reinterpret_cast<float *>(local_1c),
-		             reinterpret_cast<float *>(static_cast<uintptr_t>(param_2 + 0x30)));
-		uint32_t *pfVar3 = static_cast<uint32_t *>(FUN_10008e30(
-		    reinterpret_cast<void *>(static_cast<uintptr_t>(param_1 + 0x70)),
-		    NULL, local_28));
-		FUN_10008ee0(reinterpret_cast<float *>(local_1c),
-		             reinterpret_cast<float *>(pfVar3));
+		*reinterpret_cast<uint32_t *>(static_cast<uintptr_t>(frameMatrix + 0x0C)) = 0;
+		(void)unusedLocal;
+		MvlEulerToQuat(quat, euler);
+		MvlQuatGetMatrix(quat, NULL, reinterpret_cast<float *>(matRows));
+		MvlVectorCopy(pos, NULL, origin);
+		MvlRwFrameUpdate2();
+		MvlVectorZeroVariant(midPos);
+		MvlRwMatrixPop();
+		MvlVectorProduct1(reinterpret_cast<float *>(midPos),
+		             reinterpret_cast<float *>(static_cast<uintptr_t>(frameMatrix + 0x30)));
+		uint32_t *entityQuat = static_cast<uint32_t *>(MvlQuatNormaliseWrapper(
+		    reinterpret_cast<void *>(static_cast<uintptr_t>(entity + 0x70)),
+		    NULL, euler));
+		MvlVectorProduct2(reinterpret_cast<float *>(midPos),
+		             reinterpret_cast<float *>(entityQuat));
 
 		entry[0x0C] = 1; // (&DAT_007db894)[i*0x1C] = 1
 		*reinterpret_cast<uint32_t *>(static_cast<uintptr_t>(
@@ -677,42 +683,42 @@ static uint32_t __fastcall FUN_1003a900(int32_t param_1, int32_t param_2,
 		    PeekU32(kVC_FrameCounter) + 4000u;
 		*reinterpret_cast<uint32_t *>(static_cast<uintptr_t>(
 		    kVC_ClassSlotBase + static_cast<uint32_t>(i) * 0x1Cu + 4u)) =
-		    static_cast<uint32_t>(param_1);
+		    static_cast<uint32_t>(entity);
 		*reinterpret_cast<uint32_t *>(static_cast<uintptr_t>(
 		    kVC_ClassSlotBase + static_cast<uint32_t>(i) * 0x1Cu)) = 0x10u;
-		FUN_10008c90(reinterpret_cast<void *>(static_cast<uintptr_t>(
+		MvlVectorCopy(reinterpret_cast<void *>(static_cast<uintptr_t>(
 		                 kVC_ClassSlotBase + static_cast<uint32_t>(i) * 0x1Cu + 0x10u)),
-		             NULL, local_48);
-		FUN_10008c90(reinterpret_cast<void *>(static_cast<uintptr_t>(obj + 0x14)),
-		             NULL, local_68);
-		FUN_10008c90(reinterpret_cast<void *>(static_cast<uintptr_t>(obj + 0x24)),
-		             NULL, local_58);
-		FUN_10008c90(reinterpret_cast<void *>(static_cast<uintptr_t>(obj + 4)),
-		             NULL, local_78);
-		FUN_10008c90(reinterpret_cast<void *>(static_cast<uintptr_t>(obj + 0x34)),
-		             NULL, local_48);
-		FUN_1002e170(obj + 4);
-		FUN_10008c90(reinterpret_cast<void *>(static_cast<uintptr_t>(obj + 0x70)),
-		             NULL, local_1c);
+		             NULL, pos);
+		MvlVectorCopy(reinterpret_cast<void *>(static_cast<uintptr_t>(obj + 0x14)),
+		             NULL, zeroUp);
+		MvlVectorCopy(reinterpret_cast<void *>(static_cast<uintptr_t>(obj + 0x24)),
+		             NULL, zeroAt);
+		MvlVectorCopy(reinterpret_cast<void *>(static_cast<uintptr_t>(obj + 4)),
+		             NULL, matRows);
+		MvlVectorCopy(reinterpret_cast<void *>(static_cast<uintptr_t>(obj + 0x34)),
+		             NULL, pos);
+		MvlFixupEffectMatrix(obj + 4);
+		MvlVectorCopy(reinterpret_cast<void *>(static_cast<uintptr_t>(obj + 0x70)),
+		             NULL, midPos);
 
 		uint8_t *objFlags = reinterpret_cast<uint8_t *>(
 		    static_cast<uintptr_t>(obj + 0x11A));
-		*objFlags = static_cast<uint8_t>(((param_4 != 0) ? 0x02u : 0u) |
+		*objFlags = static_cast<uint8_t>(((flags != 0) ? 0x02u : 0u) |
 		                                 (*objFlags & 0xFDu));
 		*reinterpret_cast<uint32_t *>(static_cast<uintptr_t>(obj + 200)) =
 		    0x3F400000u;
 		*reinterpret_cast<uint8_t *>(static_cast<uintptr_t>(obj + 0x179)) = 0;
 		*reinterpret_cast<int8_t *>(static_cast<uintptr_t>(obj + 0x192)) =
 		    static_cast<int8_t>(i);
-		FUN_1000b170();
+		MvlRegisterEffect();
 		return 1;
 	}
 	return 0;
 }
 
-// 0.98e @ RVA 0x17290 - grows the anim pool to MvlColIdBoundary + 100 entries
+// FUN_10017290 (0.98e @ RVA 0x17290) - grows the anim pool to MvlColIdBoundary + 100 entries
 // (0xFFFFFFFF-filled), only while the long-model-id flag MvlLongModelIdsEnabled is set.
-static void FUN_10017290(void)
+static void MvlGrowAnimPool(void)
 {
 	int32_t capacity = MvlColIdBoundary;
 	if (MvlLongModelIdsEnabled == 0)
@@ -727,7 +733,7 @@ static void FUN_10017290(void)
 	MvlAnimPoolCapacity = capacity;
 	MvlAnimPoolBuffer = malloc(static_cast<size_t>(capacity) * 4u);
 	if (MvlAnimPoolBuffer == NULL) {
-		MvlErrorLog("helpers: FUN_10017290: anim pool alloc failed (%d entries)",
+		MvlErrorLog("helpers: MvlGrowAnimPool: anim pool alloc failed (%d entries)",
 		            capacity);
 		return;
 	}
@@ -736,8 +742,8 @@ static void FUN_10017290(void)
 		p[i] = 0xFFFFFFFFu;
 }
 
-// 0.98e @ RVA 0x17940 - col/anim code-site patches (guarded by MvlColAnimPatchesInstalled).
-static void FUN_10017940(void)
+// FUN_10017940 (0.98e @ RVA 0x17940) - col/anim code-site patches (guarded by MvlColAnimPatchesInstalled).
+static void MvlInstallColAnimPatches(void)
 {
 	if (MvlColAnimPatchesInstalled != 0)
 		return;
@@ -750,7 +756,7 @@ static void FUN_10017940(void)
 	// TODO(helpers): 0x10017890 unported;  TODO(helpers): 0x100178b0 unported;
 	// TODO(helpers): 0x100178d0 unported;  TODO(helpers): 0x100178f0 unported;
 	// TODO(helpers): 0x10017920 unported.
-	MvlErrorLog("helpers: TODO(helpers): FUN_10017940 - col/anim JMP sites not "
+	MvlErrorLog("helpers: TODO(helpers): MvlInstallColAnimPatches - col/anim JMP sites not "
 	            "installed (handlers 0x10017890..0x10017920 unported)");
 
 	// Data patches are portable (word + byte into the unlocked .text):
@@ -772,20 +778,20 @@ static void FUN_10017940(void)
 // Section 5: depth-0 roots (the 11 helpers + driver).
 // ===========================================================================
 
-// 0.98e @ RVA 0x1b610 - attach/detach fixup pair on MvlAttachFixupEntity.
-void FUN_1001b610(void)
+// FUN_1001b610 (0.98e @ RVA 0x1b610) - attach/detach fixup pair on MvlAttachFixupEntity.
+void MvlRunAttachFixups(void)
 {
 	void *entity = MvlAttachFixupEntity;
-	FUN_1001b640(MvlAttachFixupEntity, '\0');
-	FUN_1001b640(entity, '\x01');
-	FUN_1001b5b0(entity);
+	MvlFixupAttachTransform(MvlAttachFixupEntity, '\0');
+	MvlFixupAttachTransform(entity, '\x01');
+	MvlAttachmentPostFixup(entity);
 }
 
-// 0.98e @ RVA 0x3a450 - per-frame wheel-cache refresh for MvlWheelCacheEntity.
-void FUN_1003a450(void)
+// FUN_1003a450 (0.98e @ RVA 0x3a450) - per-frame wheel-cache refresh for MvlWheelCacheEntity.
+void MvlRefreshWheelCache(void)
 {
 	const int32_t entity = MvlWheelCacheEntity;
-	int32_t parts = FUN_1004f400(entity);
+	int32_t parts = MvlGetPartsBlock(entity);
 	if (parts == 0)
 		return;
 
@@ -793,38 +799,38 @@ void FUN_1003a450(void)
 	    static_cast<uint32_t>(*reinterpret_cast<int32_t *>(
 	        static_cast<uintptr_t>(parts + 0xE8))) != MvlWheelCacheGenerationStamp) {
 		// Cache generation mismatch: rebuild.
-		FUN_1003a410(entity);
-		FUN_1003a350(entity);
+		MvlFreePartsCache(entity);
+		MvlBuildWheelCache(entity);
 	}
 
 	const int32_t cache =
 	    *reinterpret_cast<int32_t *>(static_cast<uintptr_t>(parts + 0xE4));
-	if (cache != 0 && FUN_1002fb00(cache)) {
+	if (cache != 0 && MvlHasGeometry(cache)) {
 		// TODO(helpers): decompiler lost the ECX arg of FUN_1002f890; the
 		// cache object (parts+0xE4) is the only candidate - verify.
-		FUN_1002f890(reinterpret_cast<void *>(static_cast<uintptr_t>(cache)));
+		MvlInitPartsObject(reinterpret_cast<void *>(static_cast<uintptr_t>(cache)));
 		const uint32_t saved =
 		    *reinterpret_cast<uint32_t *>(static_cast<uintptr_t>(entity + 0x194));
 		*reinterpret_cast<uint32_t *>(static_cast<uintptr_t>(entity + 0x194)) =
 		    static_cast<uint32_t>(cache);
-		FUN_1002e8e0();
+		MvlFlushWheelCache();
 		*reinterpret_cast<uint32_t *>(static_cast<uintptr_t>(entity + 0x194)) =
 		    saved;
 	}
 }
 
-// 0.98e @ RVA 0x3a810 - teardown of the cached parts block of MvlPartsTeardownEntity.
+// FUN_1003a810 (0.98e @ RVA 0x3a810) - teardown of the cached parts block of MvlPartsTeardownEntity.
 // Returns 1 (AL) on success / nothing-to-do, 0 on failure (original EAX
 // semantics preserved: the decomp returns `x & 0xffffff00` for 0).
-uint32_t FUN_1003a810(void)
+uint32_t MvlTeardownPartsCache(void)
 {
 	const int32_t entity = MvlPartsTeardownEntity;
-	const int32_t modelIndex = FUN_1002d880(); // TODO(helpers): stub -> 0
-	int *dirEntry = FUN_1004f3a0(modelIndex);
+	const int32_t modelIndex = MvlGetActiveModelIndex(); // TODO(helpers): stub -> 0
+	int *dirEntry = MvlGetModelDirRecord(modelIndex);
 	if (dirEntry == NULL)
 		return 1;
 
-	int32_t parts = FUN_1004f400(entity);
+	int32_t parts = MvlGetPartsBlock(entity);
 	if (parts == 0)
 		return 1;
 
@@ -833,7 +839,7 @@ uint32_t FUN_1003a810(void)
 	                 0xF4) != 0)
 		return 0;
 
-	FUN_1003a410(entity); // frees *(parts + 0xE4) sub-block first
+	MvlFreePartsCache(entity); // frees *(parts + 0xE4) sub-block first
 	if (*reinterpret_cast<int32_t *>(static_cast<uintptr_t>(parts)) != dirEntry[0])
 		return 0; // model ID mismatch - bail (AL = 0)
 
@@ -845,10 +851,10 @@ uint32_t FUN_1003a810(void)
 			int32_t *part = reinterpret_cast<int32_t *>(
 			    static_cast<uintptr_t>(parts)) + 0x18 + i * 9;
 			if (part[0] != 0) {
-				const int32_t frame = FUN_10031ca0(part[0]);
-				FUN_10031380(frame);
-				FUN_10031ec0();
-				FUN_10031da0();
+				const int32_t frame = MvlRwClumpSetup(part[0]);
+				MvlRwAtomicDestroy(frame);
+				MvlRwFrameSync();
+				MvlRwPartDestroyGeometry();
 				part[4] = 0;
 			}
 		}
@@ -859,34 +865,34 @@ uint32_t FUN_1003a810(void)
 	return 1;
 }
 
-// 0.98e @ RVA 0x3af20 - per-frame part (door/window/extra) state machine.
+// FUN_1003af20 (0.98e @ RVA 0x3af20) - per-frame part (door/window/extra) state machine.
 // Known decompiler losses (all marked TODO at the use sites):
 //   * the entity base for FUN_1004f400 came back as extraout registers; the
 //     active-entity temp MvlActiveEntityTemp is the only candidate,
 //   * the per-part record stride (0x24) is inconsistent with fields up to
 //     +0x74 in the same record - transcribed literally, verify vs disasm.
-void FUN_1003af20(void)
+void MvlStepPartStateMachine(void)
 {
 	// TODO(helpers): entity base = MvlActiveEntityTemp is a decompiler-loss guess.
 	const int32_t entity = MvlActiveEntityTemp;
-	const int32_t modelIndex = FUN_1002d880(); // TODO(helpers): stub -> 0
-	int *dirEntry = FUN_1004f3a0(modelIndex);
+	const int32_t modelIndex = MvlGetActiveModelIndex(); // TODO(helpers): stub -> 0
+	int *dirEntry = MvlGetModelDirRecord(modelIndex);
 	if (dirEntry == NULL)
 		return;
 
 	int32_t *parts = reinterpret_cast<int32_t *>(
-	    static_cast<uintptr_t>(FUN_1004f400(entity)));
+	    static_cast<uintptr_t>(MvlGetPartsBlock(entity)));
 	const uint32_t frameCounter = PeekU32(kVC_FrameCounter);
 	const int32_t partCount = dirEntry[0xA18];
 
 	// Locals matching the Ghidra frame (sizes are generous, layout not ABI):
-	uint32_t local_60[4] = {}; // CQuaternion (reset every iteration)
-	uint32_t local_50[2] = {};
-	uint32_t local_44[2] = {};
-	uint32_t local_38[2] = {};
-	uint32_t local_2c[2] = {};
-	uint32_t local_20[2] = {};
-	uint32_t local_14[4] = {};
+	uint32_t quat[4] = {}; // CQuaternion (reset every iteration)
+	uint32_t kfTrans1[2] = {};
+	uint32_t kfNorm2[2] = {};
+	uint32_t kfProd1[2] = {};
+	uint32_t kfTrans2[2] = {};
+	uint32_t kfProd2[2] = {};
+	uint32_t kfNorm1[4] = {};
 
 	for (int32_t i = 0; i < partCount; ++i) {
 		uint8_t *st = reinterpret_cast<uint8_t *>(parts) + i * 0x24;
@@ -947,7 +953,7 @@ void FUN_1003af20(void)
 		if (*pPart == 0)
 			continue;
 
-		const int32_t frame = FUN_10031ca0(*pPart);
+		const int32_t frame = MvlRwClumpSetup(*pPart);
 		(void)frame;
 
 		// --- animation state machine (first switch; only modes 2/3/4/6/7
@@ -1019,24 +1025,24 @@ void FUN_1003af20(void)
 		}
 
 		// --- keyframe interpolation (second switch).
-		FUN_100080f0(local_60);
+		MvlAnimQuatInit(quat);
 		switch (*pMode) {
 		case 1:
 		case 2:
 		case 3:
 			if (*pDirty != 0) {
-				FUN_10008590(local_60, cfg + 0x0C,
+				MvlQuatMid(quat, cfg + 0x0C,
 				             reinterpret_cast<uint32_t *>(cfg + 0x21));
-				FUN_10008990(local_60, NULL,
+				MvlQuatGetMatrix(quat, NULL,
 				              reinterpret_cast<float *>(pMatrix));
 				float *kf = reinterpret_cast<float *>(cfg + 9);
-				FUN_10008d90(cfg + 0x25, NULL, local_50, kf);
-				FUN_10008e30(local_50, NULL, local_14);
-				FUN_10008d10(local_14, NULL, local_38, kf);
-				FUN_10008c90(reinterpret_cast<uint8_t *>(
+				MvlVectorTransform(cfg + 0x25, NULL, kfTrans1, kf);
+				MvlQuatNormaliseWrapper(kfTrans1, NULL, kfNorm1);
+				MvlVectorProductHelper(kfNorm1, NULL, kfProd1, kf);
+				MvlVectorCopy(reinterpret_cast<uint8_t *>(
 				                 static_cast<uintptr_t>(*pMatrix)) + 0x30,
-				             NULL, local_38);
-				FUN_10031d40();
+				             NULL, kfProd1);
+				MvlRwMatrixPush();
 				*pDirty = 0;
 			}
 			break;
@@ -1045,18 +1051,18 @@ void FUN_1003af20(void)
 		case 6:
 		case 7:
 			if (*pDirty != 0) {
-				FUN_10008590(local_60, cfg + 0x16,
+				MvlQuatMid(quat, cfg + 0x16,
 				             reinterpret_cast<uint32_t *>(cfg + 0x1D));
-				FUN_10008990(local_60, NULL,
+				MvlQuatGetMatrix(quat, NULL,
 				              reinterpret_cast<float *>(pMatrix));
 				float *kf = reinterpret_cast<float *>(cfg + 0x13);
-				FUN_10008d90(cfg + 0x1A, NULL, local_2c, kf);
-				FUN_10008e30(local_2c, NULL, local_44);
-				FUN_10008d10(local_44, NULL, local_20, kf);
-				FUN_10008c90(reinterpret_cast<uint8_t *>(
+				MvlVectorTransform(cfg + 0x1A, NULL, kfTrans2, kf);
+				MvlQuatNormaliseWrapper(kfTrans2, NULL, kfNorm2);
+				MvlVectorProductHelper(kfNorm2, NULL, kfProd2, kf);
+				MvlVectorCopy(reinterpret_cast<uint8_t *>(
 				                 static_cast<uintptr_t>(*pMatrix)) + 0x30,
-				             NULL, local_20);
-				FUN_10031d40();
+				             NULL, kfProd2);
+				MvlRwMatrixPush();
 				*pDirty = 0;
 			}
 			break;
@@ -1072,16 +1078,16 @@ void FUN_1003af20(void)
 		    static_cast<uintptr_t>(*pMatrix));
 		uint8_t *fr = reinterpret_cast<uint8_t *>(
 		    static_cast<uintptr_t>(frame));
-		FUN_10008c90(fr + 0x10, NULL, m + 0);
+		MvlVectorCopy(fr + 0x10, NULL, m + 0);
 		*reinterpret_cast<uint32_t *>(fr + 0x0C) = m[3];
-		FUN_10008c90(fr + 0x10, NULL, m + 4);
+		MvlVectorCopy(fr + 0x10, NULL, m + 4);
 		*reinterpret_cast<uint32_t *>(fr + 0x2C) = m[7];
-		FUN_10008c90(fr + 0x30, NULL, m + 8);
+		MvlVectorCopy(fr + 0x30, NULL, m + 8);
 		*reinterpret_cast<uint32_t *>(fr + 0x3C) = m[0xB];
-		FUN_10008c90(fr + 0x40, NULL, m + 0xC);
-		*reinterpret_cast<uint32_t *>(fr + 0x4C) = m[0xF];		FUN_10031d90();
-		FUN_10031d40();
-		FUN_10031ee0();
+		MvlVectorCopy(fr + 0x40, NULL, m + 0xC);
+		*reinterpret_cast<uint32_t *>(fr + 0x4C) = m[0xF];		MvlRwFrameUpdate2();
+		MvlRwMatrixPush();
+		MvlRwFrameUpdate3();
 
 		// --- fire / periodic action logic.
 		if (!fire)
@@ -1089,7 +1095,7 @@ void FUN_1003af20(void)
 		if (*pMode == 5 && fire) {
 			if (cfg[0] == 1) {
 				if (cfg[3] + *pCool < frameCounter) {
-					FUN_1003a900(entity, frame + 0x10,
+					MvlSpawnFireEffect(entity, frame + 0x10,
 					              reinterpret_cast<uint32_t *>(cfg + 0x28),
 					              *(reinterpret_cast<const char *>(cfg) + 9));
 					*pCool = frameCounter;
@@ -1104,7 +1110,7 @@ void FUN_1003af20(void)
 				const uint32_t n =
 				    (frameCounter - *pDelay) / static_cast<uint32_t>(cfg[8]);
 				for (uint32_t k = n; k != 0; --k)
-					FUN_1003ab00(entity, frame + 0x10,
+					MvlEmitProjectileEffect(entity, frame + 0x10,
 					              reinterpret_cast<intptr_t>(cfg),
 					              reinterpret_cast<intptr_t>(pMode));
 				*pDelay += static_cast<uint32_t>(cfg[8]) * n;
@@ -1124,11 +1130,11 @@ void FUN_1003af20(void)
 	}
 }
 
-// 0.98e @ RVA 0x3b580 - writes the single-byte patch at VC 0x571820.
-void FUN_1003b580(void)
+// FUN_1003b580 (0.98e @ RVA 0x3b580) - writes the single-byte patch at VC 0x571820.
+void MvlPatchPartFlagByte(void)
 {
-	const int32_t modelIndex = FUN_1002d880(); // TODO(helpers): stub -> 0
-	int *dirEntry = FUN_1004f3a0(modelIndex);
+	const int32_t modelIndex = MvlGetActiveModelIndex(); // TODO(helpers): stub -> 0
+	int *dirEntry = MvlGetModelDirRecord(modelIndex);
 
 	bool patch = false;
 	if (dirEntry == NULL) {
@@ -1146,76 +1152,76 @@ void FUN_1003b580(void)
 		PokeByte(kVC_PartFlagByte, 0xD9);
 }
 
-// 0.98e @ RVA 0x3b5d0 - part fade/visibility update.
-void __fastcall FUN_1003b5d0(int *param_1, float *param_2, uint32_t param_3)
+// FUN_1003b5d0 (0.98e @ RVA 0x3b5d0) - part fade/visibility update.
+void __fastcall MvlUpdatePartFade(int *part, float *fadeVec, uint32_t callbackArg)
 {
-	const int32_t modelIndex = FUN_1002d880(); // TODO(helpers): stub -> 0
-	int *dirEntry = FUN_1004f3a0(modelIndex);
+	const int32_t modelIndex = MvlGetActiveModelIndex(); // TODO(helpers): stub -> 0
+	int *dirEntry = MvlGetModelDirRecord(modelIndex);
 	if (dirEntry == NULL)
 		return;
 	if (*reinterpret_cast<char *>(
 	         reinterpret_cast<uint8_t *>(dirEntry) + 0xADE * 4) == 0)
 		return;
-	uint8_t *partBytes = reinterpret_cast<uint8_t *>(param_1);
+	uint8_t *partBytes = reinterpret_cast<uint8_t *>(part);
 	if ((partBytes[0x53] & 2) != 0)
 		return;
 
 	const float fade = *reinterpret_cast<const float *>(
 	    reinterpret_cast<const uint8_t *>(dirEntry) + 0x2B79);
 
-	// Ghidra frame layout preserved (local_60 @ -0x60, out @ -0x54,
+	// Ghidra frame layout preserved (partFadeVec @ -0x60, out @ -0x54,
 	// int-copy @ -0x48): build the part matrix in place.
 	uint8_t buf[0x60] = {};
-	float *local_60 = reinterpret_cast<float *>(buf + 0x00);
-	uint32_t *local_54 = reinterpret_cast<uint32_t *>(buf + 0x0C);
-	int32_t *local_48 = reinterpret_cast<int32_t *>(buf + 0x18);
+	float *partFadeVec = reinterpret_cast<float *>(buf + 0x00);
+	uint32_t *transformOut = reinterpret_cast<uint32_t *>(buf + 0x0C);
+	int32_t *partMatrix = reinterpret_cast<int32_t *>(buf + 0x18);
 
-	local_60[0] = fade;
+	partFadeVec[0] = fade;
 	*reinterpret_cast<float *>(buf + 0x04) = *reinterpret_cast<const float *>(
 	    reinterpret_cast<const uint8_t *>(dirEntry) + 0x2B7D);
 	*reinterpret_cast<float *>(buf + 0x08) = *reinterpret_cast<const float *>(
 	    reinterpret_cast<const uint8_t *>(dirEntry) + 0x2B81);
 
-	// 16 ints copied from param_1 + 4 (original increments before storing).
-	memcpy(local_48, partBytes + 4, 0x10 * sizeof(int32_t));
+	// 16 ints copied from part + 4 (original increments before storing).
+	memcpy(partMatrix, partBytes + 4, 0x10 * sizeof(int32_t));
 
-	FUN_10031d40();
-	FUN_10032140();
-	FUN_10008d90(local_60, NULL, local_54, param_2);
-	FUN_100092f0();
+	MvlRwMatrixPush();
+	MvlRwMatrixPop();
+	MvlVectorTransform(partFadeVec, NULL, transformOut, fadeVec);
+	MvlQuatNormalizeChain();
 
 	if (fade < 0.2f) {
 		typedef void (__cdecl *PartFn)(uint32_t);
-		const int32_t vtable = *param_1;
+		const int32_t vtable = *part;
 		PartFn fn = *reinterpret_cast<PartFn *>(
 		    static_cast<uintptr_t>(vtable + 0x80));
-		fn(param_3);
+		fn(callbackArg);
 	}
 }
 
-// 0.98e @ RVA 0x3b840 - repaint: push resolved colours into the 4 part groups.
-void __fastcall FUN_1003b840(int32_t param_1, int32_t param_2, int32_t param_3,
-                             int32_t param_4)
+// FUN_1003b840 (0.98e @ RVA 0x3b840) - repaint: push resolved colours into the 4 part groups.
+void __fastcall MvlApplyRepaintColors(int32_t entity, int32_t color1, int32_t color2,
+                             int32_t liveryEntity)
 {
-	int *dirEntry = FUN_1004f3a0(
+	int *dirEntry = MvlGetModelDirRecord(
 	    static_cast<int32_t>(*reinterpret_cast<const uint16_t *>(
-	        static_cast<uintptr_t>(param_1 + 0x46))));
+	        static_cast<uintptr_t>(entity + 0x46))));
 	if (dirEntry == NULL)
 		return;
 
 	uint32_t col1 = PeekU32(kVC_LiveryColorTable +
-	                         static_cast<uint32_t>(param_2) * 4u);
+	                         static_cast<uint32_t>(color1) * 4u);
 	uint32_t col2 = PeekU32(kVC_LiveryColorTable +
-	                         static_cast<uint32_t>(param_3) * 4u);
+	                         static_cast<uint32_t>(color2) * 4u);
 	uint32_t col3 = 0xFFFFFFFFu;
 	uint32_t col4 = 0xFFFFFFFFu;
 
-	if (param_2 == 0xFF && param_3 < dirEntry[0xB3C]) {
+	if (color1 == 0xFF && color2 < dirEntry[0xB3C]) {
 		// Directory-entry override: 16-byte paint record (4 colours).
 		// TODO(helpers): decomp stride arithmetic is garbled; the 16-byte
 		// read below matches its 4 dword loads - verify vs disasm.
 		const uint8_t *rec = reinterpret_cast<const uint8_t *>(dirEntry) +
-		                     static_cast<uint32_t>(param_3 + 0x2BF) * 16u;
+		                     static_cast<uint32_t>(color2 + 0x2BF) * 16u;
 		col1 = *reinterpret_cast<const uint32_t *>(rec + 0);
 		col2 = *reinterpret_cast<const uint32_t *>(rec + 4);
 		col3 = *reinterpret_cast<const uint32_t *>(rec + 8);
@@ -1240,10 +1246,10 @@ void __fastcall FUN_1003b840(int32_t param_1, int32_t param_2, int32_t param_3,
 	// Livery group: 4 slots (iVar3 steps 2 while < 8).
 	for (int32_t k = 0; k < 8; k += 2) {
 		const int32_t obj = dirEntry[0x9F5 + k / 2];
-		if (param_4 == 0 || MvlPrimaryLiveryColor == 0 || MvlAlternateLiveryColor == 0 || obj == 0)
+		if (liveryEntity == 0 || MvlPrimaryLiveryColor == 0 || MvlAlternateLiveryColor == 0 || obj == 0)
 			continue;
-		const uint8_t mask = PeekByte(static_cast<uint32_t>(param_4) + 0x1F9);
-		const uint32_t bits = PeekU32(static_cast<uint32_t>(param_4) + 0x2B0);
+		const uint8_t mask = PeekByte(static_cast<uint32_t>(liveryEntity) + 0x1F9);
+		const uint32_t bits = PeekU32(static_cast<uint32_t>(liveryEntity) + 0x2B0);
 		uint32_t *slot = reinterpret_cast<uint32_t *>(static_cast<uintptr_t>(obj));
 		if ((mask & 0x40u) == 0u || ((bits >> (k & 0x1F)) & 3u) != 0u)
 			*slot = static_cast<uint32_t>(MvlPrimaryLiveryColor);
@@ -1252,8 +1258,8 @@ void __fastcall FUN_1003b840(int32_t param_1, int32_t param_2, int32_t param_3,
 	}
 }
 
-// 0.98e @ RVA 0x3b9d0 - random paint for MvlPaintRandomEntity.
-void FUN_1003b9d0(void)
+// FUN_1003b9d0 (0.98e @ RVA 0x3b9d0) - random paint for MvlPaintRandomEntity.
+void MvlRandomizePaint(void)
 {
 	const int32_t entity = MvlPaintRandomEntity;
 	char *paint1 = MvlPaintRandomByte1Ptr;
@@ -1271,7 +1277,7 @@ void FUN_1003b9d0(void)
 		return;
 	}
 
-	int *dirEntry = FUN_1004f3a0(
+	int *dirEntry = MvlGetModelDirRecord(
 	    static_cast<int32_t>(*reinterpret_cast<const uint16_t *>(
 	        static_cast<uintptr_t>(entity + 0x46))));
 	uint32_t count = 0;
@@ -1285,8 +1291,8 @@ void FUN_1003b9d0(void)
 			    *paint2 != *reinterpret_cast<const char *>(
 			                   static_cast<uintptr_t>(entity + 0x31)))
 				break;
-			const uint32_t r = FUN_10059f55();
-			if (FUN_1003cfc0(static_cast<int32_t>(
+			const uint32_t r = MvlPluginRand();
+			if (MvlModelDirEntryExists(static_cast<int32_t>(
 			        *reinterpret_cast<const uint16_t *>(
 			            static_cast<uintptr_t>(entity + 0x46))))) {
 				*paint1 = static_cast<char>(-1);
@@ -1306,12 +1312,12 @@ void FUN_1003b9d0(void)
 	}
 }
 
-// 0.98e @ RVA 0x3bae0 - paint-variant round-robin for MvlPaintVariantEntity.
+// FUN_1003bae0 (0.98e @ RVA 0x3bae0) - paint-variant round-robin for MvlPaintVariantEntity.
 // Reads the shared model-lookup registry (MvlModelLookupRegistry /
 // MvlModelLookupRegistry, now single-storage in engine_globals.cpp); the lookup stays
 // guarded until CModelIndexLimit::CaptureVcLimits has filled it.
 
-void FUN_1003bae0(void)
+void MvlAdvancePaintVariant(void)
 {
 	char *paint2 = MvlPaintVariantByte2Ptr;
 	const int32_t entity = MvlPaintVariantEntity;
@@ -1331,7 +1337,7 @@ void FUN_1003bae0(void)
 
 	uint32_t count = static_cast<uint8_t>(
 	    *reinterpret_cast<const uint8_t *>(static_cast<uintptr_t>(entity + 0x154)));
-	int *dirEntry = FUN_1004f3a0(
+	int *dirEntry = MvlGetModelDirRecord(
 	    static_cast<int32_t>(*reinterpret_cast<const uint16_t *>(
 	        static_cast<uintptr_t>(entity + 0x46))));
 	if (dirEntry != NULL)
@@ -1346,7 +1352,7 @@ void FUN_1003bae0(void)
 	const uint16_t modelIndex = *reinterpret_cast<const uint16_t *>(
 	    static_cast<uintptr_t>(entity + 0x46));
 	char next2;
-	if (FUN_1003cfc0(static_cast<int32_t>(modelIndex))) {
+	if (MvlModelDirEntryExists(static_cast<int32_t>(modelIndex))) {
 		*paint1 = static_cast<char>(-1);
 		next2 = static_cast<char>(*variant);
 	} else {
@@ -1358,16 +1364,16 @@ void FUN_1003bae0(void)
 	*paint2 = next2;
 
 	if (*reinterpret_cast<const uint8_t *>(static_cast<uintptr_t>(entity + 0x154)) > 1) {
-		const int32_t player = FUN_1002dff0(0);
+		const int32_t player = MvlGetLocalPlayerPed(0);
 		if (player != 0 &&
 		    *reinterpret_cast<const char *>(static_cast<uintptr_t>(player + 0x1A0)) == *paint1 &&
 		    *reinterpret_cast<const char *>(static_cast<uintptr_t>(player + 0x1A1)) == *paint2) {
-			const int32_t idx = FUN_1002d880(); // TODO(helpers): stub -> 0
+			const int32_t idx = MvlGetActiveModelIndex(); // TODO(helpers): stub -> 0
 			if (MvlModelLookupRegistry == NULL ||
 			    MvlModelLookupRegistry[static_cast<uint32_t>(idx)] !=
 	                static_cast<uint32_t>(entity)) {
 				*variant = static_cast<uint8_t>((*variant + 1u) % count);
-				if (FUN_1003cfc0(static_cast<int32_t>(modelIndex))) {
+				if (MvlModelDirEntryExists(static_cast<int32_t>(modelIndex))) {
 					*paint1 = static_cast<char>(-1);
 					*paint2 = static_cast<char>(*variant);
 					return;
@@ -1383,8 +1389,8 @@ void FUN_1003bae0(void)
 	}
 }
 
-// 0.98e @ RVA 0x3de20 - formats "vc%u" (GetTickCount) into MvlGeneratedVcNameBuffer.
-char *FUN_1003de20(void)
+// FUN_1003de20 (0.98e @ RVA 0x3de20) - formats "vc%u" (GetTickCount) into MvlGeneratedVcNameBuffer.
+char *MvlFormatVcName(void)
 {
 	const DWORD tick = GetTickCount();
 	snprintf(MvlGeneratedVcNameBuffer, sizeof(MvlGeneratedVcNameBuffer), "vc%u",
@@ -1392,8 +1398,8 @@ char *FUN_1003de20(void)
 	return MvlGeneratedVcNameBuffer;
 }
 
-// 0.98e @ RVA 0x4f7e0 - set AI class (slot table or per-slot 0x61 list).
-void __fastcall FUN_1004f7e0(int32_t modelId, int32_t slot)
+// FUN_1004f7e0 (0.98e @ RVA 0x4f7e0) - set AI class (slot table or per-slot 0x61 list).
+void __fastcall MvlSetAiClass(int32_t modelId, int32_t slot)
 {
 	const uint32_t id = static_cast<uint32_t>(modelId);
 	if (id - 0x82u < 0x6Bu && MvlKeyClassBypassTable[id] != 0) {
@@ -1409,7 +1415,7 @@ void __fastcall FUN_1004f7e0(int32_t modelId, int32_t slot)
 	}
 }
 
-// 0.98e @ RVA 0x17820 - DRIVER for the CModelIndexLimit relocation chain.
+// FUN_10017820 (0.98e @ RVA 0x17820) - DRIVER for the CModelIndexLimit relocation chain.
 // Callees map 1:1 onto already-ported original symbols:
 //   FUN_10018180 -> CModelIndexLimit::CaptureVcLimits        (model_id.h)
 //   FUN_10017410 -> CModelIndexLimit::ReplaceStreamingBufferRefs
@@ -1421,13 +1427,32 @@ void __fastcall FUN_1004f7e0(int32_t modelId, int32_t slot)
 //   FUN_100180a0 -> directory-manager hook installer (dirmgr.h)
 //   (the decomp's extraout_ECX on the FUN_10017410 call is a lost register;
 //    the call carries exactly one int argument = streamingMax + 100.)
-void FUN_10017820(void)
+void MvlRunModelIndexLimitChain(void)
 {
+	// BUGFIX(stable-1.0): guard for out-of-game harness runs - the chain
+	// reads/writes VC 1.0 image addresses (CaptureVcLimits immediates, the
+	// site tables); without the game mapped those are NULL-page AVs. In-game
+	// gta-vc.exe is always mapped before any DLL DllMain, so this only fires
+	// for foreign-process/harness loads (deviation: crash-guard).
+	if (GetModuleHandleA("gta-vc.exe") == NULL) {
+		MvlErrorLog("helpers: MvlRunModelIndexLimitChain: gta-vc.exe not loaded - "
+		            "CModelIndexLimit relocation chain skipped");
+		return;
+	}
+
 	const int32_t modelCount = MvlConfiguredModelLimit;
 	const uint32_t texCount = static_cast<uint32_t>(MvlConfiguredTexDictLimit);
 	const int32_t colCount = MvlConfiguredColFileLimit;
 
 	CModelIndexLimit::CaptureVcLimits();
+
+	// BUGFIX(stable-1.0): the Replace* chain rewrites VC .text sites; the
+	// module invariant (model_id.h) requires the .text unlock first, but the
+	// driver performed none (only the later FUN_10017940 unlocked). Unlock
+	// here so the chain cannot write into read-only .text when the init lane
+	// does not unlock up-front (VirtualProtect is idempotent when already RWX;
+	// init.cpp's up-front unlock is still a TODO there).
+	MvlUnlockGameText();
 
 	const int32_t streamingMax =
 	    modelCount + static_cast<int32_t>(texCount);
@@ -1437,7 +1462,7 @@ void FUN_10017820(void)
 	CModelIndexLimit::ReplaceColStartIndexRefs(streamingMax, colCount);
 	CModelIndexLimit::ReplaceAnimStartIndexRefs(streamingMax + colCount);
 
-	FUN_10017940();
-	FUN_100180a0();
-	FUN_10017290();
+	MvlInstallColAnimPatches();
+	MvlInstallDirHooks();
+	MvlGrowAnimPool();
 }

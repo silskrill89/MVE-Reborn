@@ -10,8 +10,8 @@
 //   * Installation pairs: FUN_10043c00 (0.98e @ RVA 0x43c00, main init) call
 //     sites of FUN_10022560 / FUN_10022590.
 //
-// All handler names are the recovered original symbol names (Ghidra convention
-// FUN_<VA>); the naming policy mandates the 1:1 mapping. Handlers are installed
+// Handlers carry a semantic MvlHook* name; each keeps the original Ghidra
+// identity as a cite: "FUN_<VA> (0.98e @ RVA 0x...)". Handlers are installed
 // mid-function by an E9 JMP or by overwriting a function-pointer dword; they
 // mirror the original's displaced code and then fall through to a VC 1.0
 // continuation address. See port-notes-engine.md for the address tables.
@@ -40,32 +40,32 @@ void MvlUnlockGameText(void);
 // ---------------------------------------------------------------------------
 // Hook handlers (stub ports, original order = RVA order).
 // ---------------------------------------------------------------------------
-void     FUN_1003dff0(void);                                       // 0.98e @ RVA 0x3dff0
-uint64_t __fastcall FUN_1003e010(uint32_t, uint32_t, uint32_t, int32_t); // 0.98e @ RVA 0x3e010
-void     FUN_1003e070(void);                                       // 0.98e @ RVA 0x3e070
-void     FUN_1003e090(void);                                       // 0.98e @ RVA 0x3e090
-void     FUN_1003e0b0(void);                                       // 0.98e @ RVA 0x3e0b0
-uint64_t __fastcall FUN_1003e0d0(uint32_t, uint32_t, int32_t, int32_t); // 0.98e @ RVA 0x3e0d0
-void     FUN_1003e100(void);                                       // 0.98e @ RVA 0x3e100
-uint64_t __fastcall FUN_1003e120(int32_t, uint32_t);               // 0.98e @ RVA 0x3e120
-void     __fastcall FUN_1003e140(uint32_t);                        // 0.98e @ RVA 0x3e140
+void     MvlHookTrampoline426748(void);                                           // FUN_1003dff0 (0.98e @ RVA 0x3dff0)
+uint64_t __fastcall MvlHookKeyClassBypass(uint32_t, uint32_t, uint32_t, int32_t); // FUN_1003e010 (0.98e @ RVA 0x3e010)
+void     MvlHookTrampoline426ac6(void);                                           // FUN_1003e070 (0.98e @ RVA 0x3e070)
+void     MvlHookTrampoline426c80(void);                                           // FUN_1003e090 (0.98e @ RVA 0x3e090)
+void     MvlHookTrampoline427470(void);                                           // FUN_1003e0b0 (0.98e @ RVA 0x3e0b0)
+uint64_t __fastcall MvlHookSetAiClass(uint32_t, uint32_t, int32_t, int32_t);      // FUN_1003e0d0 (0.98e @ RVA 0x3e0d0)
+void     MvlHookTrampoline426a4c(void);                                           // FUN_1003e100 (0.98e @ RVA 0x3e100)
+uint64_t __fastcall MvlHookClearParts(int32_t, uint32_t);                         // FUN_1003e120 (0.98e @ RVA 0x3e120)
+void     __fastcall MvlHookTeardownParts(uint32_t);                               // FUN_1003e140 (0.98e @ RVA 0x3e140)
 // thiscall ABI on a free function: this in ECX, args on stack -> __fastcall
 // with a dummy EDX 2nd param maps identically (ECX/EDX = first two args).
-void     __fastcall FUN_1003e170(int32_t, void* /*edx*/, uint32_t, uint32_t); // 0.98e @ RVA 0x3e170
-uint64_t __fastcall FUN_1003e1d0(uint32_t, uint32_t, uint32_t, uint32_t); // 0.98e @ RVA 0x3e1d0
-uint64_t __fastcall FUN_1003e200(uint32_t, uint32_t, uint32_t, uint32_t); // 0.98e @ RVA 0x3e200
-void     __fastcall FUN_1003e230(uint32_t);                        // 0.98e @ RVA 0x3e230
-void     __fastcall FUN_1003e250(uint32_t);                        // 0.98e @ RVA 0x3e250
-void     __fastcall FUN_1003e270(uint32_t);                        // 0.98e @ RVA 0x3e270
-void     __fastcall FUN_1003e290(uint32_t);                        // 0.98e @ RVA 0x3e290
-void     __fastcall FUN_1003e2b0(uint32_t);                        // 0.98e @ RVA 0x3e2b0
+void     __fastcall MvlHookRepaint(int32_t, void* /*edx*/, uint32_t, uint32_t);   // FUN_1003e170 (0.98e @ RVA 0x3e170)
+uint64_t __fastcall MvlHookPaintRandom(uint32_t, uint32_t, uint32_t, uint32_t);   // FUN_1003e1d0 (0.98e @ RVA 0x3e1d0)
+uint64_t __fastcall MvlHookPaintVariant(uint32_t, uint32_t, uint32_t, uint32_t);  // FUN_1003e200 (0.98e @ RVA 0x3e200)
+void     __fastcall MvlHookPartUpdate69adc4(uint32_t);                            // FUN_1003e230 (0.98e @ RVA 0x3e230)
+void     __fastcall MvlHookPartUpdate6d7b68(uint32_t);                            // FUN_1003e250 (0.98e @ RVA 0x3e250)
+void     __fastcall MvlHookPartUpdate69b0e8(uint32_t);                            // FUN_1003e270 (0.98e @ RVA 0x3e270)
+void     __fastcall MvlHookWheelCache69adc0(uint32_t);                            // FUN_1003e290 (0.98e @ RVA 0x3e290)
+void     __fastcall MvlHookPartFlag6d7b64(uint32_t);                              // FUN_1003e2b0 (0.98e @ RVA 0x3e2b0)
 // Naked trampolines: consume raw stack/register state from the hook site
 // (see the definitions; Ghidra stack offsets preserved).
-void     FUN_1003e2d0(void);                                       // 0.98e @ RVA 0x3e2d0 (naked on definition)
-void     FUN_1003e320(void);                                       // 0.98e @ RVA 0x3e320 (naked on definition)
-void     FUN_10043730(void);                                       // 0.98e @ RVA 0x43730
-void     __fastcall FUN_10043760(uint32_t);                        // 0.98e @ RVA 0x43760
-void     FUN_10043780(void);                                       // 0.98e @ RVA 0x43780 (naked on definition)
+void     MvlHookFadePart(void);                                                   // FUN_1003e2d0 (0.98e @ RVA 0x3e2d0) (naked on definition)
+void     MvlHookFadePartAlt(void);                                                // FUN_1003e320 (0.98e @ RVA 0x3e320) (naked on definition)
+void     MvlHookGenerateVcName(void);                                             // FUN_10043730 (0.98e @ RVA 0x43730)
+void     __fastcall MvlHookAttachFixup(uint32_t);                                 // FUN_10043760 (0.98e @ RVA 0x43760)
+void     MvlHookFrameWait(void);                                                  // FUN_10043780 (0.98e @ RVA 0x43780) (naked on definition)
 
 // ---------------------------------------------------------------------------
 // Patch table: (VC 1.0 exe address -> MVL handler) pairs extracted from the

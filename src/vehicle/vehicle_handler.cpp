@@ -456,7 +456,11 @@ CVehicleHandler::LoadExtraSaveFile(void)
 		return;
 
 	char sidecar[0x118 + 4];   // decomp local_128 [284] with 0x118 capacity
-	if(len - 2 >= sizeof(sidecar))
+	// BUGFIX(stable-1.0): reserve room for the "_mvl.xml" suffix (8 chars +
+	// NUL). The old check only bounded the memcpy, so a save path of
+	// 276..283 chars passed the check and then aborted inside strcat_s
+	// (invalid-parameter crash).
+	if(len - 2 + sizeof("_mvl.xml") > sizeof(sidecar))
 		return;   // range-check equivalent (___report_rangecheckfailure path)
 	memcpy(sidecar, savePath, len - 2);
 	sidecar[len - 2] = '\0';
@@ -985,7 +989,12 @@ ParseSlotIdFromFilename(const char *path)
 CMvlVehicle *
 CVehicleHandler::RegistryVehicle(int relSlot)
 {
-	if(relSlot >= 0 && relSlot < s_nAvailableSlots)   // DAT_100a6d50
+	// BUGFIX(stable-1.0): bound by BOTH the configured count and the real
+	// table capacity — the config lane seeds s_nAvailableSlots and could in
+	// principle exceed kVehRegistryCapacity, which would turn this read into
+	// an out-of-bounds fetch.
+	if(relSlot >= 0 && relSlot < s_nAvailableSlots &&          // DAT_100a6d50
+	   relSlot < kVehRegistryCapacity)
 		return s_vehRegistry[relSlot];                // DAT_100b2838
 	return 0;
 }
@@ -1073,6 +1082,12 @@ CVehicleHandler::GetNewSlotForArchive(const char *archivePath, int *slotOut)
 	}
 
 	if(slot == -1)
+		return 0;
+	// BUGFIX(stable-1.0): the write below indexes s_vehRegistry directly —
+	// clamp against the real table capacity, not just the configured count
+	// (slot can only arrive in-range via the paths above, but this is the
+	// one store that corrupts memory if that ever regresses).
+	if(slot < 0 || slot >= kVehRegistryCapacity)
 		return 0;
 	if(slot == s_nNextFreeCursor)                    // DAT_100b2834
 		s_nNextFreeCursor++;
@@ -1207,7 +1222,16 @@ CVehicleHandler::LoadVehicleArchives(void)
 				// (decomp: (lVar2 != -1) == (iVar4 == 0)).
 				if((slotId != -1) == (pass == 0)){
 					char path[0x104 + 4];
-					sprintf_s(path, "mvl\\vehicles\\%s", fd.cFileName);
+					// BUGFIX(stable-1.0): cFileName can be up to MAX_PATH-1
+					// (259) chars; "mvl\vehicles\" + that overflows the 0x108
+					// buffer and aborts inside sprintf_s (the original used
+					// unbounded sprintf — a stack smash). Truncate instead:
+					// a too-long path simply won't exist and the load fails
+					// with the normal error below.
+					// MSVC secure-CRT name is _snprintf_s (snprintf_s is a
+					// C99 Annex-K alias not exposed in this TU's CRT mode).
+					_snprintf_s(path, sizeof(path), _TRUNCATE,
+					            "mvl\\vehicles\\%s", fd.cFileName);
 					if(!LoadVehicleArchive(path))
 						// verbatim (the original message ends with '\n')
 						SvErr(fn, "Could not load vehicle from '%s'.\n", path);
@@ -1330,6 +1354,14 @@ CVehicleHandler::LoadSanAndreasVehiclesTxd(void)
 	DWORD size = GetFileSize(h, &sizeHi);
 	if(size < 0x400001 && sizeHi == 0){       // decomp: size <= 4MB and high dword == 0
 		void *buf = malloc(size);
+		// BUGFIX(stable-1.0): malloc can fail (fragmented 32-bit VA space
+		// with the 4MB cap still reachable); ReadFile into NULL would fail
+		// or crash. Bail with the read-error message.
+		if(!buf){
+			CloseHandle(h);
+			SvErr(fn, "Could not read texture file.");
+			return;
+		}
 		DWORD read = 0;
 		if(ReadFile(h, buf, size, &read, 0)){
 			CloseHandle(h);                   // closed before the stream work (original)

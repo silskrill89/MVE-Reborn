@@ -115,10 +115,22 @@ LoadSAColSection(const void *data, unsigned size)
 		SaColErr("SA collision section length longer than 1MB.");
 		return (void *)data;
 	}
+	// BUGFIX(stable-1.0): the header dword at +4 and every count/offset
+	// below are read out of `sec` — a section smaller than the fixed 0x68
+	// header would read past the allocation. (The length-match check would
+	// usually catch it first, but only after the OOB read already happened.)
+	if(size < 0x68){
+		SaColErr("SA collision section length does not match length specified in header.");
+		return (void *)data;
+	}
 
 	unsigned char *sec = (unsigned char *)malloc(size);
 	if(sec == 0)
 		return (void *)data;   // clone guard (the original assumes malloc)
+	// BUGFIX(stable-1.0): MvlCopySaColSection (0x32070 hook) is not wired
+	// yet and copies nothing — zero the buffer so the length-match read
+	// below is deterministic instead of chewing on uninitialized heap.
+	memset(sec, 0, size);
 	MvlCopySaColSection(sec, data, size);              // FUN_10032070 @ 0x32070 (HOOK POINT)
 
 	if(*(int *)(sec + 4) != (int)size - 8){
@@ -126,6 +138,10 @@ LoadSAColSection(const void *data, unsigned size)
 		SaColErr("SA collision section length does not match length specified in header.");
 		return (void *)data;
 	}
+	// Cursor limit for every count-driven walk below: all counts/offsets
+	// come from the (untrusted) section header, so each loop must stay
+	// inside [sec, secEnd). BUGFIX(stable-1.0).
+	const unsigned char *secEnd = sec + size;
 
 	void *raw = MvlColModelAlloc();                    // thunk_FUN_1002c240 @ 0x2c240
 	unsigned char *col = raw ? (unsigned char *)MvlColModelInit(raw) : 0;   // FUN_1002c290 @ 0x2c290
@@ -168,6 +184,13 @@ LoadSAColSection(const void *data, unsigned size)
 		p = sec + 0x4C;
 		{
 			unsigned nSph = *(unsigned short *)(sec + 0x48);
+			// BUGFIX(stable-1.0): nSph comes from the untrusted header —
+			// the p-walk below would run nSph*0x14 bytes past secEnd.
+			if((size_t)(secEnd - p) < (size_t)nSph * 0x14){
+				SaColErr("SA collision section truncated (spheres).");
+				free(raw);
+				return (void *)data;
+			}
 			void *sph = nSph ? malloc((size_t)nSph * 0x14) : 0;
 			*(void **)(col + 0x34) = sph;                 // puVar9[0xd]
 			if(nSph && sph == 0){ SaColErr("Out of memory (spheres)."); return (void *)data; }
@@ -180,6 +203,13 @@ LoadSAColSection(const void *data, unsigned size)
 			}
 		}
 		{
+			// BUGFIX(stable-1.0): box-count byte + q walk bounds. The count
+			// byte at p and the 0x18-byte-per-box q stride are header-driven.
+			if(p >= secEnd || (size_t)(secEnd - (p + 4)) < (size_t)*p * 0x18){
+				SaColErr("SA collision section truncated (boxes).");
+				free(raw);
+				return (void *)data;
+			}
 			unsigned char nBox = *p;                      // byte count (pbVar18)
 			q = (unsigned short *)(p + 4);                // puVar19
 			void *box = nBox ? malloc((size_t)nBox << 5) : 0;
@@ -193,6 +223,13 @@ LoadSAColSection(const void *data, unsigned size)
 			}
 		}
 		{
+			// BUGFIX(stable-1.0): mesh count + 0x1C-byte q stride bounds.
+			if((const unsigned char *)(q + 2) > secEnd ||
+			   (size_t)(secEnd - (const unsigned char *)(q + 2)) < (size_t)*q * 0x1C){
+				SaColErr("SA collision section truncated (meshes).");
+				free(raw);
+				return (void *)data;
+			}
 			unsigned nMesh = *q;                          // puVar19 count -> col+0x2A
 			q += 2;
 			*(unsigned short *)(col + 0x2A) = (unsigned short)nMesh;
@@ -208,6 +245,13 @@ LoadSAColSection(const void *data, unsigned size)
 			}
 		}
 		{
+			// BUGFIX(stable-1.0): vertex count + 12-byte q stride bounds.
+			if((const unsigned char *)(q + 2) > secEnd ||
+			   (size_t)(secEnd - (const unsigned char *)(q + 2)) < (size_t)*q * 0x0C){
+				SaColErr("SA collision section truncated (vertices).");
+				free(raw);
+				return (void *)data;
+			}
 			// Vertices: int16 triples copied AS floats? no — the COLL container
 			// stores them as raw 12-byte rows (decomp copies 12 B per entry).
 			unsigned nVert = *q;
@@ -222,6 +266,14 @@ LoadSAColSection(const void *data, unsigned size)
 			}
 		}
 		{
+			// BUGFIX(stable-1.0): group count + 16-byte-per-group q stride
+			// (8 words read per entry in the loop below).
+			if((const unsigned char *)(q + 2) > secEnd ||
+			   (size_t)(secEnd - (const unsigned char *)(q + 2)) < (size_t)*q * 0x10){
+				SaColErr("SA collision section truncated (groups).");
+				free(raw);
+				return (void *)data;
+			}
 			unsigned nGrp = *q;                           // -> col+0x2C (puVar9+0xb)
 			q += 2;
 			*(unsigned short *)(col + 0x2C) = (unsigned short)nGrp;
@@ -263,41 +315,76 @@ LoadSAColSection(const void *data, unsigned size)
 	*(int *)(col + 0x0C) = *(int *)(sec + 0x44);         // puVar9[3]
 
 	// Array pointers INTO the stored section (payload base = sec + 4).
-	*(void **)(col + 0x34) = (void *)(sec + 4 + *(int *)(sec + 0x54));   // puVar9[0xd]
-	*(int *)(col + 0x38) = 0;                            // puVar9[0xe]
-	*(void **)(col + 0x3C) = (void *)(sec + 4 + *(int *)(sec + 0x58));   // puVar9[0xf]
+	// BUGFIX(stable-1.0): the four dword offsets at +0x54/+0x58/+0x60/+0x64
+	// are signed ints from the untrusted header. A negative or oversized
+	// offset turns each pointer below into an out-of-bounds address that the
+	// game later dereferences (and the group scan + vertex conversion read
+	// through them right here). Validate against the payload bounds.
 	{
-		unsigned char *groups = sec + 4 + *(int *)(sec + 0x64);          // puVar9[0x11]
-		unsigned nGrp = *(unsigned short *)(col + 0x2C);
-		unsigned maxIdx = 0xFFFFFFFFu;                  // decomp uVar17 = -1
-		for(unsigned i = 0; i < nGrp; i++){
-			unsigned a = *(unsigned short *)(groups + i * 8 + 0);
-			unsigned b = *(unsigned short *)(groups + i * 8 + 2);
-			unsigned c = *(unsigned short *)(groups + i * 8 + 4);
-			// decomp compares SIGNED (int)uVar17 < (int)uVar13
-			if((int)maxIdx < (int)a) maxIdx = a;
-			if((int)maxIdx < (int)b) maxIdx = b;
-			if((int)maxIdx < (int)c) maxIdx = c;
+		const int offSph  = *(int *)(sec + 0x54);
+		const int offMesh = *(int *)(sec + 0x58);
+		const int offVert = *(int *)(sec + 0x60);
+		const int offGrp  = *(int *)(sec + 0x64);
+		const int payload = (int)size - 4;               // bytes after the +4 base
+		if(offSph  < 0 || offSph  > payload ||
+		   offMesh < 0 || offMesh > payload ||
+		   offVert < 0 || offVert > payload ||
+		   offGrp  < 0 || offGrp  > payload){
+			SaColErr("SA collision section has invalid array offsets.");
+			free(raw);
+			return (void *)data;
 		}
+		*(void **)(col + 0x34) = (void *)(sec + 4 + offSph);   // puVar9[0xd]
+		*(int *)(col + 0x38) = 0;                              // puVar9[0xe]
+		*(void **)(col + 0x3C) = (void *)(sec + 4 + offMesh);  // puVar9[0xf]
 		{
-			// Vertex conversion: int16 triples -> float (/128 = *0.0078125f),
-			// cursor base = sec + 4 + off + 4 with the first triple read at
-			// [-2,-1,0] shorts (decomp psVar15).
-			unsigned n = maxIdx + 1;                     // (uVar17 + 1) * 0xC bytes
-			float *verts = (float *)malloc((size_t)n * 0x0C);
-			SaColVertexBuf(veh) = verts;                 // puVar5[0xa17] (veh+0x285c)
-			if(verts == 0 && n != 0){ SaColErr("Out of memory (vertices)."); return (void *)data; }
-			if((int)maxIdx >= 0){
-				short *sv = (short *)(sec + 4 + *(int *)(sec + 0x60) + 4);
-				for(unsigned i = n; i != 0; i--){
-					verts[0] = (float)sv[-2] * 0.0078125f;
-					verts[1] = (float)sv[-1] * 0.0078125f;
-					verts[2] = (float)sv[0]  * 0.0078125f;
-					verts += 3;
-					sv += 3;
-				}
+			unsigned char *groups = sec + 4 + offGrp;          // puVar9[0x11]
+			unsigned nGrp = *(unsigned short *)(col + 0x2C);
+			// BUGFIX(stable-1.0): the group scan reads nGrp*8 bytes.
+			if((size_t)(secEnd - groups) < (size_t)nGrp * 8){
+				SaColErr("SA collision section truncated (groups).");
+				free(raw);
+				return (void *)data;
 			}
-			*(void **)(col + 0x40) = SaColVertexBuf(veh);   // puVar9[0x10] = puVar5[0xa17]
+			unsigned maxIdx = 0xFFFFFFFFu;                  // decomp uVar17 = -1
+			for(unsigned i = 0; i < nGrp; i++){
+				unsigned a = *(unsigned short *)(groups + i * 8 + 0);
+				unsigned b = *(unsigned short *)(groups + i * 8 + 2);
+				unsigned c = *(unsigned short *)(groups + i * 8 + 4);
+				// decomp compares SIGNED (int)uVar17 < (int)uVar13
+				if((int)maxIdx < (int)a) maxIdx = a;
+				if((int)maxIdx < (int)b) maxIdx = b;
+				if((int)maxIdx < (int)c) maxIdx = c;
+			}
+			{
+				// Vertex conversion: int16 triples -> float (/128 = *0.0078125f),
+				// cursor base = sec + 4 + off + 4 with the first triple read at
+				// [-2,-1,0] shorts (decomp psVar15).
+				unsigned n = maxIdx + 1;                     // (uVar17 + 1) * 0xC bytes
+				// BUGFIX(stable-1.0): the conversion reads n triples of 3
+				// shorts starting at (sec+4+offVert); maxIdx comes from the
+				// untrusted group table, so bound the read.
+				if((int)maxIdx >= 0 &&
+				   (size_t)(secEnd - (sec + 4 + offVert)) < (size_t)n * 6){
+					SaColErr("SA collision section truncated (vertices).");
+					free(raw);
+					return (void *)data;
+				}
+				float *verts = (float *)malloc((size_t)n * 0x0C);
+				SaColVertexBuf(veh) = verts;                 // puVar5[0xa17] (veh+0x285c)
+				if(verts == 0 && n != 0){ SaColErr("Out of memory (vertices)."); return (void *)data; }
+				if((int)maxIdx >= 0){
+					short *sv = (short *)(sec + 4 + offVert + 4);
+					for(unsigned i = n; i != 0; i--){
+						verts[0] = (float)sv[-2] * 0.0078125f;
+						verts[1] = (float)sv[-1] * 0.0078125f;
+						verts[2] = (float)sv[0]  * 0.0078125f;
+						verts += 3;
+						sv += 3;
+					}
+				}
+				*(void **)(col + 0x40) = SaColVertexBuf(veh);   // puVar9[0x10] = puVar5[0xa17]
+			}
 		}
 	}
 	AttachColToInfo(veh, col);

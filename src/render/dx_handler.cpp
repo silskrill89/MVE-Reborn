@@ -37,7 +37,7 @@ DxError(const char *fn, const char *fmt, ...)
 //   packed id (high 16 bits set): ((id >> 14) & 0x3FF00) + 0x30000 | (id >> 16) & 0x3F
 //   plain id:                     id << 8
 // ---------------------------------------------------------------------------
-static unsigned FUN_10032f30(unsigned id)
+static unsigned MvlRwLibIdToVersion(unsigned id)     // FUN_10032f30 @ RVA 0x32f30
 {
 	if((id & 0xffff0000) != 0)
 		return (((id >> 14) & 0x3ff00) + 0x30000) | ((id >> 16) & 0x3f);
@@ -77,7 +77,7 @@ CDxHandler::DX9TextureFix(int *data, unsigned size)
 		DxError(fn, "Texture file main header missing.");
 		return false;
 	}
-	unsigned ver = FUN_10032f30((unsigned)data[2]);         // mov ecx,[ebx+8] / call 0x32f30
+	unsigned ver = MvlRwLibIdToVersion((unsigned)data[2]);         // mov ecx,[ebx+8] / call 0x32f30
 	if(ver <= 0x34003)                                      // cmp eax,0x34003 / ja
 		return true;                                        // already fine — no fixup
 	if(ver > 0x36003){                                      // cmp eax,0x36003 / jbe
@@ -103,6 +103,17 @@ CDxHandler::DX9TextureFix(int *data, unsigned size)
 	while(i < numTex){
 		// bounds: (entry - data) + 0x58 must be < size  (asm @ 0xd426..0xd42f)
 		if((unsigned)((char *)entry - (char *)data + 0x58) >= size){
+			DxError(fn, "Texture offset is invalid (tex %u).", i);
+			return false;
+		}
+		// BUGFIX(stable-1.0): the original check only guarantees 0x58 bytes
+		// (decomp FUN_1000d340 line 1224) but the body reads/writes entry
+		// fields up to +0x6F (entry[24] format dword, entry[25] +0x64, the
+		// +0x6F byte, and the mask-name word at +0x60 for 31-char names) —
+		// a truncated final texture entry would otherwise read/write past
+		// the buffer. Require the full 0x70-byte extent; well-formed TXD
+		// entries are >= 0x70, so only corrupt/truncated files are rejected.
+		if((unsigned)((char *)entry - (char *)data + 0x70) > size){
 			DxError(fn, "Texture offset is invalid (tex %u).", i);
 			return false;
 		}

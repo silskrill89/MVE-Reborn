@@ -61,7 +61,7 @@ extern int32_t MvlModelPointerBufferCapacity;
 extern uint32_t *MvlSavedTexturePool;
 
 // DAT_100a6d48 - 0.98e @ RVA 0xa6d48 - model-index base offset subtracted by
-// FUN_1004f3a0 (directory-entry lookup by model index).
+// MvlGetModelDirRecord (directory-entry lookup by model index).
 extern int32_t MvlModelIndexBaseOffset;
 
 // DAT_100b0c41 - 0.98e @ RVA 0xb0c41 - experimental long-model-ID mode flag
@@ -244,9 +244,12 @@ extern int32_t MvlFrameWaitRemainingMs;
 // 5. Key/class tables + livery colours (model_helpers.cpp)
 // ===========================================================================
 
-// DAT_100b641e - 0.98e @ RVA 0xb641e - bypass class table indexed 0x81..0xEC
-// (handler 0x3e010 + FUN_1004f7e0 gate).
-extern uint8_t MvlKeyClassBypassTable[0xED];
+// DAT_100b641e - 0.98e @ RVA 0xb641e - bypass class table; the 0.98e write
+// paths range-check ids to [0x82, 0xEF] (handler 0x3e010 read-side stops at
+// 0xEC; the InitVehicles default-car clear writes up to 0xEF).
+// BUGFIX(stable-1.0): sized [0xF0] (was [0xED]) to cover the full 0.98e write
+// range - see engine_globals.cpp.
+extern uint8_t MvlKeyClassBypassTable[0xF0];
 
 // DAT_100b2804 - 0.98e @ RVA 0xb2804 - per-slot AI class table (FUN_1004f7e0;
 // size provisional 16).

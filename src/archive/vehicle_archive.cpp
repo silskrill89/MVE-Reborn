@@ -246,7 +246,15 @@ CMvlVehicle::RegisterArchiveFile(const char *name, void *data, unsigned size)
 		// Sound files go straight to the sound handler (CSoundHandler::
 		// LoadSoundFile @ 0x33e10, name table PTR_s_rcengine1_100af104,
 		// per-vehicle slot block @ 0x2cf8). Failure fails the archive.
-		bool ok = MvlSoundLoadFile("rcengine1", &m_abSoundSlots[0][0],
+		// BUGFIX(stable-1.0): original passes &PTR_s_rcengine1_100af104 — a
+		// pointer to the {rcengine1, rcengine2, NULL} name table in .data
+		// (PE-verified: 0xaf104->0x83d20 'rcengine1', 0xaf108->0x83d2c
+		// 'rcengine2', 0xaf10c NULL). The old code passed the string literal
+		// itself, so FindSlotForName deref'd the literal's bytes 'r','c',
+		// 'e','n' as a pointer = deterministic crash on the first archive
+		// .wav. Same bug class as mvl_weapon.cpp sound-slot fix.
+		static const char *const kMvlVehSoundNames[] = { "rcengine1", "rcengine2", 0 };
+		bool ok = MvlSoundLoadFile(kMvlVehSoundNames, &m_abSoundSlots[0][0],
 		                           name, data, size);
 		if(!ok)
 			MvlVehError("CMvlVehicle::RegisterArchiveFile",
@@ -374,13 +382,19 @@ CMvlVehicle::ParseArchive(const char *archivePath)
 		// The original mallocs the entry and hands ownership to
 		// RegisterArchiveFile; mirror that with an exact-size copy.
 		unsigned size = (unsigned)tmp.size();
-		void *data = malloc(size ? size : 1);
+		// BUGFIX(stable-1.0): allocate size+1 and NUL-terminate. The .xml
+		// slot is handed to TiXmlDocument::Parse, which expects a
+		// NUL-terminated string — an exact-size archive copy makes TinyXML
+		// scan past the heap block on untrusted input. The extra byte is
+		// harmless for binary slots (sizes stay exact).
+		void *data = malloc((size_t)size + 1);
 		if(!data){
 			ok = false;
 			break;
 		}
 		if(size)
 			memcpy(data, &tmp[0], size);
+		((unsigned char *)data)[size] = '\0';
 		if(!RegisterArchiveFile(name, data, size)){
 			MvlVehError("CMvlVehicle::ParseArchive",
 			            "Could not register file '%s' from archive '%s'.",
@@ -530,12 +544,19 @@ CMvlVehicle::LoadCollisionFile(void)
 		if(colSize > m_anFileSizes[MVL_SLOT_COL] - 8 || colSize <= 0x43)
 			MvlThrow("Invalid colmodel size.");
 		void *raw = MvlColModelAlloc();                  // thunk_FUN_1002c240
-		void *col = raw ? MvlColModelInit(raw) : 0;      // FUN_1002c290
-		MvlColModelReadBuffer(col, colData, m_anFileSizes[MVL_SLOT_COL]); // FUN_1002e610
-		if(col){
-			// Stamp the vehicle id into the colmodel (+0x31/+0x32, decomp).
-			MvlColModelSetVehicleId(col, (unsigned short)m_nId);
+		void *col = raw ? MvlColModelInit(raw) : 0;      // FUN_1002c290 @ 0x2c290
+		// BUGFIX(stable-1.0): the original assumes the col-pool alloc never
+		// fails and feeds col to FUN_1002e610 unconditionally; when the hook
+		// is wired a NULL col would crash there. Bail like sa_col.cpp does,
+		// freeing the raw pool object first.
+		if(!col){
+			if(raw)
+				free(raw);                                 // decomp FID_conflict__free
+			MvlThrow("Could not allocate collision model.");
 		}
+		MvlColModelReadBuffer(col, colData, m_anFileSizes[MVL_SLOT_COL]); // FUN_1002e610
+		// stamp the vehicle id into the colmodel (+0x31/+0x32, decomp).
+		MvlColModelSetVehicleId(col, (unsigned short)m_nId);
 		if(m_pInfo){
 			m_pInfo->pad020 = 1;   // *(info+0x1b) = 1 — col from file
 			m_pInfo->pColModel = col;

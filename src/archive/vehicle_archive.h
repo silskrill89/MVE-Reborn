@@ -19,6 +19,7 @@
 #include "../core/stdafx.h"
 #include "seven_walker.h"
 
+#include <cstddef>   // offsetof (BUGFIX(stable-1.0) layout pins)
 #include <string>
 #include <vector>
 
@@ -170,6 +171,7 @@ struct SMvlVehicleHandling
 	float  fDimensions[3];       // @ 0x28  handling/dimensions (x,y,z); fallback from col
 	float  fCentreOfMass[3];     // @ 0x34  handling/centreofmass
 	int    nPercentSubmerged;    // @ 0x40  handling/percentsubmerged (%i; float convert at apply)
+	unsigned pad044;             // BUGFIX(stable-1.0): 0x44..0x47 unrecovered (decomp shows no field; struct must reach @ 0x48)
 	float  fTractionMultiplier;  // @ 0x48  traction/multiplier | boatsteering/bankforcemult
 	unsigned char pad04c[0x48];  // @ 0x4c..0x93 unrecovered
 	unsigned char nDriveType;    // @ 0x94  transmission/drivetype (%c)
@@ -491,6 +493,14 @@ public:
 
 	SMvlVehicleHandling m_handling;      // @ 0x1c .. 0x1bc+
 
+	// BUGFIX(stable-1.0): absolute-offset padding. The original CMvlVehicle
+	// is one flat 0x2D2C-byte object; raw-offset code in tuning.cpp
+	// (veh+0x7E0/0x7E4) and sa_col.cpp (veh+0x2858/0x285c) depends on the
+	// members below sitting at their documented offsets. Padding members
+	// (unsigned char = alignment 1, no surprises) make the C++ layout match;
+	// static_asserts at the class tail pin it.
+	unsigned char pad1bc[0x18];        // @ 0x1bc..0x1d3 unrecovered gap
+
 	unsigned char m_nDoorSounds;         // @ 0x1d4 audio/doorsounds
 	int    m_nHeliType;                  // @ 0x1d8 helidata/helitype (0 normal,1 remote,2 water,3 hunter)
 	int    m_nHeliWeapons;               // @ 0x1dc helidata/weapons (0 none,1 hunter,2 sparrow)
@@ -508,24 +518,41 @@ public:
 	char   m_szAnimsName[24];            // @ 0x7c4 basic/anims ("null" default)
 	int    m_nAnimsIndex;                // @ 0x7dc resolved anim group index (-1 = default)
 
+	// BUGFIX(stable-1.0): 0x7e0..0x27f4 unrecovered flat region. The tuning
+	// block lives at its head — TuningCount @ 0x7e0 and the 20 x 0x15C
+	// SMvlTuningRecord array @ 0x7e4..0x2314 (tuning.cpp raw accessors) —
+	// followed by ~0x4E0 of still-unmodelled fields. Without this pad the
+	// C++ members below would pack at ~0x7e0 and tuning.cpp's 0x1B30-byte
+	// record memset would smash past the object (heap overflow).
+	unsigned char padTuningRegion[0x2014]; // @ 0x7e0..0x27f3
+
 	unsigned char m_abEmLightData[0x44]; // @ 0x27f4 specials/emlights|emlightsingle|taxilight
 	                                     //        (parsed by LoadXMLEmLightData @ 0x4e8f0)
 	float  m_fBasicUnk10;                // @ 0x2838 pre-default DAT_1008de28 (SA: DAT_1008de40)
 	                                     //        basic table slot i=10 — name unrecovered
 	unsigned char m_bHasHeliMissilePos;  // @ 0x283c
 	unsigned char m_bHasHeliGunPos;      // @ 0x283d
-	unsigned char pad283e[2];
-	float  m_fHeliMissilePos[3];         // @ 0x283e heliweps/missilepos
-	float  m_fHeliGunPos[3];             // @ 0x284a heliweps/machinegunpos
+	unsigned char pad283e[2];            // @ 0x283e..0x283f (original: floats here, unaligned)
+	// BUGFIX(stable-1.0): the original stores the heli vectors unaligned @
+	// 0x283e/0x284a; C++ float members must be 4-aligned, so they sit at
+	// 0x2840/0x284c (2-byte divergence; only MvlParseVector writes them —
+	// no raw-offset consumer). The pad below restores m_nWeaponCount to its
+	// documented @ 0x2860 AND provides the sa_col.cpp scratch slots
+	// SaColSectionBuf/SaColVertexBuf @ 0x2858/0x285c (veh+0x2858 writes).
+	float  m_fHeliMissilePos[3];         // @ ~0x283e heliweps/missilepos (aligned 0x2840)
+	float  m_fHeliGunPos[3];             // @ ~0x284a heliweps/machinegunpos (aligned 0x284c)
+	unsigned char pad2858[8];            // @ 0x2858..0x285f sa_col scratch (puVar5[0xa16/0xa17])
 
 	int    m_nWeaponCount;               // @ 0x2860
 	SMvlVehicleWeaponData m_aWeapons[MVL_MAX_WEAPONS]; // @ 0x2864 (4 x 0xC0)
 
 	void  *m_pWeaponsTxd;                // @ 0x2b64 weapons.txd texdict
 	unsigned m_anCustomModelLoaded[4];   // @ 0x2b68 custom1-4 model loaded flags
+	unsigned char pad2b78[0x3c];         // @ 0x2b78..0x2bb3 unrecovered gap
 	SMvlVehicleAudioData m_audio;        // @ ~0x2bb4 (see struct comment)
 
 	void  *m_pAnimFile;                  // @ 0x2be4 CCustomAnimFile* (.ifp)
+	unsigned char pad2be8[4];            // @ 0x2be8..0x2beb unrecovered gap
 	unsigned m_nMaxPassengers;           // @ 0x2bec basic/maxpassengers PROVISIONAL
 
 	unsigned m_anColours[MVL_MAX_COLOURS][4]; // @ 0x2bf0 16 x 4 colours
@@ -535,8 +562,31 @@ public:
 	// Sound slot block @ 0x2cf8: 2 slots x 20 bytes (FUN_100463f0 indexes
 	// base + i*20 + 0x2cf8). Layout inside a slot unrecovered — raw bytes.
 	unsigned char m_abSoundSlots[2][20]; // @ 0x2cf8
+	unsigned char pad2d20[8];            // @ 0x2d20..0x2d27 unrecovered gap
 	void  *m_pColModelDerived;           // @ 0x2d28 colModel->field_0xc mirror
+	                                     //        (object ends @ 0x2d2c = original malloc size)
 };
+
+// BUGFIX(stable-1.0): pin the flat 0.98e layout the raw-offset consumers
+// (tuning.cpp @ 0x7e0/0x7e4, sa_col.cpp @ 0x2858/0x285c) and the original
+// malloc size (FUN_100449e0: 0x2d2C bytes) depend on. A layout drift here
+// is silent memory corruption in those lanes — keep these asserts green.
+static_assert(sizeof(SMvlVehicleHandling) == 0x1A0,
+              "SMvlVehicleHandling must span 0x1c..0x1bc");
+static_assert(offsetof(CMvlVehicle, m_handling) == 0x1C,
+              "m_handling must start at 0x1c");
+static_assert(offsetof(CMvlVehicle, m_nDoorSounds) == 0x1D4,
+              "m_nDoorSounds must sit at 0x1d4");
+static_assert(offsetof(CMvlVehicle, m_szAnimsName) == 0x7C4,
+              "m_szAnimsName must sit at 0x7c4");
+static_assert(offsetof(CMvlVehicle, m_abEmLightData) == 0x27F4,
+              "m_abEmLightData must sit at 0x27f4");
+static_assert(offsetof(CMvlVehicle, m_nWeaponCount) == 0x2860,
+              "m_nWeaponCount must sit at 0x2860 (0x2858 = sa_col scratch)");
+static_assert(offsetof(CMvlVehicle, m_aWeapons) == 0x2864,
+              "m_aWeapons must sit at 0x2864");
+static_assert(sizeof(CMvlVehicle) == 0x2D2C,
+              "CMvlVehicle must match the original 0x2d2c-byte flat object");
 
 // Shared XML parse helpers (vehicle_xml.cpp):
 // FUN_1001bdb0 @ 0x1bdb0 — parse <x><y><z> child vector into 3 floats.

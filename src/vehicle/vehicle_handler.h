@@ -98,7 +98,7 @@ const char *MvlGameSaveFilePath(void);          // TODO(save): 0xa0ce9c (gta-vc.
 int  MvlGamePoolLimit(void);                    // TODO(save): 0xa0fde4+8 (gta-vc.exe)
 // 64-bit file timestamp (0 = not found) used by the sidecar staleness check:
 unsigned long long MvlFileTimestamp64(const char *path); // TODO(save): 0x1c040
-// Model info by MVL model index (FUN_1004f3a0; NULL when unknown):
+// Model info by MVL model index (MvlGetModelDirRecord; NULL when unknown):
 void *MvlLookupModelInfoByModelIndex(int mvlModelId);  // TODO(save): 0x4f3a0
 // Model-info vehicle type (object field [1] @ +0x4 — the piVar5[1] type
 // check in FetchRealModelIndexForPoolSlot):

@@ -16,7 +16,7 @@ unsigned char MvlSecWndClassRegistered = 0;  // DAT_10124535 @ RVA 0x124535
 // WNDCLASSEXA below). HOOK POINT: not in this dispatch's decomp range; logs
 // via MvlErrorLog (once) and returns 0. Never fakes window behaviour.
 LRESULT CALLBACK
-FUN_10013310(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+MvlSecWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) // FUN_10013310 @ RVA 0x13310
 {
 	static bool s_logged = false;
 	if(!s_logged){
@@ -33,6 +33,13 @@ FUN_10013310(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 bool
 MvlSecWnd(HWND *phwndOut)
 {
+	// BUGFIX(stable-1.0): guard the out-pointer — the original writes
+	// `mov [ebx], eax` unconditionally (caller contract); the clone refuses
+	// to deref NULL so a future caller passing NULL fails cleanly instead of
+	// crashing.
+	if(phwndOut == NULL)
+		return false;
+
 	// cmp byte [DAT_10124535], 0 / jne <create window>
 	if(!MvlSecWndClassRegistered){
 		WNDCLASSEXA wc;
@@ -45,7 +52,7 @@ MvlSecWnd(HWND *phwndOut)
 		wc.hIcon          = LoadIconA(NULL, (LPCSTR)0x7f00); // [ebp-0x18], IDI_APPLICATION
 		wc.hIconSm        = LoadIconA(NULL, (LPCSTR)0x7f00); // [ebp-4]
 		wc.hInstance      = GetModuleHandleA(NULL);          // [ebp-0x1c]
-		wc.lpfnWndProc    = FUN_10013310;                    // [ebp-0x28] = 0x10013310
+		wc.lpfnWndProc    = MvlSecWndProc;                    // [ebp-0x28] = 0x10013310
 		wc.lpszClassName  = "MvlSecWnd";                     // [ebp-8]  @ RVA 0x1007b2d4
 		wc.lpszMenuName   = NULL;                            // [ebp-0xc]
 		wc.style          = 8;                               // [ebp-0x2c] CS_DBLCLKS
