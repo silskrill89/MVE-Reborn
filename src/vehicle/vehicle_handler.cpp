@@ -11,11 +11,14 @@
 #include "vehicle_handler.h"
 
 #include "../loader/log.h"
+#include "../engine/engine_globals.h"   // MvlModelIndexBaseOffset / MvlModelIdBoundary /
+                                        // MvlModelLookupRegistry / AI-class + livery tables
 
 #include "tinyxml.h"   // vendored classic TinyXML (external/tinyxml)
 
 #include <stdarg.h>
 #include <stdio.h>
+#include <stdlib.h>     // malloc/free/strtol (archive scan cluster)
 #include <string.h>
 
 // ---------------------------------------------------------------------------
@@ -926,4 +929,534 @@ CVehicleHandler::LoadXMLTaxiEmLightData(TiXmlElement *e, void *dest)
 		return false;
 	}
 	return true;
+}
+
+// ===========================================================================
+// CVehicleHandler vehicle-archive scan cluster — vehmod_retail.dll 0.98e
+// (missing33/decomp-chain.txt, depth-0 roots 0x4f4d0/0x4f5a0/0x4f680/
+// 0x4f9a0/0x4fc90 + dumped depth-1 callees 0x4f380/0x4f440/0x4f4a0/0x449e0/
+// 0x44a10/0x44c90/0x45110/0x0cac0/0x4f870). Log strings verbatim; engine
+// internals reuse the archive lane's vehicle_archive.h seams. Shared .data
+// lives in engine_globals (AI-class / livery / model-lookup tables); the
+// scan-owned globals are class statics (engine_globals.h §7 pattern).
+// ===========================================================================
+
+// Lane-replaced .data (see vehicle_handler.h for the Ghidra-name census).
+CMvlVehicle *CVehicleHandler::s_vehRegistry[kVehRegistryCapacity] = { 0 };
+                                                          // DAT_100b2838 @ RVA 0xb2838
+int  CVehicleHandler::s_nNextFreeCursor     = 0;           // DAT_100b2834 @ RVA 0xb2834
+int  CVehicleHandler::s_nAvailableSlots     = 0;           // DAT_100a6d50 @ RVA 0xa6d50
+int  CVehicleHandler::s_nSlotLimit          = 0;           // DAT_101244cc @ RVA 0x1244cc
+int  CVehicleHandler::s_nLoadedArchiveCount = 0;           // DAT_100b51d4 @ RVA 0xb51d4
+unsigned char CVehicleHandler::s_bSaTxdAttempted = 0;      // DAT_101247d4 @ RVA 0x1247d4
+void *CVehicleHandler::s_pSaTexDict         = 0;           // DAT_100b51d0 @ RVA 0xb51d0
+
+// ===========================================================================
+// FUN_1004f440 @ RVA 0x4f440 — (provisional) ParseSlotIdFromFilename
+// "x<id>_" prefix after the last '\' -> id (>= 1); -1 when absent/invalid.
+// FUN_1005abd0 @ RVA 0x5abd0 = strrchr (same helper the path code uses).
+// ===========================================================================
+static long
+ParseSlotIdFromFilename(const char *path)
+{
+	const char *start = path;
+	long id;
+	char *end = 0;
+
+	if(!path)
+		return -1;
+	{
+		const char *slash = strrchr(path, '\\');   // FUN_1005abd0 @ 0x5abd0
+		if(slash)
+			start = slash + 1;
+	}
+	if(start[0] != 'x')
+		return -1;
+	id = strtol(start + 1, &end, 10);              // base 10 (decomp)
+	if(id < 1 || end == 0 || end[0] != '_')
+		return -1;
+	return id;
+}
+
+// ===========================================================================
+// CVehicleHandler::RegistryVehicle — 0.98e @ RVA 0x4f380
+// Dumped body: if (0 <= slot < DAT_100a6d50) return table[slot]; else NULL.
+// ===========================================================================
+CMvlVehicle *
+CVehicleHandler::RegistryVehicle(int relSlot)
+{
+	if(relSlot >= 0 && relSlot < s_nAvailableSlots)   // DAT_100a6d50
+		return s_vehRegistry[relSlot];                // DAT_100b2838
+	return 0;
+}
+
+// ===========================================================================
+// FUN_1004f4a0 @ RVA 0x4f4a0 — (provisional) FindFirstFreeSlot
+// Scan [s_nNextFreeCursor, s_nAvailableSlots) for an empty registry slot;
+// -1 when full. (Ghidra lost the loop-index moves as extraout_ECX/EDX; the
+// intent — return the first free index — is unambiguous.)
+// ===========================================================================
+static int
+FindFirstFreeSlot(void)
+{
+	int i = CVehicleHandler::s_nNextFreeCursor;      // DAT_100b2834
+	while(i < CVehicleHandler::s_nAvailableSlots){   // DAT_100a6d50
+		if(CVehicleHandler::RegistryVehicle(i) == 0)
+			return i;
+		i++;
+	}
+	return -1;
+}
+
+// ===========================================================================
+// FUN_100449e0 @ RVA 0x449e0 + FUN_10044a10 @ RVA 0x44a10 — (provisional)
+// ApplyArchivedVehicleDefaults. The original mallocs 0x2d2c + memzero
+// (FUN_100449e0) then runs the deep CMvlVehicle ctor (FUN_10044a10: game
+// info-object alloc via FUN_100449b0 @ 0x449b0 — body NOT in dump; default
+// colours; rotor values; +0x2d20 = slot). The clone's CMvlVehicle::
+// CMvlVehicle() (archive lane) already memzeros + sets m_nCompRules/-1 and
+// m_nAnimsIndex/-1; this helper adds the FUN_10044a10 stores that map onto
+// declared CMvlVehicle members. NOT ported here (see comments inline):
+//   - m_pInfo allocation + its ctor defaults (info @ 0x174 bytes, vtable;
+//     FUN_100449b0 body not in the dump) -> m_pInfo stays NULL (the archive
+//     pipeline guards every m_pInfo deref),
+//   - the slot store at +0x2d20 (thread via GetNewSlotForArchive's slotOut
+//     until the field is modelled on CMvlVehicle),
+//   - the 0x40000000 (2.0f) dword at +0x2d28 (the clone models +0x2d28 as
+//     m_pColModelDerived — float-vs-pointer mismatch flagged, left zeroed).
+// ===========================================================================
+static void
+ApplyArchivedVehicleDefaults(CMvlVehicle *veh)
+{
+	unsigned white = MvlPackRgb(255, 255, 255);     // FUN_10032f10 @ 0x32f10
+
+	veh->m_nMaxPassengers   = 0;                    // +0x2bec
+	veh->m_fRotorDamageMult = 1.0f;                 // +0x1e4 = 0x3f800000
+	veh->m_fRotorRadius     = 6.2f;                 // +0x1e0 = 0x40c4cccd
+	veh->m_nHeliWeapons     = 0;                    // +0x1dc
+	veh->m_nHeliType        = 0;                    // +0x1d8
+	// +0x27f4 = 0 (emlights dword) — covered by the ctor memset.
+	veh->m_szArchivePath[0] = 0;                    // +0x22c
+	veh->m_audio.bHasLightBox = 1;                  // +0x2bcc
+	veh->m_nColourCount     = 1;                    // +0x2cf0
+	veh->m_anColours[0][0]  = white;                // +0x2bf0..0x2bfc = 4 white dwords
+	veh->m_anColours[0][1]  = white;
+	veh->m_anColours[0][2]  = white;
+	veh->m_anColours[0][3]  = white;
+	veh->m_nGang            = -1;                   // +0x2cf4
+}
+
+// ===========================================================================
+// CVehicleHandler::GetNewSlotForArchive — 0.98e @ RVA 0x4f4d0
+// ===========================================================================
+CMvlVehicle *
+CVehicleHandler::GetNewSlotForArchive(const char *archivePath, int *slotOut)
+{
+	static const char *const fn = "CVehicleHandler::GetNewSlotForArchive";
+	long parsed = ParseSlotIdFromFilename(archivePath);   // FUN_1004f440 @ 0x4f440
+	int slot = (int)parsed - MvlModelIndexBaseOffset;     // DAT_100a6d48
+
+	if(parsed != -1){
+		if(parsed < MvlModelIndexBaseOffset || s_nSlotLimit <= parsed){   // DAT_101244cc
+			SvWarn(fn, "Slot out of range, taking first free ID.");
+			slot = FindFirstFreeSlot();               // FUN_1004f4a0 @ 0x4f4a0
+		}
+		else if(RegistryVehicle(slot) != 0){          // FUN_1004f380 @ 0x4f380
+			SvWarn(fn, "Slot requested by file already in use, taking first free ID.");
+			slot = FindFirstFreeSlot();
+		}
+		// parsed in range + free: keep the requested relative slot (original
+		// goto LAB_1004f53f skips the first-free call).
+	}
+	else{
+		slot = FindFirstFreeSlot();                   // no "x<id>_" -> first free
+	}
+
+	if(slot == -1)
+		return 0;
+	if(slot == s_nNextFreeCursor)                    // DAT_100b2834
+		s_nNextFreeCursor++;
+
+	CMvlVehicle *veh = new CMvlVehicle;              // FUN_100449e0 @ 0x449e0 (malloc+zero; ctor above)
+	ApplyArchivedVehicleDefaults(veh);               // FUN_10044a10 @ 0x44a10 subset (see above)
+	s_vehRegistry[slot] = veh;                       // *(DAT_100b2838 + slot*4) = veh
+	if(slotOut)
+		*slotOut = slot;                             // original stores the slot at veh+0x2d20
+	return veh;
+}
+
+// Public wrapper (original takes the single path argument).
+CMvlVehicle *
+CVehicleHandler::GetNewSlotForArchive(const char *archivePath)
+{
+	return GetNewSlotForArchive(archivePath, 0);
+}
+
+// ===========================================================================
+// FUN_1000cac0 @ RVA 0x0cac0 — (provisional) MenuAddVehicleEntry
+// Adds "<id>: <name>" to MVL's own Win32 menu: one submenu per 20 consecutive
+// slots titled "<first>-<last>", item ids = slot + 10000. Menu handles are
+// the original's .data DAT_100b0bc4 (main) / DAT_100b0bc8 (group array; the
+// original's array bound is unrecovered — 25 groups cover slots 0..499).
+// ===========================================================================
+static HMENU s_hMainVehicleMenu;                  // DAT_100b0bc4 @ RVA 0xb0bc4
+static HMENU s_ahVehicleMenuGroup[25];            // DAT_100b0bc8 @ RVA 0xb0bc8
+
+static void
+MenuAddVehicleEntry(unsigned slot, const char *label)
+{
+	int group, base, g;
+
+	if(slot >= 500)
+		return;                                    // original range guard
+	group = (int)slot / 0x14;
+	if(s_hMainVehicleMenu == 0)
+		s_hMainVehicleMenu = CreateMenu();
+	if(s_ahVehicleMenuGroup[group] == 0 && group >= 0){
+		base = 0;
+		for(g = 0; g <= group; g++){
+			if(s_ahVehicleMenuGroup[g] == 0){
+				char title[64];
+				int first = MvlModelIndexBaseOffset + base;   // DAT_100a6d48
+				s_ahVehicleMenuGroup[g] = CreateMenu();
+				sprintf_s(title, "%d-%d", first, first + 0x13);
+				AppendMenuA(s_hMainVehicleMenu, 0x10 /*MF_POPUP*/,
+				            (UINT_PTR)s_ahVehicleMenuGroup[g], title);
+			}
+			base += 0x14;
+		}
+	}
+	AppendMenuA(s_ahVehicleMenuGroup[group], 0 /*MF_STRING*/, slot + 10000, label);
+}
+
+// ===========================================================================
+// CVehicleHandler::LoadVehicleArchive — 0.98e @ RVA 0x4f5a0
+// ===========================================================================
+bool
+CVehicleHandler::LoadVehicleArchive(const char *archivePath)
+{
+	static const char *const fn = "CVehicleHandler::LoadVehicleArchive";
+	int slot = 0;
+	char label[268];   // decomp local_10c [268]
+
+	CMvlVehicle *veh = GetNewSlotForArchive(archivePath, &slot);   // FUN_1004f4d0 @ 0x4f4d0
+	if(veh == 0){
+		// '%s' operand dropped by Ghidra; reconstructed as the archive path.
+		SvErr(fn, "Could not find a slot for vehicle file '%s', all slots full.",
+		      archivePath ? archivePath : "");
+		return false;
+	}
+
+	int id = slot + MvlModelIndexBaseOffset;   // this[0xb48] + DAT_100a6d48
+	veh->LoadFromArchive(archivePath ? archivePath : "", id);   // FUN_10045110 @ 0x45110 (archive lane)
+
+	// ORIGINAL: cVar1 = FUN_10045110(...); if (cVar1 == '\0') { log "Could
+	// not load vehicle archive '%s'."; FUN_10044c90 dtor; FUN_100073c0 free;
+	// return }. The clone's CMvlVehicle::LoadFromArchive returns void with an
+	// internal catch (archive lane), so the AL status cannot be sensed yet.
+	// TODO(archive-lane): give 0x45110 a status return (the original's AL)
+	// and rewire the branch below; until then a load is assumed successful
+	// (the failure structure is ported, not faked).
+	bool loadOk = true;
+	if(!loadOk){
+		SvErr(fn, "Could not load vehicle archive '%s'.",
+		      archivePath ? archivePath : "");
+		delete veh;                       // FUN_10044c90 @ 0x44c90 dtor + FUN_100073c0 @ 0x73c0 free
+		s_vehRegistry[slot] = 0;          // FUN_1004f410 @ 0x4f410 unregister (body NOT in dump;
+		                                  // observable effect on this path = registry clear)
+		return false;
+	}
+
+	// decomp: _sprintf(buf, "%d: %ls", *this, this + 0x7b) — id + wide name
+	// (CMvlVehicle::m_wsName @ 0x1ec = +0x7b dwords), then the menu append.
+	sprintf_s(label, "%d: %ls", veh->m_nId, veh->m_wsName);
+	MenuAddVehicleEntry((unsigned)slot, label);   // FUN_1000cac0 @ 0x0cac0
+	s_nLoadedArchiveCount++;                      // DAT_100b51d4++
+	return true;
+}
+
+// ===========================================================================
+// gta-vc.exe @ 0x9785a8 — per-AI-class "custom cars specified" counters
+// (DAT_009785a8 @ gta-vc.exe 0x9785a8; read + incremented by the InitVehicles
+// tail). GAME address — accessed via an address constant (engine_globals.h
+// header rule); the clone reads the DLL-side AI table FIRST (short-circuit)
+// so harness runs never touch game memory until that table is live. Same
+// boolean result as the decomp's operand order (both reads are pure).
+// ===========================================================================
+static int *const MvlGameClassCustomCars = (int *)0x9785a8;   // [16], stride 4
+
+// ===========================================================================
+// CVehicleHandler::LoadVehicleArchives — 0.98e @ RVA 0x4f680
+// ===========================================================================
+void
+CVehicleHandler::LoadVehicleArchives(void)
+{
+	static const char *const fn = "CVehicleHandler::LoadVehicleArchives";
+	int pass;
+
+	for(pass = 0; pass < 2; pass++){
+		WIN32_FIND_DATAA fd;
+		HANDLE h = FindFirstFileA("mvl\\vehicles\\*.7z", &fd);
+		if(h != INVALID_HANDLE_VALUE){
+			do{
+				if(fd.dwFileAttributes & 0x10 /*FILE_ATTRIBUTE_DIRECTORY*/)
+					continue;   // skip directories (the decomp renders the
+				                // original's `continue` as an empty do-while)
+				long slotId = ParseSlotIdFromFilename(fd.cFileName);   // FUN_1004f440
+				// pass 0 loads explicit "x<id>_" archives first, pass 1 the rest
+				// (decomp: (lVar2 != -1) == (iVar4 == 0)).
+				if((slotId != -1) == (pass == 0)){
+					char path[0x104 + 4];
+					sprintf_s(path, "mvl\\vehicles\\%s", fd.cFileName);
+					if(!LoadVehicleArchive(path))
+						// verbatim (the original message ends with '\n')
+						SvErr(fn, "Could not load vehicle from '%s'.\n", path);
+				}
+			}while(FindNextFileA(h, &fd));
+			FindClose(h);
+		}
+	}
+
+	// "InitVehicles" tail (verbatim context string, NOT the function name).
+	// 11 AI classes (iVar5 0..0x426 stride 0x61 over DAT_100b51d8 records;
+	// class index i = 0..10).
+	for(int i = 0; i < 11; i++){
+		int rec = i * 0x61;                              // DAT_100b51d8 record base
+		int defId = MvlAiClassSlotTable[i];              // DAT_100b2804 (engine_globals)
+		// decomp order: game counter == 0 && DLL default != 0; the clone
+		// tests the DLL side first (see MvlGameClassCustomCars note above).
+		if(defId == 0 || MvlGameClassCustomCars[i] != 0) // DAT_009785a8 @ gta-vc.exe 0x9785a8
+			continue;
+		MvlAiClassSlotList[rec] = defId;                 // DAT_100b51d8[rec]
+		MvlGameClassCustomCars[i] += 1;
+		if((unsigned)(defId - 0x82) > 0x6d){             // decomp range check [0x82, 0xEF]
+			// ORIGINAL: ___report_rangecheckfailure() (CRT abort). The clone
+			// logs + skips the out-of-bounds table write instead of killing
+			// the process — RECONSTRUCTED deviation.
+			SvErr("InitVehicles", "Default car ID %d for class %d out of range [0x82..0xEF].",
+			      defId, i);
+			continue;
+		}
+		MvlKeyClassBypassTable[defId] = 0;               // DAT_100b641e (clear NOSPAWN bypass;
+		                                                 // engine_globals declares [0xED],
+		                                                 // the original writes up to +0xEF —
+		                                                 // declared size is provisional)
+		{
+			// '%s'/'%d' operands dropped by Ghidra: '%d' = defId (verbatim
+			// "using default car with ID %d"); '%s' RECONSTRUCTED as the
+			// class index string (no class-name table recovered).
+			char cls[16];
+			sprintf_s(cls, "%d", i);
+			SvWarn("InitVehicles",
+			       "Class '%s' has all default vehicles with NOSPAWN, yet no custom cars specified for this class - using default car with ID %d",
+			       cls, defId);
+		}
+	}
+}
+
+// ===========================================================================
+// FUN_1004f870 @ RVA 0x4f870 — (provisional) BuildSaVehicleTxdPath
+// "mvl/vehicles/sa_vehicle.txd"; when missing, derive the SA install's
+// models\generic\vehicle.txd from HKLM "…\\GTA San Andreas\\Installation"
+// ExePath (truncate after the last '\', skip a leading quote). Empty string
+// = no candidate (LoadSanAndreasVehiclesTxd no-ops).
+// ===========================================================================
+static void
+BuildSaVehicleTxdPath(char *path)
+{
+	HKEY hKey = 0;
+
+	strncpy_s(path, 0x104, "mvl/vehicles/sa_vehicle.txd", _TRUNCATE);
+	if(GetFileAttributesA(path) != INVALID_FILE_ATTRIBUTES)
+		return;
+
+	path[0] = '\0';
+	if(RegOpenKeyExA(HKEY_LOCAL_MACHINE,
+	                 "Software\\Rockstar Games\\GTA San Andreas\\Installation",
+	                 0, 0x20019 /*KEY_QUERY_VALUE|KEY_READ*/, &hKey) == 0){
+		char buf[0x104];
+		DWORD len = 0x103;
+		buf[0] = '\0';
+		if(RegQueryValueExA(hKey, "ExePath", 0, 0, (LPBYTE)buf, &len) == 0){
+			// decomp writes the NUL via param_1 (Ghidra mixup); the buffer
+			// being terminated is the RegQueryValueEx target.
+			if(len < 0x104)
+				buf[len] = '\0';
+			else
+				buf[0x103] = '\0';
+			{
+				char *slash = strrchr(buf, '\\');   // FUN_1005abd0 @ 0x5abd0
+				if(slash)
+					slash[1] = '\0';               // keep the trailing '\'
+			}
+			strncat_s(buf, 0x104, "models\\generic\\vehicle.txd", _TRUNCATE);
+			{
+				const char *src = (buf[0] == '\"') ? buf + 1 : buf;
+				strncpy_s(path, 0x104, src, _TRUNCATE);
+			}
+			GetFileAttributesA(path);   // existence probe (result unused, original)
+		}
+		RegCloseKey(hKey);
+	}
+}
+
+// ===========================================================================
+// CVehicleHandler::LoadSanAndreasVehiclesTxd — 0.98e @ RVA 0x4f9a0
+// ===========================================================================
+void
+CVehicleHandler::LoadSanAndreasVehiclesTxd(void)
+{
+	static const char *const fn = "CVehicleHandler::LoadSanAndreasVehiclesTxd";
+
+	if(s_bSaTxdAttempted)                     // DAT_101247d4 one-shot latch
+		return;
+	s_bSaTxdAttempted = 1;
+
+	char path[0x104];
+	BuildSaVehicleTxdPath(path);              // FUN_1004f870 @ 0x4f870
+	if(path[0] == '\0')
+		return;
+
+	HANDLE h = CreateFileA(path, 0x80000000 /*GENERIC_READ*/, 1 /*SHARE_READ*/,
+	                       0, 3 /*OPEN_EXISTING*/, 0, 0);
+	if(h == INVALID_HANDLE_VALUE){
+		GetLastError();   // decomp calls and discards
+		// '%s' operand dropped by Ghidra; reconstructed as the resolved path.
+		SvErr(fn, "Could not open texture file '%s'", path);
+		return;
+	}
+
+	DWORD sizeHi = 0;
+	DWORD size = GetFileSize(h, &sizeHi);
+	if(size < 0x400001 && sizeHi == 0){       // decomp: size <= 4MB and high dword == 0
+		void *buf = malloc(size);
+		DWORD read = 0;
+		if(ReadFile(h, buf, size, &read, 0)){
+			CloseHandle(h);                   // closed before the stream work (original)
+			if(!MvlRecognizeTextureData(buf, size)){   // FUN_1000d340 @ 0xd340
+				SvErr(fn, "Failed to recognize texture.");
+				free(buf);
+				return;
+			}
+			void *stream = MvlRwMemoryStreamOpen(buf, size);   // FUN_100320a0 @ 0x320a0
+			if(!stream){
+				SvErr(fn, "Could not open memory stream for texture file.");
+				free(buf);
+				return;
+			}
+			if(!MvlRwStreamFindChunkHeader(stream)){          // FUN_10032770 @ 0x32770
+				SvErr(fn, "Could not find texture dictionary chunk header from .txd file.");
+				MvlRwMemoryStreamClose(stream);               // FUN_10032090 @ 0x32090
+				free(buf);
+				return;
+			}
+			s_pSaTexDict = MvlRwReadTextureDictionary(stream);   // DAT_100b51d0 = FUN_10031290 @ 0x31290
+			MvlRwMemoryStreamClose(stream);
+			free(buf);
+			if(s_pSaTexDict == 0){
+				SvErr(fn, "Loading texture dictionary from .txd file failed.");
+				return;
+			}
+			MvlPrimaryLiveryColor    = MvlRwTexDictCurrentColor();   // DAT_100b6498 = FUN_10032740 @ 0x32740
+			MvlAlternateLiveryColor  = MvlRwTexDictCurrentColor();   // DAT_100b649c = FUN_10032740
+			SvMsg("Successfully loaded San Andreas vehicle texture dictionary.");
+			return;
+		}
+		free(buf);
+		SvErr(fn, "Could not read texture file.");
+	}
+	else{
+		SvErr(fn, "Too big texture file (over 4MB).");
+	}
+	CloseHandle(h);   // failure paths only (success closed early, original)
+}
+
+// ===========================================================================
+// CVehicleHandler::AnalyzeStartIndex — 0.98e @ RVA 0x4fc90
+// ===========================================================================
+
+// Model-slot occupancy probe: *(DAT_100a6314 + idx*4) — the model-lookup
+// registry head (engine_globals MvlModelLookupRegistry). A NULL registry
+// (harness / before RegisterModelForLookup wires it) = every slot reads as
+// unoccupied, which keeps AnalyzeStartIndex's arithmetic well-defined.
+static bool
+ModelSlotOccupied(int idx)
+{
+	return MvlModelLookupRegistry != 0 && MvlModelLookupRegistry[idx] != 0;
+}
+
+void
+CVehicleHandler::AnalyzeStartIndex(void)
+{
+	static const char *const fn = "CVehicleHandler::AnalyzeStartIndex";
+	int start = MvlModelIndexBaseOffset;   // DAT_100a6d48
+	int limit = MvlModelIdBoundary;        // DAT_100a6320 ("TXD base index" bound)
+	int i = start;
+	int leadingFree = 0;
+
+	// Contiguous free run from the current base (max 500 samples).
+	if(start < limit){
+		for(leadingFree = 0; i < limit && leadingFree <= 499; i++, leadingFree++){
+			if(ModelSlotOccupied(i))
+				break;
+		}
+	}
+	leadingFree = i - start;
+
+	// Biggest free gap in [0x82, limit] (limit treated as an occupied
+	// sentinel closing any open run — decomp bVar5).
+	int bestStart = -1, bestGap = 0;
+	if(leadingFree < 500 && limit > 0x81){
+		int runStart = -1;
+		for(int idx = 0x82; idx <= limit; idx++){
+			if(idx == limit || ModelSlotOccupied(idx)){
+				if(runStart >= 0 && bestGap < idx - runStart){
+					bestGap = idx - runStart;
+					bestStart = runStart;
+				}
+				runStart = -1;
+			}
+			else if(runStart == -1){
+				runStart = idx;
+			}
+		}
+	}
+
+	if(leadingFree < 100){
+		if(leadingFree < bestGap){
+			SvWarn(fn, "Current start ID gives only %d free slots, switching base to %d which gives %d slots.",
+			       leadingFree, bestStart, bestGap);
+			MvlModelIndexBaseOffset = bestStart;   // DAT_100a6d48
+			s_nAvailableSlots = bestGap;          // DAT_100a6d50
+			if(bestGap > 500)
+				s_nAvailableSlots = 500;
+		}
+		else{
+			SvWarn(fn, "Current start ID gives only %d free slots and there aren't any better ID ranges available.",
+			       leadingFree);
+			s_nAvailableSlots = leadingFree;
+		}
+	}
+	else if(leadingFree < 500){
+		// warn-only branch (the original adjusts NOTHING here — DAT_100a6d50
+		// keeps whatever the config lane seeded)
+		if(leadingFree < bestGap)
+			SvWarn(fn, "Current start ID gives only %d free slots, suggesting start index %d which gives %d.",
+			       leadingFree, bestStart, bestGap);
+		else
+			SvWarn(fn, "Current start ID gives only %d free slots and there aren't any better ID ranges available.",
+			       leadingFree);
+	}
+	s_nSlotLimit = s_nAvailableSlots + MvlModelIndexBaseOffset;   // DAT_101244cc
+}
+
+// ===========================================================================
+// MvlRwTexDictCurrentColor — hook-point stub (vehicle_handler.h decl).
+// FUN_10032740 @ 0x32740 -> game thunk gta-vc.exe 0x64e060; the engine lane
+// binds the real call (returns the next livery colour of the loaded dict).
+// ===========================================================================
+int MvlRwTexDictCurrentColor(void)
+{
+	MvlErrorLog("HOOK POINT 0x32740 MvlRwTexDictCurrentColor (game 0x64e060)");
+	return 0;
 }

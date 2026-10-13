@@ -102,3 +102,29 @@ Highlights:
 - **Build**: MSBuild Release|Win32 GREEN after fixes (engine_globals include, reinterpret_cast cap[3], class/struct mangling x2, _vsprintf_s -> vsprintf_s). Postbuild deploy skipped: H: drive not mounted this session (setx MVL_GAME_DIR verified earlier; not a code error).
 - **Metrics**: census refined — added 20-row "Census addenda (tranches 5-6)" table to .serena/memories/re-098e-map.md (22 tranche-5/6 function identities were missing from the census, making those ports invisible to the metric). Recompiled 81% = 144/177 census fns (was 125/155 at tranche-5); 926 RVA cites, 387 TODO, 120 HOOK POINT, 18,025 LOC.
 - **Next (tranche-7)**: export the 14 undiscovered hook-stub bodies 0x51940-0x51c90 (Ghidra force-create/disasm over 10051940-10051cb0) -> port into src/scm/.
+
+
+## 2026-10-12 (tranche-7) — missing-33 close: vehicle archive scan, tuning, SA COL, xmlgen, secwnd, DX
+
+Dispatched two parallel fixer lanes against the 33 census functions that had never been ported (both reused sessions, disjoint scopes):
+
+**fix-1 (vehicle + engine-side):**
+- CVehicleHandler archive-scanning cluster ported: RegistryVehicle 0x4f380, ParseSlotIdFromFilename 0x4f440, FindFirstFreeSlot 0x4f4a0, GetNewSlotForArchive 0x4f4d0, MenuAddVehicleEntry 0x00cac0 (full Win32 menu body), LoadVehicleArchive 0x4f5a0, LoadVehicleArchives 0x4f680 (2-pass mvl/vehicles scan + InitVehicles tail), BuildSaVehicleTxdPath 0x4f870, LoadSanAndreasVehiclesTxd 0x4f9a0 (sa_vehicle.txd fallback), AnalyzeStartIndex 0x4fc90 — new class statics: s_vehRegistry[500] DAT_100b2838, slot cursors, SA-txd state.
+- src/vehicle/tuning.{h,cpp} NEW: LoadTuningFile 0x39ec0 (2-pass tuning1-9.dff pipeline, SMvlTuningRecord 0x15C), BuildPartDummyName FUN_10038db0 (9 category tables + chassis_dummy fallback), FreeTuningParts 0x39df0, ClumpFrameAt4 0x31ca0, 5 RW seams.
+- src/archive/sa_col.{h,cpp} NEW: LoadSAColSection 0x388a0 — COL2/COL3 in-place branch + COLL deep-copy branch (sphere/box/mesh cursor walk, int16->float /128 vertex conversion).
+- vehicle_archive.cpp: 6 citation-normalization hunks (Catch@ -> RVA form, comments only).
+
+**fix-2 (extras/render, capstone-assisted):**
+- Method note: Ghidra had elided every fprintf stack arg in GenerateDefaultXML (~120 call sites) — lane recovered ALL arg bindings by direct capstone disassembly of the pristine DLL, cross-validated vs d3out/strings.txt + 106 shipped samplexmls + plugin-sdk plugin_vc layouts (tHandlingData 0xDC / tFlying 0x4C / tBike 0x40 / tBoat 0x3C).
+- src/extras/xmlgen.{h,cpp} NEW (46/935): GenerateDefaultXML 0x40df0 FULL port (Alt+4 xmlgen — id loop 0x82..0xEC, 12 XML sections, boat/bike/aero branches, specials switch) + 9 recovered callees (HeliGetType/WeaponType/RotorSettings bit-exact, extraflags table FUN_1003cfe0 with 27 literals, boat engine 0x3cc70, FUN_1006d1e0 proven identity by pcj600 maxlean 44.999996 -> 0.785398 rad); 6 game-table placeholders gated by count (fails honestly until wired).
+- src/extras/secwnd.{h,cpp} NEW: MvlSecWnd 0x12170 ("MVL camera view" 640x480 window class) + WNDPROC seam.
+- src/render/dx_handler.{h,cpp} NEW: CDxHandler::DX9TextureFix 0xd340 FULL port (libid version window, 0x1003ffff writes, name+"a" mask naming, 8 verbatim error strings) + FUN_10032f30.
+- mvl_weapon.cpp: 7 citation comment normalizations.
+
+**Build fixes (4 C2660/C2664 in tuning.cpp):** seam call sites given their pointer args (MvlRwClumpPostRead(clump) / MvlWeaponClumpRegister(clump) / foundClump), BuildPartDummyName out-param unsigned char* to match FUN_10038db0.
+
+**Build:** GREEN — vehmod.dll linked (postbuild deploy skipped: H: not mounted this session, not a code error).
+
+**Metrics:** census 177 / overlap 163 = 92% (was 81%). Of the 14 not counted: 11 are file/string data addresses leaked into the census (not functions), 1 is a catch-block of an already-ported function, 2 are genuinely unported tiny fns (0x24110 manim.initAnimType 105B, 0x290d0 event-handler map insert 520B) — both have decomp in limout/missing33 and are next in line. Effectively the MVL-specific census is fully covered except 2 small functions.
+
+**Open items carried forward:** vehicle_archive.cpp provisional names MvlRecognizeTextureData / MvlLookupModelInfoByModelIndex should consolidate onto recovered names; game handling-table bases 0x97CE44/0x97D544/0x97D998 vs plugin-sdk disagreement needs engine-lane confirmation; 14 hook-stub bodies 0x51940-0x51c90 still undiscovered (Ghidra force-create needed).

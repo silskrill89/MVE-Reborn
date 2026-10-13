@@ -64,7 +64,7 @@ MvlVehError(const char *fn, const char *fmt, ...)
 }
 
 // LoadFromArchive's stage failures throw a string exception caught by its own
-// catch filter (Catch@10045318 -> "CMvlVehicle::LoadFromArchive" "%s"). The
+// catch filter (Catch@10045318, RVA 0x45318 -> "CMvlVehicle::LoadFromArchive" "%s"). The
 // thrown literals are immediate args the decompiler dropped; stage names are
 // used (see port-notes-veh.md).
 struct SMvlLoadError
@@ -403,7 +403,7 @@ done:
 
 // ===========================================================================
 // CMvlVehicle::LoadTextureFile — vehmod_retail.dll 0.98e @ RVA 0x45900
-// catch filter @ 0x45a5a ("CMvlVehicle::LoadTextureFile" "%s"); shared
+// catch filter @ RVA 0x45a5a ("CMvlVehicle::LoadTextureFile" "%s"); shared
 // cleanup tail = FUN_10045a98 (close stream, free the .txd buffer).
 // ===========================================================================
 bool
@@ -443,7 +443,7 @@ CMvlVehicle::LoadTextureFile(void)
 
 // ===========================================================================
 // CMvlVehicle::LoadModelFile — vehmod_retail.dll 0.98e @ RVA 0x45af0
-// catch filter @ 0x45ccb ("CMvlVehicle::LoadModelFile" "%s"); cleanup tail =
+// catch filter @ RVA 0x45ccb ("CMvlVehicle::LoadModelFile" "%s"); cleanup tail =
 // FUN_10045d00 (stream close + free the .dff buffer).
 // ===========================================================================
 bool
@@ -506,7 +506,7 @@ CMvlVehicle::LoadModelFile(void)
 
 // ===========================================================================
 // CMvlVehicle::LoadCollisionFile — vehmod_retail.dll 0.98e @ RVA 0x45d60
-// catch filter @ 0x45ed7 ("CMvlVehicle::LoadCollisionFile" "%s"); cleanup =
+// catch filter @ RVA 0x45ed7 ("CMvlVehicle::LoadCollisionFile" "%s"); cleanup =
 // FUN_10045f0f (free the .col buffer).
 // ===========================================================================
 bool
@@ -583,7 +583,7 @@ CMvlVehicle::LoadAnimationFile(void)
 
 // ===========================================================================
 // CMvlVehicle::LoadWeaponFiles — vehmod_retail.dll 0.98e @ RVA 0x46010
-// catch filter @ 0x462fe ("CMvlVehicle::LoadWeaponFiles" "%s"; on exception
+// catch filter @ RVA 0x462fe ("CMvlVehicle::LoadWeaponFiles" "%s"; on exception
 // the weapons.txd dict is destroyed — FUN_10032710).
 // ===========================================================================
 bool
@@ -647,7 +647,7 @@ CMvlVehicle::LoadWeaponFiles(void)
 
 // ===========================================================================
 // CMvlVehicle::LoadFromArchive — vehmod_retail.dll 0.98e @ RVA 0x45110
-// (catch filter / logging at @ 0x45318: "CMvlVehicle::LoadFromArchive" "%s").
+// (catch filter / logging at RVA 0x45318: "CMvlVehicle::LoadFromArchive" "%s").
 // ===========================================================================
 void
 CMvlVehicle::LoadFromArchive(const char *archivePath, int id)

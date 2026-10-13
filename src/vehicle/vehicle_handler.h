@@ -119,6 +119,17 @@ void CWeaponHandlerClearSaveData(void);         // 0x98e @ RVA 0x56d40
 bool CWeaponHandlerLoadSaveXmlPlayerWeapons(TiXmlElement *sector); // 0x98e @ RVA 0x567a0
 
 // ---------------------------------------------------------------------------
+// Vehicle-archive scan cluster seams (missing33 dump 0x4f380-0x4fe80).
+// ---------------------------------------------------------------------------
+
+// FUN_10032740 @ 0x32740 — game thunk (gta-vc.exe 0x64e060) called twice by
+// LoadSanAndreasVehiclesTxd after the SA tex dict loads; results land in the
+// primary/alternate livery colours (DAT_100b6498/100b649c = engine_globals
+// MvlPrimaryLiveryColor/MvlAlternateLiveryColor). PROVISIONAL semantic (the
+// thunk returns a colour-ish value; exact RW call not recovered).
+int  MvlRwTexDictCurrentColor(void);
+
+// ---------------------------------------------------------------------------
 // CVehicleHandler — save-system cluster.
 // The original's save functions are STATIC members (no thiscall; Ghidra shows
 // __fastcall = register-passed static member funcs); the two slot maps are
@@ -239,4 +250,80 @@ public:
 	// <taxilight>: 'colour' ('r,g,b'), 'position' vector, optional
 	// 'alwayson'. Sets dest[2]=1 at entry; writes RGB @ +0x40, pos @ +0x28.
 	static bool LoadXMLTaxiEmLightData(TiXmlElement *e, void *dest);
+
+	// === Vehicle-archive scan cluster (missing33 dump 0x4f380-0x4fe80) ====
+	// mvl\vehicles\*.7z discovery + per-archive slot allocation + SA-vehicle
+	// txd fallback + idstart auto-adjust. Originals are register-passed
+	// static member funcs (Ghidra __fastcall); log identities verbatim.
+
+	// Capacity of the archive registry below (DAT_100b2838): the decomp's
+	// hard bounds are all "< 500" (AnalyzeStartIndex clamps the count to 500,
+	// MenuAddVehicleEntry ignores slots >= 500), so 500 entries cover every
+	// reachable index.
+	enum { kVehRegistryCapacity = 500 };
+
+	// Slot table (original .data DAT_100b2838 @ RVA 0xb2838, one CMvlVehicle*
+	// per relative slot; the scan cluster's registry). NOTE: the archive
+	// lane's MvlVehicleRegCount/MvlVehicleRegGet (vehicle_archive.cpp) are
+	// still hook-point stubs over the same original (FUN_1004f3f0/0x4f380) —
+	// the orchestrator should re-point them at RegistryVehicle below.
+	static CMvlVehicle *s_vehRegistry[kVehRegistryCapacity];  // DAT_100b2838 @ RVA 0xb2838
+	static int  s_nNextFreeCursor;        // DAT_100b2834 @ RVA 0xb2834 (FirstFree scan start)
+	static int  s_nAvailableSlots;        // DAT_100a6d50 @ RVA 0xa6d50 (slot count; 0 until the config lane / AnalyzeStartIndex seeds it)
+	static int  s_nSlotLimit;             // DAT_101244cc @ RVA 0x1244cc (= base + count; AnalyzeStartIndex tail)
+	static int  s_nLoadedArchiveCount;    // DAT_100b51d4 @ RVA 0xb51d4 (successful-archive counter)
+	static unsigned char s_bSaTxdAttempted; // DAT_101247d4 @ RVA 0x1247d4 (one-shot latch)
+	static void *s_pSaTexDict;            // DAT_100b51d0 @ RVA 0xb51d0 (loaded SA tex dict; MvlSaTexDictAvailable @ 0x44f20 reads this — archive lane to re-point)
+
+	// CVehicleHandler::RegistryVehicle — 0.98e @ RVA 0x4f380.
+	// Direct port of the dumped body: bounds-checked slot-table read
+	// ([-1, s_nAvailableSlots) -> table[slot], else NULL). Same original as
+	// the archive lane's MvlVehicleRegGet hook stub.
+	static CMvlVehicle *RegistryVehicle(int relSlot);
+
+	// CVehicleHandler::GetNewSlotForArchive — 0.98e @ RVA 0x4f4d0.
+	// Parses the "x<id>_" filename prefix (FUN_1004f440), validates the
+	// requested slot against [MvlModelIndexBaseOffset, s_nSlotLimit) and the
+	// registry, else takes the first free slot (FUN_1004f4a0); allocates the
+	// CMvlVehicle (FUN_100449e0 + FUN_10044a10) and stores it into the
+	// registry. Returns NULL when no slot is free ("Slot out of range /
+	// already in use, taking first free ID." warns verbatim). The internal
+	// overload also reports the assigned slot (the original stores it at
+	// CMvlVehicle+0x2d20 and LoadVehicleArchive reads it back as this[0xb48];
+	// the clone threads it via the out-param until that field is modelled).
+	static CMvlVehicle *GetNewSlotForArchive(const char *archivePath);
+	static CMvlVehicle *GetNewSlotForArchive(const char *archivePath, int *slotOut);
+
+	// CVehicleHandler::LoadVehicleArchive — 0.98e @ RVA 0x4f5a0.
+	// Slot allocation + CMvlVehicle::LoadFromArchive(path, slot+base) + menu
+	// entry ("%d: %ls" -> Win32 menu, FUN_1000cac0) + counter bump
+	// (DAT_100b51d4). Errors: "Could not find a slot for vehicle file '%s',
+	// all slots full." / "Could not load vehicle archive '%s'.".
+	// Ghidra types the body void, but LoadVehicleArchives checks its AL
+	// return (0 = failure) — ported as bool.
+	static bool LoadVehicleArchive(const char *archivePath);
+
+	// CVehicleHandler::LoadVehicleArchives — 0.98e @ RVA 0x4f680.
+	// Two FindFirstFileA("mvl\\vehicles\\*.7z") passes (pass 0: only files
+	// with an explicit "x<id>_" prefix, pass 1: the rest), then the
+	// "InitVehicles" tail: an AI class (0..10) whose default car
+	// (DAT_100b2804) is NOSPAWN-gated with no custom cars gets the default
+	// registered into its list (DAT_100b51d8), the gta-vc.exe counter bumped
+	// (DAT_009785a8) and the bypass byte cleared (DAT_100b641e).
+	static void LoadVehicleArchives(void);
+
+	// CVehicleHandler::LoadSanAndreasVehiclesTxd — 0.98e @ RVA 0x4f9a0.
+	// One-shot: loads mvl/vehicles/sa_vehicle.txd, falling back to the SA
+	// install's models\generic\vehicle.txd via the registry (ExePath),
+	// through the RW tex-dict pipeline; result cached in s_pSaTexDict, the
+	// two livery colours read via MvlRwTexDictCurrentColor.
+	static void LoadSanAndreasVehiclesTxd(void);
+
+	// CVehicleHandler::AnalyzeStartIndex — 0.98e @ RVA 0x4fc90.
+	// idstart auto-adjust: counts the contiguous free model slots from
+	// MvlModelIndexBaseOffset (max 500), scans for the biggest free gap in
+	// [0x82, MvlModelIdBoundary], and (when fewer than 100 slots are free)
+	// switches the base/count — warns verbatim — then publishes
+	// s_nSlotLimit = base + count (DAT_101244cc).
+	static void AnalyzeStartIndex(void);
 };

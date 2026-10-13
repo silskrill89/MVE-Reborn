@@ -64,7 +64,7 @@ WepErr(const char *fn, const char *fmt, ...)
 }
 
 // Stage-failure exception (same family as the vehicle pipeline's SMvlLoadError;
-// Catch@1005235a etc. log "CMvlWeapon::<fn>" + "%s").
+// Catch @ RVA 0x5235a etc. log "CMvlWeapon::<fn>" + "%s").
 struct SWepLoadError
 {
 	char msg[512];
@@ -147,7 +147,7 @@ CWeaponLogicHat::CWeaponLogicHat(void *weapon)
 }
 
 // ===========================================================================
-// CMvlWeapon::LoadFromArchive — 0.98e @ RVA 0x52150 (catch @ 0x5235a)
+// CMvlWeapon::LoadFromArchive — 0.98e @ RVA 0x52150 (catch @ RVA 0x5235a)
 // ===========================================================================
 bool
 CMvlWeapon::LoadFromArchive(const char *archivePath, int id)
@@ -186,7 +186,7 @@ CMvlWeapon::LoadFromArchive(const char *archivePath, int id)
 		       m_szArchivePath);
 		return true;
 	}catch(const SWepLoadError &e){
-		// Catch@1005235a → "CMvlWeapon::LoadFromArchive" "%s"
+		// Catch @ RVA 0x5235a → "CMvlWeapon::LoadFromArchive" "%s"
 		WepErr("CMvlWeapon::LoadFromArchive", "%s", e.msg);
 		return false;
 	}
@@ -318,7 +318,7 @@ CMvlWeapon::RegisterArchiveFile(const char *name, void *data, unsigned size)
 }
 
 // ===========================================================================
-// CMvlWeapon::LoadTextureFile — 0.98e @ RVA 0x52780 (catch @ 0x528d1)
+// CMvlWeapon::LoadTextureFile — 0.98e @ RVA 0x52780 (catch @ RVA 0x528d1)
 // ===========================================================================
 bool
 CMvlWeapon::LoadTextureFile(void)
@@ -349,7 +349,7 @@ CMvlWeapon::LoadTextureFile(void)
 }
 
 // ===========================================================================
-// CMvlWeapon::LoadModelFile — 0.98e @ RVA 0x52960 (catch @ 0x52b2b)
+// CMvlWeapon::LoadModelFile — 0.98e @ RVA 0x52960 (catch @ RVA 0x52b2b)
 // ===========================================================================
 bool
 CMvlWeapon::LoadModelFile(void)
@@ -395,7 +395,7 @@ CMvlWeapon::LoadModelFile(void)
 
 // ===========================================================================
 // FUN_10052be0 @ RVA 0x52be0 — MvlWeaponLoadImageTexture (icon/scope PNG).
-// Catch@10052d0e → "CMvlWeapon::LoadImageTexture".
+// Catch @ RVA 0x52d0e → "CMvlWeapon::LoadImageTexture".
 // ===========================================================================
 bool
 MvlWeaponLoadImageTexture(void **buf, unsigned size, void **outTex)
@@ -418,7 +418,7 @@ MvlWeaponLoadImageTexture(void **buf, unsigned size, void **outTex)
 			WepThrow("Could not get texture from RwImage.");
 		MvlRwMemoryStreamClose(stream);
 	}catch(const SWepLoadError &e){
-		// Catch@10052d0e destroys the image when the texture failed
+		// Catch @ RVA 0x52d0e destroys the image when the texture failed
 		// (FUN_100327c0 @ 0x327c0) — HOOK note for the engine lane.
 		WepErr("CMvlWeapon::LoadImageTexture", "%s", e.msg);
 		return false;

@@ -1,0 +1,7 @@
+11: (`named-strings.txt`; string addr 0x1007xxxx → referencing function RVA in last column).
+35: FUN_100225a0 = VirtualProtect wrapper (PUSH 0x401000 seen @ 0x100225af — patches VC code region)
+110: RtPNGImageStreamRead 0x1c690/0x1c9aa, CHelpers::PngFileToTexture 0x1bfb3.
+123: CDxHandler::DX9TextureFix 0xd340. CHelpers::XmlParseVector 0x1bdb0. mvl\pathcache.bin 0x18b80/0x18c60.
+124: mvl\errorlog.txt 0x1c180, mvl\messagelog.txt 0x1cad0, exdbg.txt 0x42a60/0x42b10, write.txt 0x2df00.
+125: MvlSecWnd / "MVL camera view" 0x12170 (window class — testmenus/trashbin UI). mvl\bullethole.png 0xf4b0,
+126: mvl\img\seledge.png + dot.png 0x10ed0.
