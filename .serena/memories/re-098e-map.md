@@ -8,7 +8,7 @@
 ## 1. HEADLINE FINDING — RTTI class names give us real symbols
 
 The DLL retains **RTTI/exception type-descriptor strings** naming 136 functions directly
-(`named-strings.txt`; string addr 0x1007xxxx → referencing function RVA in last column).
+(`named-strings.txt`; string addr 1007xxxx → referencing function RVA in last column).
 The original was built with RTTI and error messages embed `Class::Method` names.
 **This collapses the biggest RE risk** — no blind FUN_xxxx guessing for the core.
 
@@ -32,7 +32,7 @@ entry 0x10005c1d1 → ___DllMainCRTStartup (0x1005c1f4) → security_init_cookie
       ├→ FUN_10038160 = LoadGlobalVXMLFile (mvl\vehicles\globalv.xml)
       ├→ FUN_10033740 (xref via mkfuncs-xrefs)
       └→ hook installer FUN_10022560 (write hook at VC address) / FUN_10022590 (VirtualProtect variant)
-           FUN_100225a0 = VirtualProtect wrapper (PUSH 0x401000 seen @ 0x100225af — patches VC code region)
+           FUN_100225a0 = VirtualProtect wrapper (PUSH 401000h seen @ 100225afh — patches VC code region)
 ```
 Hook stub cluster: 19 functions created at 0x1003dff0–0x1003e320 + 0x10040d40/0x10043010/0x10043730–0x10043780
 (`mkfuncs-xrefs.txt` F-CREATE rows) — these are the MVL-side hook bodies referenced by installed patches.
@@ -107,7 +107,7 @@ getPedVehicle 0x26990; `manim.initAnimType` 0x24110. Script error files `%s.err.
 ### 7z / PNG / audio / anims
 CSevenWalker::LoadSeven 0x2bf00 (static LZMA SzArEx lineage per version-matrix).
 CPngFuncs::LoadPngFuncs 0x1c3f0 (mvl/libpng15.dll LoadLibrary + "%d functions are missing"),
-RtPNGImageStreamRead 0x1c690/0x1c9aa, CHelpers::PngFileToTexture 0x1bfb3.
+RtPNGImageStreamRead 0x1c690 (catch block ported in src/render/png_funcs.cpp), CHelpers::PngFileToTexture 0x1bfb3.
 CSoundHandler: FillInfoFromName 0x338a0 (filename-encoded freq/loop), FillSampleBufferFromData 0x33a00,
 LoadSoundFile 0x33e10. CCustomAnimFile::Load 0x1472/0x1595/0x16ed, LoadVersionOne 0x1ea4, LoadVersionTwo 0x25fb.
 
@@ -120,10 +120,10 @@ RegisterModelForLookup 0x179e0, VerifyModelHasColModel 0x17f60, VerifyDirectoryC
 LoadSAColSection 0x388a0, LoadTuningFile 0x39ec0, GenerateDefaultXML 0x40df0 (mvl\vlist\%s.xml).
 
 ### Misc
-CDxHandler::DX9TextureFix 0xd340. CHelpers::XmlParseVector 0x1bdb0. mvl\pathcache.bin 0x18b80/0x18c60.
-mvl\errorlog.txt 0x1c180, mvl\messagelog.txt 0x1cad0, exdbg.txt 0x42a60/0x42b10, write.txt 0x2df00.
-MvlSecWnd / "MVL camera view" 0x12170 (window class — testmenus/trashbin UI). mvl\bullethole.png 0xf4b0,
-mvl\img\seledge.png + dot.png 0x10ed0.
+CDxHandler::DX9TextureFix 0xd340. CHelpers::XmlParseVector 0x1bdb0. mvl\pathcache.bin 18b80/18c60.
+mvl\errorlog.txt 1c180, mvl\messagelog.txt 1cad0, exdbg.txt 42a60/42b10, write.txt 2df00.
+MvlSecWnd / "MVL camera view" 0x12170 (window class — testmenus/trashbin UI). mvl\bullethole.png f4b0,
+mvl\img\seledge.png + dot.png 10ed0.
 
 ## 4. Retail vs steam divergence
 Markers `mvl/dump640FE5h.txt` (retail) vs `mvl/dump63FF95h.txt` (steam) @ 0x1007bba4 — debug dump filenames

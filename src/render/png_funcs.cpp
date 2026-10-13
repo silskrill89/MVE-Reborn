@@ -206,7 +206,7 @@ CPngFuncs::FreeReadState(SMvlPngReadState *state)
 
 // ===========================================================================
 // CPngFuncs::RtPNGImageStreamRead — vehmod_retail.dll 0.98e @ RVA 0x1c690
-// catch filter @ 0x1c9aa ("CPngFuncs::RtPNGImageStreamRead" "%s").
+// catch filter 0.98e @ RVA 0x1c9aa ("CPngFuncs::RtPNGImageStreamRead" "%s").
 // ===========================================================================
 void *
 CPngFuncs::RtPNGImageStreamRead(void *stream)

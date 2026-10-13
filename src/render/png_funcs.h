@@ -135,7 +135,7 @@ public:
 	// row-pointer array then png_destroy_read_struct.
 	static void FreeReadState(SMvlPngReadState *state);
 
-	// CPngFuncs::RtPNGImageStreamRead — 0.98e @ RVA 0x1c690, catch @ 0x1c9aa.
+	// CPngFuncs::RtPNGImageStreamRead — 0.98e @ RVA 0x1c690, catch filter 0.98e @ RVA 0x1c9aa.
 	// Decodes PNG -> engine image (throws on failure in the original; the
 	// clone throws SMvlPngError and the catch logs verbatim).
 	static void *RtPNGImageStreamRead(void *stream);

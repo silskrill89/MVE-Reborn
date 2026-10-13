@@ -35,3 +35,6 @@ tools/secrets.local.ps1
 # Large binary caches of mod distributions
 *.7z
 *.zip
+
+# Built test/distribution packages
+dist/

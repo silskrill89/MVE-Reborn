@@ -1,4 +1,4 @@
-// python_host.h - MVL 0.98e Python 3.3 host (mvlbase/mveh/manim/... modules).
+// python_host.h - MVL 0.98e Python 3.3 host (mbase/mveh/manim/... modules).
 //
 // Ported from vehmod_retail.dll 0.98e (image base 0x10000000),
 // .harness-memory/limout/pyaudio/range-decomp.txt (range 0x25000-0x2a200).
@@ -213,30 +213,58 @@ int64_t __fastcall FUN_10025160(void *tuple);
 
 // ---------------------------------------------------------------------------
 // 5. Module method ports (original PyCFunction: (self, args) -> PyObject*).
-//    Named per recovered module.method (see port-notes-py.md).
+//    Names recovered 1:1 from the DLL's own PyMethodDef tables in .data
+//    (method-name ptr -> PyModuleDef.m_name/m_methods link -> module; full
+//    extraction table in .harness-memory/limout/pyfunc-names.md). NOTE: the
+//    PyArg_ParseTuple labels for the first three say "mvlbase.*" - STALE
+//    dev-era text; the real module is "mbase" (PyModuleDef.m_name @
+//    RVA 0xa65f4 + sample scripts do `import mbase` / `mbase.logPrint`).
+//    Verbatim parse-format literals in the .cpp stay untouched.
 // ---------------------------------------------------------------------------
 
-// mvlbase module (0.98e @ RVA 0x25280/0x254b0):
-void *FUN_10025280(void *self, void *args); // mvlbase.logPrint        "s"
-void *FUN_100254b0(void *self, void *args); // mvlbase.setHudMessage   "is"
-void *FUN_100252d0(void *self, void *args); // mvlbase (event handler bind, 236 B)
+// mbase module (0.98e @ RVA 0x25280/0x252d0/0x254b0):
+void *MvlPyMbaseLogPrint(void *self, void *args);              // FUN_10025280 @ RVA 0x25280 (mbase.logPrint)        "s"
+void *MvlPyMbaseSetHudMessage(void *self, void *args);         // FUN_100254b0 @ RVA 0x254b0 (mbase.setHudMessage)   "is"
+void *MvlPyMbaseRegisterCallback(void *self, void *args);      // FUN_100252d0 @ RVA 0x252d0 (mbase.registerCallback) (event-handler bind)
 
 // mveh module (0.98e @ RVA 0x27a70..0x28110):
-void *FUN_10027a70(void *self, void *args); // mveh.createVehicle      "i(fff)(fff)i"
-void *FUN_10028000(void *self, void *args); // mveh.getVehicleHealth   "O"
-void *FUN_10028080(void *self, void *args); // mveh.setVehicleHealth   "Of"
-void *FUN_10028110(void *self, void *args); // mveh.blowVehicleUp      "OO"
-void *FUN_10027b90(void *self, void *args); // mveh.getTuningPartCount "i"
-void *FUN_10027bf0(void *self, void *args); // mveh.getTuningPartName  "ii"
-void *FUN_10027c50(void *self, void *args); // mveh.getTuningPartVarCount "ii"
-void *FUN_10027cb0(void *self, void *args); // mveh.getVehUsedTuningPart  "Oi"
-void *FUN_10027d50(void *self, void *args); // mveh.setVehUsedTuningPart  "Oii"
-void *FUN_10027de0(void *self, void *args); // mveh.getVehModelAIType     "i"
-void *FUN_10027f60(void *self, void *args); // mveh.setCarTaxiLightState  "Oi"
+void *MvlPyMvehCreateVehicle(void *self, void *args);          // FUN_10027a70 @ RVA 0x27a70 (mveh.createVehicle)      "i(fff)(fff)i"
+void *MvlPyMvehGetVehicleHealth(void *self, void *args);       // FUN_10028000 @ RVA 0x28000 (mveh.getVehicleHealth)   "O"
+void *MvlPyMvehSetVehicleHealth(void *self, void *args);       // FUN_10028080 @ RVA 0x28080 (mveh.setVehicleHealth)   "Of"
+void *MvlPyMvehBlowVehicleUp(void *self, void *args);          // FUN_10028110 @ RVA 0x28110 (mveh.blowVehicleUp)      "OO"
+void *MvlPyMvehGetTuningPartCount(void *self, void *args);     // FUN_10027b90 @ RVA 0x27b90 (mveh.getTuningPartCount) "i"
+void *MvlPyMvehGetTuningPartName(void *self, void *args);      // FUN_10027bf0 @ RVA 0x27bf0 (mveh.getTuningPartName)  "ii"
+void *MvlPyMvehGetTuningPartVarCount(void *self, void *args);  // FUN_10027c50 @ RVA 0x27c50 (mveh.getTuningPartVarCount) "ii"
+void *MvlPyMvehGetVehUsedTuningPart(void *self, void *args);   // FUN_10027cb0 @ RVA 0x27cb0 (mveh.getVehUsedTuningPart)  "Oi"
+void *MvlPyMvehSetVehUsedTuningPart(void *self, void *args);   // FUN_10027d50 @ RVA 0x27d50 (mveh.setVehUsedTuningPart)  "Oii"
+void *MvlPyMvehGetVehModelAIType(void *self, void *args);      // FUN_10027de0 @ RVA 0x27de0 (mveh.getVehModelAIType)     "i"
+void *MvlPyMvehSetCarTaxiLightState(void *self, void *args);   // FUN_10027f60 @ RVA 0x27f60 (mveh.setCarTaxiLightState)  "Oi"
 
-// mped.getPedVehicle (recon listed it under mveh - the parse string is
-// "O:mped.getPedVehicle"; see port-notes correction):
-void *FUN_10026990(void *self, void *args); // mped.getPedVehicle      "O"
+// mped module (0.98e @ RVA 0x26990):
+void *MvlPyMpedGetPedVehicle(void *self, void *args);          // FUN_10026990 @ RVA 0x26990 (mped.getPedVehicle)      "O"
 
-// manim.initAnimType @ 0x24110 - BELOW the 0x25000 dump window; body not
-// recovered (see gaps).
+// ---------------------------------------------------------------------------
+// 6. Event-handler registry + manim tail (final three ports).
+// ---------------------------------------------------------------------------
+
+// 0.98e @ RVA 0x29660 (157 B) - event name -> handler-slot index (-1 when
+// unknown); original was the std::map find at DAT_1011c344 (flat-table
+// strcmp scan per the recorded structural decision).
+int32_t FUN_10029660(const char *name);
+
+// 0.98e @ RVA 0x290d0 (520 B) - event-handler insert: slot via FUN_10029660,
+// dedup by callable pointer, ob_refcnt incref, append (original std::map +
+// std::list machinery replaced by the flat MvlPyEventHandlers arrays -
+// structural decision in the .cpp file header).
+void FUN_100290d0(const char *name, void *callable);
+
+// 0.98e @ RVA 0x23db0 - animation-type identifier -> anim-association object
+// ("Argument is not an animation type identifier." / "Animation type does
+// not exist."); its callee FUN_10002f60 @ 0x2f60 is a below-window HOOK
+// POINT seam (body not recovered).
+int32_t __fastcall FUN_10023db0(void *obj);
+
+// 0.98e @ RVA 0x24110 - manim.initAnimType("Oiii") - writes the three
+// anim-type u16 fields (+0x2c / +0x0e / +0x2e) on the association object;
+// returns None via the empty Py_BuildValue format (@ RVA 0x7c575).
+void *MvlPyManimInitAnimType(void *self, void *args);           // FUN_10024110 @ RVA 0x24110 (manim.initAnimType)
