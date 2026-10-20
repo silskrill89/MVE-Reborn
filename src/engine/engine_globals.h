@@ -10,9 +10,9 @@
 // engine_globals.cpp (single TU); all other TUs include this header.
 //
 // Confidence + shared-by census: .harness-memory/limout/globals-map.md.
-// VC 1.0 GAME addresses (0x00xxxxxx) are NOT here - they are accessed via
-// VcFunc/address constants in the ported TUs (see game-side plugin-sdk names
-// in globals-map.md).
+// VC 1.0 GAME addresses (0x00xxxxxx) live in the per-variant MvlExeAddrs map
+// (section 9 below) - the ported TUs read them via MvlAddrs()->field, never
+// as direct constants (PLAN.md §10.2 step 1 / M8a).
 #pragma once
 
 #include <stdint.h>
@@ -352,3 +352,109 @@ extern uint32_t MvlWheelCacheGenerationStamp;
 // extern const float MvlPickupMinZ;           // DAT_1008dfc0 - pickup Z floor (unknown)
 // extern const float MvlPickupSpawnBump;      // DAT_1008de00 - pickup spawn bump (unknown)
 // extern const double MvlIntToDoubleFix;      // DAT_1008e010 - int->double neg-fix (2^32)
+
+// ===========================================================================
+// 9. Per-variant VC 1.0 exe address map (PLAN.md §10.2 step 1 / M8a).
+//    One MvlExeAddrs per gta-vc.exe variant (retail 1.0 / steam). Every game
+//    address the clone touches is read through MvlAddrs()->field - no direct
+//    kVC_* constants remain in the ported TUs. The retail instance
+//    (kExeAddrsRetail, engine_globals.cpp) holds the previous per-TU constexpr
+//    values verbatim; old kVC_* names survive as trailing comments per the
+//    AGENTS.md globals rule.
+// ===========================================================================
+
+struct MvlHookSite; // complete type in game_hooks.h (the map stores a pointer)
+
+struct MvlExeAddrs
+{
+	// --- .text unlock range (FUN_100225a0 VirtualProtect args) ---
+	uint32_t textUnlockBase;         // retail 0x401000
+	uint32_t textUnlockSize;         // retail 0x27CE00
+
+	// --- model-id / streaming sites (model_id.cpp; RVA = VA - 0x400000) ---
+	uint32_t modelPtrBaseImm;        // kVC_ModelPtrBaseImm      0.98e @ RVA 0x15F636
+	uint32_t streamingBaseImm;       // kVC_StreamingBaseImm     0.98e @ RVA 0x00AF00
+	uint32_t texStartImm;            // kVC_TexStartImm          0.98e @ RVA 0x00C417
+	uint32_t colStartImm;            // kVC_ColStartImm          0.98e @ RVA 0x00C507
+	uint32_t animStartImm;           // kVC_AnimStartImm         0.98e @ RVA 0x00C582
+	uint32_t streamingCapacity;      // kVC_StreamingCapacity    0.98e @ RVA 0x0102B2
+	uint32_t texStartRef1;           // kVC_TexStartRef1         0.98e @ RVA 0x00BD2D
+	uint32_t texStartRef2;           // kVC_TexStartRef2         0.98e @ RVA 0x010651
+	uint32_t texCountRef1;           // kVC_TexCountRef1         0.98e @ RVA 0x01065F
+	uint32_t texStartRef3;           // kVC_TexStartRef3         0.98e @ RVA 0x15FB1C
+	uint32_t texCountRef2;           // kVC_TexCountRef2         0.98e @ RVA 0x180FD6
+	uint32_t texCountRef3;           // kVC_TexCountRef3         0.98e @ RVA 0x18102D
+	uint32_t texPoolGlobal;          // kVC_TexPoolGlobal        0.98e @ RVA 0x5B6A4C (VC .data ptr)
+	uint32_t texPoolRebuild1;        // kVC_TexPoolRebuild1      0.98e @ RVA 0x181010 (VC fn)
+	uint32_t texPoolRebuild2;        // kVC_TexPoolRebuild2      0.98e @ RVA 0x180FF0 (VC fn)
+	uint32_t colStartRef1;           // kVC_ColStartRef1         0.98e @ RVA 0x22A01B
+	uint32_t colStartRef2;           // kVC_ColStartRef2         0.98e @ RVA 0x22A309
+	uint32_t colExtraRef1;           // kVC_ColExtraRef1         0.98e @ RVA 0x22AA50
+	uint32_t colExtraRef2;           // kVC_ColExtraRef2         0.98e @ RVA 0x22AA52
+	uint32_t colExtraRef3;           // kVC_ColExtraRef3         0.98e @ RVA 0x22AA53
+	uint32_t streamingSkipSite1;     // kVC_StreamingSkipSite1   0.98e @ RVA 0x00BB6B
+	uint32_t streamingSkipSite2;     // kVC_StreamingSkipSite2   0.98e @ RVA 0x00FDC6
+	uint32_t modelPtrSkipSite;       // kVC_ModelPtrSkipSite     0.98e @ RVA 0x178A77
+	uint32_t modelPtrSpecialSite;    // kVC_ModelPtrSpecialSite  0.98e @ RVA 0x05E866
+	uint32_t modelPtrSpecialValue;   // kVC_ModelPtrSpecialValue 0.98e @ RVA 0x05E865 (unaligned)
+	uint32_t wideModelIdSkipSite;    // kVC_WideModelIdSkipSite  0.98e @ RVA 0x1B8520
+
+	// --- hook-helper game globals (model_helpers.cpp) ---
+	uint32_t paintByteGlobal1;       // kVC_PaintByteGlobal1     0.98e @ RVA 0x610B26
+	uint32_t paintByteGlobal2;       // kVC_PaintByteGlobal2     0.98e @ RVA 0x610B82
+	uint32_t partFlagByte;           // kVC_PartFlagByte         0.98e @ RVA 0x171820
+	uint32_t liveryColorTable;       // kVC_LiveryColorTable     0.98e @ RVA 0x539228
+	uint32_t speedCheckObject;       // kVC_SpeedCheckObject     0.98e @ RVA 0x54AD28
+	uint32_t frameCounter;           // kVC_FrameCounter         0.98e @ RVA 0x574B2C
+	uint32_t classCounterBase;       // kVC_ClassCounterBase     0.98e @ RVA 0x5785A8 (int per slot)
+	uint32_t cacheByte1;             // kVC_CacheByte1           0.98e @ RVA 0x23C6F2 (.text byte)
+	uint32_t cacheByte2;             // kVC_CacheByte2           0.98e @ RVA 0x23C71D
+	uint32_t cacheByte3;             // kVC_CacheByte3           0.98e @ RVA 0x23CE27
+	uint32_t cacheRestoreByte;       // kVC_CacheRestoreByte     0.98e @ RVA 0x2DDE20 (.data byte)
+	uint32_t classSlotBase;          // kVC_ClassSlotBase        0.98e @ RVA 0x3DB888 (stride 0x1C)
+	uint32_t classObjTable;          // kVC_ClassObjTable        0.98e @ RVA 0x54B708
+
+	// --- hook machinery (game_hooks.cpp) ---
+	const MvlHookSite *stubHookSites; // retail table = kRetailHookSites (engine_globals.cpp)
+	uint32_t           stubHookSiteCount;
+	uint32_t frameWaitHookTarget;    // VC 0x60048c - conditional site (FUN_10043780)
+
+	// --- handler continuations / mid-handler callees (game_hooks.cpp) ---
+	uint32_t contTrampoline426748;   // VC 0x42674f (MvlHookTrampoline426748)
+	uint32_t contKeyClassBypass;     // VC 0x4267e5 (MvlHookKeyClassBypass)
+	uint32_t contTrampoline426ac6;   // VC 0x426acd (MvlHookTrampoline426ac6)
+	uint32_t contTrampoline426c80;   // VC 0x426c87 (MvlHookTrampoline426c80)
+	uint32_t contTrampoline427470;   // VC 0x427477 (MvlHookTrampoline427470)
+	uint32_t contTrampoline426a4c;   // VC 0x426a53 (MvlHookTrampoline426a4c)
+	uint32_t teardownPartsCallee;    // VC 0x4bb630 (MvlHookTeardownParts mid-call)
+	uint32_t contTeardownParts;      // VC 0x5bac09 (MvlHookTeardownParts)
+	uint32_t contRepaint;            // VC 0x579295 (MvlHookRepaint)
+	uint32_t partUpdateCallee69adc4; // VC 0x589790 (MvlHookPartUpdate69adc4)
+	uint32_t partUpdateCallee6d7b68; // VC 0x60ad50 (MvlHookPartUpdate6d7b68)
+	uint32_t partUpdateCallee69b0e8; // VC 0x5a4de0 (MvlHookPartUpdate69b0e8)
+	uint32_t wheelCacheCallee;       // VC 0x589ad0 (MvlHookWheelCache69adc0)
+	uint32_t partFlagCallee;         // VC 0x60ad90 (MvlHookPartFlag6d7b64)
+	uint32_t contFadePart;           // VC 0x5cf9f9 (MvlHookFadePart)
+	uint32_t contFadePartAlt;        // VC 0x5c4348 (MvlHookFadePartAlt)
+	uint32_t contGenerateVcName;     // VC 0x40896c (MvlHookGenerateVcName)
+	uint32_t attachFixupCallee;      // VC 0x593030 (MvlHookAttachFixup)
+	uint32_t contFrameWaitThrottled; // VC 0x6006b8 (MvlHookFrameWait)
+	uint32_t contFrameWaitNormal;    // VC 0x60049c (MvlHookFrameWait)
+};
+
+// Active map. Set ONCE by MvlInitExeAddrs() during plugin init, before any
+// hook install / game-memory write. Defaults to retail so even a pre-init
+// read stays retail-identical. MAY RETURN NULL after init: that means the
+// exe variant was unknown/unreadable and ALL engine patching must no-op
+// (every write path guards on this - fail-safe, never patch a wrong exe).
+const MvlExeAddrs *MvlAddrs(void);
+
+// Init-time map selection. Call exactly once from DllMain
+// (DLL_PROCESS_ATTACH), before PrepareMvlForLoad / the init-chain patches.
+void MvlInitExeAddrs(void);
+
+// Exe-variant probe (M8c). Reads the fingerprint dword @ fixed gta-vc.exe
+// VA 0x61A7F8, SEH-guarded (same probe as src/loader/chooser.cpp):
+//   0x9753C405 -> 0 (retail), 0xE8535004 -> 1 (steam),
+//   anything else / unmapped -> -1 (unknown; caller must fail-safe no-op).
+int MvlDetectExeVariant(void);

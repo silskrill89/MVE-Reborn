@@ -154,43 +154,45 @@ static int MvlGetExtraFlags(int modelId)
 // these stay unreferenced until that lane lands.
 // ---------------------------------------------------------------------------
 
-// Game CVehicleModelInfo view (reVC x86 layout; the decomp reads these exact
-// offsets — static_asserts below pin them). Pointed to by MvlModelInfoPtrs[id].
+// Game CVehicleModelInfo view (VC 1.0 x86 layout, plugin-sdk CVehicleModelInfo
+// mirror; the decomp reads these exact offsets — static_asserts below pin
+// them). Pointed to by MvlModelInfoPtrs[id].
 struct SMvlGameModelInfo
 {
-	unsigned char _base[0x30];      // CBaseModelInfo+CClumpModelInfo (not read here)
-	unsigned char m_lastColour1;    // +0x30 (reVC m_lastColour1)
-	unsigned char m_lastColour2;    // +0x31
-	char          m_gameName[10];   // +0x32 reVC m_gameName — filename + CText key
-	int           m_vehicleType;    // +0x3C eVehicleType: 0 car,1 boat,2 train,3 heli,4 plane,5 bike
-	float         m_wheelScale;     // +0x40 <wheelscale>
-	short         m_wheelId;        // +0x44 <wheelmodel> (type 0) / <lodmodel> (type 4; reVC union m_planeLodId)
-	short         m_handlingId;     // +0x46 indexes the handling/flying/bike/boat tables
-	char          m_numDoors;       // +0x48
-	char          m_vehicleClass;   // +0x49 (-1 => "ignore") -> <class>
-	char          m_level;          // +0x4A -> <level>
-	char          m_numComps;       // +0x4B
-	short         m_frequency;      // +0x4C -> <freq> (class != -1 path)
-	unsigned char _pad1[2];         // +0x4E
-	float         m_positions[5][3];// +0x50 reVC m_positions
-	unsigned      m_compRules;      // +0x8C <comprules>
-	float         m_bikeSteerAngle; // +0x90 <wheelrotangle> (type 5, cvttss2si)
-	void         *m_materials1[24]; // +0x94
-	void         *m_materials2[20]; // +0xF4
-	unsigned char m_colours1[8];    // +0x144 <carcol> primary  (per colour byte)
-	unsigned char m_colours2[8];    // +0x14C <carcol> secondary (edi+8 in the loop)
-	unsigned char m_numColours;     // +0x154
-	unsigned char m_lastColorVariation;
-	unsigned char m_currentColour1;
-	unsigned char m_currentColour2;
-	void         *m_comps[6];       // +0x158
-	int           m_animFileIndex;  // +0x170 -1 => "null", else anim-block name
+	unsigned char _base[0x30];           // CBaseModelInfo+CClumpModelInfo (not read here)
+	unsigned char m_nLastPrimaryColor;   // +0x30
+	unsigned char m_nLastSecondaryColor; // +0x31
+	char          m_szGameName[10];      // +0x32 plugin_vc m_szGameName — filename + CText key
+	int           m_nVehicleType;        // +0x3C eVehicleType: 0 car,1 boat,2 train,3 heli,4 plane,5 bike (eVehicleType order per plugin_vc)
+	float         m_fWheelSize;          // +0x40 <wheelscale>
+	short         m_nWheelModelIndex;    // +0x44 <wheelmodel> (type 0) / <lodmodel> (type 4; plugin_vc names this m_nWheelModelIndex — no plane-lod union)
+	short         m_nHandlingId;         // +0x46 indexes the handling/flying/bike/boat tables
+	char          m_nNumDoors;           // +0x48
+	char          m_nVehicleClass;       // +0x49 (-1 => "ignore") -> <class>
+	char          m_nLvl;                // +0x4A -> <level>
+	char          m_nNumExtras;          // +0x4B
+	short         m_nFrq;                // +0x4C -> <freq> (class != -1 path)
+	unsigned char _pad1[2];              // +0x4E
+	float         m_avDummyPos[5][3];    // +0x50 plugin_vc m_avDummyPos[5] (CVector)
+	unsigned      m_nCompRules;          // +0x8C <comprules>
+	float         m_fBikeSteerAngle;     // +0x90 <wheelrotangle> (type 5, cvttss2si)
+	void         *m_apMaterialsPrimary[24];   // +0x94
+	void         *m_apMaterialsSecondary[20]; // +0xF4
+	unsigned char m_anPrimaryColors[8];    // +0x144 <carcol> primary  (per colour byte)
+	unsigned char m_anSecondaryColors[8];  // +0x14C <carcol> secondary (edi+8 in the loop)
+	unsigned char m_nNumColorVariations;   // +0x154
+	unsigned char m_nLastColorVariation;
+	unsigned char m_nCurrentPrimaryColor;
+	unsigned char m_nCurrentSecondaryColor;
+	void         *m_apExtras[6];         // +0x158
+	int           m_animFileIndex;       // +0x170 -1 => "null", else anim-block name
+	                                     // +0x170: plugin_vc models this slot as char* m_pszAnimName; MVL reads it as int anim index — layout identical (4 bytes)
 };
-static_assert(0x32 == offsetof(SMvlGameModelInfo, m_gameName), "layout");
-static_assert(0x3C == offsetof(SMvlGameModelInfo, m_vehicleType), "layout");
-static_assert(0x46 == offsetof(SMvlGameModelInfo, m_handlingId), "layout");
-static_assert(0x8C == offsetof(SMvlGameModelInfo, m_compRules), "layout");
-static_assert(0x144 == offsetof(SMvlGameModelInfo, m_colours1), "layout");
+static_assert(0x32 == offsetof(SMvlGameModelInfo, m_szGameName), "layout");
+static_assert(0x3C == offsetof(SMvlGameModelInfo, m_nVehicleType), "layout");
+static_assert(0x46 == offsetof(SMvlGameModelInfo, m_nHandlingId), "layout");
+static_assert(0x8C == offsetof(SMvlGameModelInfo, m_nCompRules), "layout");
+static_assert(0x144 == offsetof(SMvlGameModelInfo, m_anPrimaryColors), "layout");
 static_assert(0x170 == offsetof(SMvlGameModelInfo, m_animFileIndex), "layout");
 
 // tHandlingData mirror — the original's per-handling record is 0xDC bytes and
@@ -328,12 +330,12 @@ static SMvlFlyingRecord   s_mvlGameFlying[512];      // gta-vc.exe @ VA 0x97CE44
 static SMvlBikeRecord     s_mvlGameBike[512];        // gta-vc.exe @ VA 0x97D544
 static SMvlBoatRecord     s_mvlGameBoat[512];        // gta-vc.exe @ VA 0x97D998
 static SMvlAudioStats     s_mvlGameAudio[0xED];      // gta-vc.exe @ VA 0x6AC368 (indexed by model id)
-static char               s_mvlGameAnimBlocks[128][32]; // CAnimManager::ms_aAnimBlocks @ gta-vc.exe 0x7DB428 (CAnimBlock.m_name[32] @ +0)
+static char               s_mvlGameAnimBlocks[128][32]; // CAnimManager::ms_aAnimBlocks @ gta-vc.exe 0x7DB428 (plugin_vc CAnimBlock: char name[20] @ +0, record size 0x20 — the [128][32] stride is the RECORD size, not the name length)
 
 // DLL .data pointer tables (contents recovered from the 0.98e binary — REAL
 // values, not placeholders).
 static const char *const MvlVehTypeNameTable[6] = {    // DAT_100aef34 @ RVA 0xaef34
-	"car", "boat", "train", "heli", "plane", "bike"   // (reVC eVehicleType order)
+	"car", "boat", "train", "heli", "plane", "bike"   // (eVehicleType order per plugin_vc)
 };
 static const char *const MvlAiClassTable[11] = {       // DAT_100aef54 @ RVA 0xaef54
 	"normal", "poorfamily", "richfamily", "executive", "worker", "big",
@@ -358,7 +360,7 @@ static const float kMvlRadToDegDen = 3.14159274f;      // @ RVA 0x8de7c (0x40490
 // MvlTextGet (0.98e @ RVA 0x2ebb0) — tail thunk `mov eax,0x584f30; jmp eax`
 // into gta-vc.exe: CText::Get(this=TheText @ 0x94B220, const char *key) ->
 // wchar_t* (plugin-sdk plugin_vc/game_vc/CText.cpp). Used for <name>%ls with
-// the model's game name (@ SMvlGameModelInfo::m_gameName).
+// the model's game name (@ SMvlGameModelInfo::m_szGameName).
 // HOOK POINT: game text lookup not wired in the clone — returns an empty wide
 // string after logging (never fakes a translated name).
 // ---------------------------------------------------------------------------
@@ -583,8 +585,8 @@ GenerateDefaultXML(void)
 		}
 
 		// Loop-top locals (asm @ 0x40e8e..0x40f0d):
-		int handlingId = mi->m_handlingId;                 // movzx ecx, word [esi+0x46]
-		int vehType    = mi->m_vehicleType;                // mov eax, [esi+0x3c]
+		int handlingId = mi->m_nHandlingId;                // movzx ecx, word [esi+0x46]
+		int vehType    = mi->m_nVehicleType;               // mov eax, [esi+0x3c]
 		int extraFlags = MvlGetExtraFlags(modelId);            // -> [ebp-0x60], <extraflags>
 		int heliType   = HeliGetType(modelId);             // -> [ebp-0x68]
 		int heliWeapon = HeliGetWeaponType(modelId);       // -> [ebp-0x7c]
@@ -602,7 +604,7 @@ GenerateDefaultXML(void)
 		const SMvlHandlingRecord *hrec = &s_mvlHandlingRecords[handlingId];
 
 		int maxPassengers = -1;                            // local_5c, init -1
-		const char *nameSrc = mi->m_gameName;              // +0x32 (asm @ 0x40f23)
+		const char *nameSrc = mi->m_szGameName;            // +0x32 (asm @ 0x40f23)
 		if(modelId == 0x89)
 			maxPassengers = 2;
 		else if(modelId == 0x9b)
@@ -634,9 +636,10 @@ GenerateDefaultXML(void)
 		fprintf(f, "\t<basic>\n");
 		fprintf(f, "\t\t<type>%s</type>\n", MvlVehTypeNameTable[vehType]);
 		// <name>%ls: TheText.Get(gameName) — HOOK POINT seam, see MvlTextGet.
-		fprintf(f, "\t\t<name>%ls</name>\n", MvlTextGet(mi->m_gameName));
+		fprintf(f, "\t\t<name>%ls</name>\n", MvlTextGet(mi->m_szGameName));
 		// anims: m_animFileIndex == -1 -> "null" (@ RVA 0x10082088), else
-		// CAnimManager::ms_aAnimBlocks[idx].m_name (gta-vc.exe 0x7DB428).
+		// CAnimManager::ms_aAnimBlocks[idx].name (gta-vc.exe 0x7DB428;
+		// plugin_vc CAnimBlock: char name[20], record size 0x20).
 		if(mi->m_animFileIndex == -1){
 			fprintf(f, "\t\t<anims>%s</anims>\n", kMvlAnimsNull);
 		}
@@ -647,23 +650,23 @@ GenerateDefaultXML(void)
 			XmlgenError(fn, "Model %d anim file index %d out of range.", modelId, mi->m_animFileIndex);
 			fprintf(f, "\t\t<anims>%s</anims>\n", "");
 		}
-		fprintf(f, "\t\t<comprules>%d</comprules>\n", (int)mi->m_compRules);   // [+0x8c]
+		fprintf(f, "\t\t<comprules>%d</comprules>\n", (int)mi->m_nCompRules);   // [+0x8c]
 		if(maxPassengers != -1)                                        // local_5c gate
 			fprintf(f, "\t\t<maxpassengers>%d</maxpassengers>\n", maxPassengers);
 		fprintf(f, "\t\t<extraflags>%04X</extraflags>\n", extraFlags);
 		if(vehType == 0){
 			// wheelmodel (int16 +0x44, movsx) + wheelscale (float +0x40)
-			fprintf(f, "\t\t<wheelmodel>%d</wheelmodel>\n", (int)mi->m_wheelId);
-			fprintf(f, "\t\t<wheelscale>%f</wheelscale>\n", (double)mi->m_wheelScale);
+			fprintf(f, "\t\t<wheelmodel>%d</wheelmodel>\n", (int)mi->m_nWheelModelIndex);
+			fprintf(f, "\t\t<wheelscale>%f</wheelscale>\n", (double)mi->m_fWheelSize);
 		}
 		else if(vehType == 5){
-			// wheelrotangle = (int)m_bikeSteerAngle (cvttss2si float +0x90)
-			fprintf(f, "\t\t<wheelrotangle>%d</wheelrotangle>\n", (int)mi->m_bikeSteerAngle);
-			fprintf(f, "\t\t<wheelscale>%f</wheelscale>\n", (double)mi->m_wheelScale);
+			// wheelrotangle = (int)m_fBikeSteerAngle (cvttss2si float +0x90)
+			fprintf(f, "\t\t<wheelrotangle>%d</wheelrotangle>\n", (int)mi->m_fBikeSteerAngle);
+			fprintf(f, "\t\t<wheelscale>%f</wheelscale>\n", (double)mi->m_fWheelSize);
 		}
 		else if(vehType == 4){
-			// lodmodel = m_planeLodId (same int16 +0x44), NO wheelscale
-			fprintf(f, "\t\t<lodmodel>%d</lodmodel>\n", (int)mi->m_wheelId);
+			// lodmodel = same m_nWheelModelIndex slot (int16 +0x44), NO wheelscale
+			fprintf(f, "\t\t<lodmodel>%d</lodmodel>\n", (int)mi->m_nWheelModelIndex);
 		}
 		// immunity = (modelId == 0xa2) ? 5 : 0  (cmove, asm @ 0x4112f)
 		fprintf(f, "\t\t<immunity>%d</immunity>\n", modelId == 0xa2 ? 5 : 0);
@@ -672,7 +675,7 @@ GenerateDefaultXML(void)
 		fprintf(f, "\t<aidata>\n");
 		// class byte +0x49: -1 -> "ignore" (@ RVA 0x100821cc), else table[]
 		{
-			int cls = (signed char)mi->m_vehicleClass;
+			int cls = (signed char)mi->m_nVehicleClass;
 			if(cls == -1){
 				fprintf(f, "\t\t<class>%s</class>\n", "ignore");
 			}
@@ -684,24 +687,24 @@ GenerateDefaultXML(void)
 				fprintf(f, "\t\t<class>%s</class>\n", "ignore");   // clone guard (see port-notes)
 			}
 			// freq: class==-1 -> 10, else int16 +0x4C (movsx)
-			fprintf(f, "\t\t<freq>%d</freq>\n", cls == -1 ? 10 : (int)mi->m_frequency);
+			fprintf(f, "\t\t<freq>%d</freq>\n", cls == -1 ? 10 : (int)mi->m_nFrq);
 		}
-		fprintf(f, "\t\t<level>%d</level>\n", (int)mi->m_level);  // movsx byte +0x4A
+		fprintf(f, "\t\t<level>%d</level>\n", (int)mi->m_nLvl);  // movsx byte +0x4A
 		fprintf(f, "\t</aidata>\n\n");
 
 		fprintf(f, "\t<colors>\n");
 		{
-			unsigned numCol = mi->m_numColours;             // byte +0x154 (jbe guard)
+			unsigned numCol = mi->m_nNumColorVariations;    // byte +0x154 (jbe guard)
 			if(numCol > 8){
 				XmlgenError(fn, "Model %d has %u car colours (max 8).", modelId, numCol);
 				numCol = 8;
 			}
 			for(unsigned k = 0; k < numCol; k++){
-				unsigned prim = mi->m_colours1[k];          // edi+0  (+0x144)
-				unsigned sec  = mi->m_colours2[k];          // edi+8  (+0x14C)
+				unsigned prim = mi->m_anPrimaryColors[k];   // edi+0  (+0x144)
+				unsigned sec  = mi->m_anSecondaryColors[k]; // edi+8  (+0x14C)
 				if(MvlRgbColoursEnabled){
-					// RGB via game palette (gta-vc.exe 0x939228 == reVC
-					// CVehicleModelInfo::ms_colourTextureTable; clone =
+					// RGB via game palette (gta-vc.exe 0x939228 ==
+					// CVehicleModelInfo::ms_colourTextureTable (plugin_vc); clone =
 					// MvlGameColourTable, vehicle_archive.cpp, zero-filled).
 					const unsigned char *pal = (const unsigned char *)MvlGameColourTable;
 					fprintf(f, "\t\t<rgbcol>%d,%d,%d,%d,%d,%d</rgbcol>\n",

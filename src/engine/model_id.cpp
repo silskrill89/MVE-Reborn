@@ -49,36 +49,12 @@ ReportProblem(const char *context, const char *format, ...)
 // ---------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------
-// VC 1.0 exe addresses referenced by the ported functions (RVA = VA - 0x400000).
+// VC 1.0 exe addresses referenced by the ported functions (RVA = VA - 0x400000)
+// moved to the per-variant address map in M8a (PLAN.md §10.2 step 1): the
+// former kVC_* constexpr table now lives as MvlExeAddrs fields in
+// engine_globals.{h,cpp} (kExeAddrsRetail, values verbatim; old kVC_* names
+// kept as trailing comments there). All reads below go through MvlAddrs().
 // ---------------------------------------------------------------------------
-constexpr uint32_t kVC_ModelPtrBaseImm      = 0x0055F636u; // 0.98e @ RVA 0x15F636
-constexpr uint32_t kVC_StreamingBaseImm     = 0x0040AF00u; // 0.98e @ RVA 0x00AF00
-constexpr uint32_t kVC_TexStartImm          = 0x0040C417u; // 0.98e @ RVA 0x00C417
-constexpr uint32_t kVC_ColStartImm          = 0x0040C507u; // 0.98e @ RVA 0x00C507
-constexpr uint32_t kVC_AnimStartImm         = 0x0040C582u; // 0.98e @ RVA 0x00C582
-
-constexpr uint32_t kVC_StreamingCapacity    = 0x004102B2u; // 0.98e @ RVA 0x0102B2
-constexpr uint32_t kVC_TexStartRef1         = 0x0040BD2Du; // 0.98e @ RVA 0x00BD2D
-constexpr uint32_t kVC_TexStartRef2         = 0x00410651u; // 0.98e @ RVA 0x010651
-constexpr uint32_t kVC_TexCountRef1         = 0x0041065Fu; // 0.98e @ RVA 0x01065F
-constexpr uint32_t kVC_TexStartRef3         = 0x0055FB1Cu; // 0.98e @ RVA 0x15FB1C
-constexpr uint32_t kVC_TexCountRef2         = 0x00580FD6u; // 0.98e @ RVA 0x180FD6
-constexpr uint32_t kVC_TexCountRef3         = 0x0058102Du; // 0.98e @ RVA 0x18102D
-constexpr uint32_t kVC_TexPoolGlobal        = 0x009B6A4Cu; // 0.98e @ RVA 0x5B6A4C (VC .data ptr)
-constexpr uint32_t kVC_TexPoolRebuild1      = 0x00581010u; // 0.98e @ RVA 0x181010 (VC fn)
-constexpr uint32_t kVC_TexPoolRebuild2      = 0x00580FF0u; // 0.98e @ RVA 0x180FF0 (VC fn)
-constexpr uint32_t kVC_ColStartRef1         = 0x0062A01Bu; // 0.98e @ RVA 0x22A01B
-constexpr uint32_t kVC_ColStartRef2         = 0x0062A309u; // 0.98e @ RVA 0x22A309
-constexpr uint32_t kVC_ColExtraRef1         = 0x0062AA50u; // 0.98e @ RVA 0x22AA50
-constexpr uint32_t kVC_ColExtraRef2         = 0x0062AA52u; // 0.98e @ RVA 0x22AA52
-constexpr uint32_t kVC_ColExtraRef3         = 0x0062AA53u; // 0.98e @ RVA 0x22AA53
-
-constexpr uint32_t kVC_StreamingSkipSite1   = 0x0040BB6Bu; // 0.98e @ RVA 0x00BB6B
-constexpr uint32_t kVC_StreamingSkipSite2   = 0x0040FDC6u; // 0.98e @ RVA 0x00FDC6
-constexpr uint32_t kVC_ModelPtrSkipSite     = 0x00578A77u; // 0.98e @ RVA 0x178A77
-constexpr uint32_t kVC_ModelPtrSpecialSite  = 0x0045E866u; // 0.98e @ RVA 0x05E866
-constexpr uint32_t kVC_ModelPtrSpecialValue = 0x0045E865u; // 0.98e @ RVA 0x05E865 (unaligned)
-constexpr uint32_t kVC_WideModelIdSkipSite  = 0x005B8520u; // 0.98e @ RVA 0x1B8520
 
 constexpr uint32_t kStreamingBufferSize     = 0x26D2Cu;    // old streaming buffer span (bytes)
 constexpr uint32_t kModelPointerBufferRange = 26000u;      // 0.98e: literal 26000
@@ -470,7 +446,7 @@ CLongModelId::ExtendModelIdMovsx(void)
 	// 0F BF (MOVSX r32,r/m16) -> 90 8B (NOP; MOV r32,r/m32), same length.
 	for (size_t i = 0; i < sizeof(kModelIdMovsxSites) / sizeof(kModelIdMovsxSites[0]); ++i) {
 		const uint32_t siteAddress = kModelIdMovsxSites[i];
-		if (siteAddress == kVC_WideModelIdSkipSite)
+		if (siteAddress == MvlAddrs()->wideModelIdSkipSite)
 			continue; // 0x5B8520 is excluded by the original (VC jumptable data?)
 		uint16_t op;
 		memcpy(&op, reinterpret_cast<const void*>(static_cast<uintptr_t>(siteAddress)), sizeof(op));
@@ -641,7 +617,7 @@ CModelIndexLimit::ReplaceStreamingBufferRefs(int maxModelId)
 		// Original: skip only when long-model-ids are on AND the site is one of
 		// the two sites handled specially elsewhere.
 		if (MvlLongModelIdsEnabled != 0 &&
-		    (siteAddress == kVC_StreamingSkipSite1 || siteAddress == kVC_StreamingSkipSite2))
+		    (siteAddress == MvlAddrs()->streamingSkipSite1 || siteAddress == MvlAddrs()->streamingSkipSite2))
 			continue;
 
 		uint32_t *site = reinterpret_cast<uint32_t*>(static_cast<uintptr_t>(siteAddress));
@@ -651,8 +627,8 @@ CModelIndexLimit::ReplaceStreamingBufferRefs(int maxModelId)
 		if (stored < oldBaseValue || stored >= oldBaseValue + kStreamingBufferSize) {
 			// Outside the old buffer. The only legal sites that are out of range
 			// are the four rewritten directly by ReplaceTex/ColStartIndexRefs.
-			if (siteAddress != kVC_TexStartRef1 && siteAddress != kVC_TexStartRef2 &&
-			    siteAddress != kVC_ColStartRef2 && siteAddress != kVC_ColStartRef1) {
+			if (siteAddress != MvlAddrs()->texStartRef1 && siteAddress != MvlAddrs()->texStartRef2 &&
+			    siteAddress != MvlAddrs()->colStartRef2 && siteAddress != MvlAddrs()->colStartRef1) {
 				ReportProblem("CModelIndexLimit::ReplaceStreamingBufferRefs",
 				              "Problem at %08X.", siteAddress);
 				// Original reloads puVar4/puVar6 here; MvlStreamingBuffer and
@@ -665,7 +641,7 @@ CModelIndexLimit::ReplaceStreamingBufferRefs(int maxModelId)
 	}
 
 	MvlStreamingBufferBase = newBase;
-	MvlWriteDword(reinterpret_cast<void*>(static_cast<uintptr_t>(kVC_StreamingCapacity)),
+	MvlWriteDword(reinterpret_cast<void*>(static_cast<uintptr_t>(MvlAddrs()->streamingCapacity)),
 	              static_cast<uint32_t>(maxModelId));
 }
 
@@ -692,7 +668,7 @@ CModelIndexLimit::ReplaceModelPointerBufferRefs(int maxModelId)
 
 	for (size_t i = 0; i < sizeof(kModelPointerSites) / sizeof(kModelPointerSites[0]); ++i) {
 		const uint32_t siteAddress = kModelPointerSites[i];
-		if (siteAddress == kVC_ModelPtrSkipSite)
+		if (siteAddress == MvlAddrs()->modelPtrSkipSite)
 			continue; // original skips 0x578A77
 
 		uint32_t *site = reinterpret_cast<uint32_t*>(static_cast<uintptr_t>(siteAddress));
@@ -700,15 +676,15 @@ CModelIndexLimit::ReplaceModelPointerBufferRefs(int maxModelId)
 
 		if (stored < oldBaseValue || stored >= oldBaseValue + kModelPointerBufferRange) {
 			bool handled = false;
-			if (siteAddress == kVC_ModelPtrSpecialSite) {
+			if (siteAddress == MvlAddrs()->modelPtrSpecialSite) {
 				// Unaligned special case: the stored pointer sits at 0x45E865.
 				uint32_t special;
 				memcpy(&special,
-				       reinterpret_cast<const void*>(static_cast<uintptr_t>(kVC_ModelPtrSpecialValue)),
+				       reinterpret_cast<const void*>(static_cast<uintptr_t>(MvlAddrs()->modelPtrSpecialValue)),
 				       sizeof(special));
 				if (oldBaseValue <= special && special < oldBaseValue + kModelPointerBufferRange) {
 					special = (special - oldBaseValue) + newBaseValue;
-					memcpy(reinterpret_cast<void*>(static_cast<uintptr_t>(kVC_ModelPtrSpecialValue)),
+					memcpy(reinterpret_cast<void*>(static_cast<uintptr_t>(MvlAddrs()->modelPtrSpecialValue)),
 					       &special, sizeof(special));
 					handled = true;
 				}
@@ -742,19 +718,19 @@ CModelIndexLimit::ReplaceTexStartIndexRefs(int texStart, uint32_t texCount)
 
 	const uint32_t newStart = static_cast<uint32_t>(reinterpret_cast<uintptr_t>(MvlStreamingBufferBase)) +
 	                          8u + static_cast<uint32_t>(texStart) * 0x14u;
-	MvlWriteDword(reinterpret_cast<void*>(static_cast<uintptr_t>(kVC_TexStartRef1)), newStart);
-	MvlWriteDword(reinterpret_cast<void*>(static_cast<uintptr_t>(kVC_TexStartRef2)), newStart);
-	MvlWriteDword(reinterpret_cast<void*>(static_cast<uintptr_t>(kVC_TexCountRef1)), texCount);
-	MvlWriteDword(reinterpret_cast<void*>(static_cast<uintptr_t>(kVC_TexStartRef3)),
+	MvlWriteDword(reinterpret_cast<void*>(static_cast<uintptr_t>(MvlAddrs()->texStartRef1)), newStart);
+	MvlWriteDword(reinterpret_cast<void*>(static_cast<uintptr_t>(MvlAddrs()->texStartRef2)), newStart);
+	MvlWriteDword(reinterpret_cast<void*>(static_cast<uintptr_t>(MvlAddrs()->texCountRef1)), texCount);
+	MvlWriteDword(reinterpret_cast<void*>(static_cast<uintptr_t>(MvlAddrs()->texStartRef3)),
 	              static_cast<uint32_t>(texStart));
-	MvlWriteDword(reinterpret_cast<void*>(static_cast<uintptr_t>(kVC_TexCountRef2)), texCount);
-	MvlWriteDword(reinterpret_cast<void*>(static_cast<uintptr_t>(kVC_TexCountRef3)), texCount);
+	MvlWriteDword(reinterpret_cast<void*>(static_cast<uintptr_t>(MvlAddrs()->texCountRef2)), texCount);
+	MvlWriteDword(reinterpret_cast<void*>(static_cast<uintptr_t>(MvlAddrs()->texCountRef3)), texCount);
 
-	uint32_t *&vcTexPool = *reinterpret_cast<uint32_t**>(static_cast<uintptr_t>(kVC_TexPoolGlobal));
+	uint32_t *&vcTexPool = *reinterpret_cast<uint32_t**>(static_cast<uintptr_t>(MvlAddrs()->texPoolGlobal));
 	if (vcTexPool != NULL) {
 		uint32_t *oldPool = vcTexPool;
 		vcTexPool = NULL;
-		VcFunc<void (__cdecl *)(void)>(kVC_TexPoolRebuild1)();
+		VcFunc<void (__cdecl *)(void)>(MvlAddrs()->texPoolRebuild1)();
 		uint32_t *newPool = vcTexPool; // set by the VC rebuild call
 
 		// BUGFIX(stable-1.0): the original trusted the VC rebuild (0x581010) to
@@ -790,7 +766,7 @@ CModelIndexLimit::ReplaceTexStartIndexRefs(int texStart, uint32_t texCount)
 		newPool[3] = static_cast<uint32_t>(mergedTexCount);
 
 		vcTexPool = oldPool;
-		VcFunc<void (__cdecl *)(void)>(kVC_TexPoolRebuild2)();
+		VcFunc<void (__cdecl *)(void)>(MvlAddrs()->texPoolRebuild2)();
 		MvlSavedTexturePool = newPool;
 		vcTexPool = newPool;
 	}
@@ -815,12 +791,12 @@ CModelIndexLimit::ReplaceColStartIndexRefs(int colStart, uint32_t colCount)
 
 	const uint32_t base = static_cast<uint32_t>(reinterpret_cast<uintptr_t>(MvlStreamingBufferBase)) +
 	                      static_cast<uint32_t>(colStart) * 0x14u;
-	MvlWriteDword(reinterpret_cast<void*>(static_cast<uintptr_t>(kVC_ColStartRef1)), base + 9u);
-	MvlWriteDword(reinterpret_cast<void*>(static_cast<uintptr_t>(kVC_ColStartRef2)), base + 8u);
-	MvlWriteDword(reinterpret_cast<void*>(static_cast<uintptr_t>(kVC_ColExtraRef1)), 0x6Au);
+	MvlWriteDword(reinterpret_cast<void*>(static_cast<uintptr_t>(MvlAddrs()->colStartRef1)), base + 9u);
+	MvlWriteDword(reinterpret_cast<void*>(static_cast<uintptr_t>(MvlAddrs()->colStartRef2)), base + 8u);
+	MvlWriteDword(reinterpret_cast<void*>(static_cast<uintptr_t>(MvlAddrs()->colExtraRef1)), 0x6Au);
 	MvlTxdIdBoundary = colStart;
-	MvlWriteDword(reinterpret_cast<void*>(static_cast<uintptr_t>(kVC_ColExtraRef2)), 0x68u);
-	MvlWriteDword(reinterpret_cast<void*>(static_cast<uintptr_t>(kVC_ColExtraRef3)), colCount);
+	MvlWriteDword(reinterpret_cast<void*>(static_cast<uintptr_t>(MvlAddrs()->colExtraRef2)), 0x68u);
+	MvlWriteDword(reinterpret_cast<void*>(static_cast<uintptr_t>(MvlAddrs()->colExtraRef3)), colCount);
 }
 
 void
@@ -964,10 +940,10 @@ CModelIndexLimit::CaptureVcLimits(void)
 	};
 
 	MvlModelLookupRegistry = reinterpret_cast<uint32_t*>(
-	    static_cast<uintptr_t>(readVc(kVC_ModelPtrBaseImm)));
+	    static_cast<uintptr_t>(readVc(MvlAddrs()->modelPtrBaseImm)));
 	MvlStreamingBufferBase = reinterpret_cast<uint8_t*>(
-	    static_cast<uintptr_t>(readVc(kVC_StreamingBaseImm)));
-	MvlModelIdBoundary = static_cast<int>(readVc(kVC_TexStartImm));
-	MvlTxdIdBoundary = static_cast<int>(readVc(kVC_ColStartImm));
-	MvlColIdBoundary = static_cast<int>(readVc(kVC_AnimStartImm));
+	    static_cast<uintptr_t>(readVc(MvlAddrs()->streamingBaseImm)));
+	MvlModelIdBoundary = static_cast<int>(readVc(MvlAddrs()->texStartImm));
+	MvlTxdIdBoundary = static_cast<int>(readVc(MvlAddrs()->colStartImm));
+	MvlColIdBoundary = static_cast<int>(readVc(MvlAddrs()->animStartImm));
 }

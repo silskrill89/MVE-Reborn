@@ -40,3 +40,12 @@ Reverse-engineering rebuild of **Maxo's Vehicle Loader (MVL)** — a GTA Vice Ci
 - Cite binary + version for every RE claim (e.g., "vehmod_retail.dll 0.98e @ RVA 0x1234").
 - Log patch sites per version into `.serena/memories/re-*.md`.
 - Never modify anything under `original_files/`.
+
+## Status Update 2026-10-13 (stable-1.0 prep, commit 4bb2ea7)
+- Branch 'continued' active (user directive); master = 0b58d62 (tranche-7b, 100% census).
+- 42 bug-audit fixes (2 CRITICAL crash classes: .wav literal-string-as-pointer x2, ANP3 buffer, CMvlVehicle flat layout, sa_col bounds); all `// BUGFIX(stable-1.0):` w/ RVA cites.
+- Naming hygiene: 0 FUN_ code identifiers (was 182); semantic Mvl* + `// FUN_<va> @ RVA` trailing comments (mapping: .harness-memory/limout/renames-*.md).
+- rcengine1 name-table crash fixed; pad044 layout fix; _snprintf_s MSVC name fix. Build GREEN (deploy copy fails = H: not mounted, not an error).
+- Test package dist/MVE-Reborn-test.zip (1.16 MB, 190 files): full original 0.98e mvl/ data + our vehmod_retail.dll + original steam fallback.
+- 0.99d ACQUIRED (MD5 7789189644c47c75663faa6165afa720): python37.dll, spdlog debug.log, SkyGfx hook, rtshadowonpeds. Banner still "0.98e".
+- Owed: @oracle review (user m0690), stable-1.0 tag, 0.98e→0.99d diff lane.

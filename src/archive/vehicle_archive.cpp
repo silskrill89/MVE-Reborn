@@ -678,7 +678,7 @@ CMvlVehicle::LoadFromArchive(const char *archivePath, int id)
 	m_nId = id;
 	m_nIdCopy = id;
 	if(m_pInfo)
-		m_pInfo->nVehicleId = (short)id;
+		m_pInfo->m_nHandlingId = (short)id;
 
 	try{
 		if(!ParseArchive(m_szArchivePath))
@@ -736,14 +736,14 @@ CMvlVehicle::InitialiseLoaded(void)
 		s_saWarnLatch = true;
 	}
 
-	if(m_pInfo && m_pInfo->nAiClass != -1)
-		MvlHandlerSetAiClass(m_nId, m_pInfo->nAiClass);   // FUN_1004f7e0
+	if(m_pInfo && m_pInfo->m_nVehicleClass != -1)
+		MvlHandlerSetAiClass(m_nId, m_pInfo->m_nVehicleClass);   // FUN_1004f7e0
 
 	ResolveComprules();             // FUN_100450d0
 	MvlSoundNotifyLoaded();         // FUN_100336f0
 	MvlHandlerApplyGang(m_nGang, m_nId);   // FUN_1004f820(this+0x2cf4, id)
 	MvlEngineRegisterVehicle(m_nId);       // FUN_1003d790
-	if(m_pInfo && m_pInfo->nAiClass != -1)
+	if(m_pInfo && m_pInfo->m_nVehicleClass != -1)
 		MvlSoundNotifyAiClass();    // FUN_10032f80
 }
 

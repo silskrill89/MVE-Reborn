@@ -42,21 +42,12 @@
 // ---------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------
-// VC 1.0 game addresses referenced below (RVA = VA - 0x400000).
+// VC 1.0 game addresses referenced below (RVA = VA - 0x400000) moved to the
+// per-variant address map in M8a (PLAN.md §10.2 step 1): the former kVC_*
+// constexpr table now lives as MvlExeAddrs fields in engine_globals.{h,cpp}
+// (kExeAddrsRetail, values verbatim; old kVC_* names kept as trailing
+// comments there). All reads below go through MvlAddrs().
 // ---------------------------------------------------------------------------
-static constexpr uint32_t kVC_PaintByteGlobal1   = 0x00A10B26u; // 0.98e @ RVA 0x610B26
-static constexpr uint32_t kVC_PaintByteGlobal2   = 0x00A10B82u; // 0.98e @ RVA 0x610B82
-static constexpr uint32_t kVC_PartFlagByte       = 0x00571820u; // 0.98e @ RVA 0x171820
-static constexpr uint32_t kVC_LiveryColorTable   = 0x00939228u; // 0.98e @ RVA 0x539228
-static constexpr uint32_t kVC_SpeedCheckObject   = 0x0094AD28u; // 0.98e @ RVA 0x54AD28
-static constexpr uint32_t kVC_FrameCounter       = 0x00974B2Cu; // 0.98e @ RVA 0x574B2C
-static constexpr uint32_t kVC_ClassCounterBase   = 0x009785A8u; // 0.98e @ RVA 0x5785A8 (int per slot)
-static constexpr uint32_t kVC_CacheByte1         = 0x0063C6F2u; // 0.98e @ RVA 0x23C6F2 (.text byte)
-static constexpr uint32_t kVC_CacheByte2         = 0x0063C71Du; // 0.98e @ RVA 0x23C71D
-static constexpr uint32_t kVC_CacheByte3         = 0x0063CE27u; // 0.98e @ RVA 0x23CE27
-static constexpr uint32_t kVC_CacheRestoreByte   = 0x006DDE20u; // 0.98e @ RVA 0x2DDE20 (.data byte)
-static constexpr uint32_t kVC_ClassSlotBase      = 0x007DB888u; // 0.98e @ RVA 0x3DB888 (stride 0x1C)
-static constexpr uint32_t kVC_ClassObjTable      = 0x0094B708u; // 0.98e @ RVA 0x54B708
 
 // ---------------------------------------------------------------------------
 // Section 2: port helpers.
@@ -536,16 +527,16 @@ static void __fastcall MvlBuildWheelCache(int32_t entity)
 		// Original zeroes 3 VC .text bytes around the fill call, then restores
 		// them from the single .data byte at 0x6DDE20 (code-site patching).
 		MvlUnlockGameText();
-		PokeByte(kVC_CacheByte1, 0);
-		PokeByte(kVC_CacheByte2, 0);
-		PokeByte(kVC_CacheByte3, 0);
+		PokeByte(MvlAddrs()->cacheByte1, 0);
+		PokeByte(MvlAddrs()->cacheByte2, 0);
+		PokeByte(MvlAddrs()->cacheByte3, 0);
 		MvlPartsObjectFill(obj, reinterpret_cast<const uint8_t *>(
 		                  static_cast<uintptr_t>(*reinterpret_cast<int32_t *>(
 		                      static_cast<uintptr_t>(entity + 0x4C)))));
-		const uint8_t restore = PeekByte(kVC_CacheRestoreByte);
-		PokeByte(kVC_CacheByte1, restore);
-		PokeByte(kVC_CacheByte2, restore);
-		PokeByte(kVC_CacheByte3, restore);
+		const uint8_t restore = PeekByte(MvlAddrs()->cacheRestoreByte);
+		PokeByte(MvlAddrs()->cacheByte1, restore);
+		PokeByte(MvlAddrs()->cacheByte2, restore);
+		PokeByte(MvlAddrs()->cacheByte3, restore);
 		*reinterpret_cast<uint32_t *>(static_cast<uintptr_t>(parts + 0xE8)) =
 		    MvlWheelCacheGenerationStamp;
 	}
@@ -640,7 +631,7 @@ static uint32_t __fastcall MvlSpawnFireEffect(int32_t entity, int32_t frameMatri
 
 	for (int32_t i = 0; i < kSlotCount; ++i) {
 		uint8_t *entry = reinterpret_cast<uint8_t *>(
-		    static_cast<uintptr_t>(kVC_ClassSlotBase + static_cast<uint32_t>(i) * 0x1Cu));
+		    static_cast<uintptr_t>(MvlAddrs()->classSlotBase + static_cast<uint32_t>(i) * 0x1Cu));
 		if (entry[0x0C] != 0) // &DAT_007db894 + i*0x1C - occupied
 			continue;
 
@@ -648,7 +639,7 @@ static uint32_t __fastcall MvlSpawnFireEffect(int32_t entity, int32_t frameMatri
 		if (obj == 0)
 			return 0;
 		*reinterpret_cast<uint32_t *>(static_cast<uintptr_t>(
-		    kVC_ClassObjTable + static_cast<uint32_t>(i) * 4u)) =
+		    MvlAddrs()->classObjTable + static_cast<uint32_t>(i) * 4u)) =
 		    static_cast<uint32_t>(obj);
 		MvlSetupEffectFlags(obj, 0x111);
 
@@ -679,15 +670,15 @@ static uint32_t __fastcall MvlSpawnFireEffect(int32_t entity, int32_t frameMatri
 
 		entry[0x0C] = 1; // (&DAT_007db894)[i*0x1C] = 1
 		*reinterpret_cast<uint32_t *>(static_cast<uintptr_t>(
-		    kVC_ClassSlotBase + static_cast<uint32_t>(i) * 0x1Cu + 8u)) =
-		    PeekU32(kVC_FrameCounter) + 4000u;
+		    MvlAddrs()->classSlotBase + static_cast<uint32_t>(i) * 0x1Cu + 8u)) =
+		    PeekU32(MvlAddrs()->frameCounter) + 4000u;
 		*reinterpret_cast<uint32_t *>(static_cast<uintptr_t>(
-		    kVC_ClassSlotBase + static_cast<uint32_t>(i) * 0x1Cu + 4u)) =
+		    MvlAddrs()->classSlotBase + static_cast<uint32_t>(i) * 0x1Cu + 4u)) =
 		    static_cast<uint32_t>(entity);
 		*reinterpret_cast<uint32_t *>(static_cast<uintptr_t>(
-		    kVC_ClassSlotBase + static_cast<uint32_t>(i) * 0x1Cu)) = 0x10u;
+		    MvlAddrs()->classSlotBase + static_cast<uint32_t>(i) * 0x1Cu)) = 0x10u;
 		MvlVectorCopy(reinterpret_cast<void *>(static_cast<uintptr_t>(
-		                 kVC_ClassSlotBase + static_cast<uint32_t>(i) * 0x1Cu + 0x10u)),
+		                 MvlAddrs()->classSlotBase + static_cast<uint32_t>(i) * 0x1Cu + 0x10u)),
 		             NULL, pos);
 		MvlVectorCopy(reinterpret_cast<void *>(static_cast<uintptr_t>(obj + 0x14)),
 		             NULL, zeroUp);
@@ -882,7 +873,7 @@ void MvlStepPartStateMachine(void)
 
 	int32_t *parts = reinterpret_cast<int32_t *>(
 	    static_cast<uintptr_t>(MvlGetPartsBlock(entity)));
-	const uint32_t frameCounter = PeekU32(kVC_FrameCounter);
+	const uint32_t frameCounter = PeekU32(MvlAddrs()->frameCounter);
 	const int32_t partCount = dirEntry[0xA18];
 
 	// Locals matching the Ghidra frame (sizes are generous, layout not ABI):
@@ -912,7 +903,7 @@ void MvlStepPartStateMachine(void)
 		bool fire = false;
 		const int32_t speedObj =
 		    *reinterpret_cast<int32_t *>(static_cast<uintptr_t>(entity + 0x1A8));
-		if (PeekU32(kVC_SpeedCheckObject) == static_cast<uint32_t>(speedObj) &&
+		if (PeekU32(MvlAddrs()->speedCheckObject) == static_cast<uint32_t>(speedObj) &&
 		    speedObj != 0 &&
 		    *reinterpret_cast<float *>(static_cast<uintptr_t>(speedObj + 0x354)) > 0.0f) {
 			auto keyDown = [](int key) {
@@ -1147,9 +1138,9 @@ void MvlPatchPartFlagByte(void)
 	}
 
 	MvlUnlockGameText();
-	PokeByte(kVC_PartFlagByte, 0xC3);
+	PokeByte(MvlAddrs()->partFlagByte, 0xC3);
 	if (patch)
-		PokeByte(kVC_PartFlagByte, 0xD9);
+		PokeByte(MvlAddrs()->partFlagByte, 0xD9);
 }
 
 // FUN_1003b5d0 (0.98e @ RVA 0x3b5d0) - part fade/visibility update.
@@ -1209,9 +1200,9 @@ void __fastcall MvlApplyRepaintColors(int32_t entity, int32_t color1, int32_t co
 	if (dirEntry == NULL)
 		return;
 
-	uint32_t col1 = PeekU32(kVC_LiveryColorTable +
+	uint32_t col1 = PeekU32(MvlAddrs()->liveryColorTable +
 	                         static_cast<uint32_t>(color1) * 4u);
-	uint32_t col2 = PeekU32(kVC_LiveryColorTable +
+	uint32_t col2 = PeekU32(MvlAddrs()->liveryColorTable +
 	                         static_cast<uint32_t>(color2) * 4u);
 	uint32_t col3 = 0xFFFFFFFFu;
 	uint32_t col4 = 0xFFFFFFFFu;
@@ -1266,12 +1257,12 @@ void MvlRandomizePaint(void)
 	char *paint2 = MvlPaintRandomByte2Ptr;
 
 	if (*reinterpret_cast<const char *>(static_cast<uintptr_t>(entity + 0x154)) == 0 ||
-	    PeekByte(kVC_PaintByteGlobal2) != 0) {
+	    PeekByte(MvlAddrs()->paintByteGlobal2) != 0) {
 		*paint1 = '\0';
 		*paint2 = '\0';
 		return;
 	}
-	if (PeekByte(kVC_PaintByteGlobal1) == 1) {
+	if (PeekByte(MvlAddrs()->paintByteGlobal1) == 1) {
 		*paint1 = 'D';
 		*paint2 = 'D';
 		return;
@@ -1324,12 +1315,12 @@ void MvlAdvancePaintVariant(void)
 	char *paint1 = MvlPaintVariantByte1Ptr;
 
 	if (*reinterpret_cast<const uint8_t *>(static_cast<uintptr_t>(entity + 0x154)) == 0 ||
-	    PeekByte(kVC_PaintByteGlobal2) != 0) {
+	    PeekByte(MvlAddrs()->paintByteGlobal2) != 0) {
 		*paint1 = '\0';
 		*paint2 = '\0';
 		return;
 	}
-	if (PeekByte(kVC_PaintByteGlobal1) != 0) {
+	if (PeekByte(MvlAddrs()->paintByteGlobal1) != 0) {
 		*paint1 = 'D';
 		*paint2 = 'D';
 		return;
@@ -1408,7 +1399,7 @@ void __fastcall MvlSetAiClass(int32_t modelId, int32_t slot)
 	}
 	// Per-slot entry counter lives in the VC .data table at 0x9785A8.
 	uint32_t *count = reinterpret_cast<uint32_t *>(
-	    static_cast<uintptr_t>(kVC_ClassCounterBase)) + slot;
+	    static_cast<uintptr_t>(MvlAddrs()->classCounterBase)) + slot;
 	if (*count < 0x61u) {
 		MvlAiClassSlotList[slot * 0x61 + static_cast<int32_t>(*count)] = modelId;
 		++(*count);
@@ -1434,9 +1425,15 @@ void MvlRunModelIndexLimitChain(void)
 	// site tables); without the game mapped those are NULL-page AVs. In-game
 	// gta-vc.exe is always mapped before any DLL DllMain, so this only fires
 	// for foreign-process/harness loads (deviation: crash-guard).
+	// FAIL-SAFE (M8c): unknown exe variant -> no map -> run nothing.
 	if (GetModuleHandleA("gta-vc.exe") == NULL) {
 		MvlErrorLog("helpers: MvlRunModelIndexLimitChain: gta-vc.exe not loaded - "
 		            "CModelIndexLimit relocation chain skipped");
+		return;
+	}
+	if (MvlAddrs() == NULL) {
+		MvlErrorLog("helpers: MvlRunModelIndexLimitChain: exe variant unknown - "
+		            "CModelIndexLimit relocation chain skipped (fail-safe no-op)");
 		return;
 	}
 

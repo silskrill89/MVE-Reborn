@@ -1,0 +1,2925 @@
+[
+ {
+  "field": "textUnlockBase",
+  "retail_va": 4198400,
+  "retail_rva": 4096,
+  "steam_va": 4198400,
+  "steam_rva": 4096,
+  "method": "identical",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm-same",
+    "dll_off": 137648,
+    "dll_rva": 140720,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm-same",
+    "dll_off": 659042,
+    "dll_rva": 663650,
+    "section": ".rdata",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "textUnlockSize",
+  "retail_va": 2608640,
+  "retail_rva": -1585664,
+  "steam_va": 2608640,
+  "steam_rva": -1585664,
+  "method": "identical",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm-same",
+    "dll_off": 137643,
+    "dll_rva": 140715,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "modelPtrBaseImm",
+  "retail_va": 5633590,
+  "retail_rva": 1439286,
+  "steam_va": 5633318,
+  "steam_rva": 1439014,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 95617,
+    "dll_rva": 98689,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 704620,
+    "dll_rva": 712812,
+    "section": ".data",
+    "ctx_identical": false
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "streamingBaseImm",
+  "retail_va": 4239104,
+  "retail_rva": 44800,
+  "steam_va": 4239104,
+  "steam_rva": 44800,
+  "method": "identical",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm-same",
+    "dll_off": 95627,
+    "dll_rva": 98699,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm-same",
+    "dll_off": 700212,
+    "dll_rva": 708404,
+    "section": ".data",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "texStartImm",
+  "retail_va": 4244503,
+  "retail_rva": 50199,
+  "steam_va": 4244503,
+  "steam_rva": 50199,
+  "method": "identical",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm-same",
+    "dll_off": 95637,
+    "dll_rva": 98709,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm-same",
+    "dll_off": 705756,
+    "dll_rva": 713948,
+    "section": ".data",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "colStartImm",
+  "retail_va": 4244743,
+  "retail_rva": 50439,
+  "steam_va": 4244743,
+  "steam_rva": 50439,
+  "method": "identical",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm-same",
+    "dll_off": 95647,
+    "dll_rva": 98719,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm-same",
+    "dll_off": 702888,
+    "dll_rva": 711080,
+    "section": ".data",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "animStartImm",
+  "retail_va": 4244866,
+  "retail_rva": 50562,
+  "steam_va": 4244866,
+  "steam_rva": 50562,
+  "method": "identical",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm-same",
+    "dll_off": 95657,
+    "dll_rva": 98729,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm-same",
+    "dll_off": 702672,
+    "dll_rva": 710864,
+    "section": ".data",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "streamingCapacity",
+  "retail_va": 4260530,
+  "retail_rva": 66226,
+  "steam_va": 4260530,
+  "steam_rva": 66226,
+  "method": "identical",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm-same",
+    "dll_off": 92417,
+    "dll_rva": 95489,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "texStartRef1",
+  "retail_va": 4242733,
+  "retail_rva": 48429,
+  "steam_va": 4242733,
+  "steam_rva": 48429,
+  "method": "identical",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm-same",
+    "dll_off": 92332,
+    "dll_rva": 95404,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm-same",
+    "dll_off": 92761,
+    "dll_rva": 95833,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm-same",
+    "dll_off": 702620,
+    "dll_rva": 710812,
+    "section": ".data",
+    "ctx_identical": false
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "texStartRef2",
+  "retail_va": 4261457,
+  "retail_rva": 67153,
+  "steam_va": 4261457,
+  "steam_rva": 67153,
+  "method": "identical+cluster",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm-same",
+    "dll_off": 92339,
+    "dll_rva": 95411,
+    "section": ".text",
+    "ctx_identical": false,
+    "cluster_verified": true
+   },
+   {
+    "method": "imm-same",
+    "dll_off": 92776,
+    "dll_rva": 95848,
+    "section": ".text",
+    "ctx_identical": false,
+    "cluster_verified": true
+   },
+   {
+    "method": "imm-same",
+    "dll_off": 702624,
+    "dll_rva": 710816,
+    "section": ".data",
+    "ctx_identical": false,
+    "cluster_verified": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "texCountRef1",
+  "retail_va": 4261471,
+  "retail_rva": 67167,
+  "steam_va": 4261471,
+  "steam_rva": 67167,
+  "method": "identical+cluster",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm-same",
+    "dll_off": 92794,
+    "dll_rva": 95866,
+    "section": ".text",
+    "ctx_identical": false,
+    "cluster_verified": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "texStartRef3",
+  "retail_va": 5634844,
+  "retail_rva": 1440540,
+  "steam_va": 5634572,
+  "steam_rva": 1440268,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 92740,
+    "dll_rva": 95812,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "texCountRef2",
+  "retail_va": 5771222,
+  "retail_rva": 1576918,
+  "steam_va": 5770758,
+  "steam_rva": 1576454,
+  "method": "imm+cluster",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 92789,
+    "dll_rva": 95861,
+    "section": ".text",
+    "ctx_identical": false,
+    "cluster_verified": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "texCountRef3",
+  "retail_va": 5771309,
+  "retail_rva": 1577005,
+  "steam_va": 5770845,
+  "steam_rva": 1576541,
+  "method": "imm+cluster",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 92784,
+    "dll_rva": 95856,
+    "section": ".text",
+    "ctx_identical": false,
+    "cluster_verified": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "texPoolGlobal",
+  "retail_va": 10185292,
+  "retail_rva": 5990988,
+  "steam_va": 10181204,
+  "steam_rva": 5986900,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 92799,
+    "dll_rva": 95871,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 92812,
+    "dll_rva": 95884,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 92847,
+    "dll_rva": 95919,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 92910,
+    "dll_rva": 95982,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 92923,
+    "dll_rva": 95995,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 674680,
+    "dll_rva": 682872,
+    "section": ".data",
+    "ctx_identical": false
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "texPoolRebuild1",
+  "retail_va": 5771280,
+  "retail_rva": 1576976,
+  "steam_va": 5770816,
+  "steam_rva": 1576512,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 92821,
+    "dll_rva": 95893,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "texPoolRebuild2",
+  "retail_va": 5771248,
+  "retail_rva": 1576944,
+  "steam_va": 5770784,
+  "steam_rva": 1576480,
+  "method": "imm+cluster",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 92915,
+    "dll_rva": 95987,
+    "section": ".text",
+    "ctx_identical": false,
+    "cluster_verified": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "colStartRef1",
+  "retail_va": 6463515,
+  "retail_rva": 2269211,
+  "steam_va": 6462683,
+  "steam_rva": 2268379,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 92353,
+    "dll_rva": 95425,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 93065,
+    "dll_rva": 96137,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 702632,
+    "dll_rva": 710824,
+    "section": ".data",
+    "ctx_identical": false
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "colStartRef2",
+  "retail_va": 6464265,
+  "retail_rva": 2269961,
+  "steam_va": 6463433,
+  "steam_rva": 2269129,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 92346,
+    "dll_rva": 95418,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 93073,
+    "dll_rva": 96145,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 702628,
+    "dll_rva": 710820,
+    "section": ".data",
+    "ctx_identical": false
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "colExtraRef1",
+  "retail_va": 6466128,
+  "retail_rva": 2271824,
+  "steam_va": 6465296,
+  "steam_rva": 2270992,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 93084,
+    "dll_rva": 96156,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "colExtraRef2",
+  "retail_va": 6466130,
+  "retail_rva": 2271826,
+  "steam_va": 6465298,
+  "steam_rva": 2270994,
+  "method": "imm+cluster",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 93099,
+    "dll_rva": 96171,
+    "section": ".text",
+    "ctx_identical": false,
+    "cluster_verified": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "colExtraRef3",
+  "retail_va": 6466131,
+  "retail_rva": 2271827,
+  "steam_va": 6465299,
+  "steam_rva": 2270995,
+  "method": "imm+cluster",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 93105,
+    "dll_rva": 96177,
+    "section": ".text",
+    "ctx_identical": false,
+    "cluster_verified": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "streamingSkipSite1",
+  "retail_va": 4242283,
+  "retail_rva": 47979,
+  "steam_va": 4242283,
+  "steam_rva": 47979,
+  "method": "identical",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm-same",
+    "dll_off": 92288,
+    "dll_rva": 95360,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm-same",
+    "dll_off": 701348,
+    "dll_rva": 709540,
+    "section": ".data",
+    "ctx_identical": false
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "streamingSkipSite2",
+  "retail_va": 4259270,
+  "retail_rva": 64966,
+  "steam_va": 4259270,
+  "steam_rva": 64966,
+  "method": "identical",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm-same",
+    "dll_off": 92295,
+    "dll_rva": 95367,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm-same",
+    "dll_off": 701352,
+    "dll_rva": 709544,
+    "section": ".data",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "modelPtrSkipSite",
+  "retail_va": 5737079,
+  "retail_rva": 1542775,
+  "steam_va": 5736807,
+  "steam_rva": 1542503,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 92520,
+    "dll_rva": 95592,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 704692,
+    "dll_rva": 712884,
+    "section": ".data",
+    "ctx_identical": false
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "modelPtrSpecialSite",
+  "retail_va": 4581478,
+  "retail_rva": 387174,
+  "steam_va": 4581190,
+  "steam_rva": 386886,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 92552,
+    "dll_rva": 95624,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 703652,
+    "dll_rva": 711844,
+    "section": ".data",
+    "ctx_identical": false
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "modelPtrSpecialValue",
+  "retail_va": 4581477,
+  "retail_rva": 387173,
+  "steam_va": 4581189,
+  "steam_rva": 386885,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 92560,
+    "dll_rva": 95632,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 92584,
+    "dll_rva": 95656,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "wideModelIdSkipSite",
+  "retail_va": 5997856,
+  "retail_rva": 1803552,
+  "steam_va": 5997392,
+  "steam_rva": 1803088,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 91623,
+    "dll_rva": 94695,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 276891,
+    "dll_rva": 279963,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 699112,
+    "dll_rva": 707304,
+    "section": ".data",
+    "ctx_identical": false
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "paintByteGlobal1",
+  "retail_va": 10554150,
+  "retail_rva": 6359846,
+  "steam_va": 10550063,
+  "steam_rva": 6355759,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 241160,
+    "dll_rva": 244232,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 241430,
+    "dll_rva": 244502,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 674772,
+    "dll_rva": 682964,
+    "section": ".data",
+    "ctx_identical": false
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "paintByteGlobal2",
+  "retail_va": 10554242,
+  "retail_rva": 6359938,
+  "steam_va": 10550156,
+  "steam_rva": 6355852,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 241147,
+    "dll_rva": 244219,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 241417,
+    "dll_rva": 244489,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 674780,
+    "dll_rva": 682972,
+    "section": ".data",
+    "ctx_identical": false
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "partFlagByte",
+  "retail_va": 5707808,
+  "retail_rva": 1513504,
+  "steam_va": 5707536,
+  "steam_rva": 1513232,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 240067,
+    "dll_rva": 243139,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "liveryColorTable",
+  "retail_va": 9671208,
+  "retail_rva": 5476904,
+  "steam_va": 9667120,
+  "steam_rva": 5472816,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 240743,
+    "dll_rva": 243815,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 240750,
+    "dll_rva": 243822,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 249476,
+    "dll_rva": 252548,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 249547,
+    "dll_rva": 252619,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 249668,
+    "dll_rva": 252740,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 249733,
+    "dll_rva": 252805,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 249910,
+    "dll_rva": 252982,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 263723,
+    "dll_rva": 266795,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 263750,
+    "dll_rva": 266822,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 287641,
+    "dll_rva": 290713,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 287663,
+    "dll_rva": 290735,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 287849,
+    "dll_rva": 290921,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 287867,
+    "dll_rva": 290939,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 287882,
+    "dll_rva": 290954,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 287898,
+    "dll_rva": 290970,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 675188,
+    "dll_rva": 683380,
+    "section": ".data",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "speedCheckObject",
+  "retail_va": 9743656,
+  "retail_rva": 5549352,
+  "steam_va": 9739568,
+  "steam_rva": 5545264,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 28046,
+    "dll_rva": 31118,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 28056,
+    "dll_rva": 31128,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 71998,
+    "dll_rva": 75070,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 73068,
+    "dll_rva": 76140,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 151158,
+    "dll_rva": 154230,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 151306,
+    "dll_rva": 154378,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 238511,
+    "dll_rva": 241583,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 250457,
+    "dll_rva": 253529,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 250523,
+    "dll_rva": 253595,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 250562,
+    "dll_rva": 253634,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 250599,
+    "dll_rva": 253671,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 250681,
+    "dll_rva": 253753,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 268389,
+    "dll_rva": 271461,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 268446,
+    "dll_rva": 271518,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 268466,
+    "dll_rva": 271538,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 269114,
+    "dll_rva": 272186,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 269969,
+    "dll_rva": 273041,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 270385,
+    "dll_rva": 273457,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 342799,
+    "dll_rva": 345871,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 354061,
+    "dll_rva": 357133,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 674580,
+    "dll_rva": 682772,
+    "section": ".data",
+    "ctx_identical": false
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "frameCounter",
+  "retail_va": 9915180,
+  "retail_rva": 5720876,
+  "steam_va": 9911092,
+  "steam_rva": 5716788,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 40365,
+    "dll_rva": 43437,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 58900,
+    "dll_rva": 61972,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 58997,
+    "dll_rva": 62069,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 59077,
+    "dll_rva": 62149,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 69793,
+    "dll_rva": 72865,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 72340,
+    "dll_rva": 75412,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 72370,
+    "dll_rva": 75442,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 72427,
+    "dll_rva": 75499,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 72897,
+    "dll_rva": 75969,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 76831,
+    "dll_rva": 79903,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 76891,
+    "dll_rva": 79963,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 77203,
+    "dll_rva": 80275,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 77214,
+    "dll_rva": 80286,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 77225,
+    "dll_rva": 80297,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 77660,
+    "dll_rva": 80732,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 77810,
+    "dll_rva": 80882,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 77834,
+    "dll_rva": 80906,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 77845,
+    "dll_rva": 80917,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 77866,
+    "dll_rva": 80938,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 77975,
+    "dll_rva": 81047,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 77988,
+    "dll_rva": 81060,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 78044,
+    "dll_rva": 81116,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 78099,
+    "dll_rva": 81171,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 78110,
+    "dll_rva": 81182,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 78131,
+    "dll_rva": 81203,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 78153,
+    "dll_rva": 81225,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 80342,
+    "dll_rva": 83414,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 80353,
+    "dll_rva": 83425,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 80364,
+    "dll_rva": 83436,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 82188,
+    "dll_rva": 85260,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 82499,
+    "dll_rva": 85571,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 82864,
+    "dll_rva": 85936,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 82881,
+    "dll_rva": 85953,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 82918,
+    "dll_rva": 85990,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 84370,
+    "dll_rva": 87442,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 84384,
+    "dll_rva": 87456,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 84496,
+    "dll_rva": 87568,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 84512,
+    "dll_rva": 87584,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 84847,
+    "dll_rva": 87919,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 84907,
+    "dll_rva": 87979,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 84959,
+    "dll_rva": 88031,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 84970,
+    "dll_rva": 88042,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 85276,
+    "dll_rva": 88348,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 85290,
+    "dll_rva": 88362,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 86476,
+    "dll_rva": 89548,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 86906,
+    "dll_rva": 89978,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 86930,
+    "dll_rva": 90002,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 86972,
+    "dll_rva": 90044,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 87068,
+    "dll_rva": 90140,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 87142,
+    "dll_rva": 90214,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 87169,
+    "dll_rva": 90241,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 87272,
+    "dll_rva": 90344,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 87304,
+    "dll_rva": 90376,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 87315,
+    "dll_rva": 90387,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 99202,
+    "dll_rva": 102274,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 99213,
+    "dll_rva": 102285,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 99589,
+    "dll_rva": 102661,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 100087,
+    "dll_rva": 103159,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 184006,
+    "dll_rva": 187078,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 184393,
+    "dll_rva": 187465,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 184429,
+    "dll_rva": 187501,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 184480,
+    "dll_rva": 187552,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 184523,
+    "dll_rva": 187595,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 237122,
+    "dll_rva": 240194,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 237385,
+    "dll_rva": 240457,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 239724,
+    "dll_rva": 242796,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 239769,
+    "dll_rva": 242841,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 239793,
+    "dll_rva": 242865,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 239819,
+    "dll_rva": 242891,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 268697,
+    "dll_rva": 271769,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 268874,
+    "dll_rva": 271946,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 268992,
+    "dll_rva": 272064,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 269158,
+    "dll_rva": 272230,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 269317,
+    "dll_rva": 272389,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 269625,
+    "dll_rva": 272697,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 269815,
+    "dll_rva": 272887,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 269927,
+    "dll_rva": 272999,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 270066,
+    "dll_rva": 273138,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 270121,
+    "dll_rva": 273193,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 270328,
+    "dll_rva": 273400,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 270442,
+    "dll_rva": 273514,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 270822,
+    "dll_rva": 273894,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 270919,
+    "dll_rva": 273991,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 271008,
+    "dll_rva": 274080,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 350064,
+    "dll_rva": 353136,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 674620,
+    "dll_rva": 682812,
+    "section": ".data",
+    "ctx_identical": false
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "classCounterBase",
+  "retail_va": 9930152,
+  "retail_rva": 5735848,
+  "steam_va": 9926064,
+  "steam_rva": 5731760,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 322383,
+    "dll_rva": 325455,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 322559,
+    "dll_rva": 325631,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 322567,
+    "dll_rva": 325639,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 675148,
+    "dll_rva": 683340,
+    "section": ".data",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "cacheByte1",
+  "retail_va": 6538994,
+  "retail_rva": 2344690,
+  "steam_va": 6534818,
+  "steam_rva": 2340514,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 46770,
+    "dll_rva": 49842,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 235436,
+    "dll_rva": 238508,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 235480,
+    "dll_rva": 238552,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 250574,
+    "dll_rva": 253646,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 250629,
+    "dll_rva": 253701,
+    "section": ".text",
+    "ctx_identical": false
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "cacheByte2",
+  "retail_va": 6539037,
+  "retail_rva": 2344733,
+  "steam_va": 6534861,
+  "steam_rva": 2340557,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 46782,
+    "dll_rva": 49854,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 235443,
+    "dll_rva": 238515,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 235492,
+    "dll_rva": 238564,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 250581,
+    "dll_rva": 253653,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 250639,
+    "dll_rva": 253711,
+    "section": ".text",
+    "ctx_identical": false
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "cacheByte3",
+  "retail_va": 6540839,
+  "retail_rva": 2346535,
+  "steam_va": 6536663,
+  "steam_rva": 2342359,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 46794,
+    "dll_rva": 49866,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 235450,
+    "dll_rva": 238522,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 235504,
+    "dll_rva": 238576,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 250588,
+    "dll_rva": 253660,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 250649,
+    "dll_rva": 253721,
+    "section": ".text",
+    "ctx_identical": false
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "cacheRestoreByte",
+  "retail_va": 7200288,
+  "retail_rva": 3005984,
+  "steam_va": 7196088,
+  "steam_rva": 3001784,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 46715,
+    "dll_rva": 49787,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 46739,
+    "dll_rva": 49811,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 46745,
+    "dll_rva": 49817,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 46754,
+    "dll_rva": 49826,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 46765,
+    "dll_rva": 49837,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 46777,
+    "dll_rva": 49849,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 46789,
+    "dll_rva": 49861,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 46799,
+    "dll_rva": 49871,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 235475,
+    "dll_rva": 238547,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 235487,
+    "dll_rva": 238559,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 235499,
+    "dll_rva": 238571,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 250618,
+    "dll_rva": 253690,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 250634,
+    "dll_rva": 253706,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 250644,
+    "dll_rva": 253716,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 672592,
+    "dll_rva": 680784,
+    "section": ".data",
+    "ctx_identical": false
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "classSlotBase",
+  "retail_va": 8239240,
+  "retail_rva": 4044936,
+  "steam_va": 8235152,
+  "steam_rva": 4040848,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 77644,
+    "dll_rva": 80716,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 237162,
+    "dll_rva": 240234,
+    "section": ".text",
+    "ctx_identical": false
+   },
+   {
+    "method": "imm",
+    "dll_off": 674796,
+    "dll_rva": 682988,
+    "section": ".data",
+    "ctx_identical": false
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "classObjTable",
+  "retail_va": 9746184,
+  "retail_rva": 5551880,
+  "steam_va": 9742096,
+  "steam_rva": 5547792,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 77617,
+    "dll_rva": 80689,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 236890,
+    "dll_rva": 239962,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 240341,
+    "dll_rva": 243413,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 674792,
+    "dll_rva": 682984,
+    "section": ".data",
+    "ctx_identical": false
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "frameWaitHookTarget",
+  "retail_va": 6292620,
+  "retail_rva": 2098316,
+  "steam_va": 6291692,
+  "steam_rva": 2097388,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 277506,
+    "dll_rva": 280578,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "contTrampoline426748",
+  "retail_va": 4351823,
+  "retail_rva": 157519,
+  "steam_va": 4351775,
+  "steam_rva": 157471,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 250884,
+    "dll_rva": 253956,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "contKeyClassBypass",
+  "retail_va": 4351973,
+  "retail_rva": 157669,
+  "steam_va": 4351925,
+  "steam_rva": 157621,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 250972,
+    "dll_rva": 254044,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "contTrampoline426ac6",
+  "retail_va": 4352717,
+  "retail_rva": 158413,
+  "steam_va": 4352669,
+  "steam_rva": 158365,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 251012,
+    "dll_rva": 254084,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "contTrampoline426c80",
+  "retail_va": 4353159,
+  "retail_rva": 158855,
+  "steam_va": 4353111,
+  "steam_rva": 158807,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 251044,
+    "dll_rva": 254116,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "contTrampoline427470",
+  "retail_va": 4355191,
+  "retail_rva": 160887,
+  "steam_va": 4355143,
+  "steam_rva": 160839,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 251076,
+    "dll_rva": 254148,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "contTrampoline426a4c",
+  "retail_va": 4352595,
+  "retail_rva": 158291,
+  "steam_va": 4352547,
+  "steam_rva": 158243,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 251156,
+    "dll_rva": 254228,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "teardownPartsCallee",
+  "retail_va": 4961840,
+  "retail_rva": 767536,
+  "steam_va": 4961536,
+  "steam_rva": 767232,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 251220,
+    "dll_rva": 254292,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "contTeardownParts",
+  "retail_va": 6007817,
+  "retail_rva": 1813513,
+  "steam_va": 6007353,
+  "steam_rva": 1813049,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 251232,
+    "dll_rva": 254304,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "contRepaint",
+  "retail_va": 5739157,
+  "retail_rva": 1544853,
+  "steam_va": 5738885,
+  "steam_rva": 1544581,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 251328,
+    "dll_rva": 254400,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "partUpdateCallee69adc4",
+  "retail_va": 5805968,
+  "retail_rva": 1611664,
+  "steam_va": 5805504,
+  "steam_rva": 1611200,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 206641,
+    "dll_rva": 209713,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 251454,
+    "dll_rva": 254526,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "partUpdateCallee6d7b68",
+  "retail_va": 6335824,
+  "retail_rva": 2141520,
+  "steam_va": 6334832,
+  "steam_rva": 2140528,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 207121,
+    "dll_rva": 210193,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 251486,
+    "dll_rva": 254558,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "partUpdateCallee69b0e8",
+  "retail_va": 5918176,
+  "retail_rva": 1723872,
+  "steam_va": 5917712,
+  "steam_rva": 1723408,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 207521,
+    "dll_rva": 210593,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 251518,
+    "dll_rva": 254590,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "wheelCacheCallee",
+  "retail_va": 5806800,
+  "retail_rva": 1612496,
+  "steam_va": 5806336,
+  "steam_rva": 1612032,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 90228,
+    "dll_rva": 93300,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 206625,
+    "dll_rva": 209697,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 251561,
+    "dll_rva": 254633,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "partFlagCallee",
+  "retail_va": 6335888,
+  "retail_rva": 2141584,
+  "steam_va": 6334896,
+  "steam_rva": 2140592,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 207105,
+    "dll_rva": 210177,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 251588,
+    "dll_rva": 254660,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "contFadePart",
+  "retail_va": 6093305,
+  "retail_rva": 1899001,
+  "steam_va": 6092745,
+  "steam_rva": 1898441,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 251670,
+    "dll_rva": 254742,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "contFadePartAlt",
+  "retail_va": 6046536,
+  "retail_rva": 1852232,
+  "steam_va": 6046072,
+  "steam_rva": 1851768,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 251751,
+    "dll_rva": 254823,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "contGenerateVcName",
+  "retail_va": 4229484,
+  "retail_rva": 35180,
+  "steam_va": 4229484,
+  "steam_rva": 35180,
+  "method": "identical",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm-same",
+    "dll_off": 273224,
+    "dll_rva": 276296,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "attachFixupCallee",
+  "retail_va": 5845040,
+  "retail_rva": 1650736,
+  "steam_va": 5844576,
+  "steam_rva": 1650272,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 206593,
+    "dll_rva": 209665,
+    "section": ".text",
+    "ctx_identical": true
+   },
+   {
+    "method": "imm",
+    "dll_off": 273262,
+    "dll_rva": 276334,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "contFrameWaitThrottled",
+  "retail_va": 6293176,
+  "retail_rva": 2098872,
+  "steam_va": 6292248,
+  "steam_rva": 2097944,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 273383,
+    "dll_rva": 276455,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "contFrameWaitNormal",
+  "retail_va": 6292636,
+  "retail_rva": 2098332,
+  "steam_va": 6291708,
+  "steam_rva": 2097404,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 273400,
+    "dll_rva": 276472,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "map"
+ },
+ {
+  "field": "hook:MvlHookTrampoline426748",
+  "retail_va": 4351816,
+  "retail_rva": 157512,
+  "steam_va": 4351768,
+  "steam_rva": 157464,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 274506,
+    "dll_rva": 277578,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "site:0"
+ },
+ {
+  "field": "hook:MvlHookKeyClassBypass",
+  "retail_va": 4351966,
+  "retail_rva": 157662,
+  "steam_va": 4351918,
+  "steam_rva": 157614,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 274521,
+    "dll_rva": 277593,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "site:0"
+ },
+ {
+  "field": "hook:MvlHookTrampoline426ac6",
+  "retail_va": 4352710,
+  "retail_rva": 158406,
+  "steam_va": 4352662,
+  "steam_rva": 158358,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 274536,
+    "dll_rva": 277608,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "site:0"
+ },
+ {
+  "field": "hook:MvlHookTrampoline426c80",
+  "retail_va": 4353152,
+  "retail_rva": 158848,
+  "steam_va": 4353104,
+  "steam_rva": 158800,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 274551,
+    "dll_rva": 277623,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "site:0"
+ },
+ {
+  "field": "hook:MvlHookTrampoline427470",
+  "retail_va": 4355184,
+  "retail_rva": 160880,
+  "steam_va": 4355136,
+  "steam_rva": 160832,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 274566,
+    "dll_rva": 277638,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "site:0"
+ },
+ {
+  "field": "hook:MvlHookSetAiClass",
+  "retail_va": 4352032,
+  "retail_rva": 157728,
+  "steam_va": 4351984,
+  "steam_rva": 157680,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 274581,
+    "dll_rva": 277653,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "site:0"
+ },
+ {
+  "field": "hook:MvlHookTrampoline426a4c",
+  "retail_va": 4352588,
+  "retail_rva": 158284,
+  "steam_va": 4352540,
+  "steam_rva": 158236,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 274596,
+    "dll_rva": 277668,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "site:0"
+ },
+ {
+  "field": "hook:MvlHookClearParts",
+  "retail_va": 6009867,
+  "retail_rva": 1815563,
+  "steam_va": 6009403,
+  "steam_rva": 1815099,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 274611,
+    "dll_rva": 277683,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "site:0"
+ },
+ {
+  "field": "hook:MvlHookTeardownParts",
+  "retail_va": 6007812,
+  "retail_rva": 1813508,
+  "steam_va": 6007348,
+  "steam_rva": 1813044,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 274626,
+    "dll_rva": 277698,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "site:0"
+ },
+ {
+  "field": "hook:MvlHookRepaint",
+  "retail_va": 5739152,
+  "retail_rva": 1544848,
+  "steam_va": 5738880,
+  "steam_rva": 1544576,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 274641,
+    "dll_rva": 277713,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "site:0"
+ },
+ {
+  "field": "hook:MvlHookPaintRandom",
+  "retail_va": 5738640,
+  "retail_rva": 1544336,
+  "steam_va": 5738368,
+  "steam_rva": 1544064,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 274656,
+    "dll_rva": 277728,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "site:0"
+ },
+ {
+  "field": "hook:MvlHookPaintVariant",
+  "retail_va": 5738896,
+  "retail_rva": 1544592,
+  "steam_va": 5738624,
+  "steam_rva": 1544320,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 274671,
+    "dll_rva": 277743,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "site:0"
+ },
+ {
+  "field": "hook:MvlHookPartUpdate69adc4",
+  "retail_va": 6925764,
+  "retail_rva": 2731460,
+  "steam_va": 6921668,
+  "steam_rva": 2727364,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 274686,
+    "dll_rva": 277758,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "site:1"
+ },
+ {
+  "field": "hook:MvlHookPartUpdate6d7b68",
+  "retail_va": 7175016,
+  "retail_rva": 2980712,
+  "steam_va": 7170872,
+  "steam_rva": 2976568,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 274701,
+    "dll_rva": 277773,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "site:1"
+ },
+ {
+  "field": "hook:MvlHookPartUpdate69b0e8",
+  "retail_va": 6926568,
+  "retail_rva": 2732264,
+  "steam_va": 6922472,
+  "steam_rva": 2728168,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 274716,
+    "dll_rva": 277788,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "site:1"
+ },
+ {
+  "field": "hook:MvlHookWheelCache69adc0",
+  "retail_va": 6925760,
+  "retail_rva": 2731456,
+  "steam_va": 6921664,
+  "steam_rva": 2727360,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 274731,
+    "dll_rva": 277803,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "site:1"
+ },
+ {
+  "field": "hook:MvlHookPartFlag6d7b64",
+  "retail_va": 7175012,
+  "retail_rva": 2980708,
+  "steam_va": 7170868,
+  "steam_rva": 2976564,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 274746,
+    "dll_rva": 277818,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "site:1"
+ },
+ {
+  "field": "hook:MvlHookFadePart",
+  "retail_va": 6093299,
+  "retail_rva": 1898995,
+  "steam_va": 6092739,
+  "steam_rva": 1898435,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 274761,
+    "dll_rva": 277833,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "site:0"
+ },
+ {
+  "field": "hook:MvlHookFadePartAlt",
+  "retail_va": 6046529,
+  "retail_rva": 1852225,
+  "steam_va": 6046065,
+  "steam_rva": 1851761,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 274776,
+    "dll_rva": 277848,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "site:0"
+ },
+ {
+  "field": "hook:MvlHookGenerateVcName",
+  "retail_va": 4229479,
+  "retail_rva": 35175,
+  "steam_va": 4229479,
+  "steam_rva": 35175,
+  "method": "identical",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm-same",
+    "dll_off": 277371,
+    "dll_rva": 280443,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "site:0"
+ },
+ {
+  "field": "hook:MvlHookAttachFixup",
+  "retail_va": 6925744,
+  "retail_rva": 2731440,
+  "steam_va": 6921648,
+  "steam_rva": 2727344,
+  "method": "imm",
+  "confidence": "high",
+  "evidence": [
+   {
+    "method": "imm",
+    "dll_off": 277386,
+    "dll_rva": 280458,
+    "section": ".text",
+    "ctx_identical": true
+   }
+  ],
+  "kind": "site:1"
+ }
+]

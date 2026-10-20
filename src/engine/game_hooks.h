@@ -73,6 +73,8 @@ void     MvlHookFrameWait(void);                                                
 // dwordWrite != 0 means MvlWriteDword(handler) instead of MvlWriteJmp.
 // The conditional site VC 0x60048c -> FUN_10043780 (guarded by plugin flag
 // DAT_100b1791) is applied by MvlInstallStubHooks(), not tabled here.
+// Per-variant (M8a): the retail table lives in engine_globals.cpp
+// (kRetailHookSites) and is reached through MvlAddrs()->stubHookSites.
 // ---------------------------------------------------------------------------
 struct MvlHookSite
 {
@@ -80,9 +82,6 @@ struct MvlHookSite
 	uintptr_t handler;    // plugin handler to install
 	uint8_t   dwordWrite; // 0 = E9 JMP, 1 = raw dword write
 };
-
-extern const MvlHookSite g_MvlStubHookSites[];
-extern const size_t     g_MvlStubHookSiteCount;
 
 // Unlocks VC .text and installs every tabled pair (+ the conditional one).
 // Call once during plugin init, after the VC module is loaded.

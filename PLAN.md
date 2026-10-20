@@ -204,3 +204,68 @@ override any conflicting default. Unanswered sub-points keep their defaults.
 - MVL_GAME_DIR = H:\games\VC (setx'd; see AGENTS.md).
 - 7z: vendored 7z SDK (LZMA SDK) chosen — in tree at external/lzma.
 - Python host: keep as late-phase C ABI bridge (C2), revisit after core parity.
+
+## 10. 1.0 Alpha Phase 2 — Universal exe detection (single DLL, all VC variants)
+
+> Added 2026-10-20. Goal: ONE `vehmod.dll` that detects at launch which Vice City
+> exe it is loaded into and applies the correct addresses — replacing the
+> original MVL "two DLLs + chooser shim" split. Terminology baseline is now
+> plugin-sdk VC (normalized 2026-10-20: xmlgen.cpp / vehicle_archive.* /
+> vehicle_xml.cpp; zero reVC identifiers remain in src/).
+
+### 10.1 Current state (audit 2026-10-20)
+
+- **Detection exists only in the shim**: `src/loader/chooser.cpp`
+  `VehmodChooserDllMain` reads one fingerprint dword @ VA `0x61A7F8`
+  (SEH-guarded): `0x9753C405` → retail → `mvl\vehmod_retail.dll`;
+  `0xE8535004` → steam → `vehmod_steam.dll`; else silent no-op.
+- **Main DLL hard-assumes retail 1.0**: every `kVC_*` constexpr table
+  (`src/engine/model_id.cpp:52-94`, `model_helpers.cpp:44-59`), every
+  `MvlHookSite` target (`game_hooks.h:77-85`), and the .text unlock
+  `VirtualProtect(0x401000, 0x27CE00)` (`game_hooks.cpp:65-68`) are retail-only
+  constants. No per-variant dimension exists anywhere.
+- Naming/idiom baseline: raw VAs + `VcFunc<FnT>` + `Mvl*` semantic names —
+  uniform, plugin-sdk-compatible, keep as-is.
+
+### 10.2 Design
+
+1. **Address-map indirection (M8a, mechanical, retail-only behavior unchanged)**
+   - Introduce `struct MvlExeAddrs` holding every currently-constexpr `kVC_*`
+     value + all `MvlHookSite` targets + the .text range, populated from a
+     per-variant table: `kExeAddrsRetail`, later `kExeAddrsSteam`.
+   - Replace direct `kVC_*` reads with `MvlAddrs()->…` (one global pointer,
+     set once in init). No logic changes; build must stay green and retail
+     behavior byte-identical.
+2. **Variant detection in the main DLL (M8c)**
+   - Reuse the shim's proven fingerprint: read dword @ `0x61A7F8`
+     (SEH-guarded) → retail/steam.
+   - Fallback for unknown exes: lightweight pattern scan (2-3 anchor byte
+     patterns near known functions) or optional checksum; if variant is
+     unrecognized → log to `vehmod_log.txt` and **no-op** (never patch a
+     wrong exe). Detection runs before any memory write.
+3. **Steam variant RE (M8b)**
+   - Diff `vehmod_retail.dll` vs `vehmod_steam.dll` (both 760,832 B, PE32 x86)
+     to recover steam VAs for every retail address in the map. Log per-entry
+     cites to `.serena/memories/re-steam-variant.md` (binary+version+RVA rule).
+   - Steam exe base/layout differences must be recorded; extend the .text
+     unlock range per-variant.
+4. **Parity (M8d)**
+   - A/B both exes vs original MVL (retail DLL on retail exe, steam DLL on
+     steam exe). Feature matrix from README §Progress + Bitbucket issue tests.
+
+### 10.3 Milestones
+
+| M | Definition of done |
+|---|--------------------|
+| M8a | Address-map refactor merged; retail-only build green, zero behavior delta |
+| M8b | `re-steam-variant.md` complete: every map entry has a steam RVA cite |
+| M8c | Single DLL detects retail/steam at launch, dispatches correct map; unknown exe → log + no-op |
+| M8d | Dual-exe parity green → tag **1.0 alpha phase 2** |
+
+### 10.4 Risks / notes
+
+- Hook-site original bytes may differ between retail/steam — `MvlHookSite`
+  needs per-variant `dwordWrite` verification, not just address remap.
+- Pattern-scan fallback must be cheap (init-time, once) and deterministic.
+- The chooser shim stays shipped for compat with the original distribution
+  layout; the universal DLL must also work when loaded directly.

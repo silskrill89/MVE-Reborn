@@ -10,6 +10,7 @@
 #include "../core/stdafx.h"
 #include "game_hooks.h"
 #include "engine_globals.h"
+#include "../loader/log.h" // MvlErrorLog (fail-safe no-op log, M8c)
 
 #if !defined(_M_IX86)
 #error "MVL clone: game_hooks.cpp is x86-only (VC 1.0 plugin)."
@@ -62,11 +63,18 @@ MvlWriteDword(void *target, uint32_t value)
 void
 MvlUnlockGameText(void)
 {
+	// FAIL-SAFE (M8c): unknown exe variant -> no map -> never touch the game
+	// image. (Also keeps pre-init callers inert.)
+	const MvlExeAddrs *addrs = MvlAddrs();
+	if (addrs == NULL)
+		return;
+
 	// FUN_100225a0: VirtualProtect((LPVOID)0x401000, 0x27CE00,
-	// PAGE_EXECUTE_READWRITE, &old) - the full VC 1.0 .text range.
+	// PAGE_EXECUTE_READWRITE, &old) - the full VC 1.0 .text range
+	// (retail values; per-variant via MvlAddrs(), M8a).
 	DWORD oldProtect = 0;
-	VirtualProtect(reinterpret_cast<LPVOID>(static_cast<uintptr_t>(0x401000u)),
-	               0x27CE00u, PAGE_EXECUTE_READWRITE, &oldProtect);
+	VirtualProtect(reinterpret_cast<LPVOID>(static_cast<uintptr_t>(addrs->textUnlockBase)),
+	               addrs->textUnlockSize, PAGE_EXECUTE_READWRITE, &oldProtect);
 }
 
 // ---------------------------------------------------------------------------
@@ -93,8 +101,8 @@ static void MvlSetAiClass(int32_t a, int32_t b);                               /
 void MvlHookTrampoline426748(void) // FUN_1003dff0 @ RVA 0x3dff0
 {
 	// 0.98e @ RVA 0x3dff0 (30 bytes). Hook target VC 0x426748; continues 0x42674f.
-	SetContinuation(0x42674Fu);
-	VcFunc<void (__cdecl *)(void)>(0x42674Fu)();
+	SetContinuation(MvlAddrs()->contTrampoline426748);
+	VcFunc<void (__cdecl *)(void)>(MvlAddrs()->contTrampoline426748)();
 }
 
 uint64_t __fastcall MvlHookKeyClassBypass(uint32_t ecxIn, uint32_t edxHigh, uint32_t stackArg1, // FUN_1003e010 @ RVA 0x3e010
@@ -112,29 +120,29 @@ uint64_t __fastcall MvlHookKeyClassBypass(uint32_t ecxIn, uint32_t edxHigh, uint
 	if (keyClass > 0x81 && keyClass < 0xED && MvlKeyClassBypassTable[keyClass] != 0)
 		return (static_cast<uint64_t>(edxHigh) << 32) | in_eax;
 
-	SetContinuation(0x4267E5u);
-	return VcFunc<uint64_t (__cdecl *)(void)>(0x4267E5u)();
+	SetContinuation(MvlAddrs()->contKeyClassBypass);
+	return VcFunc<uint64_t (__cdecl *)(void)>(MvlAddrs()->contKeyClassBypass)();
 }
 
 void MvlHookTrampoline426ac6(void) // FUN_1003e070 @ RVA 0x3e070
 {
 	// 0.98e @ RVA 0x3e070 (30 bytes). Hook target VC 0x426ac6; continues 0x426acd.
-	SetContinuation(0x426ACDu);
-	VcFunc<void (__cdecl *)(void)>(0x426ACDu)();
+	SetContinuation(MvlAddrs()->contTrampoline426ac6);
+	VcFunc<void (__cdecl *)(void)>(MvlAddrs()->contTrampoline426ac6)();
 }
 
 void MvlHookTrampoline426c80(void) // FUN_1003e090 @ RVA 0x3e090
 {
 	// 0.98e @ RVA 0x3e090 (30 bytes). Hook target VC 0x426c80; continues 0x426c87.
-	SetContinuation(0x426C87u);
-	VcFunc<void (__cdecl *)(void)>(0x426C87u)();
+	SetContinuation(MvlAddrs()->contTrampoline426c80);
+	VcFunc<void (__cdecl *)(void)>(MvlAddrs()->contTrampoline426c80)();
 }
 
 void MvlHookTrampoline427470(void) // FUN_1003e0b0 @ RVA 0x3e0b0
 {
 	// 0.98e @ RVA 0x3e0b0 (30 bytes). Hook target VC 0x427470; continues 0x427477.
-	SetContinuation(0x427477u);
-	VcFunc<void (__cdecl *)(void)>(0x427477u)();
+	SetContinuation(MvlAddrs()->contTrampoline427470);
+	VcFunc<void (__cdecl *)(void)>(MvlAddrs()->contTrampoline427470)();
 }
 
 uint64_t __fastcall MvlHookSetAiClass(uint32_t ecxIn, uint32_t edxHigh, int32_t modelId, // FUN_1003e0d0 @ RVA 0x3e0d0
@@ -151,8 +159,8 @@ uint64_t __fastcall MvlHookSetAiClass(uint32_t ecxIn, uint32_t edxHigh, int32_t 
 void MvlHookTrampoline426a4c(void) // FUN_1003e100 @ RVA 0x3e100
 {
 	// 0.98e @ RVA 0x3e100 (30 bytes). Hook target VC 0x426a4c; continues 0x426a53.
-	SetContinuation(0x426A53u);
-	VcFunc<void (__cdecl *)(void)>(0x426A53u)();
+	SetContinuation(MvlAddrs()->contTrampoline426a4c);
+	VcFunc<void (__cdecl *)(void)>(MvlAddrs()->contTrampoline426a4c)();
 }
 
 uint64_t __fastcall MvlHookClearParts(int32_t entity, uint32_t edxHigh) // FUN_1003e120 @ RVA 0x3e120
@@ -173,9 +181,9 @@ void __fastcall MvlHookTeardownParts(uint32_t entity) // FUN_1003e140 @ RVA 0x3e
 	// 0.98e @ RVA 0x3e140 (42 bytes). Hook target VC 0x5bac04; continues 0x5bac09.
 	MvlPartsTeardownEntity = static_cast<int32_t>(entity);
 	MvlTeardownPartsCache();
-	VcFunc<void (__cdecl *)(void)>(0x4BB630u)();
-	SetContinuation(0x5BAC09u);
-	VcFunc<void (__cdecl *)(void)>(0x5BAC09u)();
+	VcFunc<void (__cdecl *)(void)>(MvlAddrs()->teardownPartsCallee)();
+	SetContinuation(MvlAddrs()->contTeardownParts);
+	VcFunc<void (__cdecl *)(void)>(MvlAddrs()->contTeardownParts)();
 }
 
 void __fastcall MvlHookRepaint(int32_t entity, void* /*edx*/, uint32_t color1, uint32_t color2) // FUN_1003e170 @ RVA 0x3e170
@@ -197,8 +205,8 @@ void __fastcall MvlHookRepaint(int32_t entity, void* /*edx*/, uint32_t color1, u
 	MvlApplyRepaintColors(entity, static_cast<int32_t>(MvlRepaintColor1),
 	             static_cast<int32_t>(MvlRepaintColor2),
 	             static_cast<int32_t>(MvlActiveEntityTemp));
-	SetContinuation(0x579295u);
-	VcFunc<void (__cdecl *)(uint32_t, uint32_t)>(0x579295u)(saveEsi, saveEbx);
+	SetContinuation(MvlAddrs()->contRepaint);
+	VcFunc<void (__cdecl *)(uint32_t, uint32_t)>(MvlAddrs()->contRepaint)(saveEsi, saveEbx);
 }
 
 uint64_t __fastcall MvlHookPaintRandom(uint32_t entity, uint32_t edxHigh, uint32_t byte1Ptr, // FUN_1003e1d0 @ RVA 0x3e1d0
@@ -228,7 +236,7 @@ void __fastcall MvlHookPartUpdate69adc4(uint32_t entity) // FUN_1003e230 @ RVA 0
 	// 0.98e @ RVA 0x3e230 (28 bytes). Dword-write hook target VC 0x69adc4.
 	MvlActiveEntityTemp = static_cast<int32_t>(entity);
 	MvlStepPartStateMachine();
-	VcFunc<void (__cdecl *)(void)>(0x589790u)();
+	VcFunc<void (__cdecl *)(void)>(MvlAddrs()->partUpdateCallee69adc4)();
 	MvlActiveEntityTemp = 0;
 }
 
@@ -237,7 +245,7 @@ void __fastcall MvlHookPartUpdate6d7b68(uint32_t entity) // FUN_1003e250 @ RVA 0
 	// 0.98e @ RVA 0x3e250 (28 bytes). Dword-write hook target VC 0x6d7b68.
 	MvlActiveEntityTemp = static_cast<int32_t>(entity);
 	MvlStepPartStateMachine();
-	VcFunc<void (__cdecl *)(void)>(0x60AD50u)();
+	VcFunc<void (__cdecl *)(void)>(MvlAddrs()->partUpdateCallee6d7b68)();
 	MvlActiveEntityTemp = 0;
 }
 
@@ -246,7 +254,7 @@ void __fastcall MvlHookPartUpdate69b0e8(uint32_t entity) // FUN_1003e270 @ RVA 0
 	// 0.98e @ RVA 0x3e270 (28 bytes). Dword-write hook target VC 0x69b0e8.
 	MvlActiveEntityTemp = static_cast<int32_t>(entity);
 	MvlStepPartStateMachine();
-	VcFunc<void (__cdecl *)(void)>(0x5A4DE0u)();
+	VcFunc<void (__cdecl *)(void)>(MvlAddrs()->partUpdateCallee69b0e8)();
 	MvlActiveEntityTemp = 0;
 }
 
@@ -256,7 +264,7 @@ void __fastcall MvlHookWheelCache69adc0(uint32_t entity) // FUN_1003e290 @ RVA 0
 	MvlWheelCacheEntity = static_cast<int32_t>(entity);
 	MvlRefreshWheelCache();
 	MvlPatchPartFlagByte();
-	VcFunc<void (__cdecl *)(void)>(0x589AD0u)();
+	VcFunc<void (__cdecl *)(void)>(MvlAddrs()->wheelCacheCallee)();
 }
 
 void __fastcall MvlHookPartFlag6d7b64(uint32_t entity) // FUN_1003e2b0 @ RVA 0x3e2b0
@@ -264,7 +272,7 @@ void __fastcall MvlHookPartFlag6d7b64(uint32_t entity) // FUN_1003e2b0 @ RVA 0x3
 	// 0.98e @ RVA 0x3e2b0 (27 bytes). Dword-write hook target VC 0x6d7b64.
 	MvlPartFlagEntity = static_cast<int32_t>(entity);
 	MvlPatchPartFlagByte();
-	VcFunc<void (__cdecl *)(void)>(0x60AD90u)();
+	VcFunc<void (__cdecl *)(void)>(MvlAddrs()->partFlagCallee)();
 }
 
 // Naked trampolines: Ghidra stack offsets are entry-ESP relative (assumption
@@ -293,8 +301,8 @@ MvlHookFadePart_impl(int *part, float *fadeVec, uint32_t callbackArg)
 	MvlFadeStackArg = callbackArg;
 	MvlFadeVecArg = fadeVec;
 	MvlUpdatePartFade(part, fadeVec, callbackArg);
-	SetContinuation(0x5CF9F9u);
-	VcFunc<void (__cdecl *)(void)>(0x5CF9F9u)();
+	SetContinuation(MvlAddrs()->contFadePart);
+	VcFunc<void (__cdecl *)(void)>(MvlAddrs()->contFadePart)();
 }
 
 extern "C" void MvlHookFadePartAlt_impl(int32_t part, int32_t *partAlt);
@@ -324,8 +332,8 @@ MvlHookFadePartAlt_impl(int32_t part, int32_t *partAlt)
 	    static_cast<uintptr_t>(static_cast<uint32_t>(part) + 4u));
 	MvlFadeScratchVec = scratch;
 	MvlUpdatePartFade(partAlt, MvlFadeScratchVec, MvlFadeCallbackArgAlt);
-	SetContinuation(0x5C4348u);
-	VcFunc<void (__cdecl *)(void)>(0x5C4348u)();
+	SetContinuation(MvlAddrs()->contFadePartAlt);
+	VcFunc<void (__cdecl *)(void)>(MvlAddrs()->contFadePartAlt)();
 }
 
 // ---------------------------------------------------------------------------
@@ -336,8 +344,8 @@ void MvlHookGenerateVcName(void) // FUN_10043730 @ RVA 0x43730
 {
 	// 0.98e @ RVA 0x43730 (34 bytes). Hook target VC 0x408967; continues 0x40896c.
 	MvlGeneratedVcNamePtr = MvlFormatVcName();
-	SetContinuation(0x40896Cu);
-	VcFunc<void (__cdecl *)(void)>(0x40896Cu)();
+	SetContinuation(MvlAddrs()->contGenerateVcName);
+	VcFunc<void (__cdecl *)(void)>(MvlAddrs()->contGenerateVcName)();
 }
 
 void __fastcall MvlHookAttachFixup(uint32_t entity) // FUN_10043760 @ RVA 0x43760
@@ -345,7 +353,7 @@ void __fastcall MvlHookAttachFixup(uint32_t entity) // FUN_10043760 @ RVA 0x4376
 	// 0.98e @ RVA 0x43760 (21 bytes). Dword-write hook target VC 0x69adb0.
 	MvlAttachFixupEntity = reinterpret_cast<void *>(static_cast<uintptr_t>(entity));
 	MvlRunAttachFixups();
-	VcFunc<void (__cdecl *)(void)>(0x593030u)();
+	VcFunc<void (__cdecl *)(void)>(MvlAddrs()->attachFixupCallee)();
 }
 
 extern "C" void MvlHookFrameWait_impl(float st0, float st1);
@@ -376,57 +384,37 @@ MvlHookFrameWait_impl(float st0, float st1)
 		if (MvlFrameWaitRemainingMs > 0)
 			MsgWaitForMultipleObjects(0, NULL, FALSE,
 			                          static_cast<DWORD>(MvlFrameWaitRemainingMs), 0x4BFu);
-		SetContinuation(0x6006B8u);
-		VcFunc<void (__cdecl *)(void)>(0x6006B8u)();
+		SetContinuation(MvlAddrs()->contFrameWaitThrottled);
+		VcFunc<void (__cdecl *)(void)>(MvlAddrs()->contFrameWaitThrottled)();
 		return;
 	}
-	SetContinuation(0x60049Cu);
-	VcFunc<void (__cdecl *)(void)>(0x60049Cu)();
+	SetContinuation(MvlAddrs()->contFrameWaitNormal);
+	VcFunc<void (__cdecl *)(void)>(MvlAddrs()->contFrameWaitNormal)();
 }
 
 // ---------------------------------------------------------------------------
 // Patch table - (VC 1.0 target -> handler) pairs from FUN_10043c00
 // (0.98e @ RVA 0x43c00, main init). Order matches the original install order.
+// Moved verbatim to engine_globals.cpp (kRetailHookSites) in M8a so the
+// per-variant map owns it; MvlInstallStubHooks reads it via MvlAddrs().
 // ---------------------------------------------------------------------------
-const MvlHookSite g_MvlStubHookSites[] = {
-	{ 0x00426748u, reinterpret_cast<uintptr_t>(&MvlHookTrampoline426748), 0 }, // -> continues 0x42674f
-	{ 0x004267DEu, reinterpret_cast<uintptr_t>(&MvlHookKeyClassBypass), 0 }, // -> continues 0x4267e5
-	{ 0x00426AC6u, reinterpret_cast<uintptr_t>(&MvlHookTrampoline426ac6), 0 }, // -> continues 0x426acd
-	{ 0x00426C80u, reinterpret_cast<uintptr_t>(&MvlHookTrampoline426c80), 0 }, // -> continues 0x426c87
-	{ 0x00427470u, reinterpret_cast<uintptr_t>(&MvlHookTrampoline427470), 0 }, // -> continues 0x427477
-	{ 0x00426820u, reinterpret_cast<uintptr_t>(&MvlHookSetAiClass), 0 }, // -> no continuation
-	{ 0x00426A4Cu, reinterpret_cast<uintptr_t>(&MvlHookTrampoline426a4c), 0 }, // -> continues 0x426a53
-	{ 0x005BB40Bu, reinterpret_cast<uintptr_t>(&MvlHookClearParts), 0 }, // -> no continuation
-	{ 0x005BAC04u, reinterpret_cast<uintptr_t>(&MvlHookTeardownParts), 0 }, // -> continues 0x5bac09
-	{ 0x00579290u, reinterpret_cast<uintptr_t>(&MvlHookRepaint), 0 }, // -> continues 0x579295
-	{ 0x00579090u, reinterpret_cast<uintptr_t>(&MvlHookPaintRandom), 0 }, // -> no continuation
-	{ 0x00579190u, reinterpret_cast<uintptr_t>(&MvlHookPaintVariant), 0 }, // -> no continuation
-	{ 0x0069ADC4u, reinterpret_cast<uintptr_t>(&MvlHookPartUpdate69adc4), 1 }, // dword slot
-	{ 0x006D7B68u, reinterpret_cast<uintptr_t>(&MvlHookPartUpdate6d7b68), 1 }, // dword slot
-	{ 0x0069B0E8u, reinterpret_cast<uintptr_t>(&MvlHookPartUpdate69b0e8), 1 }, // dword slot
-	{ 0x0069ADC0u, reinterpret_cast<uintptr_t>(&MvlHookWheelCache69adc0), 1 }, // dword slot
-	{ 0x006D7B64u, reinterpret_cast<uintptr_t>(&MvlHookPartFlag6d7b64), 1 }, // dword slot
-	{ 0x005CF9F3u, reinterpret_cast<uintptr_t>(&MvlHookFadePart), 0 }, // -> continues 0x5cf9f9
-	{ 0x005C4341u, reinterpret_cast<uintptr_t>(&MvlHookFadePartAlt), 0 }, // -> continues 0x5c4348
-	{ 0x00408967u, reinterpret_cast<uintptr_t>(&MvlHookGenerateVcName), 0 }, // -> continues 0x40896c
-	{ 0x0069ADB0u, reinterpret_cast<uintptr_t>(&MvlHookAttachFixup), 1 }, // dword slot
-
-	// Conditional site not tabled (applied by MvlInstallStubHooks):
-	//   VC 0x60048c -> FUN_10043780, guarded by plugin flag MvlFrameWaitHookEnabled.
-	// Other FUN_10043c00 pairs target handlers outside this port batch
-	// (FUN_1003e380 .. FUN_10043b50); extend this table as they get ported.
-};
-
-const size_t g_MvlStubHookSiteCount =
-	sizeof(g_MvlStubHookSites) / sizeof(g_MvlStubHookSites[0]);
 
 void
 MvlInstallStubHooks(void)
 {
+	// FAIL-SAFE (M8c): unknown exe variant -> no map -> install nothing
+	// (never patch a wrong exe).
+	const MvlExeAddrs *addrs = MvlAddrs();
+	if (addrs == NULL) {
+		MvlErrorLog("hooks: MvlInstallStubHooks: exe variant unknown - "
+		            "hook installation skipped (fail-safe no-op)");
+		return;
+	}
+
 	MvlUnlockGameText();
 
-	for (size_t i = 0; i < g_MvlStubHookSiteCount; ++i) {
-		const MvlHookSite &site = g_MvlStubHookSites[i];
+	for (uint32_t i = 0; i < addrs->stubHookSiteCount; ++i) {
+		const MvlHookSite &site = addrs->stubHookSites[i];
 		if (site.dwordWrite != 0)
 			MvlWriteDword(reinterpret_cast<void*>(static_cast<uintptr_t>(site.vcTarget)),
 			              static_cast<uint32_t>(site.handler));
@@ -437,7 +425,7 @@ MvlInstallStubHooks(void)
 
 	// FUN_10043c00: if (MvlFrameWaitHookEnabled != 0) hook VC 0x60048c -> FUN_10043780.
 	if (MvlFrameWaitHookEnabled != 0)
-		MvlWriteJmp(reinterpret_cast<void*>(static_cast<uintptr_t>(0x60048Cu)),
+		MvlWriteJmp(reinterpret_cast<void*>(static_cast<uintptr_t>(addrs->frameWaitHookTarget)),
 		            reinterpret_cast<const void*>(&MvlHookFrameWait));
 }
 

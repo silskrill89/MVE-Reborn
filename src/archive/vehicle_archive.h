@@ -130,6 +130,7 @@ bool  LoadXMLTaxiLight(TiXmlElement *e, void *dest);           // FUN_1004f090 @
 // anims text), +0x1c (post-set hook), +0x24 (install clump). Exact class
 // definition belongs to the engine lane; fields below are the ones the XML
 // and archive parsers touch.
+// Mirrors CVehicleModelInfo (plugin_vc); see SMvlGameModelInfo in extras/xmlgen.cpp.
 struct SMvlVehicleInfo
 {
 	void  *pVtable;              // @ 0x00
@@ -139,17 +140,17 @@ struct SMvlVehicleInfo
 	int    pad020;               // @ 0x20
 	int    nFlags028;            // @ 0x28  "already has clump" test in LoadModelFile
 	int    pad02c[3];            // @ 0x2c..0x37
-	int    nVehicleType;         // @ 0x3c  eVehicleType (LoadXMLBasic "type")
-	float  fWheelScale;          // @ 0x40  (1.0f forced for planes)
-	short  nWheelModelId;        // @ 0x44  wheelmodel / lodmodel
-	short  nVehicleId;           // @ 0x46  id (LoadFromArchive)
+	int    m_nVehicleType;       // @ 0x3c  eVehicleType (LoadXMLBasic "type")
+	float  m_fWheelSize;         // @ 0x40  (1.0f forced for planes)
+	short  m_nWheelModelIndex;   // @ 0x44  wheelmodel / lodmodel
+	short  m_nHandlingId;        // @ 0x46  id (LoadFromArchive)
 	unsigned char nComprulesSrc; // @ 0x48  comprules default source (ResolveComprules)
-	char   nAiClass;             // @ 0x49  aidata class (0-10, -1 ignore)
-	char   nAiLevel;             // @ 0x4a  aidata level
-	short  nAiFreq;              // @ 0x4c  aidata freq
+	char   m_nVehicleClass;      // @ 0x49  aidata class (0-10, -1 ignore)
+	char   m_nLvl;               // @ 0x4a  aidata level
+	short  m_nFrq;               // @ 0x4c  aidata freq
 	void  *pad04e[15];           // @ 0x4e..0x8b unrecovered
 	int    nImmunity;            // @ 0x8c  basic table slot i=3 ("immunity" PROVISIONAL)
-	float  fWheelRotAngle;       // @ 0x90  wheelrotangle (bikes)
+	float  m_fBikeSteerAngle;    // @ 0x90  wheelrotangle (bikes)
 	void  *pad094[43];           // @ 0x94..0x143 unrecovered
 	char   bCarColInit1;         // @ 0x144 (LoadXMLCarCol default 1)
 	char   pad145[7];

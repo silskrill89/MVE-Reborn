@@ -63,6 +63,18 @@ project "vehmod"
 		-- Vendored LZMA SDK: plain C, tolerate SDK-style warnings (never WAE here)
 		buildoptions { "/wd4100", "/wd4189", "/wd4245", "/wd4244", "/wd4267" }
 
+	-- Diagnostics toolkit (src/loader/log.cpp, src/core/crashhandler.cpp,
+	-- src/core/main.cpp): /W4 warnings-as-errors. The rest of src/ keeps the
+	-- /W3 baseline until its pre-existing W4 warnings (C4702/C4100/C4505/...
+	-- in custom_anim, mvl_weapon, vehicle_xml, png_funcs, ...) are cleaned
+	-- up in a dedicated pass — enabling /WX tree-wide breaks the build today.
+	filter "files:src/loader/log.cpp"
+		buildoptions { "/W4", "/WX" }
+	filter "files:src/core/crashhandler.cpp"
+		buildoptions { "/W4", "/WX" }
+	filter "files:src/core/main.cpp"
+		buildoptions { "/W4", "/WX" }
+
 	filter "configurations:Debug"
 		defines { "DEBUG" }
 		symbols "On"

@@ -8,6 +8,7 @@
 // and nothing is silently dropped.
 #include "stdafx.h"
 #include "init.h"
+#include "../engine/engine_globals.h" // MvlAddrs (fail-safe guard, M8c)
 #include "../loader/log.h"
 
 #if !defined(_M_IX86)
@@ -202,6 +203,15 @@ void MvlInitRemapClumpVersions(void)                 // FUN_10043b30 @ RVA 0x43b
 // ---------------------------------------------------------------------------
 void MvlInstallInitChainPatches(void)
 {
+	// FAIL-SAFE (M8c): unknown exe variant -> no map -> run nothing. (Today
+	// the roots only log through HOOK POINT seams, but the guard keeps the
+	// no-op contract for when the wiring lane flips them to live stores.)
+	if (MvlAddrs() == NULL) {
+		MvlErrorLog("init: MvlInstallInitChainPatches: exe variant unknown - "
+		            "init-chain patches skipped (fail-safe no-op)");
+		return;
+	}
+
 	MvlInitWireModelRedirects();
 	MvlInitRemapImmediates();
 	MvlInitPatchCodeStubs();

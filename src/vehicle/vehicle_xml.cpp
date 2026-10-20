@@ -281,9 +281,9 @@ CMvlVehicle::LoadXMLBasic(TiXmlElement *sector)
 				return false;
 			}
 			if(info)
-				info->nVehicleType = type;
+				info->m_nVehicleType = type;
 			if(type == 4 && info)
-				info->fWheelScale = 1.0f;
+				info->m_fWheelSize = 1.0f;
 			m_nType = type;
 			seen |= 1u;
 			break;
@@ -339,9 +339,9 @@ CMvlVehicle::LoadXMLBasic(TiXmlElement *sector)
 				return false;
 			}
 			if(info){
-				info->nWheelModelId = (short)v;
-				if(info->nWheelModelId == 0 || info->nWheelModelId == 0xf9)
-					info->nWheelModelId = 0xfa;
+				info->m_nWheelModelIndex = (short)v;
+				if(info->m_nWheelModelIndex == 0 || info->m_nWheelModelIndex == 0xf9)
+					info->m_nWheelModelIndex = 0xfa;
 			}
 			seen |= 0x10u;
 			break;
@@ -359,7 +359,7 @@ CMvlVehicle::LoadXMLBasic(TiXmlElement *sector)
 				return false;
 			}
 			if(info)
-				info->fWheelScale = v;
+				info->m_fWheelSize = v;
 			seen |= 0x20u;
 			break;
 		}
@@ -376,7 +376,7 @@ CMvlVehicle::LoadXMLBasic(TiXmlElement *sector)
 				return false;
 			}
 			if(info)
-				info->nWheelModelId = (short)v;
+				info->m_nWheelModelIndex = (short)v;
 			seen |= 0x40u;
 			break;
 		}
@@ -393,7 +393,7 @@ CMvlVehicle::LoadXMLBasic(TiXmlElement *sector)
 				return false;
 			}
 			if(info)
-				info->fWheelRotAngle = v;
+				info->m_fBikeSteerAngle = v;
 			seen |= 0x80u;
 			break;
 		}
@@ -508,7 +508,7 @@ CMvlVehicle::LoadXMLAIData(TiXmlElement *sector)
 				return false;
 			}
 			if(info)
-				info->nAiClass = (char)v;
+				info->m_nVehicleClass = (char)v;
 			bClass = true;
 		}
 		else if(_stricmp(name, "freq") == 0){
@@ -521,7 +521,7 @@ CMvlVehicle::LoadXMLAIData(TiXmlElement *sector)
 			if(sscanf(t, "%i", &v) != 1)
 				return MvlErrParse(fn, "freq");
 			if(info)
-				info->nAiFreq = (short)v;
+				info->m_nFrq = (short)v;
 			bFreq = true;
 		}
 		else if(_stricmp(name, "level") == 0){
@@ -534,7 +534,7 @@ CMvlVehicle::LoadXMLAIData(TiXmlElement *sector)
 			if(sscanf(t, "%i", &v) != 1)
 				return MvlErrParse(fn, "level");
 			if(info)
-				info->nAiLevel = (char)v;
+				info->m_nLvl = (char)v;
 			bLevel = true;
 		}
 		else if(_stricmp(name, "gang") == 0){
